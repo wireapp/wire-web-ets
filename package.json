@@ -17,9 +17,6 @@
   },
   "description": "E2E Test Service",
   "devDependencies": {
-    "eslint": "4.19.1",
-    "eslint-config-prettier": "2.9.0",
-    "eslint-plugin-prettier": "2.6.0",
     "husky": "0.14.3",
     "lint-staged": "7.1.2",
     "prettier": "1.13.2",
@@ -33,15 +30,11 @@
   ],
   "license": "GPL-3.0",
   "lint-staged": {
-    "*.{js,jsx}": [
-      "eslint --fix",
-      "git add"
-    ],
     "*.ts": [
       "tslint -c tslint.json --fix",
       "git add"
     ],
-    "*.{json,md,scss}": [
+    "*.{json,md}": [
       "prettier --write",
       "git add"
     ]
@@ -60,6 +53,8 @@
     "lint": "yarn lint:other && yarn lint:ts",
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts\"",
+    "precommit": "lint-staged",
+    "prettier": "prettier \"**/*.{json,md}\"",
     "start": "node dist/index.js",
     "test": "yarn dist && exit 0"
   },
