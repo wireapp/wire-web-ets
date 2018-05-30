@@ -13,7 +13,8 @@
     "express": "4.16.3",
     "express-validator": "5.2.0",
     "helmet": "3.12.1",
-    "pure-uuid": "1.5.2"
+    "pure-uuid": "1.5.2",
+    "typescript": "2.8.3"
   },
   "description": "E2E Test Service",
   "devDependencies": {
