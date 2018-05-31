@@ -30,10 +30,10 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
   const router = express.Router();
 
   router.post(
-    '/api/v1/instance/:id/sendConfirmation',
+    '/api/v1/instance/:instanceId/sendConfirmation',
     [check('conversationId').isUUID(), check('messageId').isUUID()],
     async (req: express.Request, res: express.Response) => {
-      const {id: instanceId = ''}: {id: string} = req.params;
+      const {instanceId}: {instanceId: string} = req.params;
       const {conversationId, messageId}: ConfirmationMessageRequest = req.body;
 
       const errors = validationResult(req);

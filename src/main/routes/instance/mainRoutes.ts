@@ -68,8 +68,8 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
     }
   );
 
-  router.get('/api/v1/instance/:id', (req, res) => {
-    const {id: instanceId = ''}: {id: string} = req.params;
+  router.get('/api/v1/instance/:instanceId', (req, res) => {
+    const {instanceId}: {instanceId: string} = req.params;
 
     if (instanceService.instanceExists(instanceId)) {
       let instance;
@@ -81,10 +81,10 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       }
 
       return res.json({
+        backend: instance.backendType.name,
+        clientId: instance.client.context!.clientId,
         instanceId,
         name: instance.name,
-        clientId: instance.client.context!.clientId,
-        backend: instance.backendType.name,
       });
     }
 

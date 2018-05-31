@@ -34,7 +34,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
-    '/api/v1/instance/:id/sendImage',
+    '/api/v1/instance/:instanceId/sendImage',
     [
       check('conversationId').isUUID(),
       check('data').isBase64(),
@@ -43,7 +43,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
       check('width').isInt(),
     ],
     async (req: express.Request, res: express.Response) => {
-      const {id: instanceId = ''}: {id: string} = req.params;
+      const {instanceId}: {instanceId: string} = req.params;
       const {conversationId, data: base64Data, height, type, width}: ImageMessageRequest = req.body;
 
       const errors = validationResult(req);
