@@ -27,6 +27,12 @@ export interface MessageRequest {
   payload: string;
 }
 
+export interface MessageUpdateRequest {
+  conversationId: string;
+  messageId: string;
+  payload: string;
+}
+
 const conversationRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
@@ -95,7 +101,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     [check('conversationId').isUUID(), check('messageId').isUUID(), check('payload').isString()],
     async (req: express.Request, res: express.Response) => {
       const {id: instanceId = ''}: {id: string} = req.params;
-      const {conversationId, messageId, payload} = req.body;
+      const {conversationId, messageId, payload}: MessageUpdateRequest = req.body;
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
