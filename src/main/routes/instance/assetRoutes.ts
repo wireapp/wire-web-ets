@@ -43,7 +43,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
       check('width').isInt(),
     ],
     async (req: express.Request, res: express.Response) => {
-      const {instanceId}: {instanceId: string} = req.params;
+      const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId, data: base64Data, height, type, width}: ImageMessageRequest = req.body;
 
       const errors = validationResult(req);

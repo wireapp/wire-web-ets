@@ -33,7 +33,7 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
     '/api/v1/instance/:instanceId/sendConfirmation',
     [check('conversationId').isUUID(), check('messageId').isUUID()],
     async (req: express.Request, res: express.Response) => {
-      const {instanceId}: {instanceId: string} = req.params;
+      const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId, messageId}: ConfirmationMessageRequest = req.body;
 
       const errors = validationResult(req);

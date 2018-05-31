@@ -24,7 +24,7 @@ const clientRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.get('/api/v1/instance/:instanceId/fingerprint', async (req: express.Request, res: express.Response) => {
-    const {instanceId}: {instanceId: string} = req.params;
+    const {instanceId = ''}: {instanceId: string} = req.params;
 
     if (!instanceService.instanceExists(instanceId)) {
       return res.status(400).json({error: `Instance "${instanceId}" not found.`});
