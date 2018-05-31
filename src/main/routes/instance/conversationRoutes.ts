@@ -95,7 +95,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     [check('conversationId').isUUID(), check('messageId').isUUID(), check('payload').isString()],
     async (req: express.Request, res: express.Response) => {
       const {id: instanceId = ''}: {id: string} = req.params;
-      const {conversationId}: MessageRequest = req.body;
+      const {conversationId, messageId, payload} = req.body;
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -107,11 +107,11 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       }
 
       try {
-        const messageId = await instanceService.sendPing(instanceId, conversationId);
+        const newMessageId = await instanceService.updateText(instanceId, conversationId, messageId, payload);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
-          messageId,
+          messageId: newMessageId,
           name: instanceName,
         });
       } catch (error) {
