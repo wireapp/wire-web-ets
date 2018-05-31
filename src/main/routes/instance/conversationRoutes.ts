@@ -29,7 +29,7 @@ export interface MessageRequest {
 
 export interface MessageUpdateRequest {
   conversationId: string;
-  messageId: string;
+  firstMessageId: string;
   payload: string;
 }
 
@@ -98,10 +98,10 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/updateText',
-    [check('conversationId').isUUID(), check('messageId').isUUID(), check('payload').isString()],
+    [check('conversationId').isUUID(), check('firstMessageId').isUUID(), check('payload').isString()],
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageId, payload}: MessageUpdateRequest = req.body;
+      const {conversationId, firstMessageId, payload}: MessageUpdateRequest = req.body;
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -113,11 +113,11 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       }
 
       try {
-        const newMessageId = await instanceService.updateText(instanceId, conversationId, messageId, payload);
+        const messageId = await instanceService.updateText(instanceId, conversationId, firstMessageId, payload);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
-          messageId: newMessageId,
+          messageId,
           name: instanceName,
         });
       } catch (error) {
