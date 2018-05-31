@@ -11,13 +11,13 @@ For licensing information, see the attached LICENSE file and the list of third-p
 ## API v1
 
 - [`PUT /api/v1/instance`](#put-apiv1instance)
-- [`GET /api/v1/instance/<id>`](#get-apiv1instanceid)
-- [`POST /api/v1/instance/<id>/sendText`](#post-apiv1instanceidsendtext)
-- [`POST /api/v1/instance/<id>/sendImage`](#post-apiv1instanceidsendimage)
-- [`POST /api/v1/instance/<id>/sendPing`](#post-apiv1instanceidsendping)
-- [`GET /api/v1/instance/<id>/fingerprint`](#get-apiv1instanceidfingerprint)
-- [`POST /api/v1/instance/<id>/typing`](#post-apiv1instanceidtyping)
-- [`POST /api/v1/instance/<id>/updateText`](#post-apiv1instanceidupdatetext)
+- [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceid)
+- [`POST /api/v1/instance/<instanceId>/sendText`](#post-apiv1instanceidsendtext)
+- [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceidsendimage)
+- [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceidsendping)
+- [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceidfingerprint)
+- [`POST /api/v1/instance/<instanceId>/typing`](#post-apiv1instanceidtyping)
+- [`POST /api/v1/instance/<instanceId>/updateText`](#post-apiv1instanceidupdatetext)
 - [Planned API](#planned-api)
 
 ---
@@ -45,7 +45,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 }
 ```
 
-### `GET /api/v1/instance/<id>`
+### `GET /api/v1/instance/<instanceId>`
 
 #### Response
 
@@ -58,7 +58,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 }
 ```
 
-### `POST /api/v1/instance/<id>/sendText`
+### `POST /api/v1/instance/<instanceId>/sendText`
 
 #### Request
 
@@ -79,7 +79,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 }
 ```
 
-### `POST /api/v1/instance/<id>/sendImage`
+### `POST /api/v1/instance/<instanceId>/sendImage`
 
 #### Request
 
@@ -103,7 +103,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 }
 ```
 
-### `POST /api/v1/instance/<id>/sendPing`
+### `POST /api/v1/instance/<instanceId>/sendPing`
 
 #### Request
 
@@ -123,7 +123,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 }
 ```
 
-### `GET /api/v1/instance/<id>/fingerprint`
+### `GET /api/v1/instance/<instanceId>/fingerprint`
 
 #### Response
 
@@ -134,7 +134,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 }
 ```
 
-### `POST /api/v1/instance/<id>/typing`
+### `POST /api/v1/instance/<instanceId>/typing`
 
 #### Request
 
@@ -154,7 +154,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 }
 ```
 
-### `POST /api/v1/instance/<id>/updateText`
+### `POST /api/v1/instance/<instanceId>/updateText`
 
 #### Request
 
