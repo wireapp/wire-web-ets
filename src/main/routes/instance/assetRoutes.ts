@@ -24,7 +24,10 @@ import InstanceService from '../../InstanceService';
 
 export interface ImageMessageRequest {
   conversationId: string;
-  payload: Image & {data: string};
+  data: string;
+  height: number;
+  type: string;
+  width: number;
 }
 
 const assetRoutes = (instanceService: InstanceService): express.Router => {
@@ -32,10 +35,16 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
 
   router.post(
     '/api/v1/instance/:id/sendImage',
-    [check('conversationId').isUUID(), check('payload').isBase64()],
+    [
+      check('conversationId').isUUID(),
+      check('data').isBase64(),
+      check('height').isInt(),
+      check('type').isMimeType(),
+      check('width').isInt(),
+    ],
     async (req: express.Request, res: express.Response) => {
       const {id: instanceId = ''}: {id: string} = req.params;
-      const {conversationId, payload}: ImageMessageRequest = req.body;
+      const {conversationId, data: base64Data, height, type, width}: ImageMessageRequest = req.body;
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -47,7 +56,9 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
       }
 
       try {
-        const messageId = await instanceService.sendImage(instanceId, conversationId, payload);
+        const data = Buffer.from(base64Data, 'base64');
+        const image: Image = {data, height, type, width};
+        const messageId = await instanceService.sendImage(instanceId, conversationId, image);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,

@@ -157,13 +157,10 @@ class InstanceService {
     }
   }
 
-  async sendImage(instanceId: string, conversationId: string, image: Image & {data: string}): Promise<string> {
+  async sendImage(instanceId: string, conversationId: string, image: Image): Promise<string> {
     const instance = this.getInstance(instanceId);
-    const imageData = Buffer.from(image.data, 'base64');
-    const convertedImage: Image = {...image, data: imageData};
-
     if (instance.account.service) {
-      const messageId = await instance.account.service.conversation.sendImage(conversationId, convertedImage);
+      const messageId = await instance.account.service.conversation.sendImage(conversationId, image);
       return messageId;
     } else {
       throw new Error('Account service not set.');
