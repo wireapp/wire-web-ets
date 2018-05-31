@@ -31,10 +31,10 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   const router = express.Router();
 
   router.post(
-    '/api/v1/instance/:id/sendText',
+    '/api/v1/instance/:instanceId/sendText',
     [check('conversationId').isUUID(), check('payload').isString()],
     async (req: express.Request, res: express.Response) => {
-      const {id: instanceId = ''}: {id: string} = req.params;
+      const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId, payload}: MessageRequest = req.body;
 
       const errors = validationResult(req);
@@ -61,10 +61,10 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:id/sendPing',
+    '/api/v1/instance/:instanceId/sendPing',
     [check('conversationId').isUUID()],
     async (req: express.Request, res: express.Response) => {
-      const {id: instanceId = ''}: {id: string} = req.params;
+      const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId}: MessageRequest = req.body;
 
       const errors = validationResult(req);
@@ -91,10 +91,10 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:id/updateText',
+    '/api/v1/instance/:instanceId/updateText',
     [check('conversationId').isUUID(), check('messageId').isUUID(), check('payload').isString()],
     async (req: express.Request, res: express.Response) => {
-      const {id: instanceId = ''}: {id: string} = req.params;
+      const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId, messageId, payload} = req.body;
 
       const errors = validationResult(req);

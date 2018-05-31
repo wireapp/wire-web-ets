@@ -30,10 +30,10 @@ const typingRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
-    '/api/v1/instance/:id/typing',
+    '/api/v1/instance/:instanceId/typing',
     [check('conversationId').isUUID(), check('payload').matches(/^(started|stopped)$/)],
     async (req: express.Request, res: express.Response) => {
-      const {id: instanceId = ''}: {id: string} = req.params;
+      const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId, payload}: TypingMessageRequest = req.body;
 
       const errors = validationResult(req);
