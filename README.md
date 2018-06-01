@@ -11,13 +11,13 @@ For licensing information, see the attached LICENSE file and the list of third-p
 ## API v1
 
 - [`PUT /api/v1/instance`](#put-apiv1instance)
-- [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceid)
-- [`POST /api/v1/instance/<instanceId>/sendText`](#post-apiv1instanceidsendtext)
-- [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceidsendimage)
-- [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceidsendping)
-- [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceidfingerprint)
-- [`POST /api/v1/instance/<instanceId>/typing`](#post-apiv1instanceidtyping)
-- [`POST /api/v1/instance/<instanceId>/updateText`](#post-apiv1instanceidupdatetext)
+- [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
+- [`POST /api/v1/instance/<instanceId>/sendText`](#post-apiv1instanceinstanceidsendtext)
+- [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
+- [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
+- [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
+- [`POST /api/v1/instance/<instanceId>/typing`](#post-apiv1instanceinstanceidtyping)
+- [`POST /api/v1/instance/<instanceId>/updateText`](#post-apiv1instanceinstanceidupdatetext)
 - [Planned API](#planned-api)
 
 ---
