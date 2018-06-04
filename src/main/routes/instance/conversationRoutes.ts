@@ -18,9 +18,9 @@
  */
 
 import * as express from 'express';
-import {check, validationResult} from 'express-validator/check';
-
+import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
+import joiValidate from '../../middlewares/joiValidate';
 
 export interface MessageRequest {
   conversationId: string;
@@ -38,15 +38,15 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/sendText',
-    [check('conversationId').isUUID(), check('payload').isString()],
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      payload: Joi.string().required(),
+    }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId, payload}: MessageRequest = req.body;
-
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(422).json({errors: errors.mapped()});
-      }
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -68,15 +68,14 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/sendPing',
-    [check('conversationId').isUUID()],
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+    }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId}: MessageRequest = req.body;
-
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(422).json({errors: errors.mapped()});
-      }
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -98,15 +97,18 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/updateText',
-    [check('conversationId').isUUID(), check('firstMessageId').isUUID(), check('payload').isString()],
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      firstMessageId: Joi.string()
+        .uuid()
+        .required(),
+      payload: Joi.string().required(),
+    }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId, firstMessageId, payload}: MessageUpdateRequest = req.body;
-
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(422).json({errors: errors.mapped()});
-      }
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});

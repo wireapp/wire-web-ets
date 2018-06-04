@@ -18,8 +18,9 @@
  */
 
 import * as express from 'express';
-import {check, validationResult} from 'express-validator/check';
+import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
+import joiValidate from '../../middlewares/joiValidate';
 
 export interface TypingMessageRequest {
   conversationId: string;
@@ -31,15 +32,17 @@ const typingRoutes = (instanceService: InstanceService): express.Router => {
 
   router.post(
     '/api/v1/instance/:instanceId/typing',
-    [check('conversationId').isUUID(), check('payload').matches(/^(started|stopped)$/)],
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      payload: Joi.string()
+        .valid(['started', 'stopped'])
+        .required(),
+    }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId, payload}: TypingMessageRequest = req.body;
-
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(422).json({errors: errors.mapped()});
-      }
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});

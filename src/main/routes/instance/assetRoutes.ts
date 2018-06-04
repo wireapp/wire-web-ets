@@ -19,8 +19,9 @@
 
 import {Image} from '@wireapp/core/dist/conversation/root';
 import * as express from 'express';
-import {check, validationResult} from 'express-validator/check';
+import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
+import joiValidate from '../../middlewares/joiValidate';
 
 export interface ImageMessageRequest {
   conversationId: string;
@@ -34,22 +35,25 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
-    '/api/v1/instance/:instanceId/sendImage',
-    [
-      check('conversationId').isUUID(),
-      check('data').isBase64(),
-      check('height').isInt(),
-      check('type').isMimeType(),
-      check('width').isInt(),
-    ],
+    '/api/v1/instance/:instanceId/sendImage/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      data: Joi.string()
+        .base64()
+        .required(),
+      height: Joi.number()
+        .min(1)
+        .required(),
+      type: Joi.string().required(),
+      width: Joi.number()
+        .min(1)
+        .required(),
+    }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
       const {conversationId, data: base64Data, height, type, width}: ImageMessageRequest = req.body;
-
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(422).json({errors: errors.mapped()});
-      }
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});

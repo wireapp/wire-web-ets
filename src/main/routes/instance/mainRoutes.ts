@@ -19,8 +19,9 @@
 
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
 import * as express from 'express';
-import {check, validationResult} from 'express-validator/check';
+import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
+import joiValidate from '../../middlewares/joiValidate';
 
 export interface InstanceRequest {
   backend: string;
@@ -35,20 +36,17 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
 
   router.put(
     '/api/v1/instance/?',
-    [
-      check('backend')
-        .matches(/^(prod(uction)?|staging)$/)
-        .withMessage('Should be "prod", "production" or "staging".'),
-      check('email').isAscii(),
-      check('password').exists(),
-    ],
+    joiValidate({
+      backend: Joi.string()
+        .valid(['prod', 'production', 'staging'])
+        .required(),
+      email: Joi.string()
+        .email()
+        .required(),
+      password: Joi.string().required(),
+    }),
     async (req: express.Request, res: express.Response) => {
       const {backend, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
-
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(422).json({errors: errors.mapped()});
-      }
 
       const LoginData: LoginData = {
         email,
@@ -91,7 +89,7 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
     return res.sendStatus(404);
   });
 
-  router.get('/api/v1/instances', (req, res) => {
+  router.get('/api/v1/instances/?', (req, res) => {
     const instances = instanceService.getInstances();
 
     if (instances.length) {
