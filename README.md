@@ -28,7 +28,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 
 ```json
 {
-  "backend": "<'staging' or 'production' or 'prod'>",
+  "backend": "<'prod'|'production'|'staging'>",
   "deviceName": "<string>",
   "email": "<string in email format>",
   "name": "<string>",
@@ -141,7 +141,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 ```json
 {
   "conversationId": "<string in UUID format>",
-  "payload": "<started|stopped>"
+  "payload": "<'started'|'stopped'>"
 }
 ```
 

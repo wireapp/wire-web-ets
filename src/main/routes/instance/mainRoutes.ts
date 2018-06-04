@@ -21,6 +21,7 @@ import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
+import joiValidate from '../../middlewares/joiValidate';
 
 export interface InstanceRequest {
   backend: string;
@@ -30,43 +31,40 @@ export interface InstanceRequest {
   password: string;
 }
 
-const joiSchema = {
-  backend: Joi.string()
-    .valid(['prod', 'production', 'staging'])
-    .required(),
-  email: Joi.string()
-    .email()
-    .required(),
-  password: Joi.string().required(),
-};
-
 const mainRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
-  router.put('/api/v1/instance/?', async (req: express.Request, res: express.Response) => {
-    const {backend, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
+  router.put(
+    '/api/v1/instance/?',
+    joiValidate({
+      backend: Joi.string()
+        .valid(['prod', 'production', 'staging'])
+        .required(),
+      email: Joi.string()
+        .email()
+        .required(),
+      password: Joi.string().required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {backend, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
 
-    const {error: joiError} = Joi.validate(req.body, joiSchema);
-    if (joiError) {
-      return res.status(422).json({error: `Validation error: ${joiError.message}}`});
+      const LoginData: LoginData = {
+        email,
+        password,
+        persist: true,
+      };
+
+      try {
+        const instanceId = await instanceService.createInstance(backend, LoginData, deviceName, instanceName);
+        return res.json({
+          instanceId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
     }
-
-    const LoginData: LoginData = {
-      email,
-      password,
-      persist: true,
-    };
-
-    try {
-      const instanceId = await instanceService.createInstance(backend, LoginData, deviceName, instanceName);
-      return res.json({
-        instanceId,
-        name: instanceName,
-      });
-    } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
-    }
-  });
+  );
 
   router.get('/api/v1/instance/:instanceId', (req, res) => {
     const {instanceId = ''}: {instanceId: string} = req.params;

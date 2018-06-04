@@ -21,6 +21,7 @@ import {Image} from '@wireapp/core/dist/conversation/root';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
+import joiValidate from '../../middlewares/joiValidate';
 
 export interface ImageMessageRequest {
   conversationId: string;
@@ -30,52 +31,49 @@ export interface ImageMessageRequest {
   width: number;
 }
 
-const joiSchema = {
-  conversationId: Joi.string()
-    .uuid()
-    .required(),
-  data: Joi.string()
-    .base64()
-    .required(),
-  height: Joi.number()
-    .min(1)
-    .required(),
-  type: Joi.string().required(),
-  width: Joi.number()
-    .min(1)
-    .required(),
-};
-
 const assetRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
-  router.post('/api/v1/instance/:instanceId/sendImage/?', async (req: express.Request, res: express.Response) => {
-    const {instanceId = ''}: {instanceId: string} = req.params;
-    const {conversationId, data: base64Data, height, type, width}: ImageMessageRequest = req.body;
+  router.post(
+    '/api/v1/instance/:instanceId/sendImage/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      data: Joi.string()
+        .base64()
+        .required(),
+      height: Joi.number()
+        .min(1)
+        .required(),
+      type: Joi.string().required(),
+      width: Joi.number()
+        .min(1)
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, data: base64Data, height, type, width}: ImageMessageRequest = req.body;
 
-    const {error: joiError} = Joi.validate(req.body, joiSchema);
-    if (joiError) {
-      return res.status(422).json({error: `Validation error: ${joiError.message}}`});
-    }
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
 
-    if (!instanceService.instanceExists(instanceId)) {
-      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      try {
+        const data = Buffer.from(base64Data, 'base64');
+        const image: Image = {data, height, type, width};
+        const messageId = await instanceService.sendImage(instanceId, conversationId, image);
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
     }
-
-    try {
-      const data = Buffer.from(base64Data, 'base64');
-      const image: Image = {data, height, type, width};
-      const messageId = await instanceService.sendImage(instanceId, conversationId, image);
-      const instanceName = instanceService.getInstance(instanceId).name;
-      return res.json({
-        instanceId,
-        messageId,
-        name: instanceName,
-      });
-    } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
-    }
-  });
+  );
 
   return router;
 };

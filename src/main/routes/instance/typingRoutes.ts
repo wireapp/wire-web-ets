@@ -20,47 +20,45 @@
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
+import joiValidate from '../../middlewares/joiValidate';
 
 export interface TypingMessageRequest {
   conversationId: string;
   payload: 'started' | 'stopped';
 }
 
-const joiSchema = {
-  conversationId: Joi.string()
-    .uuid()
-    .required(),
-  payload: Joi.string()
-    .regex(/^(started|stopped)$/)
-    .required(),
-};
-
 const typingRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
-  router.post('/api/v1/instance/:instanceId/typing', async (req: express.Request, res: express.Response) => {
-    const {instanceId = ''}: {instanceId: string} = req.params;
-    const {conversationId, payload}: TypingMessageRequest = req.body;
+  router.post(
+    '/api/v1/instance/:instanceId/typing',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      payload: Joi.string()
+        .valid(['started', 'stopped'])
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, payload}: TypingMessageRequest = req.body;
 
-    const {error: joiError} = Joi.validate(req.body, joiSchema);
-    if (joiError) {
-      return res.status(422).json({error: `Validation error: ${joiError.message}}`});
-    }
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
 
-    if (!instanceService.instanceExists(instanceId)) {
-      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      try {
+        const instanceName = await instanceService.sendTyping(instanceId, conversationId, payload);
+        return res.json({
+          instanceId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
     }
-
-    try {
-      const instanceName = await instanceService.sendTyping(instanceId, conversationId, payload);
-      return res.json({
-        instanceId,
-        name: instanceName,
-      });
-    } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
-    }
-  });
+  );
 
   return router;
 };

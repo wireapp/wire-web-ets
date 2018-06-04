@@ -19,8 +19,8 @@
 
 import * as express from 'express';
 import * as Joi from 'joi';
-
 import InstanceService from '../../InstanceService';
+import joiValidate from '../../middlewares/joiValidate';
 
 export interface MessageRequest {
   conversationId: string;
@@ -36,74 +36,68 @@ export interface MessageUpdateRequest {
 const conversationRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
-  router.post('/api/v1/instance/:instanceId/sendText', async (req: express.Request, res: express.Response) => {
-    const {instanceId = ''}: {instanceId: string} = req.params;
-    const {conversationId, payload}: MessageRequest = req.body;
-
-    const joiSchema = {
+  router.post(
+    '/api/v1/instance/:instanceId/sendText',
+    joiValidate({
       conversationId: Joi.string()
         .uuid()
         .required(),
       payload: Joi.string().required(),
-    };
-    const {error: joiError} = Joi.validate(req.body, joiSchema);
-    if (joiError) {
-      return res.status(422).json({error: `Validation error: ${joiError.message}}`});
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, payload}: MessageRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const messageId = await instanceService.sendText(instanceId, conversationId, payload);
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
     }
+  );
 
-    if (!instanceService.instanceExists(instanceId)) {
-      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
-    }
-
-    try {
-      const messageId = await instanceService.sendText(instanceId, conversationId, payload);
-      const instanceName = instanceService.getInstance(instanceId).name;
-      return res.json({
-        instanceId,
-        messageId,
-        name: instanceName,
-      });
-    } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
-    }
-  });
-
-  router.post('/api/v1/instance/:instanceId/sendPing', async (req: express.Request, res: express.Response) => {
-    const {instanceId = ''}: {instanceId: string} = req.params;
-    const {conversationId}: MessageRequest = req.body;
-
-    const joiSchema = {
+  router.post(
+    '/api/v1/instance/:instanceId/sendPing',
+    joiValidate({
       conversationId: Joi.string()
         .uuid()
         .required(),
-    };
-    const {error: joiError} = Joi.validate(req.body, joiSchema);
-    if (joiError) {
-      return res.status(422).json({error: `Validation error: ${joiError.message}}`});
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId}: MessageRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const messageId = await instanceService.sendPing(instanceId, conversationId);
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
     }
+  );
 
-    if (!instanceService.instanceExists(instanceId)) {
-      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
-    }
-
-    try {
-      const messageId = await instanceService.sendPing(instanceId, conversationId);
-      const instanceName = instanceService.getInstance(instanceId).name;
-      return res.json({
-        instanceId,
-        messageId,
-        name: instanceName,
-      });
-    } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
-    }
-  });
-
-  router.post('/api/v1/instance/:instanceId/updateText', async (req: express.Request, res: express.Response) => {
-    const {instanceId = ''}: {instanceId: string} = req.params;
-    const {conversationId, firstMessageId, payload}: MessageUpdateRequest = req.body;
-
-    const joiSchema = {
+  router.post(
+    '/api/v1/instance/:instanceId/updateText',
+    joiValidate({
       conversationId: Joi.string()
         .uuid()
         .required(),
@@ -111,28 +105,28 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
         .uuid()
         .required(),
       payload: Joi.string().required(),
-    };
-    const {error: joiError} = Joi.validate(req.body, joiSchema);
-    if (joiError) {
-      return res.status(422).json({error: `Validation error: ${joiError.message}}`});
-    }
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, firstMessageId, payload}: MessageUpdateRequest = req.body;
 
-    if (!instanceService.instanceExists(instanceId)) {
-      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
-    }
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
 
-    try {
-      const messageId = await instanceService.updateText(instanceId, conversationId, firstMessageId, payload);
-      const instanceName = instanceService.getInstance(instanceId).name;
-      return res.json({
-        instanceId,
-        messageId,
-        name: instanceName,
-      });
-    } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
+      try {
+        const messageId = await instanceService.updateText(instanceId, conversationId, firstMessageId, payload);
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
     }
-  });
+  );
 
   return router;
 };
