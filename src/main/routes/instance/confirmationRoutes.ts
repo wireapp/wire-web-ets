@@ -18,7 +18,7 @@
  */
 
 import * as express from 'express';
-import {check, validationResult} from 'express-validator/check';
+import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 
 export interface ConfirmationMessageRequest {
@@ -26,36 +26,42 @@ export interface ConfirmationMessageRequest {
   messageId: string;
 }
 
+const joiSchema = {
+  conversationId: Joi.string()
+    .uuid()
+    .required(),
+  messageId: Joi.string()
+    .uuid()
+    .required(),
+};
+
 const confirmationRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
-  router.post(
-    '/api/v1/instance/:instanceId/sendConfirmation',
-    [check('conversationId').isUUID(), check('messageId').isUUID()],
-    async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageId}: ConfirmationMessageRequest = req.body;
+  router.post('/api/v1/instance/:instanceId/sendConfirmation', async (req: express.Request, res: express.Response) => {
+    const {instanceId = ''}: {instanceId: string} = req.params;
+    const {conversationId, messageId}: ConfirmationMessageRequest = req.body;
 
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(422).json({errors: errors.mapped()});
-      }
+    const {error: joiError} = Joi.validate(req.body, joiSchema);
 
-      if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
-      }
-
-      try {
-        const instanceName = await instanceService.sendConfirmation(instanceId, conversationId, messageId);
-        return res.json({
-          instanceId,
-          name: instanceName,
-        });
-      } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
-      }
+    if (joiError) {
+      return res.status(422).json({error: `Validation error: ${joiError.message}}`});
     }
-  );
+
+    if (!instanceService.instanceExists(instanceId)) {
+      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+    }
+
+    try {
+      const instanceName = await instanceService.sendConfirmation(instanceId, conversationId, messageId);
+      return res.json({
+        instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      return res.status(500).json({error: error.message, stack: error.stack});
+    }
+  });
 
   return router;
 };
