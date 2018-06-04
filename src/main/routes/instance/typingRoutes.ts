@@ -43,7 +43,6 @@ const typingRoutes = (instanceService: InstanceService): express.Router => {
     const {conversationId, payload}: TypingMessageRequest = req.body;
 
     const {error: joiError} = Joi.validate(req.body, joiSchema);
-
     if (joiError) {
       return res.status(422).json({error: `Validation error: ${joiError.message}}`});
     }

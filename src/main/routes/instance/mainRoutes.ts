@@ -46,8 +46,8 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
 
   router.put('/api/v1/instance/?', async (req: express.Request, res: express.Response) => {
     const {backend, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
-    const {error: joiError} = Joi.validate(req.body, joiSchema);
 
+    const {error: joiError} = Joi.validate(req.body, joiSchema);
     if (joiError) {
       return res.status(422).json({error: `Validation error: ${joiError.message}}`});
     }

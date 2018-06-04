@@ -43,7 +43,6 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
     const {conversationId, messageId}: ConfirmationMessageRequest = req.body;
 
     const {error: joiError} = Joi.validate(req.body, joiSchema);
-
     if (joiError) {
       return res.status(422).json({error: `Validation error: ${joiError.message}}`});
     }

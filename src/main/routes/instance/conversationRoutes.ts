@@ -47,7 +47,6 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       payload: Joi.string().required(),
     };
     const {error: joiError} = Joi.validate(req.body, joiSchema);
-
     if (joiError) {
       return res.status(422).json({error: `Validation error: ${joiError.message}}`});
     }
@@ -79,7 +78,6 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
         .required(),
     };
     const {error: joiError} = Joi.validate(req.body, joiSchema);
-
     if (joiError) {
       return res.status(422).json({error: `Validation error: ${joiError.message}}`});
     }
@@ -115,7 +113,6 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       payload: Joi.string().required(),
     };
     const {error: joiError} = Joi.validate(req.body, joiSchema);
-
     if (joiError) {
       return res.status(422).json({error: `Validation error: ${joiError.message}}`});
     }

@@ -54,7 +54,6 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
     const {conversationId, data: base64Data, height, type, width}: ImageMessageRequest = req.body;
 
     const {error: joiError} = Joi.validate(req.body, joiSchema);
-
     if (joiError) {
       return res.status(422).json({error: `Validation error: ${joiError.message}}`});
     }
