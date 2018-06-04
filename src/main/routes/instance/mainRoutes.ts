@@ -32,8 +32,7 @@ export interface InstanceRequest {
 
 const joiSchema = {
   backend: Joi.string()
-    .regex(/^(prod(uction)?|staging)$/)
-    .description('Should be "prod", "production" or "staging".')
+    .valid(['prod', 'production', 'staging'])
     .required(),
   email: Joi.string()
     .email()
