@@ -18,6 +18,7 @@
  */
 
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
+import {ClientType} from '@wireapp/api-client/dist/commonjs/client/';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
@@ -49,9 +50,9 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       const {backend, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
 
       const LoginData: LoginData = {
+        clientType: ClientType.PERMANENT,
         email,
         password,
-        persist: true,
       };
 
       try {
