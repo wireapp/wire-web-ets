@@ -17,6 +17,7 @@
  *
  */
 
+import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
@@ -24,7 +25,7 @@ import joiValidate from '../../middlewares/joiValidate';
 
 export interface TypingMessageRequest {
   conversationId: string;
-  status: 'started' | 'stopped';
+  status: CONVERSATION_TYPING;
 }
 
 const typingRoutes = (instanceService: InstanceService): express.Router => {
@@ -37,7 +38,7 @@ const typingRoutes = (instanceService: InstanceService): express.Router => {
         .uuid()
         .required(),
       status: Joi.string()
-        .valid(['started', 'stopped'])
+        .valid([CONVERSATION_TYPING.STARTED, CONVERSATION_TYPING.STOPPED])
         .required(),
     }),
     async (req: express.Request, res: express.Response) => {
