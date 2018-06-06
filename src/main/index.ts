@@ -23,4 +23,4 @@ import Server from './Server';
 new Server(config)
   .start()
   .then(port => console.info(`Server is running on port ${port}.`))
-  .catch(error => console.error(error));
+  .catch(error => console.error(error.stack));

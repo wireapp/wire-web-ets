@@ -17,6 +17,7 @@
  *
  */
 
+import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
@@ -24,32 +25,32 @@ import joiValidate from '../../middlewares/joiValidate';
 
 export interface TypingMessageRequest {
   conversationId: string;
-  payload: 'started' | 'stopped';
+  status: CONVERSATION_TYPING;
 }
 
 const typingRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
-    '/api/v1/instance/:instanceId/typing',
+    '/api/v1/instance/:instanceId/sendTyping',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
         .required(),
-      payload: Joi.string()
-        .valid(['started', 'stopped'])
+      status: Joi.string()
+        .valid([CONVERSATION_TYPING.STARTED, CONVERSATION_TYPING.STOPPED])
         .required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, payload}: TypingMessageRequest = req.body;
+      const {conversationId, status}: TypingMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
       try {
-        const instanceName = await instanceService.sendTyping(instanceId, conversationId, payload);
+        const instanceName = await instanceService.sendTyping(instanceId, conversationId, status);
         return res.json({
           instanceId,
           name: instanceName,

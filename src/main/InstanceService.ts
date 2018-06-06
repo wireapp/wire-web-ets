@@ -21,6 +21,7 @@ import APIClient = require('@wireapp/api-client');
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
 import {ClientClassification} from '@wireapp/api-client/dist/commonjs/client/';
 import {Config} from '@wireapp/api-client/dist/commonjs/Config';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {Image} from '@wireapp/core/dist/conversation/root';
@@ -178,11 +179,11 @@ class InstanceService {
     }
   }
 
-  async sendTyping(instanceId: string, conversationId: string, payload: 'started' | 'stopped'): Promise<string> {
+  async sendTyping(instanceId: string, conversationId: string, status: CONVERSATION_TYPING): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      if (payload === 'started') {
+      if (status === CONVERSATION_TYPING.STARTED) {
         await instance.account.service.conversation.sendTypingStart(conversationId);
       } else {
         await instance.account.service.conversation.sendTypingStop(conversationId);
@@ -193,11 +194,11 @@ class InstanceService {
     }
   }
 
-  updateText(instanceId: string, conversationId: string, messageId: string, payload: string): Promise<string> {
+  updateText(instanceId: string, conversationId: string, messageId: string, text: string): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      return instance.account.service.conversation.updateTextMessage(conversationId, messageId, payload);
+      return instance.account.service.conversation.updateTextMessage(conversationId, messageId, text);
     } else {
       throw new Error('Account service not set.');
     }
