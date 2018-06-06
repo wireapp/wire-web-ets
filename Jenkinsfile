@@ -19,7 +19,7 @@ node("$NODE") {
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${VERSION} build failed** see: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} build failed** see: ${JOB_URL}"
       throw e
     }
   }
@@ -36,10 +36,10 @@ node("$NODE") {
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Starting ETS ${VERSION} failed** see: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Starting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
       throw e
     }
   }
 
-  wireSend secret: "${jenkinsbot_secret}", message: "🐛 **ETS ${VERSION} is up and running**"
+  wireSend secret: "${jenkinsbot_secret}", message: "🐛 **ETS ${BRANCH} on ${NODE} is up and running**"
 }
