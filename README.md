@@ -65,7 +65,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 ```json
 {
   "conversationId": "<string in UUID format>",
-  "payload": "<string>"
+  "text": "<string>"
 }
 ```
 
@@ -86,12 +86,10 @@ For licensing information, see the attached LICENSE file and the list of third-p
 ```json
 {
   "conversationId": "<string in UUID format>",
-  "payload": {
-    "data": "<string in base64 format>",
-    "height": "<number>",
-    "type": "<string>",
-    "width": "<number>"
-  }
+  "data": "<string in base64 format>",
+  "height": "<number>",
+  "type": "<string>",
+  "width": "<number>"
 }
 ```
 
@@ -136,14 +134,14 @@ For licensing information, see the attached LICENSE file and the list of third-p
 }
 ```
 
-### `POST /api/v1/instance/<instanceId>/typing`
+### `POST /api/v1/instance/<instanceId>/sendTyping`
 
 #### Request
 
 ```json
 {
   "conversationId": "<string in UUID format>",
-  "payload": "<'started'|'stopped'>"
+  "status": "<'started'|'stopped'>"
 }
 ```
 
@@ -164,7 +162,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 {
   "conversationId": "<string in UUID format>",
   "firstMessageId": "<string in UUID format>",
-  "payload": "<string>"
+  "text": "<string>"
 }
 ```
 
@@ -181,11 +179,11 @@ For licensing information, see the attached LICENSE file and the list of third-p
 
 ```
 POST /clear {"conversationId": "..."}
-POST /delete {"conversationId": "...", "messageId":""}
-POST /deleteEverywhere {"conversationId": "...", "messageId":""}
-POST /markEphemeralRead {"conversationId": "...", "messageId":""}
-POST /react {"conversationId": "...", "messageId":"", "reactType":""}
-POST /sendEphemeralText {"conversationId": "...", "payload":""}
-POST /sendFile {"conversationId": "...", "payload":""}
-POST /sendLocation {"conversationId": "...", "longitude":"...", "latitude":"...", "locationName":"...", "zoom":"..."}  (not sure about the payload yet)
+POST /delete {"conversationId": "...", "messageId": "..."}
+POST /deleteEverywhere {"conversationId": "...", "messageId": "..."}
+POST /markEphemeralRead {"conversationId": "...", "messageId": "..."}
+POST /react {"conversationId": "...", "messageId":"", "reactType": "..."}
+POST /sendEphemeralText {"conversationId": "...", "payload": "..."}
+POST /sendFile {"conversationId": "...", "payload": "..."}
+POST /sendLocation {"conversationId": "...", "longitude":"...", "latitude":"...", "locationName":"...", "zoom":"..."} (not sure about the payload yet)
 ```

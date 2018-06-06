@@ -6,7 +6,7 @@ node('Linux_Node') {
   }
 
   stage('Checkout & Clean') {
-    git branch: "master", url: 'https://github.com/wireapp/wire-web-e2e-test-service.git'
+    git branch: "master", url: 'https://github.com/wireapp/wire-web-ets.git'
   }
 
   stage('Build') {
