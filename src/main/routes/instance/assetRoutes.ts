@@ -25,10 +25,12 @@ import joiValidate from '../../middlewares/joiValidate';
 
 export interface ImageMessageRequest {
   conversationId: string;
-  data: string;
-  height: number;
-  type: string;
-  width: number;
+  payload: {
+    data: string;
+    height: number;
+    type: string;
+    width: number;
+  };
 }
 
 const assetRoutes = (instanceService: InstanceService): express.Router => {
@@ -40,20 +42,25 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
       conversationId: Joi.string()
         .uuid()
         .required(),
-      data: Joi.string()
-        .base64()
-        .required(),
-      height: Joi.number()
-        .min(1)
-        .required(),
-      type: Joi.string().required(),
-      width: Joi.number()
-        .min(1)
-        .required(),
+      payload: {
+        data: Joi.string()
+          .base64()
+          .required(),
+        height: Joi.number()
+          .min(1)
+          .required(),
+        type: Joi.string().required(),
+        width: Joi.number()
+          .min(1)
+          .required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, data: base64Data, height, type, width}: ImageMessageRequest = req.body;
+      const {
+        conversationId,
+        payload: {data: base64Data, height, type, width},
+      }: ImageMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
