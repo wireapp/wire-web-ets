@@ -42,8 +42,9 @@
     ]
   },
   "main": "dist/index.js",
-  "name": "wire-web-e2e-test-service",
-  "repository": "https://github.com/wireapp/wire-web-e2e-test-service",
+  "name": "wire-web-ets",
+  "private": true,
+  "repository": "https://github.com/wireapp/wire-web-ets",
   "scripts": {
     "build": "yarn build:node",
     "build:node": "tsc",
