@@ -1,4 +1,4 @@
-node('Linux_Node') {
+node($NODE) {
 
   def jenkinsbot_secret = ''
   withCredentials([string(credentialsId: "${params.JENKINSBOT_SECRET}", variable: 'JENKINSBOT_SECRET')]) {
@@ -6,7 +6,7 @@ node('Linux_Node') {
   }
 
   stage('Checkout & Clean') {
-    git branch: "master", url: 'https://github.com/wireapp/wire-web-ets.git'
+    git branch: "$BRANCH", url: 'https://github.com/wireapp/wire-web-ets.git'
   }
 
   stage('Build') {
