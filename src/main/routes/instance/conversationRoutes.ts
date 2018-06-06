@@ -24,13 +24,13 @@ import joiValidate from '../../middlewares/joiValidate';
 
 export interface MessageRequest {
   conversationId: string;
-  payload: string;
+  text: string;
 }
 
 export interface MessageUpdateRequest {
   conversationId: string;
   firstMessageId: string;
-  payload: string;
+  text: string;
 }
 
 const conversationRoutes = (instanceService: InstanceService): express.Router => {
@@ -42,18 +42,18 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
-      payload: Joi.string().required(),
+      text: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, payload}: MessageRequest = req.body;
+      const {conversationId, text}: MessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
       try {
-        const messageId = await instanceService.sendText(instanceId, conversationId, payload);
+        const messageId = await instanceService.sendText(instanceId, conversationId, text);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
@@ -104,18 +104,18 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       firstMessageId: Joi.string()
         .uuid()
         .required(),
-      payload: Joi.string().required(),
+      text: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, firstMessageId, payload}: MessageUpdateRequest = req.body;
+      const {conversationId, firstMessageId, text}: MessageUpdateRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
       try {
-        const messageId = await instanceService.updateText(instanceId, conversationId, firstMessageId, payload);
+        const messageId = await instanceService.updateText(instanceId, conversationId, firstMessageId, text);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,

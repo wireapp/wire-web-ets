@@ -178,11 +178,11 @@ class InstanceService {
     }
   }
 
-  async sendTyping(instanceId: string, conversationId: string, payload: 'started' | 'stopped'): Promise<string> {
+  async sendTyping(instanceId: string, conversationId: string, status: 'started' | 'stopped'): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      if (payload === 'started') {
+      if (status === 'started') {
         await instance.account.service.conversation.sendTypingStart(conversationId);
       } else {
         await instance.account.service.conversation.sendTypingStop(conversationId);
@@ -193,11 +193,11 @@ class InstanceService {
     }
   }
 
-  updateText(instanceId: string, conversationId: string, messageId: string, payload: string): Promise<string> {
+  updateText(instanceId: string, conversationId: string, messageId: string, text: string): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      return instance.account.service.conversation.updateTextMessage(conversationId, messageId, payload);
+      return instance.account.service.conversation.updateTextMessage(conversationId, messageId, text);
     } else {
       throw new Error('Account service not set.');
     }
