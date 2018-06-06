@@ -1,4 +1,4 @@
-node($NODE) {
+node("$NODE") {
 
   def jenkinsbot_secret = ''
   withCredentials([string(credentialsId: "${params.JENKINSBOT_SECRET}", variable: 'JENKINSBOT_SECRET')]) {
