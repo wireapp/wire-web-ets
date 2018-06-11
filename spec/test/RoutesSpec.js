@@ -27,7 +27,6 @@ const nock = require('nock');
 const request = require('request');
 const Client = require('@wireapp/api-client/dist/commonjs/Client');
 const backendURL = Client.BACKEND.PRODUCTION.rest;
-console.log('backendURL', backendURL)
 const {AuthAPI} = require('@wireapp/api-client/dist/commonjs/auth/');
 const {ClientAPI} = require('@wireapp/api-client/dist/commonjs/client/');
 const {ConversationAPI} = require('@wireapp/api-client/dist/commonjs/conversation/');
@@ -83,21 +82,43 @@ describe('Routes', () => {
     }
   });
 
-  const createInstance = async () => {
+  const createInstance = async data => {
     const port = await server.start();
     const url = baseURL + '/instance';
-    const data = {backend: 'production', email: 'test@example.com', password: 'supersecret'}
-    const response = await sendRequest('put', url, data);
-    expect(response.statusCode).toBe(200);
-    console.log('response', response.body)
-    const {instanceId} = JSON.parse(response.body);
-    return instanceId;
+    data = data || {backend: 'production', email: 'test@example.com', password: 'supersecret'};
+    return sendRequest('put', url, data);
   }
 
   it('can create instances', async done => {
     try {
-      const instanceId = await createInstance();
+      const {statusCode, body} = await createInstance();
+      expect(statusCode).toBe(200);
+      const {instanceId} = JSON.parse(body);
       expect(instanceId).toBeDefined();
+      done();
+    } catch(error) {
+      console.error(error);
+    }
+  });
+
+  it(`doesn't create an instance without login data`, async done => {
+    try {
+      const {statusCode, body} = await createInstance({ backend: 'staging' });
+      expect(statusCode).toBe(422);
+      const {error} = JSON.parse(body);
+      expect(error).toContain('Validation error');
+      done();
+    } catch(error) {
+      console.error(error);
+    }
+  });
+
+  it(`doesn't create an instance without login data`, async done => {
+    try {
+      const {statusCode, body} = await createInstance({});
+      expect(statusCode).toBe(422);
+      const {error} = JSON.parse(body);
+      expect(error).toContain('Validation error');
       done();
     } catch(error) {
       console.error(error);
@@ -106,11 +127,16 @@ describe('Routes', () => {
 
   it('can get the instance', async done => {
     try {
-      const instanceId = await createInstance();
-      const url = `${baseURL}/instance/${instanceId}`;
-      const response = await sendRequest('get', url);
-      const body = JSON.parse(response.body);
-      expect(body.instanceId).toBe(instanceId);
+      const {statusCode, body} = await createInstance();
+      expect(statusCode).toBe(200);
+      const {instanceId} = JSON.parse(body);
+
+      const requestUrl = `${baseURL}/instance/${instanceId}`;
+      const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
+      expect(requestedStatusCode).toBe(200);
+      const {instanceId: requestedId} = JSON.parse(requestedBody);
+
+      expect(requestedId).toBe(instanceId);
       done();
     } catch(error) {
       console.error(error);
@@ -119,14 +145,17 @@ describe('Routes', () => {
 
   it('can send a text message', async done => {
     try {
-      const instanceId = await createInstance();
-      const url = `${baseURL}/instance/${instanceId}/sendText`;
-      const data = {conversationId: 'b8258e66-5314-4ca1-a80e-ee0c523a0adb', text: 'Hello from Jasmine'}
-      const response = await sendRequest('post', url, data);
-      console.log('response.body', response.body)
-      expect(response.statusCode).toBe(200);
-      const body = JSON.parse(response.body);
-      expect(body.instanceId).toBeDefined()
+      const {statusCode, body} = await createInstance();
+      expect(statusCode).toBe(200);
+      const {instanceId} = JSON.parse(body);
+
+      const requestUrl = `${baseURL}/instance/${instanceId}/sendText`;
+      const requestData = {conversationId: 'b8258e66-5314-4ca1-a80e-ee0c523a0adb', text: 'Hello from Jasmine'}
+      const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
+      expect(requestedStatusCode).toBe(200);
+
+      const {instanceId: requestedId} = JSON.parse(requestedBody);
+      expect(requestedId).toBe(instanceId);
       done();
     } catch(error) {
       console.error(error);
