@@ -19,9 +19,11 @@
   },
   "description": "E2E Test Service",
   "devDependencies": {
+    "babel-eslint": "8.2.3",
     "eslint": "4.19.1",
     "eslint-config-prettier": "2.9.0",
     "eslint-plugin-prettier": "2.6.0",
+    "eslint-plugin-react": "7.9.1",
     "husky": "0.14.3",
     "jasmine": "3.1.0",
     "lint-staged": "7.2.0",
