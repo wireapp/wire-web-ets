@@ -19,9 +19,18 @@
   },
   "description": "E2E Test Service",
   "devDependencies": {
+    "babel-eslint": "8.2.3",
+    "eslint": "4.19.1",
+    "eslint-config-prettier": "2.9.0",
+    "eslint-plugin-prettier": "2.6.0",
+    "eslint-plugin-react": "7.9.1",
     "husky": "0.14.3",
+    "jasmine": "3.1.0",
     "lint-staged": "7.2.0",
+    "logdown": "3.2.3",
+    "nock": "9.3.0",
     "prettier": "1.13.5",
+    "request": "2.87.0",
     "rimraf": "2.6.2",
     "tslint": "5.10.0",
     "tslint-config-prettier": "1.13.0",
@@ -32,6 +41,10 @@
   ],
   "license": "GPL-3.0",
   "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
     "*.ts": [
       "tslint -c tslint.json --fix",
       "git add"
@@ -48,18 +61,20 @@
   "scripts": {
     "build": "yarn build:node",
     "build:node": "tsc",
-    "clear": "rimraf dist",
-    "dist": "yarn clear && yarn build",
-    "fix": "yarn fix:other && yarn fix:ts",
+    "clean": "rimraf dist",
+    "dist": "yarn clean && yarn build",
+    "fix": "yarn fix:other && yarn fix:js && yarn fix:ts",
+    "fix:js": "yarn lint:js --fix",
     "fix:other": "yarn prettier --write",
     "fix:ts": "yarn lint:ts --fix",
-    "lint": "yarn lint:other && yarn lint:ts",
+    "lint": "yarn lint:js && yarn lint:other && yarn lint:ts",
+    "lint:js": "eslint --ignore-path .gitignore **/*.js",
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts\"",
     "precommit": "lint-staged",
     "prettier": "prettier \"**/*.{json,md}\"",
     "start": "node dist/index.js",
-    "test": "yarn dist && exit 0"
+    "test": "yarn dist && jasmine --config=jasmine.json"
   },
   "types": "dist/index.d.ts",
   "version": "0.0.1"
