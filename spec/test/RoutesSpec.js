@@ -19,7 +19,6 @@
 
 // @ts-check
 
-require('dotenv').config({path: 'spec/test/.env'});
 const {default: config} = require('../../dist/config');
 const {default: Server} = require('../../dist/Server');
 const nock = require('nock');
@@ -48,7 +47,7 @@ const sendRequest = async (method, url, data) => {
 };
 
 describe('Routes', () => {
-  let server;
+  let etsServer;
   const baseURL = `http://localhost:${config.PORT_HTTP}/api/v1`;
 
   const accessTokenData = {
@@ -60,7 +59,7 @@ describe('Routes', () => {
   };
 
   beforeEach(() => {
-    server = new Server(config);
+    etsServer = new Server(config);
     const clientId = '4e37b32f57f6da55';
     nock(backendURL)
       .post(AuthAPI.URL.LOGIN)
@@ -86,9 +85,9 @@ describe('Routes', () => {
   });
 
   afterEach(async done => {
-    if (server && server.server) {
+    if (etsServer && etsServer.server) {
       try {
-        await server.stop();
+        await etsServer.stop();
         done();
       } catch (error) {
         console.error(error);
@@ -99,7 +98,7 @@ describe('Routes', () => {
   });
 
   const createInstance = async data => {
-    await server.start();
+    await etsServer.start();
     const url = baseURL + '/instance';
     data = data || {backend: 'production', email: 'test@example.com', password: 'supersecret'};
     return sendRequest('put', url, data);

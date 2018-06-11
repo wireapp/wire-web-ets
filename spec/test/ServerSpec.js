@@ -19,7 +19,6 @@
 
 // @ts-check
 
-require('dotenv').config({path: 'spec/test/.env'});
 const {default: config} = require('../../dist/config');
 const request = require('request');
 const {default: Server} = require('../../dist/Server');
@@ -27,14 +26,14 @@ const {default: Server} = require('../../dist/Server');
 const HTTP_CODE_OK = 200;
 
 describe('Server', () => {
-  let server;
+  let etsServer;
 
-  beforeEach(() => (server = new Server(config)));
+  beforeEach(() => (etsServer = new Server(config)));
 
   afterEach(async done => {
-    if (server && server.server) {
+    if (etsServer && etsServer.server) {
       try {
-        await server.stop();
+        await etsServer.stop();
         done();
       } catch (error) {
         console.error(error);
@@ -46,9 +45,8 @@ describe('Server', () => {
 
   it('starts a server on a specified port', async done => {
     try {
-      const port = await server.start();
-      console.log('process.env.PORT', process.env.PORT);
-      expect(port).toBe(Number(process.env.PORT));
+      const port = await etsServer.start();
+      expect(port).toBe(config.PORT_HTTP);
       done();
     } catch (error) {
       console.error(error);
@@ -56,7 +54,7 @@ describe('Server', () => {
   });
 
   it('responds to requests', async done => {
-    const port = await server.start();
+    const port = await etsServer.start();
 
     const url = `http://localhost:${port}/`;
     request.get(url, (error, response) => {
@@ -64,8 +62,8 @@ describe('Server', () => {
         done.fail(error);
       } else {
         expect(response.statusCode).toBe(HTTP_CODE_OK);
-        const body = JSON.parse(response.body);
-        expect(body.message).toContain('ready');
+        const {message} = JSON.parse(response.body);
+        expect(message).toContain('ready');
         done();
       }
     });
