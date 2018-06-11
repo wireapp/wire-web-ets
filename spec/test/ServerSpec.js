@@ -24,6 +24,8 @@ const {default: config} = require('../../dist/config');
 const request = require('request');
 const {default: Server} = require('../../dist/Server');
 
+const HTTP_CODE_OK = 200;
+
 describe('Server', () => {
   let server;
 
@@ -34,7 +36,7 @@ describe('Server', () => {
       try {
         await server.stop();
         done();
-      } catch(error) {
+      } catch (error) {
         console.error(error);
       }
     } else {
@@ -42,31 +44,30 @@ describe('Server', () => {
     }
   });
 
-  describe('start', () => {
-    it('starts a server on a specified port', async done => {
-      try {
-        const port = await server.start();
-        expect(port).toBe(Number(process.env.PORT));
-        done();
-      } catch(error) {
-        console.error(error);
-      }
-    });
-
-    it('responds to requests', async done => {
+  it('starts a server on a specified port', async done => {
+    try {
       const port = await server.start();
+      console.log('process.env.PORT', process.env.PORT);
+      expect(port).toBe(Number(process.env.PORT));
+      done();
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
-      const url = `http://localhost:${port}/`;
-      request.get(url, (error, response) => {
-        if (error) {
-          done.fail(error);
-        } else {
-          expect(response.statusCode).toBe(200);
-          const body = JSON.parse(response.body);
-          expect(body.message).toContain('ready');
-          done();
-        }
-      });
+  it('responds to requests', async done => {
+    const port = await server.start();
+
+    const url = `http://localhost:${port}/`;
+    request.get(url, (error, response) => {
+      if (error) {
+        done.fail(error);
+      } else {
+        expect(response.statusCode).toBe(HTTP_CODE_OK);
+        const body = JSON.parse(response.body);
+        expect(body.message).toContain('ready');
+        done();
+      }
     });
   });
 });
