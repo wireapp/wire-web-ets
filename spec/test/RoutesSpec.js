@@ -17,7 +17,6 @@
  *
  */
 
-/* eslint no-magic-numbers: "off" */
 // @ts-check
 
 require('dotenv').config({path: 'spec/test/.env'});
