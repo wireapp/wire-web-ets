@@ -1,4 +1,4 @@
-node('Linux_Node') {
+node("$NODE") {
 
   def jenkinsbot_secret = ''
   withCredentials([string(credentialsId: "${params.JENKINSBOT_SECRET}", variable: 'JENKINSBOT_SECRET')]) {
@@ -6,7 +6,7 @@ node('Linux_Node') {
   }
 
   stage('Checkout & Clean') {
-    git branch: "master", url: 'https://github.com/wireapp/wire-web-ets.git'
+    git branch: "$BRANCH", url: 'https://github.com/wireapp/wire-web-ets.git'
   }
 
   stage('Build') {
@@ -19,7 +19,7 @@ node('Linux_Node') {
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${VERSION} build failed** see: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} build failed** see: ${JOB_URL}"
       throw e
     }
   }
@@ -36,10 +36,10 @@ node('Linux_Node') {
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Starting ETS ${VERSION} failed** see: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Starting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
       throw e
     }
   }
 
-  wireSend secret: "${jenkinsbot_secret}", message: "🐛 **ETS ${VERSION} is up and running**"
+  wireSend secret: "${jenkinsbot_secret}", message: "🐛 **ETS ${BRANCH} on ${NODE} is up and running**"
 }

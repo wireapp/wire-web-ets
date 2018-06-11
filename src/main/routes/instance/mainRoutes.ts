@@ -41,9 +41,15 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       backend: Joi.string()
         .valid(['prod', 'production', 'staging'])
         .required(),
+      deviceName: Joi.string()
+        .allow('')
+        .optional(),
       email: Joi.string()
         .email()
         .required(),
+      name: Joi.string()
+        .allow('')
+        .optional(),
       password: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
