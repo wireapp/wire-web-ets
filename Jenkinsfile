@@ -1,5 +1,7 @@
-// Enable the option "This project is parameterized" and add 2 String parameters: BRANCH, NODE
-// Additionally add a Credentials Parameter JENKINSBOT_SECRET with type "Secret text"
+// Enable the option "This project is parameterized" and add following parameters:
+// BRANCH as String parameter
+// NODE as String parameter
+// JENKINSBOT_SECRET as Credentials parameter with type "Secret text"
 
 node("$NODE") {
 
