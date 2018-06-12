@@ -1,3 +1,6 @@
+// Enable the option "This project is parameterized" and add 2 String parameters: BRANCH, NODE
+// Additionally add a Credentials Parameter JENKINSBOT_SECRET with type "Secret text"
+
 node("$NODE") {
 
   def jenkinsbot_secret = ''
