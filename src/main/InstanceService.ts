@@ -30,7 +30,13 @@ import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
 import UUID from 'pure-uuid';
 
+const logdown = require('logdown');
 const {version}: {version: string} = require('../package.json');
+
+const logger = logdown('@wireapp/wire-web-ets/instanceService', {
+  logger: console,
+  markdown: false,
+});
 
 export interface Instance {
   account: Account;
@@ -63,11 +69,11 @@ class InstanceService {
 
     const engine = new MemoryEngine();
 
-    console.log('Initializing MemoryEngine...');
+    logger.log('Initializing MemoryEngine...');
 
     await engine.init('');
 
-    console.log(`Creating APIClient with "${backendType.name}" backend ...`);
+    logger.log(`Creating APIClient with "${backendType.name}" backend ...`);
     const client = new APIClient(new Config(engine, backendType));
     const account = new Account(client);
 
@@ -77,7 +83,7 @@ class InstanceService {
       model: deviceModel || `E2E Test Server v${version}`,
     };
 
-    console.log(`Logging in ...`);
+    logger.log(`Logging in ...`);
 
     try {
       await account.login(LoginData, true, ClientInfo);
@@ -133,7 +139,10 @@ class InstanceService {
   }
 
   getInstances(): Instance[] {
-    return this.cachedInstances.getAll().map(instance => instance.value);
+    return this.cachedInstances.getAll().map(instance => {
+      const key = Object.keys(instance)[0];
+      return instance[key];
+    });
   }
 
   async sendText(instanceId: string, conversationId: string, message: string): Promise<string> {
