@@ -74,7 +74,8 @@ describe('Routes', () => {
     nock(backendURL)
       .post(new RegExp(ConversationAPI.URL.CONVERSATIONS + '/.*/otr/messages'))
       .query({ignore_missing: false})
-      .reply(HTTP_CODE_OK);
+      .reply(HTTP_CODE_OK)
+      .persist();
     nock(backendURL)
       .get(NotificationAPI.URL.NOTIFICATION + '/last')
       .query({client: clientId})
