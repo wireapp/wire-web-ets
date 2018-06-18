@@ -149,7 +149,8 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const messageId = await instance.account.service.conversation.sendTextMessage(conversationId, message);
+      const messagePayload = await instance.account.service.conversation.createText(message);
+      const {id: messageId} = await instance.account.service.conversation.sendText(conversationId, messagePayload);
       return messageId;
     } else {
       throw new Error('Account service not set.');
@@ -170,7 +171,8 @@ class InstanceService {
   async sendImage(instanceId: string, conversationId: string, image: Image): Promise<string> {
     const instance = this.getInstance(instanceId);
     if (instance.account.service) {
-      const messageId = await instance.account.service.conversation.sendImage(conversationId, image);
+      const imagePayload = await instance.account.service.conversation.createImage(image);
+      const {id: messageId} = await instance.account.service.conversation.sendImage(conversationId, imagePayload);
       return messageId;
     } else {
       throw new Error('Account service not set.');
@@ -207,7 +209,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      return instance.account.service.conversation.updateTextMessage(conversationId, messageId, text);
+      return instance.account.service.conversation.updateText(conversationId, messageId, text);
     } else {
       throw new Error('Account service not set.');
     }
