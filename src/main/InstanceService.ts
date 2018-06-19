@@ -184,12 +184,12 @@ class InstanceService {
     }
   }
 
-  async sendPing(instanceId: string, conversationId: string): Promise<string> {
+  async sendPing(instanceId: string, conversationId: string, expireAfterMillis = 0): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       const payload = instance.account.service.conversation.createPing();
-      await instance.account.service.conversation.send(conversationId, payload);
+      await instance.account.service.conversation.send(conversationId, payload, expireAfterMillis);
       return instance.name;
     } else {
       throw new Error('Account service not set.');
