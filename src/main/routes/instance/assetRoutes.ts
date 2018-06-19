@@ -27,6 +27,7 @@ export interface ImageMessageRequest {
   conversationId: string;
   data: string;
   height: number;
+  messageTimer?: number;
   type: string;
   width: number;
 }
@@ -46,6 +47,9 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
       height: Joi.number()
         .min(1)
         .required(),
+      messageTimer: Joi.number()
+        .optional()
+        .default(0),
       type: Joi.string().required(),
       width: Joi.number()
         .min(1)
@@ -53,7 +57,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, data: base64Data, height, type, width}: ImageMessageRequest = req.body;
+      const {conversationId, data: base64Data, height, messageTimer, type, width}: ImageMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -62,7 +66,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
       try {
         const data = Buffer.from(base64Data, 'base64');
         const image: Image = {data, height, type, width};
-        const messageId = await instanceService.sendImage(instanceId, conversationId, image);
+        const messageId = await instanceService.sendImage(instanceId, conversationId, image, messageTimer);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
