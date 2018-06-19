@@ -145,12 +145,16 @@ class InstanceService {
     });
   }
 
-  async sendText(instanceId: string, conversationId: string, message: string): Promise<string> {
+  async sendText(instanceId: string, conversationId: string, message: string, expireAfterMillis = 0): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       const payload = await instance.account.service.conversation.createText(message);
-      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
+      const {id: messageId} = await instance.account.service.conversation.send(
+        conversationId,
+        payload,
+        expireAfterMillis
+      );
       return messageId;
     } else {
       throw new Error('Account service not set.');

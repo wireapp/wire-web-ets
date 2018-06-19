@@ -24,6 +24,7 @@ import joiValidate from '../../middlewares/joiValidate';
 
 export interface MessageRequest {
   conversationId: string;
+  messageTimer?: number;
   text: string;
 }
 
@@ -42,18 +43,19 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
+      messageTimer: Joi.number().optional(),
       text: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, text}: MessageRequest = req.body;
+      const {conversationId, messageTimer, text}: MessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
       try {
-        const messageId = await instanceService.sendText(instanceId, conversationId, text);
+        const messageId = await instanceService.sendText(instanceId, conversationId, text, messageTimer);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
