@@ -145,12 +145,16 @@ class InstanceService {
     });
   }
 
-  async sendText(instanceId: string, conversationId: string, message: string): Promise<string> {
+  async sendText(instanceId: string, conversationId: string, message: string, expireAfterMillis = 0): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       const payload = await instance.account.service.conversation.createText(message);
-      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
+      const {id: messageId} = await instance.account.service.conversation.send(
+        conversationId,
+        payload,
+        expireAfterMillis
+      );
       return messageId;
     } else {
       throw new Error('Account service not set.');
@@ -169,23 +173,27 @@ class InstanceService {
     }
   }
 
-  async sendImage(instanceId: string, conversationId: string, image: Image): Promise<string> {
+  async sendImage(instanceId: string, conversationId: string, image: Image, expireAfterMillis = 0): Promise<string> {
     const instance = this.getInstance(instanceId);
     if (instance.account.service) {
       const payload = await instance.account.service.conversation.createImage(image);
-      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
+      const {id: messageId} = await instance.account.service.conversation.send(
+        conversationId,
+        payload,
+        expireAfterMillis
+      );
       return messageId;
     } else {
       throw new Error('Account service not set.');
     }
   }
 
-  async sendPing(instanceId: string, conversationId: string): Promise<string> {
+  async sendPing(instanceId: string, conversationId: string, expireAfterMillis = 0): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       const payload = instance.account.service.conversation.createPing();
-      await instance.account.service.conversation.send(conversationId, payload);
+      await instance.account.service.conversation.send(conversationId, payload, expireAfterMillis);
       return instance.name;
     } else {
       throw new Error('Account service not set.');
