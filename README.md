@@ -65,7 +65,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 ```json
 {
   "conversationId": "<string in UUID format>",
-  ["messageTimer": "<number>",]
+  "messageTimer?": "<number>",
   "text": "<string>"
 }
 ```
