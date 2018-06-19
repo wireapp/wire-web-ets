@@ -22,6 +22,11 @@ import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
 
+export interface EphemeralModeRequest {
+  conversationId: string;
+  msTimeout: number;
+}
+
 export interface MessageRequest {
   conversationId: string;
   text: string;
@@ -60,6 +65,32 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
           messageId,
           name: instanceName,
         });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/messageTimer',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      msTimeout: Joi.number().required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, msTimeout}: EphemeralModeRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const instance = instanceService.getInstance(instanceId);
+        instance.messageTimers.set(conversationId, msTimeout);
+        return res.status(200);
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }

@@ -48,6 +48,7 @@ export interface Instance {
   client: APIClient;
   engine: CRUDEngine;
   id: string;
+  messageTimers: Map<string, number>;
   name: string;
 }
 
@@ -101,6 +102,7 @@ class InstanceService {
       client,
       engine,
       id: instanceId,
+      messageTimers: new Map(),
       name: instanceName || '',
     };
 
@@ -150,7 +152,12 @@ class InstanceService {
 
     if (instance.account.service) {
       const payload = await instance.account.service.conversation.createText(message);
-      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
+      const expireAfterMillis = instance.messageTimers.get(conversationId) || 0;
+      const {id: messageId} = await instance.account.service.conversation.send(
+        conversationId,
+        payload,
+        expireAfterMillis
+      );
       return messageId;
     } else {
       throw new Error('Account service not set.');
