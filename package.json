@@ -16,7 +16,7 @@
     "pure-uuid": "1.5.2",
     "typescript": "2.9.2"
   },
-  "description": "E2E Test Service",
+  "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
     "babel-eslint": "8.2.3",
     "eslint": "4.19.1",

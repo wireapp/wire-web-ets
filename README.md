@@ -8,6 +8,8 @@ For licensing information, see the attached LICENSE file and the list of third-p
 
 ## E2E Test Service
 
+End-to-end Test Service (ETS) for Wire's test automation suite.
+
 ## API v1
 
 - [`PUT /api/v1/instance`](#put-apiv1instance)
