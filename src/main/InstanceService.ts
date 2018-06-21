@@ -145,11 +145,16 @@ class InstanceService {
     });
   }
 
-  async sendText(instanceId: string, conversationId: string, message: string): Promise<string> {
+  async sendText(instanceId: string, conversationId: string, message: string, expireAfterMillis = 0): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const messageId = await instance.account.service.conversation.sendTextMessage(conversationId, message);
+      const payload = await instance.account.service.conversation.createText(message);
+      const {id: messageId} = await instance.account.service.conversation.send(
+        conversationId,
+        payload,
+        expireAfterMillis
+      );
       return messageId;
     } else {
       throw new Error('Account service not set.');
@@ -160,28 +165,35 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.sendConfirmation(conversationId, messageId);
+      const payload = instance.account.service.conversation.createConfirmation(messageId);
+      await instance.account.service.conversation.send(conversationId, payload);
       return instance.name;
     } else {
       throw new Error('Account service not set.');
     }
   }
 
-  async sendImage(instanceId: string, conversationId: string, image: Image): Promise<string> {
+  async sendImage(instanceId: string, conversationId: string, image: Image, expireAfterMillis = 0): Promise<string> {
     const instance = this.getInstance(instanceId);
     if (instance.account.service) {
-      const messageId = await instance.account.service.conversation.sendImage(conversationId, image);
+      const payload = await instance.account.service.conversation.createImage(image);
+      const {id: messageId} = await instance.account.service.conversation.send(
+        conversationId,
+        payload,
+        expireAfterMillis
+      );
       return messageId;
     } else {
       throw new Error('Account service not set.');
     }
   }
 
-  async sendPing(instanceId: string, conversationId: string): Promise<string> {
+  async sendPing(instanceId: string, conversationId: string, expireAfterMillis = 0): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.sendPing(conversationId);
+      const payload = instance.account.service.conversation.createPing();
+      await instance.account.service.conversation.send(conversationId, payload, expireAfterMillis);
       return instance.name;
     } else {
       throw new Error('Account service not set.');
@@ -207,7 +219,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      return instance.account.service.conversation.updateTextMessage(conversationId, messageId, text);
+      return instance.account.service.conversation.updateText(conversationId, messageId, text);
     } else {
       throw new Error('Account service not set.');
     }

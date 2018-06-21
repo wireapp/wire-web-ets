@@ -65,6 +65,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
 ```json
 {
   "conversationId": "<string in UUID format>",
+  "messageTimer?": "<number>",
   "text": "<string>"
 }
 ```
@@ -88,6 +89,7 @@ For licensing information, see the attached LICENSE file and the list of third-p
   "conversationId": "<string in UUID format>",
   "data": "<string in base64 format>",
   "height": "<number>",
+  "messageTimer?": "<number>",
   "type": "<string>",
   "width": "<number>"
 }
@@ -109,7 +111,8 @@ For licensing information, see the attached LICENSE file and the list of third-p
 
 ```json
 {
-  "conversationId": "<string in UUID format>"
+  "conversationId": "<string in UUID format>",
+  "messageTimer?": "<number>"
 }
 ```
 
@@ -183,7 +186,6 @@ POST /delete {"conversationId": "...", "messageId": "..."}
 POST /deleteEverywhere {"conversationId": "...", "messageId": "..."}
 POST /markEphemeralRead {"conversationId": "...", "messageId": "..."}
 POST /react {"conversationId": "...", "messageId":"", "reactType": "..."}
-POST /sendEphemeralText {"conversationId": "...", "payload": "..."}
 POST /sendFile {"conversationId": "...", "payload": "..."}
 POST /sendLocation {"conversationId": "...", "longitude":"...", "latitude":"...", "locationName":"...", "zoom":"..."} (not sure about the payload yet)
 ```
