@@ -16,7 +16,7 @@
     "pure-uuid": "1.5.2",
     "typescript": "2.9.2"
   },
-  "description": "E2E Test Service",
+  "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
     "babel-eslint": "8.2.3",
     "eslint": "4.19.1",
@@ -70,11 +70,14 @@
     "lint:js": "eslint --ignore-path .gitignore **/*.js",
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts\"",
+    "postversion": "git push && git push --tags",
     "precommit": "lint-staged",
     "prettier": "prettier \"**/*.{json,md}\"",
+    "preversion": "yarn && yarn test",
     "start": "node dist/index.js",
-    "test": "yarn dist && jasmine --config=jasmine.json"
+    "test": "yarn dist && jasmine --config=jasmine.json",
+    "version": "yarn dist"
   },
   "types": "dist/index.d.ts",
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
