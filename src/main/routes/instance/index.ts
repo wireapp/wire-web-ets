@@ -26,6 +26,7 @@ import clientRoutes from './clientRoutes';
 import confirmationRoutes from './confirmationRoutes';
 import conversationRoutes from './conversationRoutes';
 import mainRoutes from './mainRoutes';
+import sessionRoutes from './sessionRoutes';
 
 const routes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
@@ -33,8 +34,9 @@ const routes = (instanceService: InstanceService): express.Router => {
   router.use(assetRoutes(instanceService));
   router.use(clientRoutes(instanceService));
   router.use(confirmationRoutes(instanceService));
-  router.use(mainRoutes(instanceService));
   router.use(conversationRoutes(instanceService));
+  router.use(mainRoutes(instanceService));
+  router.use(sessionRoutes(instanceService));
 
   return router;
 };
