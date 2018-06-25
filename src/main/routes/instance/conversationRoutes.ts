@@ -22,6 +22,11 @@ import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
 
+export interface DeletionRequest {
+  conversationId: string;
+  messageId: string;
+}
+
 export interface MessageRequest {
   conversationId: string;
   messageTimer?: number;
@@ -36,6 +41,64 @@ export interface MessageUpdateRequest {
 
 const conversationRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
+
+  router.post(
+    '/api/v1/instance/:instanceId/delete',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      messageId: Joi.string()
+        .uuid()
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, messageId}: DeletionRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        await instanceService.deleteMessageLocal(instanceId, conversationId, messageId);
+        return res.json({
+          instanceId,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/deleteEverywhere',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      messageId: Joi.string()
+        .uuid()
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, messageId}: DeletionRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        await instanceService.deleteMessageEveryone(instanceId, conversationId, messageId);
+        return res.json({
+          instanceId,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
 
   router.post(
     '/api/v1/instance/:instanceId/sendText',

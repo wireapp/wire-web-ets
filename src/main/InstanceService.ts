@@ -110,6 +110,26 @@ class InstanceService {
     return instanceId;
   }
 
+  async deleteMessageLocal(instanceId: string, conversationId: string, messageId: string): Promise<void> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.deleteMessageLocal(conversationId, messageId);
+    } else {
+      throw new Error('Account service not set.');
+    }
+  }
+
+  async deleteMessageEveryone(instanceId: string, conversationId: string, messageId: string): Promise<void> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId);
+    } else {
+      throw new Error('Account service not set.');
+    }
+  }
+
   instanceExists(instanceId: string): boolean {
     return !!this.cachedInstances.get(instanceId);
   }
@@ -162,7 +182,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      instance.account.service.conversation.timerService.setMessageLevelTimer(conversationId, expireAfterMillis);
+      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await instance.account.service.conversation.createText(message);
       const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
       return messageId;
@@ -186,7 +206,7 @@ class InstanceService {
   async sendImage(instanceId: string, conversationId: string, image: Image, expireAfterMillis = 0): Promise<string> {
     const instance = this.getInstance(instanceId);
     if (instance.account.service) {
-      instance.account.service.conversation.timerService.setMessageLevelTimer(conversationId, expireAfterMillis);
+      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await instance.account.service.conversation.createImage(image);
       const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
       return messageId;
@@ -199,7 +219,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      instance.account.service.conversation.timerService.setMessageLevelTimer(conversationId, expireAfterMillis);
+      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = instance.account.service.conversation.createPing();
       await instance.account.service.conversation.send(conversationId, payload);
       return instance.name;

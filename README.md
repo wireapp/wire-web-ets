@@ -15,6 +15,8 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`PUT /api/v1/instance`](#put-apiv1instance)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
 - [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
+- [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceidsendimage)
+- [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
 - [`POST /api/v1/instance/<instanceId>/sendSessionReset`](#post-apiv1instanceinstanceidsendsessionreset)
@@ -68,6 +70,44 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```json
 {
   "fingerprint": "<string>",
+  "instanceId": "<string in UUID format>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/delete`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "messageId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/deleteEverywhere`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "messageId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
   "instanceId": "<string in UUID format>"
 }
 ```
@@ -205,8 +245,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ```
 POST /clear {"conversationId": "..."}
-POST /delete {"conversationId": "...", "messageId": "..."}
-POST /deleteEverywhere {"conversationId": "...", "messageId": "..."}
 POST /markEphemeralRead {"conversationId": "...", "messageId": "..."}
 POST /react {"conversationId": "...", "messageId":"", "reactType": "..."}
 POST /sendFile {"conversationId": "...", "payload": "..."}
