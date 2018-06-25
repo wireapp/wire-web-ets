@@ -98,7 +98,6 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
 
   router.get('/api/v1/instances/?', (req, res) => {
     const instances = instanceService.getInstances();
-    console.log({instances});
 
     if (instances.length) {
       return res.json({
