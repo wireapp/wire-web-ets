@@ -60,6 +60,44 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 }
 ```
 
+### `POST /api/v1/instance/<instanceId>/delete`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "messageId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/deleteEverywhere`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "messageId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>"
+}
+```
+
 ### `POST /api/v1/instance/<instanceId>/sendText`
 
 #### Request
@@ -184,8 +222,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ```
 POST /clear {"conversationId": "..."}
-POST /delete {"conversationId": "...", "messageId": "..."}
-POST /deleteEverywhere {"conversationId": "...", "messageId": "..."}
 POST /markEphemeralRead {"conversationId": "...", "messageId": "..."}
 POST /react {"conversationId": "...", "messageId":"", "reactType": "..."}
 POST /sendFile {"conversationId": "...", "payload": "..."}
