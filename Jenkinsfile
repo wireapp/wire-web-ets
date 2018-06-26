@@ -37,7 +37,7 @@ node("$NODE") {
     try {
       def NODE = tool name: 'node-v9.9.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin", "JENKINS_NODE_COOKIE=do_not_kill"]) {
-        sh 'yarn start &'
+        sh 'yarn start &> error.log &'
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
