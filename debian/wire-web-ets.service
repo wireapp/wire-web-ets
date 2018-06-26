@@ -1,0 +1,15 @@
+[Unit]
+Description=wire-web-ets
+After=network.target
+
+[Service]
+User=node
+ExecStart=~/wire-web-ets/debian/run.sh
+Restart=on-failure
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=wire-web-ets-node
+
+[Install]
+WantedBy=multi-user.target
