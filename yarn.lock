@@ -220,10 +220,6 @@
   version "10.5.1"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.1.tgz#d578446f4abff5c0b49ade9b4e5274f6badaadfc"
 
-"@types/node@10.5.1":
-  version "10.5.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.1.tgz#d578446f4abff5c0b49ade9b4e5274f6badaadfc"
-
 "@types/node@^8.9.4":
   version "8.10.20"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.20.tgz#fe674ea52e13950ab10954433a7824438aabbcac"
@@ -267,9 +263,9 @@
   version "3.0.56"
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.56.tgz#5e5d20e5848d02f8fff5fdc2c86d2e0ecc510540"
 
-"@wireapp/core@3.6.15":
-  version "3.6.15"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-3.6.15.tgz#f611f98c7e74ec0c0a63217044ece84432d18cc1"
+"@wireapp/core@3.6.17":
+  version "3.6.17"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-3.6.17.tgz#fd44e19695914620ad8f55a5c1cde960b4ecba93"
   dependencies:
     "@types/node" "10.5.1"
     "@wireapp/api-client" "1.5.7"
