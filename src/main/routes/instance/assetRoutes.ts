@@ -17,7 +17,7 @@
  *
  */
 
-import {Image} from '@wireapp/core/dist/conversation/root';
+import {ImageContent} from '@wireapp/core/dist/conversation/root';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
@@ -65,7 +65,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
 
       try {
         const data = Buffer.from(base64Data, 'base64');
-        const image: Image = {data, height, type, width};
+        const image: ImageContent = {data, height, type, width};
         const messageId = await instanceService.sendImage(instanceId, conversationId, image, messageTimer);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
