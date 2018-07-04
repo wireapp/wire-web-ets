@@ -24,7 +24,7 @@ import {Config} from '@wireapp/api-client/dist/commonjs/Config';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
-import {Image} from '@wireapp/core/dist/conversation/root';
+import {ImageContent} from '@wireapp/core/dist/conversation/root';
 import LRUCache from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
@@ -203,7 +203,12 @@ class InstanceService {
     }
   }
 
-  async sendImage(instanceId: string, conversationId: string, image: Image, expireAfterMillis = 0): Promise<string> {
+  async sendImage(
+    instanceId: string,
+    conversationId: string,
+    image: ImageContent,
+    expireAfterMillis = 0
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
