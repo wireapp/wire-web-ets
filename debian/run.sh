@@ -3,4 +3,6 @@
 # Change to script's directory to ensure we're in the correct folder.
 cd "${0%/*}" || exit 1
 
-yarn start "$@" >> error.log 2>&1
+export NODE_DEBUG="@wireapp/*"
+
+yarn start "$@" >> output.log 2>&1

@@ -22,6 +22,8 @@ node("$NODE") {
         sh 'yarn'
         sh 'yarn dist'
       }
+      sh 'cp debian/wire-web-ets.service /home/jenkins/.config/systemd/user/'
+      sh 'systemctl --user enable wire-web-ets'
     } catch(e) {
       currentBuild.result = 'FAILED'
       wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} build failed** see: ${JOB_URL}"
@@ -30,14 +32,16 @@ node("$NODE") {
   }
 
   stage('Kill server') {
-    sh returnStatus: true, script: 'killall node'
+    sh returnStatus: true, script: 'systemctl --user stop wire-web-ets'
   }
 
   stage('Start server') {
     try {
       def NODE = tool name: 'node-v9.9.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin", "JENKINS_NODE_COOKIE=do_not_kill"]) {
-        sh 'yarn start &> error.log &'
+        sh 'cp debian/wire-web-ets.service /home/jenkins/.config/systemd/user/'
+        sh 'systemctl --user enable wire-web-ets'
+        sh 'systemctl --user restart wire-web-ets'
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
