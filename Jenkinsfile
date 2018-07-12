@@ -36,7 +36,7 @@ node("$NODE") {
   stage('Start server') {
     try {
       def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
-      withEnv(["PATH+NODE=${NODE}/bin", "JENKINS_NODE_COOKIE=do_not_kill"]) {
+      withEnv(["PATH+NODE=${NODE}/bin", "JENKINS_NODE_COOKIE=do_not_kill", "NODE_DEBUG=@wireapp/*"]) {
         sh 'yarn start &> error.log &'
       }
     } catch(e) {
