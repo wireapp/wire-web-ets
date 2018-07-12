@@ -16,7 +16,7 @@ node("$NODE") {
 
   stage('Build') {
     try {
-      def NODE = tool name: 'node-v9.9.0', type: 'nodejs'
+      def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
         sh 'npm install -g yarn'
         sh 'yarn'
@@ -35,7 +35,7 @@ node("$NODE") {
 
   stage('Start server') {
     try {
-      def NODE = tool name: 'node-v9.9.0', type: 'nodejs'
+      def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin", "JENKINS_NODE_COOKIE=do_not_kill"]) {
         sh 'yarn start &> error.log &'
       }
