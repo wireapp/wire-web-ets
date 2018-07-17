@@ -112,6 +112,28 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 }
 ```
 
+### `POST /api/v1/instance/<instanceId>/messages`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+[
+  {
+    "id": "<string in UUID format>",
+    "type": "<string>",
+    "timestamp": <number>
+  }
+]
+```
+
 ### `POST /api/v1/instance/<instanceId>/sendImage`
 
 #### Request

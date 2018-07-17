@@ -166,6 +166,16 @@ class InstanceService {
     });
   }
 
+  getMessages(instanceId: string, conversationId: string): Messages[] {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.getMessages(conversationId);
+    } else {
+      throw new Error('Account service not set.');
+    }
+  }
+
   async resetSession(instanceId: string, conversationId: string): Promise<string> {
     const instance = this.getInstance(instanceId);
 
