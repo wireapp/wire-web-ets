@@ -17,7 +17,7 @@
  *
  */
 
-import {ImageContent} from '@wireapp/core/dist/conversation/root';
+import {ImageContent} from '@wireapp/core/dist/conversation/content/';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
