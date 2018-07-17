@@ -15,7 +15,8 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`PUT /api/v1/instance`](#put-apiv1instance)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
 - [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
-- [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceidsendimage)
+- [`GET /api/v1/instance/<instanceId>/messages`](#get-apiv1instanceinstanceidmessages)
+- [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceiddelete)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
@@ -74,6 +75,33 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 }
 ```
 
+### `GET /api/v1/instance/<instanceId>/messages`
+
+#### Request
+
+```json
+{
+  "conversationId?": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+[
+  {
+    content?: "AssetContent | ClientActionContent | ClientActionType | ConfirmationContent | DeletedContent | HiddenContent | ImageAssetContent | ImageContent | TextContent";
+    conversation?: "<string>";
+    from: "<string>";
+    id: "<string>";
+    messageTimer: "<number>";
+    state: "PayloadBundleState.INCOMING";
+    timestamp: "<number>";
+    type: "<string>;
+  }
+]
+```
+
 ### `POST /api/v1/instance/<instanceId>/delete`
 
 #### Request
@@ -110,28 +138,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 {
   "instanceId": "<string in UUID format>"
 }
-```
-
-### `POST /api/v1/instance/<instanceId>/messages`
-
-#### Request
-
-```json
-{
-  "conversationId": "<string in UUID format>"
-}
-```
-
-#### Response
-
-```json
-[
-  {
-    "id": "<string in UUID format>",
-    "type": "<string>",
-    "timestamp": <number>
-  }
-]
 ```
 
 ### `POST /api/v1/instance/<instanceId>/sendImage`

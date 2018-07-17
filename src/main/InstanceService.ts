@@ -25,6 +25,7 @@ import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {ImageContent} from '@wireapp/core/dist/conversation/content/';
+import {PayloadBundleIncoming} from '@wireapp/core/dist/conversation/root';
 import LRUCache from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
@@ -46,6 +47,9 @@ export interface Instance {
     ws: string;
   };
   client: APIClient;
+  conversations: {
+    [conversationId: string]: PayloadBundleIncoming;
+  };
   engine: CRUDEngine;
   id: string;
   name: string;
@@ -100,12 +104,21 @@ class InstanceService {
       account,
       backendType,
       client,
+      conversations: {},
       engine,
       id: instanceId,
       name: instanceName || '',
     };
 
     this.cachedInstances.set(instanceId, instance);
+
+    account.on(Account.INCOMING.TEXT_MESSAGE, async (data: PayloadBundleIncoming) => {
+      const instance = this.cachedInstances.get(instanceId);
+      if (!instance) {
+        throw new Error(`Instance with ID "${instanceId}" not found.`);
+      }
+      instance.conversations[data.id] = data;
+    });
 
     return instanceId;
   }
@@ -166,11 +179,11 @@ class InstanceService {
     });
   }
 
-  getMessages(instanceId: string, conversationId: string): Messages[] {
+  getMessages(instanceId: string, conversationId: string): PayloadBundleIncoming {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.getMessages(conversationId);
+      return instance.conversations[conversationId];
     } else {
       throw new Error('Account service not set.');
     }
