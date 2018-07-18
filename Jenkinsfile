@@ -30,16 +30,16 @@ node("$NODE") {
   }
 
   stage('Install') {
-    def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
     try {
+      def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
       sh ([script: """
-    echo "#!/usr/bin/env sh
+echo "#!/usr/bin/env sh
 cd "\$\{0%/*\}" || exit 1
 export NODE_DEBUG=\"@wireapp/*\"
 export PATH=\"\$\{PATH\}:${NODE}/bin\"
 yarn start "$@" >> output.log 2>&1"
 > debian/run.sh
-    """])
+      """])
 
       sh 'cat run.sh'
 
@@ -63,7 +63,7 @@ SyslogIdentifier=wire-web-ets
 [Install]
 WantedBy=default.target"
 >> ${HOME}/.config/systemd/user/wire-web-ets.service"
-"""])
+      """])
 
       sh "cat ${HOME}/.config/systemd/user/wire-web-ets.service"
 
