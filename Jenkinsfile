@@ -31,8 +31,8 @@ node("$NODE") {
 
   stage('Install') {
     def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
-
-    sh ([script: """
+    try {
+      sh ([script: """
     echo "#!/usr/bin/env sh
 cd "\$\{0%/*\}" || exit 1
 export NODE_DEBUG=\"@wireapp/*\"
@@ -41,14 +41,14 @@ yarn start "$@" >> output.log 2>&1"
 > debian/run.sh
     """])
 
-    sh 'cat run.sh'
+      sh 'cat run.sh'
 
-    sh 'chmod +x run.sh'
+      sh 'chmod +x run.sh'
 
-    sh "mkdir -p ${HOME}/.config/systemd/user/"
+      sh "mkdir -p ${HOME}/.config/systemd/user/"
 
-    sh ([script: """
-    echo "[Unit]
+      sh ([script: """
+echo "[Unit]
 Description=wire-web-ets
 After=network.target
 
@@ -65,9 +65,14 @@ WantedBy=default.target"
 >> ${HOME}/.config/systemd/user/wire-web-ets.service"
 """])
 
-    sh "cat ${HOME}/.config/systemd/user/wire-web-ets.service"
+      sh "cat ${HOME}/.config/systemd/user/wire-web-ets.service"
 
-    sh 'systemctl --user enable wire-web-ets'
+      sh 'systemctl --user enable wire-web-ets'
+    } catch(e) {
+      currentBuild.result = 'FAILED'
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} install failed** see: ${JOB_URL}"
+      throw e
+    }
   }
 
   stage('Restart server') {
