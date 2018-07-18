@@ -108,7 +108,14 @@ class InstanceService {
 
     this.cachedInstances.set(instanceId, instance);
 
+    logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
+
     return instanceId;
+  }
+
+  deleteInstance(instanceId: string): void {
+    this.cachedInstances.delete(instanceId);
+    logger.log(`[${utils.formatDate()}] Deleted instance with id "${instanceId}".`);
   }
 
   async deleteMessageLocal(instanceId: string, conversationId: string, messageId: string): Promise<void> {

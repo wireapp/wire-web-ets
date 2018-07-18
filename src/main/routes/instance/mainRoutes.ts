@@ -96,6 +96,22 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
     return res.sendStatus(404);
   });
 
+  router.delete('/api/v1/instance/:instanceId', (req, res) => {
+    const {instanceId = ''}: {instanceId: string} = req.params;
+
+    if (instanceService.instanceExists(instanceId)) {
+      try {
+        instanceService.deleteInstance(instanceId);
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+
+      return res.status(200);
+    }
+
+    return res.sendStatus(404);
+  });
+
   router.get('/api/v1/instances/?', (req, res) => {
     const instances = instanceService.getInstances();
 

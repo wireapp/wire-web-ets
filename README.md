@@ -15,6 +15,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`PUT /api/v1/instance`](#put-apiv1instance)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
 - [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
+- [`DELETE /api/v1/instance/<instanceId>`](#delete-apiv1instanceinstanceid)
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
@@ -73,6 +74,12 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
   "instanceId": "<string in UUID format>"
 }
 ```
+
+### `DELETE /api/v1/instance/<instanceId>`
+
+#### Response
+
+`200`
 
 ### `POST /api/v1/instance/<instanceId>/delete`
 
