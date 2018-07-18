@@ -20,9 +20,14 @@
 import * as express from 'express';
 import {ServerConfig} from '../../config';
 
-const router: express.Router = express.Router();
+const errorRoute = (config: ServerConfig): express.ErrorRequestHandler => (err, req, res) => {
+  console.error(err.stack);
+  const error = {
+    code: 500,
+    message: 'Internal server error',
+    stack: err.stack,
+  };
+  return res.status(error.code).json(error);
+};
 
-const DefaultRoute = (config: ServerConfig): express.RequestHandler =>
-  router.get('*', (req, res) => res.json({message: `E2E Test Service v${config.VERSION} ready`}));
-
-export default DefaultRoute;
+export default errorRoute;

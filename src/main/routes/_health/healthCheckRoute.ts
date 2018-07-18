@@ -19,10 +19,8 @@
 
 import * as express from 'express';
 
-const router: express.Router = express.Router();
+const router = express.Router();
 
-const STATUS_CODE_OK = 200;
+const healthRoute = (): express.RequestHandler => router.get('/_health/?', (req, res) => res.sendStatus(200));
 
-router.get('/_health/?', (req, res) => res.sendStatus(STATUS_CODE_OK));
-
-export default router;
+export default healthRoute;

@@ -18,30 +18,21 @@
  */
 
 import * as express from 'express';
-import InstanceService from '../../InstanceService';
+import * as fs from 'fs';
+import * as path from 'path';
+import {promisify} from 'util';
 
-const clientRoutes = (instanceService: InstanceService): express.Router => {
-  const router = express.Router();
+const router = express.Router();
 
-  router.get('/api/v1/instance/:instanceId/fingerprint/?', async (req: express.Request, res: express.Response) => {
-    const {instanceId = ''}: {instanceId: string} = req.params;
-
-    if (!instanceService.instanceExists(instanceId)) {
-      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
-    }
-
+const healthRoute = (): express.RequestHandler =>
+  router.get('/log/?', async (req, res) => {
+    const logFile = path.join(__dirname, '..', '..', '..', 'output.log');
     try {
-      const fingerprint = instanceService.getFingerprint(instanceId);
-      return res.json({
-        fingerprint,
-        instanceId,
-      });
+      const log = await promisify(fs.readFile)(logFile, {encoding: 'utf8'});
+      return res.send(log);
     } catch (error) {
       return res.status(500).json({error: error.message, stack: error.stack});
     }
   });
 
-  return router;
-};
-
-export default clientRoutes;
+export default healthRoute;
