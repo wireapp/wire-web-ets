@@ -29,6 +29,7 @@ import LRUCache from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
 import UUID from 'pure-uuid';
+import utils from './utils';
 
 const logdown = require('logdown');
 const {version}: {version: string} = require('../package.json');
@@ -69,11 +70,11 @@ class InstanceService {
 
     const engine = new MemoryEngine();
 
-    logger.log('Initializing MemoryEngine...');
+    logger.log(`[${utils.formatDate}] Initializing MemoryEngine...`);
 
     await engine.init('wire-web-ets');
 
-    logger.log(`Creating APIClient with "${backendType.name}" backend ...`);
+    logger.log(`[${utils.formatDate}] Creating APIClient with "${backendType.name}" backend ...`);
     const client = new APIClient(new Config(engine, backendType));
     const account = new Account(client);
 
@@ -83,7 +84,7 @@ class InstanceService {
       model: deviceModel || `E2E Test Server v${version}`,
     };
 
-    logger.log(`Logging in ...`);
+    logger.log(`[${utils.formatDate}] Logging in ...`);
 
     try {
       await account.login(LoginData, true, ClientInfo);
@@ -116,7 +117,7 @@ class InstanceService {
     if (instance.account.service) {
       await instance.account.service.conversation.deleteMessageLocal(conversationId, messageId);
     } else {
-      throw new Error('Account service not set.');
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
@@ -126,7 +127,7 @@ class InstanceService {
     if (instance.account.service) {
       await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId);
     } else {
-      throw new Error('Account service not set.');
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
@@ -142,10 +143,10 @@ class InstanceService {
       if (cryptoboxIdentity) {
         return cryptoboxIdentity.public_key.fingerprint();
       } else {
-        throw new Error('Instance identity broken.');
+        throw new Error(`Identity of instance "${instance.id}" broken.`);
       }
     } else {
-      throw new Error('Account service not set.');
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
@@ -153,7 +154,7 @@ class InstanceService {
     const instance = this.cachedInstances.get(instanceId);
 
     if (!instance) {
-      throw new Error('Instance not found.');
+      throw new Error(`Instance "${instanceId}" not found.`);
     }
 
     return instance;
@@ -174,7 +175,7 @@ class InstanceService {
       const {id: messageId} = await instance.account.service.conversation.send(conversationId, sessionResetPayload);
       return messageId;
     } else {
-      throw new Error('Account service not set.');
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
@@ -187,7 +188,7 @@ class InstanceService {
       const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
       return messageId;
     } else {
-      throw new Error('Account service not set.');
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
@@ -199,7 +200,7 @@ class InstanceService {
       await instance.account.service.conversation.send(conversationId, payload);
       return instance.name;
     } else {
-      throw new Error('Account service not set.');
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
@@ -216,7 +217,7 @@ class InstanceService {
       const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
       return messageId;
     } else {
-      throw new Error('Account service not set.');
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
@@ -229,7 +230,7 @@ class InstanceService {
       await instance.account.service.conversation.send(conversationId, payload);
       return instance.name;
     } else {
-      throw new Error('Account service not set.');
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
@@ -244,7 +245,7 @@ class InstanceService {
       }
       return instance.name;
     } else {
-      throw new Error('Account service not set.');
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
@@ -254,7 +255,7 @@ class InstanceService {
     if (instance.account.service) {
       return instance.account.service.conversation.updateText(conversationId, messageId, text);
     } else {
-      throw new Error('Account service not set.');
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 }
