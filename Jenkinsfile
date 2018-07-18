@@ -35,10 +35,11 @@ node("$NODE") {
 
       sh """printf \\
 '#!/usr/bin/env sh
-cd \"\${0%/*}\" || exit 1
-export NODE_DEBUG=\"@wireapp/*\"
-export PATH=\"\${PATH}:${NODE}/bin\"
-yarn start \"\$@\" >> output.log 2>&1' \\
+cd "\${0%%/*}" || exit 1
+export NODE_DEBUG="@wireapp/*"
+export PATH="\${PATH}:${NODE}/bin"
+yarn start "\$@" >> output.log 2>&1
+' \\
 > ${WORKSPACE}/run.sh"""
 
       sh "cat ${WORKSPACE}/run.sh"
@@ -61,7 +62,8 @@ StandardError=syslog
 SyslogIdentifier=wire-web-ets
 
 [Install]
-WantedBy=default.target' \\
+WantedBy=default.target
+' \\
 > ${HOME}/.config/systemd/user/wire-web-ets.service"""
 
       sh "cat ${HOME}/.config/systemd/user/wire-web-ets.service"
