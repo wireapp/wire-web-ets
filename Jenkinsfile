@@ -38,7 +38,7 @@ cd "\${0%/*}" || exit 1
 export NODE_DEBUG=\"@wireapp/*\"
 export PATH=\"\${PATH}:${NODE}/bin\"
 yarn start "\$@" >> output.log 2>&1"
-> debian/run.sh
+> run.sh
       """])
 
       sh 'cat run.sh'
