@@ -38,12 +38,12 @@ cd "\${0%/*}" || exit 1
 export NODE_DEBUG=\"@wireapp/*\"
 export PATH=\"\${PATH}:${NODE}/bin\"
 yarn start "\$@" >> output.log 2>&1"
-> run.sh
+> ${WORKSPACE}/run.sh
       """])
 
-      sh 'cat run.sh'
+      sh "cat ${WORKSPACE}/run.sh"
 
-      sh 'chmod +x run.sh'
+      sh "chmod +x ${WORKSPACE}/run.sh"
 
       sh "mkdir -p ${HOME}/.config/systemd/user/"
 
@@ -62,7 +62,7 @@ SyslogIdentifier=wire-web-ets
 
 [Install]
 WantedBy=default.target"
->> ${HOME}/.config/systemd/user/wire-web-ets.service"
+> ${HOME}/.config/systemd/user/wire-web-ets.service
       """])
 
       sh "cat ${HOME}/.config/systemd/user/wire-web-ets.service"
