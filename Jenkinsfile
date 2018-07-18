@@ -40,7 +40,7 @@ export PATH=\"\${PATH}:${NODE}/bin\"
 yarn start "\$@" >> output.log 2>&1"
       """
 
-      new File("${HOME}/run.sh").write("${run_script}")
+      new File("${WORKSPACE}/run.sh").write("${run_script}")
 
       sh "cat ${WORKSPACE}/run.sh"
 
