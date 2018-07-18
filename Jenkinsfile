@@ -6,7 +6,6 @@
 node("$NODE") {
 
   def jenkinsbot_secret = ''
-  def jenkins_home = '/home/jenkins'
   withCredentials([string(credentialsId: "${params.JENKINSBOT_SECRET}", variable: 'JENKINSBOT_SECRET')]) {
     jenkinsbot_secret = env.JENKINSBOT_SECRET
   }
@@ -46,7 +45,7 @@ yarn start "$@" >> output.log 2>&1"
 
     sh 'chmod +x run.sh'
 
-    sh "mkdir -p ${jenkins_home}/.config/systemd/user/"
+    sh "mkdir -p ${HOME}/.config/systemd/user/"
 
     sh ([script: """
     echo "[Unit]
@@ -63,10 +62,10 @@ SyslogIdentifier=wire-web-ets
 
 [Install]
 WantedBy=default.target"
->> ${jenkins_home}/.config/systemd/user/wire-web-ets.service"
+>> ${HOME}/.config/systemd/user/wire-web-ets.service"
 """])
 
-    sh "cat ${jenkins_home}/.config/systemd/user/wire-web-ets.service"
+    sh "cat ${HOME}/.config/systemd/user/wire-web-ets.service"
 
     sh 'systemctl --user enable wire-web-ets'
   }
