@@ -18,7 +18,7 @@
  */
 
 import {Router} from 'express';
-import * as fs from 'fs';
+import {readFile} from 'fs';
 import * as path from 'path';
 import {promisify} from 'util';
 
@@ -26,7 +26,7 @@ const logRoute = () =>
   Router().get('/log/?', async (req, res) => {
     const logFile = path.join(__dirname, '..', '..', '..', 'output.log');
     try {
-      const logData = await promisify(fs.readFile)(logFile, {encoding: 'utf8'});
+      const logData = await promisify(readFile)(logFile, {encoding: 'utf8'});
       return res.contentType('text/plain; charset=UTF-8').send(logData);
     } catch (error) {
       return res.status(500).json({error: error.message, stack: error.stack});
