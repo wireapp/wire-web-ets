@@ -32,14 +32,15 @@ node("$NODE") {
   stage('Install') {
     try {
       def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
-      sh ([script: """
-echo "#!/usr/bin/env sh
+      run_script = """
+#!/usr/bin/env sh
 cd "\${0%/*}" || exit 1
 export NODE_DEBUG=\"@wireapp/*\"
 export PATH=\"\${PATH}:${NODE}/bin\"
 yarn start "\$@" >> output.log 2>&1"
-> ${WORKSPACE}/run.sh
-      """])
+      """
+
+      new File("${HOME}/run.sh").write("${run_script}")
 
       sh "cat ${WORKSPACE}/run.sh"
 
@@ -47,8 +48,8 @@ yarn start "\$@" >> output.log 2>&1"
 
       sh "mkdir -p ${HOME}/.config/systemd/user/"
 
-      sh ([script: """
-echo "[Unit]
+      unit_script = """
+[Unit]
 Description=wire-web-ets
 After=network.target
 
@@ -61,9 +62,10 @@ StandardError=syslog
 SyslogIdentifier=wire-web-ets
 
 [Install]
-WantedBy=default.target"
-> ${HOME}/.config/systemd/user/wire-web-ets.service
-      """])
+WantedBy=default.target
+      """
+
+      new File("${HOME}/.config/systemd/user/wire-web-ets.service").write("${unit_script}")
 
       sh "cat ${HOME}/.config/systemd/user/wire-web-ets.service"
 
