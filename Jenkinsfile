@@ -34,11 +34,11 @@ node("$NODE") {
       def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
       sh "touch ${WORKSPACE}/run.sh"
 
-      sh "echo \"#!/usr/bin/env sh\" >> ${WORKSPACE}/run.sh"
-      sh "echo \"cd \"\${0%/*}\" || exit 1 >> ${WORKSPACE}/run.sh"
-      sh "echo \"export NODE_DEBUG=\"@wireapp/*\" >> ${WORKSPACE}/run.sh"
-      sh "echo \"export PATH=\"\${PATH}:${NODE}/bin\" >> ${WORKSPACE}/run.sh"
-      sh "echo \"yarn start \"\$@\" >> output.log 2>&1\" >> ${WORKSPACE}/run.sh"
+      sh "echo '#!/usr/bin/env sh' >> ${WORKSPACE}/run.sh"
+      sh "echo 'cd \"\${0%/*}\" || exit 1' >> ${WORKSPACE}/run.sh"
+      sh "echo 'export NODE_DEBUG=\"@wireapp/*' >> ${WORKSPACE}/run.sh"
+      sh "echo 'export PATH=\"\${PATH}:${NODE}/bin' >> ${WORKSPACE}/run.sh"
+      sh "echo 'yarn start \"\$@\" >> output.log 2>&1' >> ${WORKSPACE}/run.sh"
 
       sh "cat ${WORKSPACE}/run.sh"
 
