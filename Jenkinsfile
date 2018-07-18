@@ -37,7 +37,7 @@ echo "#!/usr/bin/env sh
 cd "\${0%/*}" || exit 1
 export NODE_DEBUG=\"@wireapp/*\"
 export PATH=\"\${PATH}:${NODE}/bin\"
-yarn start "$@" >> output.log 2>&1"
+yarn start "\$@" >> output.log 2>&1"
 > debian/run.sh
       """])
 
