@@ -11,3 +11,4 @@ npm-debug.log*
 package-lock.json
 temp
 *.log
+run.sh
