@@ -40,7 +40,7 @@ export PATH=\"\${PATH}:${NODE}/bin\"
 yarn start "\$@" >> output.log 2>&1"
       """
 
-      new File("${WORKSPACE}/run.sh").write("${run_script}")
+      new File("${WORKSPACE}/run.sh").append("${run_script}")
 
       sh "cat ${WORKSPACE}/run.sh"
 
@@ -65,7 +65,7 @@ SyslogIdentifier=wire-web-ets
 WantedBy=default.target
       """
 
-      new File("${HOME}/.config/systemd/user/wire-web-ets.service").write("${unit_script}")
+      new File("${HOME}/.config/systemd/user/wire-web-ets.service").append("${unit_script}")
 
       sh "cat ${HOME}/.config/systemd/user/wire-web-ets.service"
 
