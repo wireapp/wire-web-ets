@@ -42,8 +42,6 @@ yarn start "\$@" >> output.log 2>&1
 ' \\
 > ${WORKSPACE}/run.sh"""
 
-      sh "cat ${WORKSPACE}/run.sh"
-
       sh "chmod +x ${WORKSPACE}/run.sh"
 
       sh "mkdir -p ${HOME}/.config/systemd/user/"
@@ -66,8 +64,6 @@ WantedBy=default.target
 ' \\
 > ${HOME}/.config/systemd/user/wire-web-ets.service"""
 
-      sh "cat ${HOME}/.config/systemd/user/wire-web-ets.service"
-
       sh 'systemctl --user enable wire-web-ets'
     } catch(e) {
       currentBuild.result = 'FAILED'
@@ -78,6 +74,7 @@ WantedBy=default.target
 
   stage('Restart server') {
     try {
+      sh 'systemctl --user daemon-reload'
       sh 'systemctl --user restart wire-web-ets'
     } catch(e) {
       currentBuild.result = 'FAILED'
