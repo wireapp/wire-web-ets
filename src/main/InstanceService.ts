@@ -171,11 +171,8 @@ class InstanceService {
     return instance;
   }
 
-  getInstances(): Instance[] {
-    return this.cachedInstances.getAll().map(instance => {
-      const key = Object.keys(instance)[0];
-      return instance[key];
-    });
+  getInstances(): Array<{[id: string]: Instance}> {
+    return this.cachedInstances.getAll();
   }
 
   async resetSession(instanceId: string, conversationId: string): Promise<string> {
