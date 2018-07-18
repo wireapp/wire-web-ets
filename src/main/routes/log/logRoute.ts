@@ -17,22 +17,20 @@
  *
  */
 
-import * as express from 'express';
+import {Router} from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 import {promisify} from 'util';
 
-const router = express.Router();
-
-const healthRoute = (): express.RequestHandler =>
-  router.get('/log/?', async (req, res) => {
+const logRoute = () =>
+  Router().get('/log/?', async (req, res) => {
     const logFile = path.join(__dirname, '..', '..', '..', 'output.log');
     try {
-      const log = await promisify(fs.readFile)(logFile, {encoding: 'utf8'});
-      return res.send(log);
+      const logData = await promisify(fs.readFile)(logFile, {encoding: 'utf8'});
+      return res.contentType('text/plain; charset=UTF-8').send(logData);
     } catch (error) {
       return res.status(500).json({error: error.message, stack: error.stack});
     }
   });
 
-export default healthRoute;
+export default logRoute;

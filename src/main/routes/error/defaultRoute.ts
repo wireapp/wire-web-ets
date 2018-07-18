@@ -22,7 +22,7 @@ import {ServerConfig} from '../../config';
 
 const router = express.Router();
 
-const defaultRoute = (config: ServerConfig): express.RequestHandler =>
+const defaultRoute = (config: ServerConfig) =>
   router.get('*', (req, res) => res.json({message: `E2E Test Service v${config.VERSION} ready`}));
 
 export default defaultRoute;
