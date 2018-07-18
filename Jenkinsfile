@@ -44,7 +44,7 @@ node("$NODE") {
 
       sh "mkdir -p ${HOME}/.config/systemd/user/"
 
-      sh """printf
+      sh """printf \\
 '[Unit]
 Description=wire-web-ets
 After=network.target
