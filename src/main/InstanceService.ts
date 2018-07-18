@@ -108,7 +108,18 @@ class InstanceService {
 
     this.cachedInstances.set(instanceId, instance);
 
+    logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
+
     return instanceId;
+  }
+
+  async deleteInstance(instanceId: string): Promise<void> {
+    const instance = this.getInstance(instanceId);
+
+    await instance.account.logout();
+
+    this.cachedInstances.delete(instanceId);
+    logger.log(`[${utils.formatDate()}] Deleted instance with id "${instanceId}".`);
   }
 
   async deleteMessageLocal(instanceId: string, conversationId: string, messageId: string): Promise<void> {
@@ -160,11 +171,8 @@ class InstanceService {
     return instance;
   }
 
-  getInstances(): Instance[] {
-    return this.cachedInstances.getAll().map(instance => {
-      const key = Object.keys(instance)[0];
-      return instance[key];
-    });
+  getInstances(): Array<{[id: string]: Instance}> {
+    return this.cachedInstances.getAll();
   }
 
   async resetSession(instanceId: string, conversationId: string): Promise<string> {

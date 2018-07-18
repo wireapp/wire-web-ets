@@ -263,28 +263,29 @@
   version "3.0.60"
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.60.tgz#dcf6fada5b4201625b9ed5ff6d71852d4a979b4e"
 
-"@wireapp/core@3.12.2":
-  version "3.12.2"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-3.12.2.tgz#0aa7a08ed6a4a659e3866779e1af1b3811398c2e"
+"@wireapp/core@3.13.0":
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-3.13.0.tgz#2645f482647014f685e919e27166fbcdf61e68aa"
   dependencies:
     "@types/node" "10.5.2"
     "@wireapp/api-client" "1.9.1"
-    "@wireapp/cryptobox" "8.5.15"
+    "@wireapp/cryptobox" "8.6.0"
+    "@wireapp/protocol-messaging" "1.20.1"
     "@wireapp/store-engine" "0.11.45"
     bazinga64 "5.2.13"
     logdown "3.2.3"
     protobufjs "6.8.6"
     pure-uuid "1.5.3"
 
-"@wireapp/cryptobox@8.5.15":
-  version "8.5.15"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-8.5.15.tgz#4225bd43e3fb988ae76873abc32aeeec7ced989c"
+"@wireapp/cryptobox@8.6.0":
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-8.6.0.tgz#3eb9f7a48760ce0e01a0ebece34de720f0bfa162"
   dependencies:
     "@types/fs-extra" "5.0.4"
     "@types/node" "10.5.2"
     "@wireapp/lru-cache" "2.1.35"
     "@wireapp/priority-queue" "0.1.58"
-    "@wireapp/proteus" "7.2.10"
+    "@wireapp/proteus" "7.3.0"
     "@wireapp/store-engine" "0.11.45"
     bazinga64 "5.2.13"
     dexie "2.0.4"
@@ -302,9 +303,9 @@
     "@types/node" "10.5.2"
     pure-uuid "1.5.3"
 
-"@wireapp/proteus@7.2.10":
-  version "7.2.10"
-  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-7.2.10.tgz#90377d370c08a5431370676ff6b55264a6123031"
+"@wireapp/proteus@7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-7.3.0.tgz#97b0328288ffcf9937a247ce057d88d13838b69c"
   dependencies:
     "@types/chai" "4.1.4"
     "@types/ed2curve" "0.2.2"
@@ -312,6 +313,12 @@
     "@wireapp/cbor" "3.0.60"
     ed2curve "0.2.1"
     libsodium-wrappers-sumo "0.7.3"
+
+"@wireapp/protocol-messaging@1.20.1":
+  version "1.20.1"
+  resolved "https://registry.yarnpkg.com/@wireapp/protocol-messaging/-/protocol-messaging-1.20.1.tgz#3ff6b21914b628ef62f0092dc1827a99bd9e5b24"
+  dependencies:
+    protobufjs "6.8.6"
 
 "@wireapp/store-engine@0.11.45":
   version "0.11.45"
@@ -810,6 +817,13 @@ cosmiconfig@^5.0.2:
     is-directory "^0.3.1"
     js-yaml "^3.9.0"
     parse-json "^4.0.0"
+
+cross-env@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.2.0.tgz#6ecd4c015d5773e614039ee529076669b9d126f2"
+  dependencies:
+    cross-spawn "^6.0.5"
+    is-windows "^1.0.0"
 
 cross-spawn@^5.0.1:
   version "5.1.0"
@@ -1839,7 +1853,7 @@ is-typedarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
 
-is-windows@^1.0.2:
+is-windows@^1.0.0, is-windows@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/is-windows/-/is-windows-1.0.2.tgz#d1850eb9791ecd18e6182ce12a30f396634bb19d"
 
