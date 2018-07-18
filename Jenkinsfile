@@ -47,4 +47,10 @@ node("$NODE") {
   }
 
   wireSend secret: "${jenkinsbot_secret}", message: "🐛 **ETS ${BRANCH} on ${NODE} is up and running**"
+
+  if("$BRANCH" == "dev") {
+    stage('Test') {
+       build job: 'wire-web-ets_Smoke_Tests', wait: false
+    }
+  }
 }
