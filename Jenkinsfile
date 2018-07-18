@@ -72,13 +72,10 @@ WantedBy=default.target"
 
   stage('Restart server') {
     try {
-      def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
-      withEnv(["PATH+NODE=${NODE}/bin", "JENKINS_NODE_COOKIE=do_not_kill", "NODE_DEBUG=@wireapp/*"]) {
-        sh 'systemctl --user restart wire-web-ets'
-      }
+      sh 'systemctl --user restart wire-web-ets'
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Starting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
       throw e
     }
   }
