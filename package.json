@@ -19,6 +19,7 @@
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
     "babel-eslint": "8.2.6",
+    "cross-env": "5.2.0",
     "eslint": "5.1.0",
     "eslint-config-prettier": "2.9.0",
     "eslint-plugin-prettier": "2.6.2",
@@ -74,7 +75,7 @@
     "precommit": "lint-staged",
     "prettier": "prettier \"**/*.{json,md}\"",
     "preversion": "yarn && yarn test",
-    "start": "node dist/index.js",
+    "start": "cross-env NODE_DEBUG=\"@wireapp/*\" node dist/index.js",
     "test": "yarn dist && jasmine --config=jasmine.json",
     "version": "yarn dist"
   },

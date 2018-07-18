@@ -113,7 +113,11 @@ class InstanceService {
     return instanceId;
   }
 
-  deleteInstance(instanceId: string): void {
+  async deleteInstance(instanceId: string): Promise<void> {
+    const instance = this.getInstance(instanceId);
+
+    await instance.account.logout();
+
     this.cachedInstances.delete(instanceId);
     logger.log(`[${utils.formatDate()}] Deleted instance with id "${instanceId}".`);
   }

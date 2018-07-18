@@ -96,17 +96,17 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
     return res.sendStatus(404);
   });
 
-  router.delete('/api/v1/instance/:instanceId', (req, res) => {
+  router.delete('/api/v1/instance/:instanceId', async (req, res) => {
     const {instanceId = ''}: {instanceId: string} = req.params;
 
     if (instanceService.instanceExists(instanceId)) {
       try {
-        instanceService.deleteInstance(instanceId);
+        await instanceService.deleteInstance(instanceId);
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
 
-      return res.status(200);
+      return res.sendStatus(200);
     }
 
     return res.sendStatus(404);
@@ -115,13 +115,22 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
   router.get('/api/v1/instances/?', (req, res) => {
     const instances = instanceService.getInstances();
 
-    if (instances.length) {
-      return res.json({
-        instances,
-      });
+    if (!instances.length) {
+      return res.json({});
     }
 
-    return res.sendStatus(404);
+    const mappedInstances = instances.map(instance => {
+      const {backendType, client, id, name} = instance;
+
+      return {
+        backend: backendType.name,
+        clientId: client.context!.clientId,
+        instanceId: id,
+        name: name,
+      };
+    });
+
+    return res.json({instances: mappedInstances});
   });
 
   return router;
