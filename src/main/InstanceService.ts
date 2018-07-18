@@ -70,11 +70,11 @@ class InstanceService {
 
     const engine = new MemoryEngine();
 
-    logger.log(`[${utils.formatDate}] Initializing MemoryEngine...`);
+    logger.log(`[${utils.formatDate()}] Initializing MemoryEngine...`);
 
     await engine.init('wire-web-ets');
 
-    logger.log(`[${utils.formatDate}] Creating APIClient with "${backendType.name}" backend ...`);
+    logger.log(`[${utils.formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
     const client = new APIClient(new Config(engine, backendType));
     const account = new Account(client);
 
@@ -84,7 +84,7 @@ class InstanceService {
       model: deviceModel || `E2E Test Server v${version}`,
     };
 
-    logger.log(`[${utils.formatDate}] Logging in ...`);
+    logger.log(`[${utils.formatDate()}] Logging in ...`);
 
     try {
       await account.login(LoginData, true, ClientInfo);
