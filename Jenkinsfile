@@ -29,19 +29,56 @@ node("$NODE") {
     }
   }
 
-  stage('Kill server') {
-    sh returnStatus: true, script: 'killall node'
-  }
-
-  stage('Start server') {
+  stage('Install') {
     try {
       def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
-      withEnv(["PATH+NODE=${NODE}/bin", "JENKINS_NODE_COOKIE=do_not_kill", "NODE_DEBUG=@wireapp/*"]) {
-        sh 'yarn start &> error.log &'
-      }
+
+      sh """printf \\
+'#!/usr/bin/env sh
+cd "\${0%%/*}" || exit 1
+export NODE_DEBUG="@wireapp/*"
+export PATH="\${PATH}:${NODE}/bin"
+yarn start "\$@" >> output.log 2>&1
+' \\
+> ${WORKSPACE}/run.sh"""
+
+      sh "chmod +x ${WORKSPACE}/run.sh"
+
+      sh "mkdir -p ${HOME}/.config/systemd/user/"
+
+      sh """printf \\
+'[Unit]
+Description=wire-web-ets
+After=network.target
+
+[Service]
+ExecStart=${WORKSPACE}/run.sh
+Restart=on-failure
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=wire-web-ets
+
+[Install]
+WantedBy=default.target
+' \\
+> ${HOME}/.config/systemd/user/wire-web-ets.service"""
+
+      sh 'systemctl --user enable wire-web-ets'
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Starting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} install failed** see: ${JOB_URL}"
+      throw e
+    }
+  }
+
+  stage('Restart server') {
+    try {
+      sh 'systemctl --user daemon-reload'
+      sh 'systemctl --user restart wire-web-ets'
+    } catch(e) {
+      currentBuild.result = 'FAILED'
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
       throw e
     }
   }
