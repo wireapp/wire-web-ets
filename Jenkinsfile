@@ -38,7 +38,7 @@ node("$NODE") {
   stage('Start server') {
     try {
       def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
-      withEnv(["PATH+NODE=${NODE}/bin", "JENKINS_NODE_COOKIE=do_not_kill"]) {
+      withEnv(["PATH+NODE=${NODE}/bin", "JENKINS_NODE_COOKIE=do_not_kill", "NODE_DEBUG=@wireapp/*"]) {
         sh 'cp debian/wire-web-ets.service /home/jenkins/.config/systemd/user/'
         sh 'systemctl --user enable wire-web-ets'
         sh 'systemctl --user restart wire-web-ets'

@@ -17,23 +17,18 @@
  *
  */
 
-import config from './config';
-import Server from './Server';
-import utils from './utils';
+const utils = {
+  formatDate(): string {
+    const localeOptions = {
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      month: '2-digit',
+      second: '2-digit',
+      year: 'numeric',
+    };
+    return new Date().toLocaleDateString('de-DE', localeOptions);
+  },
+};
 
-const server = new Server(config);
-
-server
-  .start()
-  .then(port => console.info(`[${utils.formatDate()}] Server is running on port ${port}.`))
-  .catch(error => console.error(`[${utils.formatDate()}] ${error.stack}`));
-
-process.on('SIGINT', () => {
-  console.log(`[${utils.formatDate()}] Received "SIGINT" signal. Exiting.`);
-  server.stop();
-});
-
-process.on('SIGTERM', () => {
-  console.log(`[${utils.formatDate()}] Received "SIGTERM" signal. Exiting.`);
-  server.stop();
-});
+export default utils;
