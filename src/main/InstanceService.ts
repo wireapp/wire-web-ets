@@ -48,11 +48,11 @@ export interface Instance {
     ws: string;
   };
   client: APIClient;
-  conversations: {
-    [conversationId: string]: PayloadBundleIncoming;
-  };
   engine: CRUDEngine;
   id: string;
+  messages: {
+    [messageId: string]: PayloadBundleIncoming;
+  };
   name: string;
 }
 
@@ -105,20 +105,20 @@ class InstanceService {
       account,
       backendType,
       client,
-      conversations: {},
       engine,
       id: instanceId,
+      messages: {},
       name: instanceName || '',
     };
 
     this.cachedInstances.set(instanceId, instance);
 
-    account.on(Account.INCOMING.TEXT_MESSAGE, async (data: PayloadBundleIncoming) => {
+    account.on(Account.INCOMING.TEXT_MESSAGE, async (message: PayloadBundleIncoming) => {
       const instance = this.cachedInstances.get(instanceId);
       if (!instance) {
         throw new Error(`Instance with ID "${instanceId}" not found.`);
       }
-      instance.conversations[data.id] = data;
+      instance.messages[message.id] = message;
     });
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
@@ -192,7 +192,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      return instance.conversations[conversationId];
+      return instance.messages[conversationId];
     } else {
       throw new Error('Account service not set.');
     }

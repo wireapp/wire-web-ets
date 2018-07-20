@@ -91,19 +91,19 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 #### Response
 
 ```json
-[
-  {
+{
+  "<message id>": {
     "content?":
       "<AssetContent | ClientActionContent | ClientActionType | ConfirmationContent | DeletedContent | HiddenContent | ImageAssetContent | ImageContent | TextContent>",
-    "conversation?": "<string>",
-    "from": "<string>",
-    "id": "<string>",
+    "conversationId?": "<string in UUID format>",
+    "from": "<string in UUID format>",
+    "id": "<string in UUID format>",
     "messageTimer": "<number>",
     "state": "PayloadBundleState.INCOMING",
-    "timestamp": "<number>",
+    "timestamp": "<UNIX timestamp as number>",
     "type": "<string>"
   }
-]
+}
 ```
 
 ### `PUT /api/v1/instance`
