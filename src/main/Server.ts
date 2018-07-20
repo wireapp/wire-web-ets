@@ -55,7 +55,7 @@ class Server {
     this.app.use(logRoute());
     this.app.use(healthCheckRoute());
     this.app.use(defaultRoute(this.config));
-    this.app.use(errorRoute(this.config));
+    this.app.use(errorRoute());
   }
 
   initAPIRoutes() {

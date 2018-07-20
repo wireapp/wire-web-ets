@@ -120,7 +120,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       }
 
       try {
-        const messages = await instanceService.getMessages(instanceId, conversationId);
+        const messages = instanceService.getMessages(instanceId, conversationId);
         return res.json(messages);
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
