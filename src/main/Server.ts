@@ -24,10 +24,11 @@ import * as helmet from 'helmet';
 import * as http from 'http';
 import {ServerConfig} from './config';
 import InstanceService from './InstanceService';
-import HealthCheckRoute from './routes/_health/HealthCheckRoute';
-import DefaultRoute from './routes/error/DefaultRoute';
-import ErrorRoute from './routes/error/ErrorRoute';
+import healthCheckRoute from './routes/_health/healthCheckRoute';
+import defaultRoute from './routes/error/defaultRoute';
+import errorRoute from './routes/error/errorRoute';
 import InstanceRoutes from './routes/instance/';
+import logRoute from './routes/log/logRoute';
 
 class Server {
   private app: express.Express;
@@ -51,9 +52,10 @@ class Server {
       })
     );
     this.initAPIRoutes();
-    this.app.use(HealthCheckRoute);
-    this.app.use(DefaultRoute(this.config));
-    this.app.use(ErrorRoute(this.config));
+    this.app.use(logRoute());
+    this.app.use(healthCheckRoute());
+    this.app.use(defaultRoute(this.config));
+    this.app.use(errorRoute(this.config));
   }
 
   initAPIRoutes() {

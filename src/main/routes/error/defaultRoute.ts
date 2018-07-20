@@ -17,23 +17,12 @@
  *
  */
 
-import config from './config';
-import Server from './Server';
-import utils from './utils';
+import * as express from 'express';
+import {ServerConfig} from '../../config';
 
-const server = new Server(config);
+const router = express.Router();
 
-server
-  .start()
-  .then(port => console.info(`[${utils.formatDate()}] Server is running on port ${port}.`))
-  .catch(error => console.error(`[${utils.formatDate()}] ${error.stack}`));
+const defaultRoute = (config: ServerConfig) =>
+  router.get('*', (req, res) => res.json({message: `E2E Test Service v${config.VERSION} ready`}));
 
-process.on('SIGINT', () => {
-  console.log(`[${utils.formatDate()}] Received "SIGINT" signal. Exiting.`);
-  server.stop();
-});
-
-process.on('SIGTERM', () => {
-  console.log(`[${utils.formatDate()}] Received "SIGTERM" signal. Exiting.`);
-  server.stop();
-});
+export default defaultRoute;

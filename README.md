@@ -12,11 +12,14 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ## API v1
 
-- [`PUT /api/v1/instance`](#put-apiv1instance)
+- [`GET /log`](#get-log)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
 - [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
+- [`GET /api/v1/instances`](#get-apiv1instances)
 - [`GET /api/v1/instance/<instanceId>/messages`](#get-apiv1instanceinstanceidmessages)
-- [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceiddelete)
+- [`PUT /api/v1/instance`](#put-apiv1instance)
+- [`DELETE /api/v1/instance/<instanceId>`](#delete-apiv1instanceinstanceid)
+- [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
@@ -28,27 +31,12 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ---
 
-### `PUT /api/v1/instance`
-
-#### Request
-
-```json
-{
-  "backend": "<'prod'|'production'|'staging'>",
-  "deviceName": "<string>",
-  "email": "<string in email format>",
-  "name": "<string>",
-  "password": "<string>"
-}
-```
+### `GET /log`
 
 #### Response
 
-```json
-{
-  "instanceId": "<string>",
-  "name": "<string>"
-}
+```
+<complete log as plain text>
 ```
 
 ### `GET /api/v1/instance/<instanceId>`
@@ -75,13 +63,28 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 }
 ```
 
+### `GET /api/v1/instances`
+
+#### Response
+
+```json
+{
+  "<instance id>": {
+    "backend": "<string>",
+    "clientId": "<string>",
+    "instanceId": "<string in UUID format>",
+    "name": "<string>"
+  }
+}
+```
+
 ### `GET /api/v1/instance/<instanceId>/messages`
 
 #### Request
 
 ```json
 {
-  "conversationId?": "<string in UUID format>"
+  "conversationId": "<string in UUID format>"
 }
 ```
 
@@ -90,17 +93,47 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```json
 [
   {
-    content?: "AssetContent | ClientActionContent | ClientActionType | ConfirmationContent | DeletedContent | HiddenContent | ImageAssetContent | ImageContent | TextContent";
-    conversation?: "<string>";
-    from: "<string>";
-    id: "<string>";
-    messageTimer: "<number>";
-    state: "PayloadBundleState.INCOMING";
-    timestamp: "<number>";
-    type: "<string>;
+    "content?":
+      "<AssetContent | ClientActionContent | ClientActionType | ConfirmationContent | DeletedContent | HiddenContent | ImageAssetContent | ImageContent | TextContent>",
+    "conversation?": "<string>",
+    "from": "<string>",
+    "id": "<string>",
+    "messageTimer": "<number>",
+    "state": "PayloadBundleState.INCOMING",
+    "timestamp": "<number>",
+    "type": "<string>"
   }
 ]
 ```
+
+### `PUT /api/v1/instance`
+
+#### Request
+
+```json
+{
+  "backend": "<'prod'|'production'|'staging'>",
+  "deviceName": "<string>",
+  "email": "<string in email format>",
+  "name": "<string>",
+  "password": "<string>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string>",
+  "name": "<string>"
+}
+```
+
+### `DELETE /api/v1/instance/<instanceId>`
+
+#### Response
+
+`200`
 
 ### `POST /api/v1/instance/<instanceId>/delete`
 

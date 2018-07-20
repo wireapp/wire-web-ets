@@ -17,17 +17,8 @@
  *
  */
 
-import * as express from 'express';
-import {ServerConfig} from '../../config';
+import {Router} from 'express';
 
-const ErrorRoute = (config: ServerConfig): express.ErrorRequestHandler => (err, req, res, next) => {
-  console.error(err.stack);
-  const error = {
-    code: 500,
-    message: 'Internal server error',
-    stack: err.stack,
-  };
-  res.status(error.code).json(error);
-};
+const healthRoute = () => Router().get('/_health/?', (req, res) => res.sendStatus(200));
 
-export default ErrorRoute;
+export default healthRoute;

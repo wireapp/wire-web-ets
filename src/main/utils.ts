@@ -17,12 +17,18 @@
  *
  */
 
-import * as express from 'express';
-import {ServerConfig} from '../../config';
+const utils = {
+  formatDate(): string {
+    const localeOptions = {
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      month: '2-digit',
+      second: '2-digit',
+      year: 'numeric',
+    };
+    return new Date().toLocaleDateString('de-DE', localeOptions);
+  },
+};
 
-const router: express.Router = express.Router();
-
-const DefaultRoute = (config: ServerConfig): express.RequestHandler =>
-  router.get('*', (req, res) => res.json({message: `E2E Test Service v${config.VERSION} ready`}));
-
-export default DefaultRoute;
+export default utils;
