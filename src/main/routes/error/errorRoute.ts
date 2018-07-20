@@ -18,11 +18,16 @@
  */
 
 import * as express from 'express';
+import {ServerConfig} from '../../config';
 
-const router: express.Router = express.Router();
+const errorRoute = (config: ServerConfig): express.ErrorRequestHandler => (err, req, res) => {
+  console.error(err.stack);
+  const error = {
+    code: 500,
+    message: 'Internal server error',
+    stack: err.stack,
+  };
+  return res.status(error.code).json(error);
+};
 
-const STATUS_CODE_OK = 200;
-
-router.get('/_health/?', (req, res) => res.sendStatus(STATUS_CODE_OK));
-
-export default router;
+export default errorRoute;
