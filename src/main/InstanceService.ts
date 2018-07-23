@@ -17,7 +17,7 @@
  *
  */
 
-import APIClient = require('@wireapp/api-client');
+import {APIClient} from '@wireapp/api-client';
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
 import {ClientClassification} from '@wireapp/api-client/dist/commonjs/client/';
 import {Config} from '@wireapp/api-client/dist/commonjs/Config';
@@ -25,7 +25,7 @@ import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {ImageContent} from '@wireapp/core/dist/conversation/content/ImageContent';
-import LRUCache from '@wireapp/lru-cache';
+import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
 import UUID from 'pure-uuid';
