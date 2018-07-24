@@ -247,9 +247,9 @@
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.3.tgz#7f226d67d654ec9070e755f46daebf014628e9d9"
 
-"@wireapp/api-client@1.9.11":
-  version "1.9.11"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.9.11.tgz#13cea81736f04d176a8d974b01da99a0a884565e"
+"@wireapp/api-client@1.9.14":
+  version "1.9.14"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.9.14.tgz#ba1ac8df7ef130dd10bbfc7d1f017f5559242afd"
   dependencies:
     "@types/node" "10.5.2"
     "@types/spark-md5" "3.0.0"
@@ -267,13 +267,13 @@
   version "3.0.62"
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.62.tgz#73144aef3db75a666e6cda5448026532ecb94b61"
 
-"@wireapp/core@3.14.0":
-  version "3.14.0"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-3.14.0.tgz#354e46c98924d321d7d5264f4a010b17f379dd61"
+"@wireapp/core@3.14.3":
+  version "3.14.3"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-3.14.3.tgz#5cd412933a1169440268158027ad873b3633f5de"
   dependencies:
     "@types/node" "10.5.2"
-    "@wireapp/api-client" "1.9.11"
-    "@wireapp/cryptobox" "8.6.3"
+    "@wireapp/api-client" "1.9.14"
+    "@wireapp/cryptobox" "8.6.4"
     "@wireapp/protocol-messaging" "1.20.1"
     "@wireapp/store-engine" "0.11.48"
     bazinga64 "5.2.14"
@@ -281,15 +281,15 @@
     protobufjs "6.8.8"
     pure-uuid "1.5.3"
 
-"@wireapp/cryptobox@8.6.3":
-  version "8.6.3"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-8.6.3.tgz#a0487a6c32e5106c4f513466d4c32e239ac42d86"
+"@wireapp/cryptobox@8.6.4":
+  version "8.6.4"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-8.6.4.tgz#79c8948619fc1340eef9e22a02ff31f8b3a1d11d"
   dependencies:
     "@types/fs-extra" "5.0.4"
     "@types/node" "10.5.2"
     "@wireapp/lru-cache" "2.1.38"
     "@wireapp/priority-queue" "0.1.60"
-    "@wireapp/proteus" "7.3.2"
+    "@wireapp/proteus" "7.3.3"
     "@wireapp/store-engine" "0.11.48"
     bazinga64 "5.2.14"
     dexie "2.0.4"
@@ -307,9 +307,9 @@
     "@types/node" "10.5.2"
     pure-uuid "1.5.3"
 
-"@wireapp/proteus@7.3.2":
-  version "7.3.2"
-  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-7.3.2.tgz#989cac23a10565d2dd20fd19b3dc54533c4af14d"
+"@wireapp/proteus@7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-7.3.3.tgz#410051742f69dd5103373a065868271ec7ad08a3"
   dependencies:
     "@types/chai" "4.1.4"
     "@types/ed2curve" "0.2.2"
