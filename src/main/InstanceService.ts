@@ -257,11 +257,18 @@ class InstanceService {
     }
   }
 
-  updateText(instanceId: string, conversationId: string, messageId: string, text: string): Promise<string> {
+  async updateText(
+    instanceId: string,
+    conversationId: string,
+    originalMessageId: string,
+    newMessageText: string
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      return instance.account.service.conversation.updateText(conversationId, messageId, text);
+      const payload = instance.account.service.conversation.createEditedText(newMessageText, originalMessageId);
+      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
+      return messageId;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
