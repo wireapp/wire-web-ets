@@ -247,9 +247,9 @@
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.3.tgz#7f226d67d654ec9070e755f46daebf014628e9d9"
 
-"@wireapp/api-client@1.10.1":
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.10.1.tgz#70623e34860f890988fa527be39069d659130cb4"
+"@wireapp/api-client@1.10.3":
+  version "1.10.3"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.10.3.tgz#e1cd0a5ea26dab3b79aeacf7972994c7a88a84cc"
   dependencies:
     "@types/node" "10.5.4"
     "@types/spark-md5" "3.0.0"
@@ -267,23 +267,23 @@
   version "3.0.64"
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.64.tgz#6ee9c33d57a26b44db1d0a1ded11d53f2fe2a800"
 
-"@wireapp/core@3.15.5":
-  version "3.15.5"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-3.15.5.tgz#0fce374a5326cfa0687a4d187ac7151e1c25b277"
+"@wireapp/core@3.15.7":
+  version "3.15.7"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-3.15.7.tgz#0c7a95e58f4cb2a4ac41d49f82f428c76060b5ec"
   dependencies:
     "@types/node" "10.5.4"
-    "@wireapp/api-client" "1.10.1"
-    "@wireapp/cryptobox" "8.6.8"
+    "@wireapp/api-client" "1.10.3"
+    "@wireapp/cryptobox" "8.6.9"
     "@wireapp/protocol-messaging" "1.20.1"
     "@wireapp/store-engine" "0.11.50"
-    bazinga64 "5.2.16"
+    bazinga64 "5.2.17"
     logdown "3.2.3"
     protobufjs "6.8.8"
     pure-uuid "1.5.3"
 
-"@wireapp/cryptobox@8.6.8":
-  version "8.6.8"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-8.6.8.tgz#91e25f8e9023cb7c14ebf9df273959fb78070aea"
+"@wireapp/cryptobox@8.6.9":
+  version "8.6.9"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-8.6.9.tgz#73c6b6d0610d015320e7328693b7ef0c092e325f"
   dependencies:
     "@types/fs-extra" "5.0.4"
     "@types/node" "10.5.4"
@@ -291,7 +291,7 @@
     "@wireapp/priority-queue" "0.1.62"
     "@wireapp/proteus" "7.3.6"
     "@wireapp/store-engine" "0.11.50"
-    bazinga64 "5.2.16"
+    bazinga64 "5.2.17"
     dexie "2.0.4"
     fs-extra "7.0.0"
     logdown "3.2.3"
@@ -536,9 +536,9 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
-bazinga64@5.2.16:
-  version "5.2.16"
-  resolved "https://registry.yarnpkg.com/bazinga64/-/bazinga64-5.2.16.tgz#d81649561911a1ad9bce64a95e40367105eac1c9"
+bazinga64@5.2.17:
+  version "5.2.17"
+  resolved "https://registry.yarnpkg.com/bazinga64/-/bazinga64-5.2.17.tgz#04c8357c51f083ee466055fdf408d66a302f9ff5"
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.1"
