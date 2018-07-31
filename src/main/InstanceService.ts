@@ -25,7 +25,7 @@ import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {ImageContent} from '@wireapp/core/dist/conversation/content/ImageContent';
-import {PayloadBundleIncoming, ReactionType} from '@wireapp/core/dist/conversation/root';
+import {PayloadBundleIncoming, PayloadBundleOutgoing, ReactionType} from '@wireapp/core/dist/conversation/root';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
@@ -42,7 +42,7 @@ const logger = logdown('@wireapp/wire-web-ets/instanceService', {
 
 interface ConversationStorage {
   [conversationId: string]: {
-    [messageId: string]: PayloadBundleIncoming;
+    [messageId: string]: PayloadBundleIncoming | PayloadBundleOutgoing;
   };
 }
 
@@ -117,21 +117,9 @@ class InstanceService {
 
     this.cachedInstances.set(instanceId, instance);
 
-    account.on(Account.INCOMING.TEXT_MESSAGE, async (payload: PayloadBundleIncoming) => {
-      const instance = this.cachedInstances.get(instanceId);
-      if (!instance) {
-        throw new Error(`Instance with ID "${instanceId}" not found.`);
-      }
-
-      const {conversation: conversationId, id: messageId} = payload;
-
-      if (conversationId) {
-        if (!instance.conversations[conversationId]) {
-          instance.conversations[conversationId] = {};
-        }
-        instance.conversations[conversationId][messageId] = payload;
-      }
-    });
+    account.on(Account.INCOMING.TEXT_MESSAGE, (payload: PayloadBundleIncoming) =>
+      this.addMessageToStorage(instanceId, payload)
+    );
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
 
@@ -200,7 +188,10 @@ class InstanceService {
     return this.cachedInstances.getAll();
   }
 
-  getMessages(instanceId: string, conversationId: string): {[messageId: string]: PayloadBundleIncoming} {
+  getMessages(
+    instanceId: string,
+    conversationId: string
+  ): {[messageId: string]: PayloadBundleIncoming | PayloadBundleOutgoing} {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
@@ -228,8 +219,9 @@ class InstanceService {
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await instance.account.service.conversation.createText(message);
-      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
-      return messageId;
+      const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
+      this.addMessageToStorage(instance.id, sentMessage);
+      return sentMessage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
@@ -323,6 +315,22 @@ class InstanceService {
       return messageId;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  private addMessageToStorage(instanceId: string, payload: PayloadBundleIncoming | PayloadBundleOutgoing): void {
+    const instance = this.getInstance(instanceId);
+    if (!instance) {
+      throw new Error(`Instance with ID "${instanceId}" not found.`);
+    }
+
+    const {conversation: conversationId, id: messageId} = payload;
+
+    if (conversationId) {
+      if (!instance.conversations[conversationId]) {
+        instance.conversations[conversationId] = {};
+      }
+      instance.conversations[conversationId][messageId] = payload;
     }
   }
 }
