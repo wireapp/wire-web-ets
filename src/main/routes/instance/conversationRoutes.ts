@@ -102,7 +102,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/messages/?',
+    '/api/v1/instance/:instanceId/getmessages/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()

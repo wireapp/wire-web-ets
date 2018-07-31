@@ -228,7 +228,7 @@ describe('Routes', () => {
         [messageId]: receivedMessage,
       };
 
-      const requestUrl = `${baseURL}/instance/${instanceId}/messages`;
+      const requestUrl = `${baseURL}/instance/${instanceId}/getmessages`;
       const requestData = {conversationId};
       const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
 

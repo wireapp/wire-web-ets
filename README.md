@@ -15,12 +15,12 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`GET /log`](#get-log)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
 - [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
-- [`GET /api/v1/instance/<instanceId>/messages`](#get-apiv1instanceinstanceidmessages)
 - [`GET /api/v1/instances`](#get-apiv1instances)
 - [`PUT /api/v1/instance`](#put-apiv1instance)
 - [`DELETE /api/v1/instance/<instanceId>`](#delete-apiv1instanceinstanceid)
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceidsendimage)
+- [`POST /api/v1/instance/<instanceId>/getmessages`](#post-apiv1instanceinstanceidgetmessages)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
 - [`POST /api/v1/instance/<instanceId>/sendSessionReset`](#post-apiv1instanceinstanceidsendsessionreset)
@@ -60,35 +60,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 {
   "fingerprint": "<string>",
   "instanceId": "<string in UUID format>"
-}
-```
-
-### `GET /api/v1/instance/<instanceId>/messages`
-
-#### Request
-
-```json
-{
-  "conversationId": "<string in UUID format>"
-}
-```
-
-#### Response
-
-```json
-{
-  "<message id>": {
-    "content?": {
-      "text": "<string>"
-    },
-    "conversation": "<string in UUID format>",
-    "from": "<string in UUID format>",
-    "id": "<string in UUID format>",
-    "messageTimer": "<number>",
-    "state": "PayloadBundleState.INCOMING",
-    "timestamp": "<number in Unix time stamp format>",
-    "type": "<string>"
-  }
 }
 ```
 
@@ -171,6 +142,35 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```json
 {
   "instanceId": "<string in UUID format>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/getmessages`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "<message id>": {
+    "content?": {
+      "text": "<string>"
+    },
+    "conversation": "<string in UUID format>",
+    "from": "<string in UUID format>",
+    "id": "<string in UUID format>",
+    "messageTimer": "<number>",
+    "state": "PayloadBundleState.INCOMING",
+    "timestamp": "<number in Unix time stamp format>",
+    "type": "<string>"
+  }
 }
 ```
 
