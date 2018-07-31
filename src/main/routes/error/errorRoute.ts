@@ -18,8 +18,9 @@
  */
 
 import * as express from 'express';
+import {ServerConfig} from '../../config';
 
-const errorRoute = (): express.ErrorRequestHandler => (err, res: any) => {
+const errorRoute = (config: ServerConfig): express.ErrorRequestHandler => (err, req, res) => {
   console.error(err.stack);
   const error = {
     code: 500,
