@@ -202,7 +202,12 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
-      type: Joi.string().allow([ReactionType.LIKE, ReactionType.NONE]),
+      originalMessageId: Joi.string()
+        .uuid()
+        .required(),
+      type: Joi.string()
+        .valid(ReactionType.LIKE, ReactionType.NONE)
+        .required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
