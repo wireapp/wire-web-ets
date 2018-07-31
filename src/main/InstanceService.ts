@@ -25,6 +25,7 @@ import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {ImageContent} from '@wireapp/core/dist/conversation/content/ImageContent';
+import {PayloadBundleIncoming} from '@wireapp/core/dist/conversation/root';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
@@ -39,6 +40,12 @@ const logger = logdown('@wireapp/wire-web-ets/instanceService', {
   markdown: false,
 });
 
+interface ConversationStorage {
+  [conversationId: string]: {
+    [messageId: string]: PayloadBundleIncoming;
+  };
+}
+
 export interface Instance {
   account: Account;
   backendType: {
@@ -49,6 +56,7 @@ export interface Instance {
   client: APIClient;
   engine: CRUDEngine;
   id: string;
+  conversations: ConversationStorage;
   name: string;
 }
 
@@ -101,12 +109,29 @@ class InstanceService {
       account,
       backendType,
       client,
+      conversations: {},
       engine,
       id: instanceId,
       name: instanceName || '',
     };
 
     this.cachedInstances.set(instanceId, instance);
+
+    account.on(Account.INCOMING.TEXT_MESSAGE, async (payload: PayloadBundleIncoming) => {
+      const instance = this.cachedInstances.get(instanceId);
+      if (!instance) {
+        throw new Error(`Instance with ID "${instanceId}" not found.`);
+      }
+
+      const {conversation: conversationId, id: messageId} = payload;
+
+      if (conversationId) {
+        if (!instance.conversations[conversationId]) {
+          instance.conversations[conversationId] = {};
+        }
+        instance.conversations[conversationId][messageId] = payload;
+      }
+    });
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
 
@@ -173,6 +198,16 @@ class InstanceService {
 
   getInstances(): Array<{[id: string]: Instance}> {
     return this.cachedInstances.getAll();
+  }
+
+  getMessages(instanceId: string, conversationId: string): {[messageId: string]: PayloadBundleIncoming} {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      return instance.conversations[conversationId];
+    } else {
+      throw new Error('Account service not set.');
+    }
   }
 
   async resetSession(instanceId: string, conversationId: string): Promise<string> {

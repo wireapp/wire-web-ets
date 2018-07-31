@@ -23,6 +23,7 @@ const {default: config} = require('../../dist/config');
 const {default: Server} = require('../../dist/Server');
 const nock = require('nock');
 const request = require('request');
+const {default: UUID} = require('pure-uuid');
 const {APIClient} = require('@wireapp/api-client');
 const backendURL = APIClient.BACKEND.PRODUCTION.rest;
 const {AuthAPI} = require('@wireapp/api-client/dist/commonjs/auth/');
@@ -30,6 +31,7 @@ const {ClientAPI} = require('@wireapp/api-client/dist/commonjs/client/');
 const {ConversationAPI} = require('@wireapp/api-client/dist/commonjs/conversation/');
 const {NotificationAPI} = require('@wireapp/api-client/dist/commonjs/notification/');
 
+const UUID_VERSION = 4;
 const HTTP_CODE_OK = 200;
 const HTTP_CODE_NOT_FOUND = 404;
 const HTTP_CODE_UNPROCESSABLE_ENTITY = 422;
@@ -60,10 +62,10 @@ describe('Routes', () => {
       'iJCRCjc8oROO-dkrkqCXOade997oa8Jhbz6awMUQPBQo80VenWqp_oNvfY6AnU5BxEsdDPOBfBP-uz_b0gAKBQ==.v=1.k=1.d=1498600993.t=a.l=.u=aaf9a833-ef30-4c22-86a0-9adc8a15b3b4.c=15037015562284012115',
     expires_in: 900,
     token_type: 'Bearer',
-    user: 'aaf9a833-ef30-4c22-86a0-9adc8a15b3b4',
+    user: new UUID(UUID_VERSION).format(),
   };
 
-  beforeEach(() => {
+  beforeEach(async done => {
     etsServer = new Server(config);
     const clientId = '4e37b32f57f6da55';
     nock(backendURL)
@@ -88,6 +90,9 @@ describe('Routes', () => {
     nock(backendURL)
       .get(ClientAPI.URL.CLIENTS)
       .reply(HTTP_CODE_OK, [{id: clientId}]);
+
+    await etsServer.start();
+    done();
   });
 
   afterEach(async done => {
@@ -104,7 +109,6 @@ describe('Routes', () => {
   });
 
   const createInstance = async data => {
-    await etsServer.start();
     const url = baseURL + '/instance';
     data = data || {backend: 'production', email: 'test@example.com', password: 'supersecret'};
     return sendRequest('put', url, data);
@@ -170,8 +174,9 @@ describe('Routes', () => {
       expect(statusCode).toBe(HTTP_CODE_OK);
       const {instanceId} = JSON.parse(body);
 
+      const conversationId = new UUID(UUID_VERSION).format();
       const requestUrl = `${baseURL}/instance/${instanceId}/sendText`;
-      const requestData = {conversationId: 'b8258e66-5314-4ca1-a80e-ee0c523a0adb', text: 'Hello from Jasmine'};
+      const requestData = {conversationId, text: 'Hello from Jasmine'};
       const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
       expect(requestedStatusCode).toBe(HTTP_CODE_OK);
 
@@ -191,6 +196,46 @@ describe('Routes', () => {
       const requestUrl = `${baseURL}/doesnotexist`;
       const {statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
       expect(requestedStatusCode).toBe(HTTP_CODE_NOT_FOUND);
+      done();
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  it('outputs received messages', async done => {
+    try {
+      const instance = await createInstance();
+      const {instanceId} = JSON.parse(instance.body);
+
+      const rawInstance = etsServer.instanceService.cachedInstances.get(instanceId);
+      const conversationId = new UUID(UUID_VERSION).format();
+      const messageId = new UUID(UUID_VERSION).format();
+
+      const receivedMessage = {
+        content: {
+          text: 'Hello from Jasmine',
+        },
+        conversation: conversationId,
+        from: new UUID(UUID_VERSION).format(),
+        id: messageId,
+        messageTimer: 0,
+        state: 'PayloadBundleState.INCOMING',
+        timestamp: 1533033857761,
+        type: 'text',
+      };
+
+      rawInstance.conversations[conversationId] = {
+        [messageId]: receivedMessage,
+      };
+
+      const requestUrl = `${baseURL}/instance/${instanceId}/getMessages`;
+      const requestData = {conversationId};
+      const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
+
+      const receivedPayload = JSON.parse(requestedBody);
+
+      expect(requestedStatusCode).toBe(HTTP_CODE_OK);
+      expect(receivedPayload[messageId]).toEqual(receivedMessage);
       done();
     } catch (error) {
       console.error(error);

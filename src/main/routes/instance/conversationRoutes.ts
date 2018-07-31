@@ -22,19 +22,20 @@ import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
 
-export interface DeletionRequest {
+export interface MessagesRequest {
   conversationId: string;
+}
+
+export interface DeletionRequest extends MessagesRequest {
   messageId: string;
 }
 
-export interface MessageRequest {
-  conversationId: string;
+export interface MessageRequest extends MessagesRequest {
   messageTimer?: number;
   text: string;
 }
 
-export interface MessageUpdateRequest {
-  conversationId: string;
+export interface MessageUpdateRequest extends MessagesRequest {
   firstMessageId: string;
   text: string;
 }
@@ -94,6 +95,30 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
         return res.json({
           instanceId,
         });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/getMessages/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId}: MessagesRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const messages = instanceService.getMessages(instanceId, conversationId);
+        return res.json(messages || {});
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }

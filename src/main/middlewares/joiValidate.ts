@@ -17,13 +17,13 @@
  *
  */
 
-import * as Express from 'express';
+import * as express from 'express';
 import * as Joi from 'joi';
 
 const joiValidate = (schema: Joi.SchemaLike) => (
-  req: Express.Request,
-  res: Express.Response,
-  next: Express.NextFunction
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
 ): void => {
   const {body, method} = req;
 
