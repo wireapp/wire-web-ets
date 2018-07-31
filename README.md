@@ -78,13 +78,15 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```json
 {
   "<message id>": {
-    "content?": "<AssetContent | ClientActionContent | ClientActionType | ConfirmationContent | DeletedContent | HiddenContent | ImageAssetContent | ImageContent | TextContent>",
-    "conversationId?": "<string in UUID format>",
+    "content?": {
+      "text": "<string>"
+    },
+    "conversation": "<string in UUID format>",
     "from": "<string in UUID format>",
     "id": "<string in UUID format>",
     "messageTimer": "<number>",
     "state": "PayloadBundleState.INCOMING",
-    "timestamp": "<UNIX timestamp as number>",
+    "timestamp": "<number in Unix time stamp format>",
     "type": "<string>"
   }
 }

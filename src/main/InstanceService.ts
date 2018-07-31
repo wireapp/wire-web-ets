@@ -40,6 +40,12 @@ const logger = logdown('@wireapp/wire-web-ets/instanceService', {
   markdown: false,
 });
 
+interface ConversationStorage {
+  [conversationId: string]: {
+    [messageId: string]: PayloadBundleIncoming;
+  };
+}
+
 export interface Instance {
   account: Account;
   backendType: {
@@ -50,11 +56,7 @@ export interface Instance {
   client: APIClient;
   engine: CRUDEngine;
   id: string;
-  conversations: {
-    [conversationId: string]: {
-      [messageId: string]: PayloadBundleIncoming;
-    };
-  };
+  conversations: ConversationStorage;
   name: string;
 }
 
@@ -115,16 +117,19 @@ class InstanceService {
 
     this.cachedInstances.set(instanceId, instance);
 
-    account.on(Account.INCOMING.TEXT_MESSAGE, async (message: PayloadBundleIncoming) => {
+    account.on(Account.INCOMING.TEXT_MESSAGE, async (payload: PayloadBundleIncoming) => {
       const instance = this.cachedInstances.get(instanceId);
       if (!instance) {
         throw new Error(`Instance with ID "${instanceId}" not found.`);
       }
 
-      if (message.conversation) {
-        instance.conversations[message.conversation] = {
-          [message.id]: message,
-        };
+      const {conversation: conversationId, id: messageId} = payload;
+
+      if (conversationId) {
+        if (!instance.conversations[conversationId]) {
+          instance.conversations[conversationId] = {};
+        }
+        instance.conversations[conversationId][messageId] = payload;
       }
     });
 
@@ -199,6 +204,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
+      console.log({getMessages: instance.conversations[conversationId], conversationId});
       return instance.conversations[conversationId];
     } else {
       throw new Error('Account service not set.');

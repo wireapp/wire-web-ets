@@ -104,12 +104,12 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }
   );
 
-  router.get(
+  router.post(
     '/api/v1/instance/:instanceId/messages/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
-        .optional(),
+        .required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -121,7 +121,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
       try {
         const messages = instanceService.getMessages(instanceId, conversationId);
-        return res.json(messages);
+        return res.json(messages || {});
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
