@@ -17,7 +17,7 @@
  *
  */
 
-import APIClient = require('@wireapp/api-client');
+import {APIClient} from '@wireapp/api-client';
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
 import {ClientClassification} from '@wireapp/api-client/dist/commonjs/client/';
 import {Config} from '@wireapp/api-client/dist/commonjs/Config';
@@ -26,7 +26,7 @@ import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {ImageContent} from '@wireapp/core/dist/conversation/content/ImageContent';
 import {PayloadBundleIncoming} from '@wireapp/core/dist/conversation/root';
-import LRUCache from '@wireapp/lru-cache';
+import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
 import UUID from 'pure-uuid';
@@ -287,11 +287,18 @@ class InstanceService {
     }
   }
 
-  updateText(instanceId: string, conversationId: string, messageId: string, text: string): Promise<string> {
+  async updateText(
+    instanceId: string,
+    conversationId: string,
+    originalMessageId: string,
+    newMessageText: string
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      return instance.account.service.conversation.updateText(conversationId, messageId, text);
+      const payload = instance.account.service.conversation.createEditedText(newMessageText, originalMessageId);
+      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
+      return messageId;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
