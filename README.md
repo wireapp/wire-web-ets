@@ -15,8 +15,8 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`GET /log`](#get-log)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
 - [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
-- [`GET /api/v1/instances`](#get-apiv1instances)
 - [`GET /api/v1/instance/<instanceId>/messages`](#get-apiv1instanceinstanceidmessages)
+- [`GET /api/v1/instances`](#get-apiv1instances)
 - [`PUT /api/v1/instance`](#put-apiv1instance)
 - [`DELETE /api/v1/instance/<instanceId>`](#delete-apiv1instanceinstanceid)
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceidsendimage)
@@ -63,21 +63,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 }
 ```
 
-### `GET /api/v1/instances`
-
-#### Response
-
-```json
-{
-  "<instance id>": {
-    "backend": "<string>",
-    "clientId": "<string>",
-    "instanceId": "<string in UUID format>",
-    "name": "<string>"
-  }
-}
-```
-
 ### `GET /api/v1/instance/<instanceId>/messages`
 
 #### Request
@@ -93,8 +78,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```json
 {
   "<message id>": {
-    "content?":
-      "<AssetContent | ClientActionContent | ClientActionType | ConfirmationContent | DeletedContent | HiddenContent | ImageAssetContent | ImageContent | TextContent>",
+    "content?": "<AssetContent | ClientActionContent | ClientActionType | ConfirmationContent | DeletedContent | HiddenContent | ImageAssetContent | ImageContent | TextContent>",
     "conversationId?": "<string in UUID format>",
     "from": "<string in UUID format>",
     "id": "<string in UUID format>",
@@ -102,6 +86,21 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     "state": "PayloadBundleState.INCOMING",
     "timestamp": "<UNIX timestamp as number>",
     "type": "<string>"
+  }
+}
+```
+
+### `GET /api/v1/instances`
+
+#### Response
+
+```json
+{
+  "<instance id>": {
+    "backend": "<string>",
+    "clientId": "<string>",
+    "instanceId": "<string in UUID format>",
+    "name": "<string>"
   }
 }
 ```
