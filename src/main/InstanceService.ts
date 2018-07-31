@@ -204,7 +204,6 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      console.log({getMessages: instance.conversations[conversationId], conversationId});
       return instance.conversations[conversationId];
     } else {
       throw new Error('Account service not set.');
