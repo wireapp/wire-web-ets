@@ -22,23 +22,20 @@ import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
 
-export interface DeletionRequest {
-  conversationId: string;
-  messageId: string;
-}
-
-export interface MessageRequest {
-  conversationId: string;
-  messageTimer?: number;
-  text: string;
-}
-
 export interface MessagesRequest {
   conversationId: string;
 }
 
-export interface MessageUpdateRequest {
-  conversationId: string;
+export interface DeletionRequest extends MessagesRequest {
+  messageId: string;
+}
+
+export interface MessageRequest extends MessagesRequest {
+  messageTimer?: number;
+  text: string;
+}
+
+export interface MessageUpdateRequest extends MessagesRequest {
   firstMessageId: string;
   text: string;
 }
