@@ -17,6 +17,7 @@
  *
  */
 
+import {ReactionType} from '@wireapp/core/dist/conversation/root';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
@@ -33,6 +34,11 @@ export interface DeletionRequest extends MessagesRequest {
 export interface MessageRequest extends MessagesRequest {
   messageTimer?: number;
   text: string;
+}
+
+export interface ReactionRequest extends MessagesRequest {
+  originalMessageId: string;
+  type: ReactionType;
 }
 
 export interface MessageUpdateRequest extends MessagesRequest {
@@ -178,6 +184,41 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
       try {
         const messageId = await instanceService.sendPing(instanceId, conversationId, messageTimer);
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/sendReaction',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      originalMessageId: Joi.string()
+        .uuid()
+        .required(),
+      type: Joi.string()
+        .valid(ReactionType.LIKE, ReactionType.NONE)
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, originalMessageId, type}: ReactionRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const messageId = await instanceService.sendReaction(instanceId, conversationId, originalMessageId, type);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,

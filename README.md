@@ -23,6 +23,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
+- [`POST /api/v1/instance/<instanceId>/sendReaction`](#post-apiv1instanceinstanceidsendreaction)
 - [`POST /api/v1/instance/<instanceId>/sendSessionReset`](#post-apiv1instanceinstanceidsendsessionreset)
 - [`POST /api/v1/instance/<instanceId>/sendText`](#post-apiv1instanceinstanceidsendtext)
 - [`POST /api/v1/instance/<instanceId>/typing`](#post-apiv1instanceinstanceidtyping)
@@ -220,6 +221,28 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 }
 ```
 
+### `POST /api/v1/instance/<instanceId>/sendReaction`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "originalMessageId": "<string in UUID format>",
+  "type": "<'❤️'|''>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "messageId": "<string>",
+  "name": "<string>"
+}
+```
+
 ### `POST /api/v1/instance/<instanceId>/sendSessionReset`
 
 #### Request
@@ -308,7 +331,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```
 POST /clear {"conversationId": "..."}
 POST /markEphemeralRead {"conversationId": "...", "messageId": "..."}
-POST /react {"conversationId": "...", "messageId":"", "reactType": "..."}
 POST /sendFile {"conversationId": "...", "payload": "..."}
 POST /sendLocation {"conversationId": "...", "longitude":"...", "latitude":"...", "locationName":"...", "zoom":"..."} (not sure about the payload yet)
 ```
