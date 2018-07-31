@@ -25,10 +25,10 @@ import * as http from 'http';
 import {ServerConfig} from './config';
 import InstanceService from './InstanceService';
 import healthCheckRoute from './routes/_health/healthCheckRoute';
-import defaultRoute from './routes/error/defaultRoute';
-import errorRoute from './routes/error/errorRoute';
+import {internalErrorRoute, notFoundRoute} from './routes/error/errorRoutes';
 import InstanceRoutes from './routes/instance/';
 import logRoute from './routes/log/logRoute';
+import mainRoute from './routes/mainRoute';
 
 class Server {
   private app: express.Express;
@@ -54,8 +54,9 @@ class Server {
     this.initAPIRoutes();
     this.app.use(logRoute());
     this.app.use(healthCheckRoute());
-    this.app.use(defaultRoute(this.config));
-    this.app.use(errorRoute(this.config));
+    this.app.use(mainRoute(this.config));
+    this.app.use(notFoundRoute());
+    this.app.use(internalErrorRoute());
   }
 
   initAPIRoutes() {

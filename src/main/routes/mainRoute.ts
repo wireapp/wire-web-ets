@@ -18,16 +18,13 @@
  */
 
 import * as express from 'express';
-import {ServerConfig} from '../../config';
+import {ServerConfig} from '../config';
 
-const errorRoute = (config: ServerConfig): express.ErrorRequestHandler => (err, req, res) => {
-  console.error(err.stack);
-  const error = {
-    code: 500,
-    message: 'Internal server error',
-    stack: err.stack,
-  };
-  return res.status(error.code).json(error);
-};
+const router = express.Router();
 
-export default errorRoute;
+const mainRoute = (config: ServerConfig) =>
+  router.get(['/', '/api/v1/?'], (req, res) =>
+    res.json({code: 200, message: `E2E Test Service v${config.VERSION} ready`})
+  );
+
+export default mainRoute;

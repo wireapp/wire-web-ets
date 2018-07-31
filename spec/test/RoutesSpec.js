@@ -31,12 +31,17 @@ const {ConversationAPI} = require('@wireapp/api-client/dist/commonjs/conversatio
 const {NotificationAPI} = require('@wireapp/api-client/dist/commonjs/notification/');
 
 const HTTP_CODE_OK = 200;
+const HTTP_CODE_NOT_FOUND = 404;
 const HTTP_CODE_UNPROCESSABLE_ENTITY = 422;
 
 const sendRequest = async (method, url, data) => {
-  const body = JSON.stringify(data);
+  let options = {method};
+  if (data) {
+    const body = JSON.stringify(data);
+    options = {body, headers: {'Content-Type': 'application/json'}, method};
+  }
   return new Promise((resolve, reject) => {
-    request(url, {body, headers: {'Content-Type': 'application/json'}, method}, (error, response) => {
+    request(url, options, (error, response) => {
       if (error) {
         reject(error);
       } else {
@@ -172,6 +177,20 @@ describe('Routes', () => {
 
       const {instanceId: requestedId} = JSON.parse(requestedBody);
       expect(requestedId).toBe(instanceId);
+      done();
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  it('sends the correct error code for not found', async done => {
+    try {
+      const {statusCode} = await createInstance();
+      expect(statusCode).toBe(HTTP_CODE_OK);
+
+      const requestUrl = `${baseURL}/doesnotexist`;
+      const {statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
+      expect(requestedStatusCode).toBe(HTTP_CODE_NOT_FOUND);
       done();
     } catch (error) {
       console.error(error);
