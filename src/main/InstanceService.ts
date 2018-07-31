@@ -120,6 +120,10 @@ class InstanceService {
     account.on(Account.INCOMING.TEXT_MESSAGE, (payload: PayloadBundleIncoming) =>
       this.addMessageToStorage(instanceId, payload)
     );
+    account.on(Account.INCOMING.ASSET, (payload: PayloadBundleIncoming) => {
+      delete (payload.content as ImageContent).data;
+      this.addMessageToStorage(instanceId, payload);
+    });
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
 
@@ -249,8 +253,10 @@ class InstanceService {
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await instance.account.service.conversation.createImage(image);
-      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
-      return messageId;
+      const sentImage = await instance.account.service.conversation.send(conversationId, payload);
+      delete (sentImage.content as ImageContent).data;
+      this.addMessageToStorage(instanceId, sentImage);
+      return sentImage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
