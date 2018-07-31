@@ -25,7 +25,7 @@ import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {ImageContent} from '@wireapp/core/dist/conversation/content/ImageContent';
-import {PayloadBundleIncoming} from '@wireapp/core/dist/conversation/root';
+import {PayloadBundleIncoming, ReactionType} from '@wireapp/core/dist/conversation/root';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
@@ -270,8 +270,8 @@ class InstanceService {
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = instance.account.service.conversation.createPing();
-      await instance.account.service.conversation.send(conversationId, payload);
-      return instance.name;
+      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
+      return messageId;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
@@ -287,6 +287,23 @@ class InstanceService {
         await instance.account.service.conversation.sendTypingStop(conversationId);
       }
       return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendReaction(
+    instanceId: string,
+    conversationId: string,
+    originalMessageId: string,
+    type: ReactionType
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      const payload = instance.account.service.conversation.createReaction(originalMessageId, type);
+      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
+      return messageId;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
