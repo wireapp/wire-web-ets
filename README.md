@@ -160,7 +160,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```json
 {
   "<message id>": {
-    "content?": {
+    "content": {
       "text": "<string>"
     },
     "conversation": "<string in UUID format>",
@@ -169,7 +169,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     "messageTimer": "<number>",
     "state": "PayloadBundleState.INCOMING",
     "timestamp": "<number in Unix time stamp format>",
-    "type": "<string>"
+    "type": "text"
   }
 }
 ```
