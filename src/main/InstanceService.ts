@@ -29,10 +29,10 @@ import {PayloadBundleIncoming, PayloadBundleOutgoing, ReactionType} from '@wirea
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
+import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 import utils from './utils';
 
-const logdown = require('logdown');
 const {version}: {version: string} = require('../package.json');
 
 const logger = logdown('@wireapp/wire-web-ets/instanceService', {
