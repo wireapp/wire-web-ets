@@ -17,24 +17,31 @@
  *
  */
 
+import {ReactionType} from '@wireapp/core/dist/conversation/root';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
 
-export interface DeletionRequest {
+export interface MessagesRequest {
   conversationId: string;
+}
+
+export interface DeletionRequest extends MessagesRequest {
   messageId: string;
 }
 
-export interface MessageRequest {
-  conversationId: string;
+export interface MessageRequest extends MessagesRequest {
   messageTimer?: number;
   text: string;
 }
 
-export interface MessageUpdateRequest {
-  conversationId: string;
+export interface ReactionRequest extends MessagesRequest {
+  originalMessageId: string;
+  type: ReactionType;
+}
+
+export interface MessageUpdateRequest extends MessagesRequest {
   firstMessageId: string;
   text: string;
 }
@@ -101,6 +108,30 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
+    '/api/v1/instance/:instanceId/getMessages/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId}: MessagesRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const messages = instanceService.getMessages(instanceId, conversationId);
+        return res.json(messages || {});
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
     '/api/v1/instance/:instanceId/sendText',
     joiValidate({
       conversationId: Joi.string()
@@ -153,6 +184,41 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
       try {
         const messageId = await instanceService.sendPing(instanceId, conversationId, messageTimer);
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/sendReaction',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      originalMessageId: Joi.string()
+        .uuid()
+        .required(),
+      type: Joi.string()
+        .valid(ReactionType.LIKE, ReactionType.NONE)
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, originalMessageId, type}: ReactionRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const messageId = await instanceService.sendReaction(instanceId, conversationId, originalMessageId, type);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,

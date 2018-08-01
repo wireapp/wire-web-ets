@@ -18,11 +18,13 @@
  */
 
 import * as express from 'express';
+import {ServerConfig} from '../config';
 
-const router: express.Router = express.Router();
+const router = express.Router();
 
-const STATUS_CODE_OK = 200;
+const mainRoute = (config: ServerConfig) =>
+  router.get(['/', '/api/v1/?'], (req, res) =>
+    res.json({code: 200, message: `E2E Test Service v${config.VERSION} ready`})
+  );
 
-router.get('/_health/?', (req, res) => res.sendStatus(STATUS_CODE_OK));
-
-export default router;
+export default mainRoute;

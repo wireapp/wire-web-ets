@@ -12,15 +12,18 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ## API v1
 
-- [`PUT /api/v1/instance`](#put-apiv1instance)
+- [`GET /log`](#get-log)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
 - [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
 - [`GET /api/v1/instances`](#get-apiv1instances)
+- [`PUT /api/v1/instance`](#put-apiv1instance)
 - [`DELETE /api/v1/instance/<instanceId>`](#delete-apiv1instanceinstanceid)
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceidsendimage)
+- [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
+- [`POST /api/v1/instance/<instanceId>/sendReaction`](#post-apiv1instanceinstanceidsendreaction)
 - [`POST /api/v1/instance/<instanceId>/sendSessionReset`](#post-apiv1instanceinstanceidsendsessionreset)
 - [`POST /api/v1/instance/<instanceId>/sendText`](#post-apiv1instanceinstanceidsendtext)
 - [`POST /api/v1/instance/<instanceId>/typing`](#post-apiv1instanceinstanceidtyping)
@@ -29,27 +32,12 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ---
 
-### `PUT /api/v1/instance`
-
-#### Request
-
-```json
-{
-  "backend": "<'prod'|'production'|'staging'>",
-  "deviceName": "<string>",
-  "email": "<string in email format>",
-  "name": "<string>",
-  "password": "<string>"
-}
-```
+### `GET /log`
 
 #### Response
 
-```json
-{
-  "instanceId": "<string>",
-  "name": "<string>"
-}
+```
+<complete log as plain text>
 ```
 
 ### `GET /api/v1/instance/<instanceId>`
@@ -88,6 +76,29 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     "instanceId": "<string in UUID format>",
     "name": "<string>"
   }
+}
+```
+
+### `PUT /api/v1/instance`
+
+#### Request
+
+```json
+{
+  "backend": "<'prod'|'production'|'staging'>",
+  "deviceName": "<string>",
+  "email": "<string in email format>",
+  "name": "<string>",
+  "password": "<string>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string>",
+  "name": "<string>"
 }
 ```
 
@@ -135,6 +146,35 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 }
 ```
 
+### `POST /api/v1/instance/<instanceId>/getMessages`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "<message id>": {
+    "content": {
+      "text": "<string>"
+    },
+    "conversation": "<string in UUID format>",
+    "from": "<string in UUID format>",
+    "id": "<string in UUID format>",
+    "messageTimer": "<number>",
+    "state": "<'PayloadBundleState.INCOMING'|'PayloadBundleState.OUTGOING_SENT'>",
+    "timestamp": "<number in Unix time stamp format>",
+    "type": "text"
+  }
+}
+```
+
 ### `POST /api/v1/instance/<instanceId>/sendImage`
 
 #### Request
@@ -168,6 +208,28 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 {
   "conversationId": "<string in UUID format>",
   "messageTimer?": "<number>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "messageId": "<string>",
+  "name": "<string>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/sendReaction`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "originalMessageId": "<string in UUID format>",
+  "type": "<'❤️'|''>"
 }
 ```
 
@@ -269,7 +331,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```
 POST /clear {"conversationId": "..."}
 POST /markEphemeralRead {"conversationId": "...", "messageId": "..."}
-POST /react {"conversationId": "...", "messageId":"", "reactType": "..."}
 POST /sendFile {"conversationId": "...", "payload": "..."}
 POST /sendLocation {"conversationId": "...", "longitude":"...", "latitude":"...", "locationName":"...", "zoom":"..."} (not sure about the payload yet)
 ```

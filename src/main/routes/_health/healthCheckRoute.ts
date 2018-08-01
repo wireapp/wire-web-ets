@@ -17,12 +17,8 @@
  *
  */
 
-import * as express from 'express';
-import {ServerConfig} from '../../config';
+import {Router} from 'express';
 
-const router: express.Router = express.Router();
+const healthRoute = () => Router().get('/_health/?', (req, res) => res.sendStatus(200));
 
-const DefaultRoute = (config: ServerConfig): express.RequestHandler =>
-  router.get('*', (req, res) => res.json({message: `E2E Test Service v${config.VERSION} ready`}));
-
-export default DefaultRoute;
+export default healthRoute;

@@ -18,16 +18,26 @@
  */
 
 import * as express from 'express';
-import {ServerConfig} from '../../config';
 
-const ErrorRoute = (config: ServerConfig): express.ErrorRequestHandler => (err, req, res, next) => {
+const router = express.Router();
+
+const internalErrorRoute = (): express.ErrorRequestHandler => (err, req, res, next) => {
   console.error(err.stack);
   const error = {
     code: 500,
     message: 'Internal server error',
     stack: err.stack,
   };
-  res.status(error.code).json(error);
+  return res.status(error.code).json(error);
 };
 
-export default ErrorRoute;
+const notFoundRoute = () =>
+  router.get('*', (req, res) => {
+    const error = {
+      code: 404,
+      message: 'Not found',
+    };
+    return res.status(error.code).json(error);
+  });
+
+export {internalErrorRoute, notFoundRoute};
