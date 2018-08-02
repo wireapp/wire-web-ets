@@ -15,9 +15,11 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`GET /log`](#get-log)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
 - [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
+- [`GET /api/v1/instance/<instanceId>/clients`](#get-apiv1instanceinstanceidclients)
 - [`GET /api/v1/instances`](#get-apiv1instances)
 - [`PUT /api/v1/instance`](#put-apiv1instance)
 - [`DELETE /api/v1/instance/<instanceId>`](#delete-apiv1instanceinstanceid)
+- [`DELETE /api/v1/instance/<instanceId>/clients`](#delete-apiv1instanceinstanceidclients)
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
@@ -64,6 +66,27 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 }
 ```
 
+### `GET /api/v1/instance/<instanceId>/clients`
+
+#### Response
+
+```json
+[
+  {
+    "class": "<desktop>",
+    "cookie": "<string>",
+    "id": "<string>",
+    "location": {
+      "lat": "<float>",
+      "lon": "<float>"
+    },
+    "model": "<string>",
+    "time": "<Date>",
+    "type": "<string>"
+  }
+]
+```
+
 ### `GET /api/v1/instances`
 
 #### Response
@@ -106,7 +129,17 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 #### Response
 
-`200`
+```json
+{}
+```
+
+### `DELETE /api/v1/instance/<instanceId>/clients`
+
+#### Response
+
+```json
+{}
+```
 
 ### `POST /api/v1/instance/<instanceId>/delete`
 
