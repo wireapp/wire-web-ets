@@ -223,7 +223,8 @@ describe('Routes', () => {
         type: 'text',
       };
 
-      etsServer.instanceService.addMessageToStorage(instanceId, receivedMessage);
+      const rawInstance = etsServer.instanceService.getInstance(instanceId);
+      rawInstance.messages.set(receivedMessage.id, receivedMessage);
 
       const requestUrl = `${baseURL}/instance/${instanceId}/getMessages`;
       const requestData = {conversationId};
