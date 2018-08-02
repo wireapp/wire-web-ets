@@ -17,23 +17,69 @@
  *
  */
 
-import {ImageContent} from '@wireapp/core/dist/conversation/content/ImageContent';
+import {FileContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
 
-export interface ImageMessageRequest {
+interface AssetMessageRequest {
   conversationId: string;
   data: string;
-  height: number;
   messageTimer?: number;
   type: string;
+}
+
+export interface FileMessageRequest extends AssetMessageRequest {
+  fileName: number;
+}
+
+export interface ImageMessageRequest extends AssetMessageRequest {
+  height: number;
   width: number;
 }
 
 const assetRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
+
+  router.post(
+    '/api/v1/instance/:instanceId/sendFile/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      data: Joi.string()
+        .base64()
+        .required(),
+      fileName: Joi.string().required(),
+      messageTimer: Joi.number()
+        .optional()
+        .default(0),
+      type: Joi.string().required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, data: base64Data, fileName, messageTimer, type}: FileMessageRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const data = Buffer.from(base64Data, 'base64');
+        const file: FileContent = {data, name: fileName, type};
+        const messageId = await instanceService.sendFile(instanceId, conversationId, file, messageTimer);
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
 
   router.post(
     '/api/v1/instance/:instanceId/sendImage/?',

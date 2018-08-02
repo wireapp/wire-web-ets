@@ -24,7 +24,7 @@ import {Config} from '@wireapp/api-client/dist/commonjs/Config';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
-import {ImageContent} from '@wireapp/core/dist/conversation/content/ImageContent';
+import {FileContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
 import {PayloadBundleIncoming, PayloadBundleOutgoing, ReactionType} from '@wireapp/core/dist/conversation/root';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
@@ -275,6 +275,25 @@ class InstanceService {
       delete (sentImage.content as ImageContent).data;
       this.addMessageToStorage(instanceId, sentImage);
       return sentImage.id;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendFile(
+    instanceId: string,
+    conversationId: string,
+    file: FileContent,
+    expireAfterMillis = 0
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    if (instance.account.service) {
+      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = await instance.account.service.conversation.createFile(file);
+      const sentFile = await instance.account.service.conversation.send(conversationId, payload);
+      delete (sentFile.content as FileContent).data;
+      this.addMessageToStorage(instanceId, sentFile);
+      return sentFile.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }

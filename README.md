@@ -20,9 +20,10 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`PUT /api/v1/instance`](#put-apiv1instance)
 - [`DELETE /api/v1/instance/<instanceId>`](#delete-apiv1instanceinstanceid)
 - [`DELETE /api/v1/instance/<instanceId>/clients`](#delete-apiv1instanceinstanceidclients)
-- [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceidsendimage)
-- [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceidsendimage)
+- [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceiddelete)
+- [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceiddeleteeverywhere)
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
+- [`POST /api/v1/instance/<instanceId>/sendFile`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
 - [`POST /api/v1/instance/<instanceId>/sendReaction`](#post-apiv1instanceinstanceidsendreaction)
@@ -206,6 +207,20 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     "type": "text"
   }
 ]
+```
+
+### `POST /api/v1/instance/<instanceId>/sendFile`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "data": "<string in base64 format>",
+  "fileName:" "<string>",
+  "messageTimer?": "<number>",
+  "type": "<string>",
+}
 ```
 
 ### `POST /api/v1/instance/<instanceId>/sendImage`
