@@ -159,8 +159,8 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 #### Response
 
 ```json
-{
-  "<message id>": {
+[
+  {
     "content": {
       "text": "<string>"
     },
@@ -172,7 +172,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     "timestamp": "<number in Unix time stamp format>",
     "type": "text"
   }
-}
+]
 ```
 
 ### `POST /api/v1/instance/<instanceId>/sendImage`

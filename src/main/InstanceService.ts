@@ -41,9 +41,7 @@ const logger = logdown('@wireapp/wire-web-ets/instanceService', {
 });
 
 interface ConversationStorage {
-  [conversationId: string]: {
-    [messageId: string]: PayloadBundleIncoming | PayloadBundleOutgoing;
-  };
+  [conversationId: string]: Array<PayloadBundleIncoming | PayloadBundleOutgoing>;
 }
 
 export interface Instance {
@@ -192,10 +190,7 @@ class InstanceService {
     return this.cachedInstances.getAll();
   }
 
-  getMessages(
-    instanceId: string,
-    conversationId: string
-  ): {[messageId: string]: PayloadBundleIncoming | PayloadBundleOutgoing} {
+  getMessages(instanceId: string, conversationId: string): Array<PayloadBundleIncoming | PayloadBundleOutgoing> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
@@ -334,9 +329,9 @@ class InstanceService {
 
     if (conversationId) {
       if (!instance.conversations[conversationId]) {
-        instance.conversations[conversationId] = {};
+        instance.conversations[conversationId] = [];
       }
-      instance.conversations[conversationId][messageId] = payload;
+      instance.conversations[conversationId].push(payload);
     }
   }
 }
