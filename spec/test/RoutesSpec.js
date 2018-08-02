@@ -202,38 +202,31 @@ describe('Routes', () => {
     }
   });
 
-  it('outputs received messages', async done => {
+  it('saves sent messages', async done => {
     try {
-      const instance = await createInstance();
-      const {instanceId} = JSON.parse(instance.body);
+      const {statusCode, body} = await createInstance();
+      expect(statusCode).toBe(HTTP_CODE_OK);
+      const {instanceId} = JSON.parse(body);
+
+      const message = 'Hello from Jasmine';
 
       const conversationId = new UUID(UUID_VERSION).format();
-      const messageId = new UUID(UUID_VERSION).format();
+      const textRequestUrl = `${baseURL}/instance/${instanceId}/sendText`;
+      const textRequestData = {conversationId, text: message};
+      await sendRequest('post', textRequestUrl, textRequestData);
 
-      const receivedMessage = {
-        content: {
-          text: 'Hello from Jasmine',
-        },
-        conversation: conversationId,
-        from: new UUID(UUID_VERSION).format(),
-        id: messageId,
-        messageTimer: 0,
-        state: 'PayloadBundleState.INCOMING',
-        timestamp: 1533033857761,
-        type: 'text',
-      };
-
-      const rawInstance = etsServer.instanceService.getInstance(instanceId);
-      rawInstance.messages.set(receivedMessage.id, receivedMessage);
-
-      const requestUrl = `${baseURL}/instance/${instanceId}/getMessages`;
-      const requestData = {conversationId};
-      const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
+      const messagesRequestUrl = `${baseURL}/instance/${instanceId}/getMessages`;
+      const messagesRequestData = {conversationId};
+      const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest(
+        'post',
+        messagesRequestUrl,
+        messagesRequestData
+      );
 
       const receivedPayload = JSON.parse(requestedBody);
 
       expect(requestedStatusCode).toBe(HTTP_CODE_OK);
-      expect(receivedPayload[0]).toEqual(receivedMessage);
+      expect(receivedPayload[0].content.text).toEqual(message);
       done();
     } catch (error) {
       console.error(error);
