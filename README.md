@@ -23,7 +23,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceiddelete)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceiddeleteeverywhere)
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
-- [`POST /api/v1/instance/<instanceId>/sendFile`](#post-apiv1instanceinstanceidsendimage)
+- [`POST /api/v1/instance/<instanceId>/sendFile`](#post-apiv1instanceinstanceidsendfile)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
 - [`POST /api/v1/instance/<instanceId>/sendReaction`](#post-apiv1instanceinstanceidsendreaction)
@@ -217,9 +217,9 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 {
   "conversationId": "<string in UUID format>",
   "data": "<string in base64 format>",
-  "fileName:" "<string>",
+  "fileName": "<string>",
   "messageTimer?": "<number>",
-  "type": "<string>",
+  "type": "<string>"
 }
 ```
 
