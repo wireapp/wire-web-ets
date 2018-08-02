@@ -19,7 +19,7 @@
 
 import * as dotenv from 'dotenv';
 
-const pkg = require('../package.json');
+const {version}: {version: string} = require('../package.json');
 
 dotenv.config();
 
@@ -39,7 +39,7 @@ const config: ServerConfig = {
   COMPRESS_MIN_SIZE: 500,
   ENVIRONMENT: process.env.ENVIRONMENT || 'prod',
   PORT_HTTP: Number(process.env.PORT) || 21080,
-  VERSION: pkg.version,
+  VERSION: version,
 };
 
 config.DEVELOPMENT = config.ENVIRONMENT === 'dev';

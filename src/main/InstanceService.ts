@@ -19,7 +19,7 @@
 
 import {APIClient} from '@wireapp/api-client';
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
-import {ClientClassification} from '@wireapp/api-client/dist/commonjs/client/';
+import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/commonjs/client/';
 import {Config} from '@wireapp/api-client/dist/commonjs/Config';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
@@ -67,7 +67,7 @@ class InstanceService {
 
   async createInstance(
     backend: string,
-    LoginData: LoginData,
+    loginData: LoginData,
     deviceModel?: string,
     instanceName?: string
   ): Promise<string> {
@@ -93,7 +93,7 @@ class InstanceService {
     logger.log(`[${utils.formatDate()}] Logging in ...`);
 
     try {
-      await account.login(LoginData, true, ClientInfo);
+      await account.login(loginData, true, ClientInfo);
       await account.listen();
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -197,6 +197,29 @@ class InstanceService {
       return instance.conversations[conversationId];
     } else {
       throw new Error('Account service not set.');
+    }
+  }
+
+  getAllClients(instanceId: string): Promise<RegisteredClient[]> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      return instance.client.client.api.getClients();
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async removeAllOtherClients(instanceId: string, password: string): Promise<void> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      const clients = await instance.client.client.api.getClients();
+      for (const client of clients) {
+        await instance.client.client.api.deleteClient(client.id, password);
+      }
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
