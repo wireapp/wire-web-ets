@@ -207,7 +207,6 @@ describe('Routes', () => {
       const instance = await createInstance();
       const {instanceId} = JSON.parse(instance.body);
 
-      const rawInstance = etsServer.instanceService.cachedInstances.get(instanceId);
       const conversationId = new UUID(UUID_VERSION).format();
       const messageId = new UUID(UUID_VERSION).format();
 
@@ -224,9 +223,7 @@ describe('Routes', () => {
         type: 'text',
       };
 
-      rawInstance.conversations[conversationId] = {
-        [messageId]: receivedMessage,
-      };
+      etsServer.instanceService.addMessageToStorage(instanceId, receivedMessage);
 
       const requestUrl = `${baseURL}/instance/${instanceId}/getMessages`;
       const requestData = {conversationId};
@@ -235,7 +232,7 @@ describe('Routes', () => {
       const receivedPayload = JSON.parse(requestedBody);
 
       expect(requestedStatusCode).toBe(HTTP_CODE_OK);
-      expect(receivedPayload[messageId]).toEqual(receivedMessage);
+      expect(receivedPayload[0]).toEqual(receivedMessage);
       done();
     } catch (error) {
       console.error(error);
