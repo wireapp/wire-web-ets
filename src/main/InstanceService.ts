@@ -325,7 +325,7 @@ class InstanceService {
       throw new Error(`Instance with ID "${instanceId}" not found.`);
     }
 
-    const {conversation: conversationId, id: messageId} = payload;
+    const {conversation: conversationId} = payload;
 
     if (conversationId) {
       if (!instance.conversations[conversationId]) {
