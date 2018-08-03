@@ -60,6 +60,36 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
     }
   );
 
+  router.post(
+    '/api/v1/instance/:instanceId/markEphemeralRead',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      messageId: Joi.string()
+        .uuid()
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, messageId}: ConfirmationMessageRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const instanceName = await instanceService.sendConfirmationEphemeral(instanceId, conversationId, messageId);
+        return res.json({
+          instanceId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
   return router;
 };
 

@@ -23,6 +23,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
+- [`POST /api/v1/instance/<instanceId>/markEphemeralRead`](#post-apiv1instanceinstanceidmarkephemeralread)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
 - [`POST /api/v1/instance/<instanceId>/sendReaction`](#post-apiv1instanceinstanceidsendreaction)
@@ -208,6 +209,25 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ]
 ```
 
+### `POST /api/v1/instance/<instanceId>/markEphemeralRead`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "messageId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "conversationId": "<string in UUID format>"
+}
+```
+
 ### `POST /api/v1/instance/<instanceId>/sendImage`
 
 #### Request
@@ -363,7 +383,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ```
 POST /clear {"conversationId": "..."}
-POST /markEphemeralRead {"conversationId": "...", "messageId": "..."}
 POST /sendFile {"conversationId": "...", "payload": "..."}
 POST /sendLocation {"conversationId": "...", "longitude":"...", "latitude":"...", "locationName":"...", "zoom":"..."} (not sure about the payload yet)
 ```
