@@ -31,7 +31,7 @@ interface AssetMessageRequest {
 }
 
 export interface FileMessageRequest extends AssetMessageRequest {
-  fileName: number;
+  fileName: string;
 }
 
 export interface ImageMessageRequest extends AssetMessageRequest {
