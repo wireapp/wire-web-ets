@@ -24,7 +24,7 @@ import {Config} from '@wireapp/api-client/dist/commonjs/Config';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
-import {ImageContent} from '@wireapp/core/dist/conversation/content/ImageContent';
+import {ImageContent} from '@wireapp/core/dist/conversation/content/';
 import {PayloadBundleIncoming, PayloadBundleOutgoing, ReactionType} from '@wireapp/core/dist/conversation/root';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
@@ -118,7 +118,9 @@ class InstanceService {
       instance.messages.set(payload.id, payload)
     );
     account.on(Account.INCOMING.ASSET, (payload: PayloadBundleIncoming) => {
-      delete (payload.content as ImageContent).data;
+      instance.messages.set(payload.id, payload);
+    });
+    account.on(Account.INCOMING.IMAGE, (payload: PayloadBundleIncoming) => {
       instance.messages.set(payload.id, payload);
     });
 
