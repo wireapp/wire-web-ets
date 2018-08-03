@@ -271,9 +271,8 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const confirmationPayload = instance.account.service.conversation.createConfirmation(messageId);
+      const confirmationPayload = instance.account.service.conversation.createConfirmationEphemeral(messageId);
       await instance.account.service.conversation.send(conversationId, confirmationPayload);
-      await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId);
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
