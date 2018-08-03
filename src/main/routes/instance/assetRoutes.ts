@@ -17,7 +17,7 @@
  *
  */
 
-import {FileContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
+import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
@@ -67,8 +67,9 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
 
       try {
         const data = Buffer.from(base64Data, 'base64');
-        const file: FileContent = {data, name: fileName, type};
-        const messageId = await instanceService.sendFile(instanceId, conversationId, file, messageTimer);
+        const file: FileContent = {data};
+        const metadata: FileMetaDataContent = {length: data.length, name: fileName, type};
+        const messageId = await instanceService.sendFile(instanceId, conversationId, file, metadata, messageTimer);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,

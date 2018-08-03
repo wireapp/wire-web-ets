@@ -284,13 +284,18 @@ class InstanceService {
     instanceId: string,
     conversationId: string,
     file: FileContent,
+    metadata: FileMetaDataContent,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.createFile(file);
-      const sentFile = await instance.account.service.conversation.send(conversationId, payload);
+
+      const metadataPayload = await instance.account.service.conversation.createFileMetadata(metadata);
+      await instance.account.service.conversation.send(conversationId, metadataPayload);
+
+      const filePayload = await instance.account.service.conversation.createFileData(file, metadataPayload.id);
+      const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
       delete (sentFile.content as FileContent).data;
       this.addMessageToStorage(instanceId, sentFile);
       return sentFile.id;
