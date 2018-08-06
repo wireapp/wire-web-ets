@@ -19,18 +19,19 @@
 
 import {APIClient} from '@wireapp/api-client';
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
-import {ClientClassification} from '@wireapp/api-client/dist/commonjs/client/';
+import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/commonjs/client/';
 import {Config} from '@wireapp/api-client/dist/commonjs/Config';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
-import {ImageContent} from '@wireapp/core/dist/conversation/content/ImageContent';
+import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
 import {PayloadBundleIncoming, PayloadBundleOutgoing, ReactionType} from '@wireapp/core/dist/conversation/root';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
+
 import utils from './utils';
 
 const {version}: {version: string} = require('../package.json');
@@ -40,11 +41,7 @@ const logger = logdown('@wireapp/wire-web-ets/instanceService', {
   markdown: false,
 });
 
-interface ConversationStorage {
-  [conversationId: string]: {
-    [messageId: string]: PayloadBundleIncoming | PayloadBundleOutgoing;
-  };
-}
+type MessagePayload = PayloadBundleIncoming | PayloadBundleOutgoing;
 
 export interface Instance {
   account: Account;
@@ -56,7 +53,7 @@ export interface Instance {
   client: APIClient;
   engine: CRUDEngine;
   id: string;
-  conversations: ConversationStorage;
+  messages: LRUCache<MessagePayload>;
   name: string;
 }
 
@@ -69,7 +66,7 @@ class InstanceService {
 
   async createInstance(
     backend: string,
-    LoginData: LoginData,
+    loginData: LoginData,
     deviceModel?: string,
     instanceName?: string
   ): Promise<string> {
@@ -95,7 +92,7 @@ class InstanceService {
     logger.log(`[${utils.formatDate()}] Logging in ...`);
 
     try {
-      await account.login(LoginData, true, ClientInfo);
+      await account.login(loginData, true, ClientInfo);
       await account.listen();
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -109,21 +106,19 @@ class InstanceService {
       account,
       backendType,
       client,
-      conversations: {},
       engine,
       id: instanceId,
+      messages: new LRUCache(),
       name: instanceName || '',
     };
 
     this.cachedInstances.set(instanceId, instance);
 
     account.on(Account.INCOMING.TEXT_MESSAGE, (payload: PayloadBundleIncoming) =>
-      this.addMessageToStorage(instanceId, payload)
+      instance.messages.set(payload.id, payload)
     );
-    account.on(Account.INCOMING.ASSET, (payload: PayloadBundleIncoming) => {
-      delete (payload.content as ImageContent).data;
-      this.addMessageToStorage(instanceId, payload);
-    });
+    account.on(Account.INCOMING.ASSET, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(Account.INCOMING.IMAGE, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
 
@@ -192,16 +187,43 @@ class InstanceService {
     return this.cachedInstances.getAll();
   }
 
-  getMessages(
-    instanceId: string,
-    conversationId: string
-  ): {[messageId: string]: PayloadBundleIncoming | PayloadBundleOutgoing} {
+  getMessages(instanceId: string, conversationId: string): MessagePayload[] {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      return instance.conversations[conversationId];
+      const allMessages = instance.messages.getAll();
+      const messageArray = allMessages.reduce((messages: MessagePayload[], message) => {
+        const messageId = Object.keys(message)[0];
+        messages.push(message[messageId]);
+        return messages;
+      }, []);
+
+      return messageArray.filter(message => message.conversation === conversationId);
     } else {
       throw new Error('Account service not set.');
+    }
+  }
+
+  getAllClients(instanceId: string): Promise<RegisteredClient[]> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      return instance.client.client.api.getClients();
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async removeAllOtherClients(instanceId: string, password: string): Promise<void> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      const clients = await instance.client.client.api.getClients();
+      for (const client of clients) {
+        await instance.client.client.api.deleteClient(client.id, password);
+      }
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
@@ -224,7 +246,7 @@ class InstanceService {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await instance.account.service.conversation.createText(message);
       const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
-      this.addMessageToStorage(instance.id, sentMessage);
+      instance.messages.set(sentMessage.id, sentMessage);
       return sentMessage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -255,8 +277,32 @@ class InstanceService {
       const payload = await instance.account.service.conversation.createImage(image);
       const sentImage = await instance.account.service.conversation.send(conversationId, payload);
       delete (sentImage.content as ImageContent).data;
-      this.addMessageToStorage(instanceId, sentImage);
+      instance.messages.set(sentImage.id, sentImage);
       return sentImage.id;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendFile(
+    instanceId: string,
+    conversationId: string,
+    file: FileContent,
+    metadata: FileMetaDataContent,
+    expireAfterMillis = 0
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    if (instance.account.service) {
+      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+
+      const metadataPayload = await instance.account.service.conversation.createFileMetadata(metadata);
+      await instance.account.service.conversation.send(conversationId, metadataPayload);
+
+      const filePayload = await instance.account.service.conversation.createFileData(file, metadataPayload.id);
+      const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
+      delete (sentFile.content as FileContent).data;
+      instance.messages.set(sentFile.id, sentFile);
+      return sentFile.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
@@ -317,26 +363,11 @@ class InstanceService {
 
     if (instance.account.service) {
       const payload = instance.account.service.conversation.createEditedText(newMessageText, originalMessageId);
-      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
-      return messageId;
+      const editedMessage = await instance.account.service.conversation.send(conversationId, payload);
+      instance.messages.set(originalMessageId, editedMessage);
+      return editedMessage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
-    }
-  }
-
-  private addMessageToStorage(instanceId: string, payload: PayloadBundleIncoming | PayloadBundleOutgoing): void {
-    const instance = this.getInstance(instanceId);
-    if (!instance) {
-      throw new Error(`Instance with ID "${instanceId}" not found.`);
-    }
-
-    const {conversation: conversationId, id: messageId} = payload;
-
-    if (conversationId) {
-      if (!instance.conversations[conversationId]) {
-        instance.conversations[conversationId] = {};
-      }
-      instance.conversations[conversationId][messageId] = payload;
     }
   }
 }

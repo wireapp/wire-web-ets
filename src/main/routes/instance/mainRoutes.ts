@@ -105,7 +105,7 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
     });
   });
 
-  router.delete('/api/v1/instance/:instanceId', async (req, res) => {
+  router.delete('/api/v1/instance/:instanceId/?', async (req, res) => {
     const {instanceId = ''}: {instanceId: string} = req.params;
 
     if (!instanceService.instanceExists(instanceId)) {
@@ -114,6 +114,7 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
 
     try {
       await instanceService.deleteInstance(instanceId);
+      return res.json({});
     } catch (error) {
       return res.status(500).json({error: error.message, stack: error.stack});
     }
@@ -128,20 +129,57 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       return res.json({});
     }
 
-    const reducedInstances = instances.reduce((reducedInstances: ReducedInstances, instance) => {
+    const reducedInstances = instances.reduce((instances: ReducedInstances, instance) => {
       const instanceId = Object.keys(instance)[0];
       const {backendType, client, name} = instance[instanceId];
 
-      reducedInstances[instanceId] = {
+      instances[instanceId] = {
         backend: backendType.name,
         clientId: client.context!.clientId!,
         instanceId,
         name,
       };
-      return reducedInstances;
+      return instances;
     }, {});
 
     return res.json(reducedInstances);
+  });
+
+  router.delete(
+    '/api/v1/instance/:instanceId/clients/?',
+    joiValidate({
+      password: Joi.string().required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {password}: {password: string} = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        await instanceService.removeAllOtherClients(instanceId, password);
+        return res.json({});
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.get('/api/v1/instance/:instanceId/clients/?', async (req: express.Request, res: express.Response) => {
+    const {instanceId = ''}: {instanceId: string} = req.params;
+
+    if (!instanceService.instanceExists(instanceId)) {
+      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+    }
+
+    try {
+      const clients = await instanceService.getAllClients(instanceId);
+      return res.json(clients);
+    } catch (error) {
+      return res.status(500).json({error: error.message, stack: error.stack});
+    }
   });
 
   return router;
