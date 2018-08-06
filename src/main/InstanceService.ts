@@ -24,7 +24,7 @@ import {Config} from '@wireapp/api-client/dist/commonjs/Config';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
-import {ImageContent} from '@wireapp/core/dist/conversation/content/';
+import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
 import {PayloadBundleIncoming, PayloadBundleOutgoing, ReactionType} from '@wireapp/core/dist/conversation/root';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
@@ -117,12 +117,8 @@ class InstanceService {
     account.on(Account.INCOMING.TEXT_MESSAGE, (payload: PayloadBundleIncoming) =>
       instance.messages.set(payload.id, payload)
     );
-    account.on(Account.INCOMING.ASSET, (payload: PayloadBundleIncoming) => {
-      instance.messages.set(payload.id, payload);
-    });
-    account.on(Account.INCOMING.IMAGE, (payload: PayloadBundleIncoming) => {
-      instance.messages.set(payload.id, payload);
-    });
+    account.on(Account.INCOMING.ASSET, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(Account.INCOMING.IMAGE, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
 
@@ -283,6 +279,30 @@ class InstanceService {
       delete (sentImage.content as ImageContent).data;
       instance.messages.set(sentImage.id, sentImage);
       return sentImage.id;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendFile(
+    instanceId: string,
+    conversationId: string,
+    file: FileContent,
+    metadata: FileMetaDataContent,
+    expireAfterMillis = 0
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    if (instance.account.service) {
+      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+
+      const metadataPayload = await instance.account.service.conversation.createFileMetadata(metadata);
+      await instance.account.service.conversation.send(conversationId, metadataPayload);
+
+      const filePayload = await instance.account.service.conversation.createFileData(file, metadataPayload.id);
+      const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
+      delete (sentFile.content as FileContent).data;
+      instance.messages.set(sentFile.id, sentFile);
+      return sentFile.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
