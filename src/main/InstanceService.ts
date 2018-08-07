@@ -24,7 +24,12 @@ import {Config} from '@wireapp/api-client/dist/commonjs/Config';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
-import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
+import {
+  EditedTextContent,
+  FileContent,
+  FileMetaDataContent,
+  ImageContent,
+} from '@wireapp/core/dist/conversation/content/';
 import {
   PayloadBundleIncoming,
   PayloadBundleOutgoing,
@@ -124,6 +129,12 @@ class InstanceService {
     account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
       instance.messages.set(payload.id, payload)
     );
+    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
+      const editedContent = payload.content as EditedTextContent;
+      payload.id = editedContent.originalMessageId;
+      delete editedContent.originalMessageId;
+      instance.messages.set(payload.id, payload);
+    });
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
 
