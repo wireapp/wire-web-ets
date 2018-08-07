@@ -58,27 +58,25 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   const router = express.Router();
 
   router.post(
-    '/api/v1/instance/:instanceId/delete',
+    '/api/v1/instance/:instanceId/clear/?',
     joiValidate({
       conversationId: Joi.string()
-        .uuid()
-        .required(),
-      messageId: Joi.string()
         .uuid()
         .required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageId}: DeletionRequest = req.body;
+      const {conversationId}: MessagesRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
       try {
-        await instanceService.deleteMessageLocal(instanceId, conversationId, messageId);
+        const instanceName = await instanceService.clearConversation(instanceId, conversationId);
         return res.json({
           instanceId,
+          name: instanceName,
         });
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
@@ -87,7 +85,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/deleteEverywhere',
+    '/api/v1/instance/:instanceId/delete/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
@@ -105,9 +103,40 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       }
 
       try {
-        await instanceService.deleteMessageEveryone(instanceId, conversationId, messageId);
+        const instanceName = await instanceService.deleteMessageLocal(instanceId, conversationId, messageId);
         return res.json({
           instanceId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/deleteEverywhere/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      messageId: Joi.string()
+        .uuid()
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, messageId}: DeletionRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const instanceName = await instanceService.deleteMessageEveryone(instanceId, conversationId, messageId);
+        return res.json({
+          instanceId,
+          name: instanceName,
         });
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
@@ -140,7 +169,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/sendLocation',
+    '/api/v1/instance/:instanceId/sendLocation/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
@@ -186,7 +215,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/sendText',
+    '/api/v1/instance/:instanceId/sendText/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
@@ -219,7 +248,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/sendPing',
+    '/api/v1/instance/:instanceId/sendPing/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
@@ -251,7 +280,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/sendReaction',
+    '/api/v1/instance/:instanceId/sendReaction/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
@@ -286,7 +315,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/updateText',
+    '/api/v1/instance/:instanceId/updateText/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
