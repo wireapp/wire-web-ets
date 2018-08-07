@@ -24,8 +24,18 @@ import {Config} from '@wireapp/api-client/dist/commonjs/Config';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
-import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
-import {PayloadBundleIncoming, PayloadBundleOutgoing, ReactionType} from '@wireapp/core/dist/conversation/root';
+import {
+  FileContent,
+  FileMetaDataContent,
+  ImageContent,
+  LocationContent,
+} from '@wireapp/core/dist/conversation/content/';
+import {
+  PayloadBundleIncoming,
+  PayloadBundleOutgoing,
+  PayloadBundleType,
+  ReactionType,
+} from '@wireapp/core/dist/conversation/root';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
@@ -114,11 +124,11 @@ class InstanceService {
 
     this.cachedInstances.set(instanceId, instance);
 
-    account.on(Account.INCOMING.TEXT_MESSAGE, (payload: PayloadBundleIncoming) =>
+    account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
       instance.messages.set(payload.id, payload)
     );
-    account.on(Account.INCOMING.ASSET, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
-    account.on(Account.INCOMING.IMAGE, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
 
@@ -303,6 +313,25 @@ class InstanceService {
       delete (sentFile.content as FileContent).data;
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendLocation(
+    instanceId: string,
+    conversationId: string,
+    location: LocationContent,
+    expireAfterMillis = 0
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = await instance.account.service.conversation.createLocation(location);
+      const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
+      instance.messages.set(sentMessage.id, sentMessage);
+      return sentMessage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }

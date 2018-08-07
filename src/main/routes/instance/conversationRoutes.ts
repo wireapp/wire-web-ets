@@ -41,6 +41,13 @@ export interface ReactionRequest extends MessagesRequest {
   type: ReactionType;
 }
 
+export interface LocationRequest extends MessagesRequest {
+  latitude: number;
+  locationName?: string;
+  longitude: number;
+  zoom?: number;
+}
+
 export interface MessageUpdateRequest extends MessagesRequest {
   firstMessageId: string;
   text: string;
@@ -125,6 +132,47 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       try {
         const messages = instanceService.getMessages(instanceId, conversationId);
         return res.json(messages || {});
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/sendLocation',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      latitude: Joi.number().required(),
+      locationName: Joi.string().optional(),
+      longitude: Joi.number().required(),
+      messageTimer: Joi.number()
+        .optional()
+        .default(0),
+      zoom: Joi.number().optional(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, latitude, longitude, locationName, zoom}: LocationRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const messageId = await instanceService.sendLocation(instanceId, conversationId, {
+          latitude,
+          longitude,
+          name: locationName,
+          zoom,
+        });
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
