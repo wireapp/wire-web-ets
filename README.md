@@ -269,7 +269,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
   "latitude": "<number>",
   "locationName": "<string>",
   "longitude": "<number>",
-  "messageTimer": "<number>",
+  "messageTimer?": "<number>",
   "zoom": "<number>"
 }
 ```

@@ -31,7 +31,7 @@ export interface DeletionRequest extends MessagesRequest {
   messageId: string;
 }
 
-export interface MessageRequest extends MessagesRequest {
+export interface TextRequest extends MessagesRequest {
   messageTimer?: number;
   text: string;
 }
@@ -45,6 +45,7 @@ export interface LocationRequest extends MessagesRequest {
   latitude: number;
   locationName?: string;
   longitude: number;
+  messageTimer?: number;
   zoom?: number;
 }
 
@@ -154,19 +155,24 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, latitude, longitude, locationName, zoom}: LocationRequest = req.body;
+      const {conversationId, latitude, longitude, locationName, messageTimer, zoom}: LocationRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
       try {
-        const messageId = await instanceService.sendLocation(instanceId, conversationId, {
-          latitude,
-          longitude,
-          name: locationName,
-          zoom,
-        });
+        const messageId = await instanceService.sendLocation(
+          instanceId,
+          conversationId,
+          {
+            latitude,
+            longitude,
+            name: locationName,
+            zoom,
+          },
+          messageTimer
+        );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
@@ -192,7 +198,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageTimer, text}: MessageRequest = req.body;
+      const {conversationId, messageTimer, text}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -224,7 +230,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageTimer}: MessageRequest = req.body;
+      const {conversationId, messageTimer}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
