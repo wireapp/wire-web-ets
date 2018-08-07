@@ -29,6 +29,7 @@ import {
   FileContent,
   FileMetaDataContent,
   ImageContent,
+  LocationContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {
   PayloadBundleIncoming,
@@ -319,6 +320,25 @@ class InstanceService {
       delete (sentFile.content as FileContent).data;
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendLocation(
+    instanceId: string,
+    conversationId: string,
+    location: LocationContent,
+    expireAfterMillis = 0
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = await instance.account.service.conversation.createLocation(location);
+      const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
+      instance.messages.set(sentMessage.id, sentMessage);
+      return sentMessage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
