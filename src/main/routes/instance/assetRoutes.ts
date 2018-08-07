@@ -48,9 +48,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
       conversationId: Joi.string()
         .uuid()
         .required(),
-      data: Joi.string()
-        .base64()
-        .required(),
+      data: Joi.string().required(),
       fileName: Joi.string().required(),
       messageTimer: Joi.number()
         .optional()
