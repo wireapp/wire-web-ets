@@ -25,7 +25,12 @@ import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
-import {PayloadBundleIncoming, PayloadBundleOutgoing, ReactionType} from '@wireapp/core/dist/conversation/root';
+import {
+  PayloadBundleIncoming,
+  PayloadBundleOutgoing,
+  PayloadBundleType,
+  ReactionType,
+} from '@wireapp/core/dist/conversation/root';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
@@ -114,11 +119,11 @@ class InstanceService {
 
     this.cachedInstances.set(instanceId, instance);
 
-    account.on(Account.INCOMING.TEXT_MESSAGE, (payload: PayloadBundleIncoming) =>
+    account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
       instance.messages.set(payload.id, payload)
     );
-    account.on(Account.INCOMING.ASSET, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
-    account.on(Account.INCOMING.IMAGE, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
 
