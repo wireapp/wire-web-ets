@@ -415,4 +415,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```
 POST /clear {"conversationId": "..."}
 POST /markEphemeralRead {"conversationId": "...", "messageId": "..."}
+POST /status {"userId": "...", status: "..."}
+POST /linkPreview {"link": "...", "preview": "..."}
 ```
