@@ -26,7 +26,7 @@ const sessionRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
-    '/api/v1/instance/:instanceId/sendSessionReset',
+    '/api/v1/instance/:instanceId/sendSessionReset/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()

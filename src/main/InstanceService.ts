@@ -74,6 +74,17 @@ class InstanceService {
     this.cachedInstances = new LRUCache(this.maximumInstances);
   }
 
+  async clearConversation(instanceId: string, conversationId: string): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.clearConversation(conversationId);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
   async createInstance(
     backend: string,
     loginData: LoginData,
@@ -150,21 +161,23 @@ class InstanceService {
     logger.log(`[${utils.formatDate()}] Deleted instance with id "${instanceId}".`);
   }
 
-  async deleteMessageLocal(instanceId: string, conversationId: string, messageId: string): Promise<void> {
+  async deleteMessageLocal(instanceId: string, conversationId: string, messageId: string): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       await instance.account.service.conversation.deleteMessageLocal(conversationId, messageId);
+      return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
-  async deleteMessageEveryone(instanceId: string, conversationId: string, messageId: string): Promise<void> {
+  async deleteMessageEveryone(instanceId: string, conversationId: string, messageId: string): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId);
+      return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
