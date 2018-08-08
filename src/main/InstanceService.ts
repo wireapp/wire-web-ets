@@ -20,7 +20,6 @@
 import {APIClient} from '@wireapp/api-client';
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
 import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/commonjs/client/';
-import {Config} from '@wireapp/api-client/dist/commonjs/Config';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
@@ -91,7 +90,7 @@ class InstanceService {
     await engine.init('wire-web-ets');
 
     logger.log(`[${utils.formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
-    const client = new APIClient(new Config(engine, backendType));
+    const client = new APIClient({store: engine, urls: backendType});
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
