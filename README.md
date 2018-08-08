@@ -150,8 +150,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ```json
 {
-  "conversationId": "<string in UUID format>",
-  "name": "<string>"
+  "conversationId": "<string in UUID format>"
 }
 ```
 
