@@ -75,6 +75,17 @@ class InstanceService {
     this.cachedInstances = new LRUCache(this.maximumInstances);
   }
 
+  async archiveConversation(instanceId: string, conversationId: string, archive: boolean): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.toggleArchiveConversation(conversationId, archive);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
   async clearConversation(instanceId: string, conversationId: string): Promise<string> {
     const instance = this.getInstance(instanceId);
 

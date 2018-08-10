@@ -20,6 +20,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`PUT /api/v1/instance`](#put-apiv1instance)
 - [`DELETE /api/v1/instance/<instanceId>`](#delete-apiv1instanceinstanceid)
 - [`DELETE /api/v1/clients`](#delete-apiv1clients)
+- [`POST /api/v1/instance/<instanceId>/archive`](#post-apiv1instanceinstanceidarchive)
 - [`POST /api/v1/instance/<instanceId>/clear`](#post-apiv1instanceinstanceidclear)
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceiddelete)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceiddeleteeverywhere)
@@ -152,6 +153,26 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ```json
 {}
+```
+
+### `POST /api/v1/instance/<instanceId>/archive`
+
+#### Request
+
+```json
+{
+  "archive": "<boolean>",
+  "conversationId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
 ```
 
 ### `POST /api/v1/instance/<instanceId>/clear`
