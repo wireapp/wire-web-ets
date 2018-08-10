@@ -249,7 +249,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      return instance.client.client.api.getClients();
+      return instance.account.service.client.getClients();
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
