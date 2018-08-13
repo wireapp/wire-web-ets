@@ -16,7 +16,7 @@ node("$NODE") {
 
   stage('Build') {
     try {
-      def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
+      def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
         sh 'npm install -g yarn'
         sh 'yarn'
@@ -31,7 +31,7 @@ node("$NODE") {
 
   stage('Install') {
     try {
-      def NODE = tool name: 'node-v9.11.2', type: 'nodejs'
+      def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
 
       sh """printf \\
 '#!/usr/bin/env sh

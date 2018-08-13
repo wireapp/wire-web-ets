@@ -27,11 +27,15 @@ export interface MessagesRequest {
   conversationId: string;
 }
 
+export interface ArchiveRequest extends MessagesRequest {
+  archive: boolean;
+}
+
 export interface DeletionRequest extends MessagesRequest {
   messageId: string;
 }
 
-export interface MessageRequest extends MessagesRequest {
+export interface TextRequest extends MessagesRequest {
   messageTimer?: number;
   text: string;
 }
@@ -39,6 +43,14 @@ export interface MessageRequest extends MessagesRequest {
 export interface ReactionRequest extends MessagesRequest {
   originalMessageId: string;
   type: ReactionType;
+}
+
+export interface LocationRequest extends MessagesRequest {
+  latitude: number;
+  locationName?: string;
+  longitude: number;
+  messageTimer?: number;
+  zoom?: number;
 }
 
 export interface MessageUpdateRequest extends MessagesRequest {
@@ -50,27 +62,26 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   const router = express.Router();
 
   router.post(
-    '/api/v1/instance/:instanceId/delete',
+    '/api/v1/instance/:instanceId/archive/?',
     joiValidate({
+      archive: Joi.boolean().required(),
       conversationId: Joi.string()
-        .uuid()
-        .required(),
-      messageId: Joi.string()
         .uuid()
         .required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageId}: DeletionRequest = req.body;
+      const {archive, conversationId}: ArchiveRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
       try {
-        await instanceService.deleteMessageLocal(instanceId, conversationId, messageId);
+        const instanceName = await instanceService.archiveConversation(instanceId, conversationId, archive);
         return res.json({
           instanceId,
+          name: instanceName,
         });
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
@@ -79,7 +90,34 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/deleteEverywhere',
+    '/api/v1/instance/:instanceId/clear/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId}: MessagesRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const instanceName = await instanceService.clearConversation(instanceId, conversationId);
+        return res.json({
+          instanceId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/delete/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
@@ -97,9 +135,40 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       }
 
       try {
-        await instanceService.deleteMessageEveryone(instanceId, conversationId, messageId);
+        const instanceName = await instanceService.deleteMessageLocal(instanceId, conversationId, messageId);
         return res.json({
           instanceId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/deleteEverywhere/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      messageId: Joi.string()
+        .uuid()
+        .required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, messageId}: DeletionRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const instanceName = await instanceService.deleteMessageEveryone(instanceId, conversationId, messageId);
+        return res.json({
+          instanceId,
+          name: instanceName,
         });
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
@@ -132,7 +201,53 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/sendText',
+    '/api/v1/instance/:instanceId/sendLocation/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      latitude: Joi.number().required(),
+      locationName: Joi.string().optional(),
+      longitude: Joi.number().required(),
+      messageTimer: Joi.number()
+        .optional()
+        .default(0),
+      zoom: Joi.number().optional(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, latitude, longitude, locationName, messageTimer, zoom}: LocationRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const messageId = await instanceService.sendLocation(
+          instanceId,
+          conversationId,
+          {
+            latitude,
+            longitude,
+            name: locationName,
+            zoom,
+          },
+          messageTimer
+        );
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/sendText/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
@@ -144,7 +259,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageTimer, text}: MessageRequest = req.body;
+      const {conversationId, messageTimer, text}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -165,7 +280,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/sendPing',
+    '/api/v1/instance/:instanceId/sendPing/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
@@ -176,7 +291,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageTimer}: MessageRequest = req.body;
+      const {conversationId, messageTimer}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -197,7 +312,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/sendReaction',
+    '/api/v1/instance/:instanceId/sendReaction/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
@@ -232,7 +347,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/updateText',
+    '/api/v1/instance/:instanceId/updateText/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()

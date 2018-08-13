@@ -20,12 +20,23 @@
 import {APIClient} from '@wireapp/api-client';
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
 import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/commonjs/client/';
-import {Config} from '@wireapp/api-client/dist/commonjs/Config';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
-import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
-import {PayloadBundleIncoming, PayloadBundleOutgoing, ReactionType} from '@wireapp/core/dist/conversation/root';
+import {
+  AssetContent,
+  EditedTextContent,
+  FileContent,
+  FileMetaDataContent,
+  ImageContent,
+  LocationContent,
+} from '@wireapp/core/dist/conversation/content/';
+import {
+  PayloadBundleIncoming,
+  PayloadBundleOutgoing,
+  PayloadBundleType,
+  ReactionType,
+} from '@wireapp/core/dist/conversation/root';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
@@ -64,6 +75,28 @@ class InstanceService {
     this.cachedInstances = new LRUCache(this.maximumInstances);
   }
 
+  async archiveConversation(instanceId: string, conversationId: string, archive: boolean): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.toggleArchiveConversation(conversationId, archive);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async clearConversation(instanceId: string, conversationId: string): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.clearConversation(conversationId);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
   async createInstance(
     backend: string,
     loginData: LoginData,
@@ -80,7 +113,7 @@ class InstanceService {
     await engine.init('wire-web-ets');
 
     logger.log(`[${utils.formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
-    const client = new APIClient(new Config(engine, backendType));
+    const client = new APIClient({store: engine, urls: backendType});
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
@@ -114,11 +147,26 @@ class InstanceService {
 
     this.cachedInstances.set(instanceId, instance);
 
-    account.on(Account.INCOMING.TEXT_MESSAGE, (payload: PayloadBundleIncoming) =>
+    account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => {
+      const metaPayload = instance.messages.get(payload.id);
+      if (metaPayload && payload) {
+        (payload.content as AssetContent).uploaded = (metaPayload.content as AssetContent).uploaded;
+      }
+      instance.messages.set(payload.id, payload);
+    });
+    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) =>
       instance.messages.set(payload.id, payload)
     );
-    account.on(Account.INCOMING.ASSET, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
-    account.on(Account.INCOMING.IMAGE, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
+      instance.messages.set(payload.id, payload)
+    );
+    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
+      const editedContent = payload.content as EditedTextContent;
+      payload.id = editedContent.originalMessageId;
+      delete editedContent.originalMessageId;
+      instance.messages.set(payload.id, payload);
+    });
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
 
@@ -134,21 +182,23 @@ class InstanceService {
     logger.log(`[${utils.formatDate()}] Deleted instance with id "${instanceId}".`);
   }
 
-  async deleteMessageLocal(instanceId: string, conversationId: string, messageId: string): Promise<void> {
+  async deleteMessageLocal(instanceId: string, conversationId: string, messageId: string): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       await instance.account.service.conversation.deleteMessageLocal(conversationId, messageId);
+      return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
-  async deleteMessageEveryone(instanceId: string, conversationId: string, messageId: string): Promise<void> {
+  async deleteMessageEveryone(instanceId: string, conversationId: string, messageId: string): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId);
+      return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
@@ -303,6 +353,25 @@ class InstanceService {
       delete (sentFile.content as FileContent).data;
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendLocation(
+    instanceId: string,
+    conversationId: string,
+    location: LocationContent,
+    expireAfterMillis = 0
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = await instance.account.service.conversation.createLocation(location);
+      const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
+      instance.messages.set(sentMessage.id, sentMessage);
+      return sentMessage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }

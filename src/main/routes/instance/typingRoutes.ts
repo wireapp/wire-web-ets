@@ -32,7 +32,7 @@ const typingRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
-    '/api/v1/instance/:instanceId/sendTyping',
+    '/api/v1/instance/:instanceId/sendTyping/?',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
