@@ -22,9 +22,11 @@ import {ServerConfig} from '../config';
 
 const router = express.Router();
 
+const {version: nodeVersion} = process;
+
 const mainRoute = (config: ServerConfig) =>
   router.get(['/', '/api/v1/?'], (req, res) =>
-    res.json({code: 200, message: `E2E Test Service v${config.VERSION} ready`})
+    res.json({code: 200, message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`})
   );
 
 export default mainRoute;

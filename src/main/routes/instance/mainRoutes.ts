@@ -82,7 +82,7 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
     }
   );
 
-  router.get('/api/v1/instance/:instanceId', (req, res) => {
+  router.get('/api/v1/instance/:instanceId/?', (req, res) => {
     const {instanceId = ''}: {instanceId: string} = req.params;
 
     if (!instanceService.instanceExists(instanceId)) {
