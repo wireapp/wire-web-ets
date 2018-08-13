@@ -25,6 +25,7 @@ import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/commonjs/h
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {
+  AssetContent,
   EditedTextContent,
   FileContent,
   FileMetaDataContent,
@@ -148,7 +149,16 @@ class InstanceService {
     this.cachedInstances.set(instanceId, instance);
 
     account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
-    account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => {
+      const metaPayload = instance.messages.get(payload.id);
+      if (metaPayload && payload) {
+        (payload.content as AssetContent).uploaded = (metaPayload.content as AssetContent).uploaded;
+      }
+      instance.messages.set(payload.id, payload);
+    });
+    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) =>
+      instance.messages.set(payload.id, payload)
+    );
     account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
       instance.messages.set(payload.id, payload)
     );
