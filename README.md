@@ -453,11 +453,3 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
   "messageId": "<string>"
 }
 ```
-
-## Planned API
-
-```
-POST /markEphemeralRead {"conversationId": "...", "messageId": "..."}
-POST /status {"userId": "...", status: "..."}
-POST /linkPreview {"link": "...", "preview": "..."}
-```
