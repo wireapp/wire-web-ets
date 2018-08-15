@@ -273,9 +273,9 @@
     spark-md5 "3.0.0"
     tough-cookie "2.4.3"
 
-"@wireapp/cbor@3.0.69":
-  version "3.0.69"
-  resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.69.tgz#b26bfcde8c86d0ca660be73e30f4a86b0c82c127"
+"@wireapp/cbor@3.0.72":
+  version "3.0.72"
+  resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.72.tgz#0e56c7ee8389f7bd51bc7aed17c8e68521258ca9"
 
 "@wireapp/core@5.7.17":
   version "5.7.17"
@@ -306,9 +306,13 @@
     fs-extra "7.0.0"
     logdown "3.2.7"
 
-"@wireapp/lru-cache@2.1.45", "@wireapp/lru-cache@2.1.48":
+"@wireapp/lru-cache@2.1.45":
   version "2.1.45"
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-2.1.45.tgz#47acbc3d134fd3149a10cbcc0ddc2b2fad47c68d"
+
+"@wireapp/lru-cache@2.1.48":
+  version "2.1.48"
+  resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-2.1.48.tgz#2337fdf6935e1bb64d54b82a399ec3470d9e43c6"
 
 "@wireapp/priority-queue@0.2.4":
   version "0.2.4"
@@ -318,13 +322,13 @@
     pure-uuid "1.5.3"
 
 "@wireapp/proteus@7.3.15":
-  version "7.3.12"
-  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-7.3.12.tgz#8902f4c48bc7b90548900c5ec5a6611fd4cabfe1"
+  version "7.3.15"
+  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-7.3.15.tgz#cf4cd00c8b21f6b97c3adaed05d2a6c858d678bb"
   dependencies:
     "@types/chai" "4.1.4"
     "@types/ed2curve" "0.2.2"
     "@types/node" "10.5.7"
-    "@wireapp/cbor" "3.0.69"
+    "@wireapp/cbor" "3.0.72"
     ed2curve "0.2.1"
     libsodium-wrappers-sumo "0.7.3"
 
