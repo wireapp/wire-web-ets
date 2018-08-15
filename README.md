@@ -35,7 +35,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`POST /api/v1/instance/<instanceId>/sendText`](#post-apiv1instanceinstanceidsendtext)
 - [`POST /api/v1/instance/<instanceId>/typing`](#post-apiv1instanceinstanceidtyping)
 - [`POST /api/v1/instance/<instanceId>/updateText`](#post-apiv1instanceinstanceidupdatetext)
-- [Planned API](#planned-api)
 
 ---
 
