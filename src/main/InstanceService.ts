@@ -295,7 +295,7 @@ class InstanceService {
           for (const instanceId in instances) {
             const instance = this.cachedInstances.get(instanceId);
             if (instance && instance.client.context && instance.client.context.clientId === client.id) {
-              await instance.account.logout();
+              await this.deleteInstance(instanceId);
             }
           }
           await apiClient.client.api.deleteClient(client.id, password);
