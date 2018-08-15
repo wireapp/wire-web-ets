@@ -25,6 +25,7 @@ import joiValidate from '../../middlewares/joiValidate';
 export interface ConfirmationMessageRequest {
   conversationId: string;
   messageId: string;
+  userIds: string[];
 }
 
 const confirmationRoutes = (instanceService: InstanceService): express.Router => {
@@ -69,17 +70,25 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
       messageId: Joi.string()
         .uuid()
         .required(),
+      userIds: Joi.array()
+        .items(Joi.string())
+        .required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageId}: ConfirmationMessageRequest = req.body;
+      const {conversationId, messageId, userIds}: ConfirmationMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
       try {
-        const instanceName = await instanceService.sendConfirmationEphemeral(instanceId, conversationId, messageId);
+        const instanceName = await instanceService.sendConfirmationEphemeral(
+          instanceId,
+          conversationId,
+          messageId,
+          userIds
+        );
         return res.json({
           instanceId,
           name: instanceName,

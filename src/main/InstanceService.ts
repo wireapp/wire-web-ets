@@ -315,12 +315,18 @@ class InstanceService {
     }
   }
 
-  async sendConfirmationEphemeral(instanceId: string, conversationId: string, messageId: string): Promise<string> {
+  async sendConfirmationEphemeral(
+    instanceId: string,
+    conversationId: string,
+    messageId: string,
+    userIds: string[]
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const confirmationPayload = instance.account.service.conversation.createConfirmationEphemeral(messageId);
+      const confirmationPayload = instance.account.service.conversation.createConfirmation(messageId);
       await instance.account.service.conversation.send(conversationId, confirmationPayload);
+      await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, userIds);
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
