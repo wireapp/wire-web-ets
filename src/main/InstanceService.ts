@@ -162,6 +162,7 @@ class InstanceService {
     account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
       instance.messages.set(payload.id, payload)
     );
+    account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
     account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
       const editedContent = payload.content as EditedTextContent;
       instance.messages.set(payload.id, payload);
@@ -431,8 +432,9 @@ class InstanceService {
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = instance.account.service.conversation.createPing();
-      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
-      return messageId;
+      const sentPing = await instance.account.service.conversation.send(conversationId, payload);
+      instance.messages.set(sentPing.id, sentPing);
+      return sentPing.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
