@@ -259,7 +259,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     "messageTimer": "<number>",
     "state": "<'PayloadBundleState.INCOMING'|'PayloadBundleState.OUTGOING_SENT'>",
     "timestamp": "<number in Unix time stamp format>",
-    "type": "text"
+    "type": "<string>"
   }
 ]
 ```
