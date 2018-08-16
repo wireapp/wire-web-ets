@@ -23,6 +23,7 @@ const {APIClient} = require('@wireapp/api-client');
 const {AuthAPI} = require('@wireapp/api-client/dist/commonjs/auth/');
 const {ClientAPI} = require('@wireapp/api-client/dist/commonjs/client/');
 const {ConversationAPI} = require('@wireapp/api-client/dist/commonjs/conversation/');
+const {UserAPI} = require('@wireapp/api-client/dist/commonjs/user/');
 const {default: config} = require('../../dist/config');
 const {default: Server} = require('../../dist/Server');
 const {default: UUID} = require('pure-uuid');
@@ -95,6 +96,38 @@ describe('Routes', () => {
       .post(new RegExp(ConversationAPI.URL.CONVERSATIONS + '/.*/otr/messages'))
       .query({ignore_missing: false})
       .reply(HTTP_CODE_OK)
+      .persist();
+
+    nock(backendURL)
+      .get(new RegExp(UserAPI.URL.USERS + '/.*/' + UserAPI.URL.PRE_KEYS))
+      .reply(HTTP_CODE_OK, {
+        clients: [
+          {
+            client: clientId,
+            prekey: new UUID(UUID_VERSION).format(),
+          },
+        ],
+        user: new UUID(UUID_VERSION).format(),
+      })
+      .persist();
+
+    nock(backendURL)
+      .get(new RegExp(ConversationAPI.URL.CONVERSATIONS + '/.*'))
+      .reply(HTTP_CODE_OK, {
+        creator: new UUID(UUID_VERSION).format(),
+        members: {
+          others: [
+            {
+              [new UUID(UUID_VERSION).format()]: {
+                id: new UUID(UUID_VERSION).format(),
+              },
+            },
+          ],
+          self: {
+            id: new UUID(UUID_VERSION).format(),
+          },
+        },
+      })
       .persist();
 
     nock(backendURL)
