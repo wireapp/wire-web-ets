@@ -43,7 +43,7 @@ class Server {
 
   init() {
     // The order is important here, please don't sort!
-    this.app.use(bodyParser.json({limit: '30mb'}));
+    this.app.use(bodyParser.json({limit: '100mb'}));
     this.initSecurityHeaders();
     this.app.use(
       compression({
