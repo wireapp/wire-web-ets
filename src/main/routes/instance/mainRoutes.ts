@@ -17,7 +17,6 @@
  *
  */
 
-import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
 import {ClientType} from '@wireapp/api-client/dist/commonjs/client/';
 import * as express from 'express';
 import * as Joi from 'joi';
@@ -64,14 +63,14 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
     async (req: express.Request, res: express.Response) => {
       const {backend, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
 
-      const LoginData: LoginData = {
+      const loginData = {
         clientType: ClientType.PERMANENT,
         email,
         password,
       };
 
       try {
-        const instanceId = await instanceService.createInstance(backend, LoginData, deviceName, instanceName);
+        const instanceId = await instanceService.createInstance(backend, loginData, deviceName, instanceName);
         return res.json({
           instanceId,
           name: instanceName,
@@ -118,8 +117,6 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
     } catch (error) {
       return res.status(500).json({error: error.message, stack: error.stack});
     }
-
-    return res.sendStatus(200);
   });
 
   router.get('/api/v1/instances/?', (req, res) => {
@@ -146,20 +143,21 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
   });
 
   router.delete(
-    '/api/v1/instance/:instanceId/clients/?',
+    '/api/v1/clients/?',
     joiValidate({
+      backend: Joi.string()
+        .valid(['prod', 'production', 'staging'])
+        .required(),
+      email: Joi.string()
+        .email()
+        .required(),
       password: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
-      const {password}: {password: string} = req.body;
-
-      if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
-      }
+      const {backend, email, password}: InstanceRequest = req.body;
 
       try {
-        await instanceService.removeAllOtherClients(instanceId, password);
+        await instanceService.removeAllClients(backend, email, password);
         return res.json({});
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
