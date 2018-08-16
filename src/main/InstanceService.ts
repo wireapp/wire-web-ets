@@ -19,8 +19,9 @@
 
 import {APIClient} from '@wireapp/api-client';
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
-import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/commonjs/client/';
+import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/dist/commonjs/client/';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
+import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/commonjs/http/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {
@@ -163,9 +164,8 @@ class InstanceService {
     );
     account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
       const editedContent = payload.content as EditedTextContent;
-      payload.id = editedContent.originalMessageId;
-      delete editedContent.originalMessageId;
       instance.messages.set(payload.id, payload);
+      instance.messages.delete(editedContent.originalMessageId);
     });
 
     logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
@@ -258,23 +258,53 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      return instance.client.client.api.getClients();
+      return instance.account.service.client.getClients();
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
   }
 
-  async removeAllOtherClients(instanceId: string, password: string): Promise<void> {
-    const instance = this.getInstance(instanceId);
+  async removeAllClients(backend: string, email: string, password: string): Promise<void> {
+    const backendType = backend === 'staging' ? APIClient.BACKEND.STAGING : APIClient.BACKEND.PRODUCTION;
+    const engine = new MemoryEngine();
+    await engine.init('temporary');
+    const apiClient = new APIClient({store: engine, urls: backendType});
+    const account = new Account(apiClient);
 
-    if (instance.account.service) {
-      const clients = await instance.client.client.api.getClients();
-      for (const client of clients) {
-        await instance.client.client.api.deleteClient(client.id, password);
+    const ClientInfo: ClientInfo = {
+      classification: ClientClassification.DESKTOP,
+      cookieLabel: 'default',
+      model: `E2E Test Server v${version}`,
+    };
+
+    const loginData = {
+      clientType: ClientType.PERMANENT,
+      email,
+      password,
+    };
+
+    try {
+      await account.login(loginData, true, ClientInfo);
+    } catch (error) {
+      if (error.code !== StatusCode.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
+        throw error;
       }
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+
+    const clients = await apiClient.client.api.getClients();
+    const instances = this.cachedInstances.getAll();
+
+    for (const client of clients) {
+      for (const instanceId in instances) {
+        const instance = this.cachedInstances.get(instanceId);
+        if (instance && instance.client.context && instance.client.context.clientId === client.id) {
+          await this.deleteInstance(instanceId);
+        }
+      }
+      await apiClient.client.api.deleteClient(client.id, password);
+    }
+
+    await account.logout();
   }
 
   async resetSession(instanceId: string, conversationId: string): Promise<string> {
@@ -309,6 +339,24 @@ class InstanceService {
     if (instance.account.service) {
       const payload = instance.account.service.conversation.createConfirmation(messageId);
       await instance.account.service.conversation.send(conversationId, payload);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendConfirmationEphemeral(instanceId: string, conversationId: string, messageId: string): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const message = instance.messages.get(messageId);
+
+    if (!message) {
+      throw new Error(`Message with ID "${messageId}" not found.`);
+    }
+
+    if (instance.account.service) {
+      const confirmationPayload = instance.account.service.conversation.createConfirmation(messageId);
+      await instance.account.service.conversation.send(conversationId, confirmationPayload);
+      await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [message.from]);
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);

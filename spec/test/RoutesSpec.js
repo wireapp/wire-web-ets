@@ -19,24 +19,26 @@
 
 // @ts-check
 
-const {default: config} = require('../../dist/config');
-const {default: Server} = require('../../dist/Server');
-const nock = require('nock');
-const request = require('request');
-const {default: UUID} = require('pure-uuid');
 const {APIClient} = require('@wireapp/api-client');
-const backendURL = APIClient.BACKEND.PRODUCTION.rest;
 const {AuthAPI} = require('@wireapp/api-client/dist/commonjs/auth/');
 const {ClientAPI} = require('@wireapp/api-client/dist/commonjs/client/');
 const {ConversationAPI} = require('@wireapp/api-client/dist/commonjs/conversation/');
+const {UserAPI} = require('@wireapp/api-client/dist/commonjs/user/');
+const {default: config} = require('../../dist/config');
+const {default: Server} = require('../../dist/Server');
+const {default: UUID} = require('pure-uuid');
 const {NotificationAPI} = require('@wireapp/api-client/dist/commonjs/notification/');
 
+const nock = require('nock');
+const request = require('request');
+
+const backendURL = APIClient.BACKEND.PRODUCTION.rest;
 const UUID_VERSION = 4;
 const HTTP_CODE_OK = 200;
 const HTTP_CODE_NOT_FOUND = 404;
 const HTTP_CODE_UNPROCESSABLE_ENTITY = 422;
 
-const sendRequest = async (method, url, data) => {
+const sendRequest = (method, url, data) => {
   let options = {method};
   if (data) {
     const body = JSON.stringify(data);
@@ -65,171 +67,176 @@ describe('Routes', () => {
     user: new UUID(UUID_VERSION).format(),
   };
 
-  beforeEach(async done => {
+  beforeEach(async () => {
     etsServer = new Server(config);
     const clientId = '4e37b32f57f6da55';
+
     nock(backendURL)
       .post(AuthAPI.URL.LOGIN)
       .query({persist: true})
-      .reply(HTTP_CODE_OK, accessTokenData);
+      .reply(HTTP_CODE_OK, accessTokenData)
+      .persist();
+
     nock(backendURL)
       .post(AuthAPI.URL.ACCESS + '/' + AuthAPI.URL.LOGOUT)
-      .reply(HTTP_CODE_OK);
+      .reply(HTTP_CODE_OK)
+      .persist();
+
+    nock(backendURL)
+      .post(AuthAPI.URL.ACCESS)
+      .reply(HTTP_CODE_OK)
+      .persist();
+
     nock(backendURL)
       .post(ClientAPI.URL.CLIENTS)
-      .reply(HTTP_CODE_OK, {id: clientId});
+      .reply(HTTP_CODE_OK, {id: clientId})
+      .persist();
+
     nock(backendURL)
       .post(new RegExp(ConversationAPI.URL.CONVERSATIONS + '/.*/otr/messages'))
       .query({ignore_missing: false})
       .reply(HTTP_CODE_OK)
       .persist();
+
+    nock(backendURL)
+      .get(new RegExp(UserAPI.URL.USERS + '/.*/' + UserAPI.URL.PRE_KEYS))
+      .reply(HTTP_CODE_OK, {
+        clients: [
+          {
+            client: clientId,
+            prekey: new UUID(UUID_VERSION).format(),
+          },
+        ],
+        user: new UUID(UUID_VERSION).format(),
+      })
+      .persist();
+
+    nock(backendURL)
+      .get(new RegExp(ConversationAPI.URL.CONVERSATIONS + '/.*'))
+      .reply(HTTP_CODE_OK, {
+        creator: new UUID(UUID_VERSION).format(),
+        members: {
+          others: [
+            {
+              [new UUID(UUID_VERSION).format()]: {
+                id: new UUID(UUID_VERSION).format(),
+              },
+            },
+          ],
+          self: {
+            id: new UUID(UUID_VERSION).format(),
+          },
+        },
+      })
+      .persist();
+
     nock(backendURL)
       .get(NotificationAPI.URL.NOTIFICATION + '/last')
       .query({client: clientId})
-      .reply(HTTP_CODE_OK, {});
+      .reply(HTTP_CODE_OK, {})
+      .persist();
+
     nock(backendURL)
       .get(ClientAPI.URL.CLIENTS)
-      .reply(HTTP_CODE_OK, [{id: clientId}]);
+      .reply(HTTP_CODE_OK, [{id: clientId}])
+      .persist();
 
     await etsServer.start();
-    done();
   });
 
-  afterEach(async done => {
+  afterEach(async () => {
     if (etsServer && etsServer.server) {
-      try {
-        await etsServer.stop();
-        done();
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      done();
+      await etsServer.stop();
     }
   });
 
-  const createInstance = async data => {
+  const createInstance = data => {
     const url = baseURL + '/instance';
     data = data || {backend: 'production', email: 'test@example.com', password: 'supersecret'};
     return sendRequest('put', url, data);
   };
 
-  it('can create instances', async done => {
-    try {
-      const {statusCode, body} = await createInstance();
-      expect(statusCode).toBe(HTTP_CODE_OK);
-      const {instanceId} = JSON.parse(body);
-      expect(instanceId).toBeDefined();
-      done();
-    } catch (error) {
-      console.error(error);
-    }
+  it('can create instances', async () => {
+    const {statusCode, body} = await createInstance();
+    expect(statusCode).toBe(HTTP_CODE_OK);
+    const {instanceId} = JSON.parse(body);
+    expect(instanceId).toBeDefined();
   });
 
-  it(`doesn't create an instance without login data`, async done => {
-    try {
-      const {statusCode, body} = await createInstance({backend: 'staging'});
-      expect(statusCode).toBe(HTTP_CODE_UNPROCESSABLE_ENTITY);
-      const {error} = JSON.parse(body);
-      expect(error).toContain('Validation error');
-      done();
-    } catch (error) {
-      console.error(error);
-    }
+  it(`doesn't create an instance without login data`, async () => {
+    const {statusCode, body} = await createInstance({backend: 'staging'});
+    expect(statusCode).toBe(HTTP_CODE_UNPROCESSABLE_ENTITY);
+    const {error} = JSON.parse(body);
+    expect(error).toContain('Validation error');
   });
 
-  it(`doesn't create an instance without login data`, async done => {
-    try {
-      const {statusCode, body} = await createInstance({});
-      expect(statusCode).toBe(HTTP_CODE_UNPROCESSABLE_ENTITY);
-      const {error} = JSON.parse(body);
-      expect(error).toContain('Validation error');
-      done();
-    } catch (error) {
-      console.error(error);
-    }
+  it(`doesn't create an instance without login data`, async () => {
+    const {statusCode, body} = await createInstance({});
+    expect(statusCode).toBe(HTTP_CODE_UNPROCESSABLE_ENTITY);
+    const {error} = JSON.parse(body);
+    expect(error).toContain('Validation error');
   });
 
-  it('can get the instance', async done => {
-    try {
-      const {statusCode, body} = await createInstance();
-      expect(statusCode).toBe(HTTP_CODE_OK);
-      const {instanceId} = JSON.parse(body);
+  it('can get the instance', async () => {
+    const {statusCode, body} = await createInstance();
+    expect(statusCode).toBe(HTTP_CODE_OK);
+    const {instanceId} = JSON.parse(body);
 
-      const requestUrl = `${baseURL}/instance/${instanceId}`;
-      const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
-      expect(requestedStatusCode).toBe(HTTP_CODE_OK);
-      const {instanceId: requestedId} = JSON.parse(requestedBody);
+    const requestUrl = `${baseURL}/instance/${instanceId}`;
+    const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
+    expect(requestedStatusCode).toBe(HTTP_CODE_OK);
+    const {instanceId: requestedId} = JSON.parse(requestedBody);
 
-      expect(requestedId).toBe(instanceId);
-      done();
-    } catch (error) {
-      console.error(error);
-    }
+    expect(requestedId).toBe(instanceId);
   });
 
-  it('can send a text message', async done => {
-    try {
-      const {statusCode, body} = await createInstance();
-      expect(statusCode).toBe(HTTP_CODE_OK);
-      const {instanceId} = JSON.parse(body);
+  it('can send a text message', async () => {
+    const {statusCode, body} = await createInstance();
+    expect(statusCode).toBe(HTTP_CODE_OK);
+    const {instanceId} = JSON.parse(body);
 
-      const conversationId = new UUID(UUID_VERSION).format();
-      const requestUrl = `${baseURL}/instance/${instanceId}/sendText`;
-      const requestData = {conversationId, text: 'Hello from Jasmine'};
-      const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
-      expect(requestedStatusCode).toBe(HTTP_CODE_OK);
+    const conversationId = new UUID(UUID_VERSION).format();
+    const requestUrl = `${baseURL}/instance/${instanceId}/sendText`;
+    const requestData = {conversationId, text: 'Hello from Jasmine'};
+    const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
+    expect(requestedStatusCode).toBe(HTTP_CODE_OK);
 
-      const {instanceId: requestedId} = JSON.parse(requestedBody);
-      expect(requestedId).toBe(instanceId);
-      done();
-    } catch (error) {
-      console.error(error);
-    }
+    const {instanceId: requestedId} = JSON.parse(requestedBody);
+    expect(requestedId).toBe(instanceId);
   });
 
-  it('sends the correct error code for not found', async done => {
-    try {
-      const {statusCode} = await createInstance();
-      expect(statusCode).toBe(HTTP_CODE_OK);
+  it('sends the correct error code for not found', async () => {
+    const {statusCode} = await createInstance();
+    expect(statusCode).toBe(HTTP_CODE_OK);
 
-      const requestUrl = `${baseURL}/doesnotexist`;
-      const {statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
-      expect(requestedStatusCode).toBe(HTTP_CODE_NOT_FOUND);
-      done();
-    } catch (error) {
-      console.error(error);
-    }
+    const requestUrl = `${baseURL}/doesnotexist`;
+    const {statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
+    expect(requestedStatusCode).toBe(HTTP_CODE_NOT_FOUND);
   });
 
-  it('saves sent messages', async done => {
-    try {
-      const {statusCode, body} = await createInstance();
-      expect(statusCode).toBe(HTTP_CODE_OK);
-      const {instanceId} = JSON.parse(body);
+  it('saves sent messages', async () => {
+    const {statusCode, body} = await createInstance();
+    expect(statusCode).toBe(HTTP_CODE_OK);
+    const {instanceId} = JSON.parse(body);
 
-      const message = 'Hello from Jasmine';
+    const message = 'Hello from Jasmine';
 
-      const conversationId = new UUID(UUID_VERSION).format();
-      const textRequestUrl = `${baseURL}/instance/${instanceId}/sendText`;
-      const textRequestData = {conversationId, text: message};
-      await sendRequest('post', textRequestUrl, textRequestData);
+    const conversationId = new UUID(UUID_VERSION).format();
+    const textRequestUrl = `${baseURL}/instance/${instanceId}/sendText`;
+    const textRequestData = {conversationId, text: message};
+    await sendRequest('post', textRequestUrl, textRequestData);
 
-      const messagesRequestUrl = `${baseURL}/instance/${instanceId}/getMessages`;
-      const messagesRequestData = {conversationId};
-      const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest(
-        'post',
-        messagesRequestUrl,
-        messagesRequestData
-      );
+    const messagesRequestUrl = `${baseURL}/instance/${instanceId}/getMessages`;
+    const messagesRequestData = {conversationId};
+    const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest(
+      'post',
+      messagesRequestUrl,
+      messagesRequestData
+    );
 
-      const receivedPayload = JSON.parse(requestedBody);
+    const receivedPayload = JSON.parse(requestedBody);
 
-      expect(requestedStatusCode).toBe(HTTP_CODE_OK);
-      expect(receivedPayload[0].content.text).toEqual(message);
-      done();
-    } catch (error) {
-      console.error(error);
-    }
+    expect(requestedStatusCode).toBe(HTTP_CODE_OK);
+    expect(receivedPayload[0].content.text).toEqual(message);
   });
 });
