@@ -164,7 +164,6 @@ class InstanceService {
     );
     account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
       const editedContent = payload.content as EditedTextContent;
-      payload.id = editedContent.originalMessageId;
       delete editedContent.originalMessageId;
       instance.messages.set(payload.id, payload);
     });
