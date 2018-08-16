@@ -287,22 +287,22 @@ class InstanceService {
     try {
       await account.login(loginData, true, ClientInfo);
     } catch (error) {
-      if (error.code === StatusCode.FORBIDDEN && error.label === BackendErrorLabel.TOO_MANY_CLIENTS) {
-        const clients = await apiClient.client.api.getClients();
-        const instances = this.cachedInstances.getAll();
-
-        for (const client of clients) {
-          for (const instanceId in instances) {
-            const instance = this.cachedInstances.get(instanceId);
-            if (instance && instance.client.context && instance.client.context.clientId === client.id) {
-              await this.deleteInstance(instanceId);
-            }
-          }
-          await apiClient.client.api.deleteClient(client.id, password);
-        }
-      } else {
+      if (error.code !== StatusCode.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
         throw error;
       }
+    }
+
+    const clients = await apiClient.client.api.getClients();
+    const instances = this.cachedInstances.getAll();
+
+    for (const client of clients) {
+      for (const instanceId in instances) {
+        const instance = this.cachedInstances.get(instanceId);
+        if (instance && instance.client.context && instance.client.context.clientId === client.id) {
+          await this.deleteInstance(instanceId);
+        }
+      }
+      await apiClient.client.api.deleteClient(client.id, password);
     }
 
     await account.logout();
