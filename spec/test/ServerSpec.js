@@ -30,27 +30,15 @@ describe('Server', () => {
 
   beforeEach(() => (etsServer = new Server(config)));
 
-  afterEach(async done => {
+  afterEach(async () => {
     if (etsServer && etsServer.server) {
-      try {
-        await etsServer.stop();
-        done();
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      done();
+      await etsServer.stop();
     }
   });
 
-  it('starts a server on a specified port', async done => {
-    try {
-      const port = await etsServer.start();
-      expect(port).toBe(config.PORT_HTTP);
-      done();
-    } catch (error) {
-      console.error(error);
-    }
+  it('starts a server on a specified port', async () => {
+    const port = await etsServer.start();
+    expect(port).toBe(config.PORT_HTTP);
   });
 
   it('responds to requests', async done => {
