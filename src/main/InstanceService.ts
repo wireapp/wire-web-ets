@@ -442,7 +442,9 @@ class InstanceService {
       const sentMessage = await instance.account.service.conversation.send(conversationId, linkPreviewPayload);
 
       (sentMessage.content as TextContent).linkPreview!.forEach(preview => {
-        delete preview.image!.image.data;
+        if (preview.image) {
+          delete preview.image.image.data;
+        }
       });
 
       instance.messages.set(sentMessage.id, sentMessage);
