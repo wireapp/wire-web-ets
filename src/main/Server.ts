@@ -43,7 +43,14 @@ class Server {
 
   init() {
     // The order is important here, please don't sort!
-    this.app.use(bodyParser.json({limit: '200mb'}));
+    this.app.use((req, res, next) => {
+      bodyParser.json({limit: '200mb'})(req, res, error => {
+        if (error) {
+          return res.status(400).json({error: 'Payload is not valid JSON data.'});
+        }
+        return next();
+      });
+    });
     this.initSecurityHeaders();
     this.app.use(
       compression({
