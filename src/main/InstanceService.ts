@@ -31,6 +31,8 @@ import {
   FileMetaDataContent,
   ImageContent,
   LocationContent,
+  TextContent,
+  TweetContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {
   PayloadBundleIncoming,
@@ -402,6 +404,51 @@ class InstanceService {
       delete (sentFile.content as FileContent).data;
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendLinkPreview(
+    instanceId: string,
+    conversationId: string,
+    text: string,
+    url: string,
+    urlOffset: number,
+    permanentUrl: string,
+    image?: ImageContent,
+    summary?: string,
+    title?: string,
+    tweet?: TweetContent,
+    expireAfterMillis = 0
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const textPayload = instance.account.service.conversation.createText(text);
+      const linkPreview = await instance.account.service.conversation.createLinkPreview(
+        url,
+        urlOffset,
+        permanentUrl,
+        image,
+        summary,
+        title,
+        tweet
+      );
+      const linkPreviewPayload = instance.account.service.conversation.createText(text, [linkPreview], textPayload.id);
+
+      await instance.account.service.conversation.send(conversationId, textPayload);
+      const sentMessage = await instance.account.service.conversation.send(conversationId, linkPreviewPayload);
+
+      (sentMessage.content as TextContent).linkPreview!.forEach(preview => {
+        if (preview.image) {
+          delete preview.image.image.data;
+        }
+      });
+
+      instance.messages.set(sentMessage.id, sentMessage);
+      return sentMessage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
