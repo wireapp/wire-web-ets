@@ -521,8 +521,8 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     "url": "<string>",
     "urlOffset": "<number>",
     "tweet?": {
-      "author": "<string>",
-      "username": "<string>"
+      "author?": "<string>",
+      "username?": "<string>"
     }
   }
 }

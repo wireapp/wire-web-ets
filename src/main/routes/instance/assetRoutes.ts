@@ -55,8 +55,8 @@ export interface LinkPreviewRequest {
   summary?: string;
   title?: string;
   tweet?: {
-    author: string;
-    username: string;
+    author?: string;
+    username?: string;
   };
   url: string;
   urlOffset: number;
@@ -73,8 +73,8 @@ export const validateLinkPreview = {
   summary: Joi.string().optional(),
   title: Joi.string().optional(),
   tweet: Joi.object({
-    author: Joi.string().required(),
-    username: Joi.string().required(),
+    author: Joi.string().optional(),
+    username: Joi.string().optional(),
   }).optional(),
   url: Joi.string().required(),
   urlOffset: Joi.number().required(),
