@@ -536,7 +536,6 @@ class InstanceService {
         originalMessageId,
         linkPreviewMessages
       );
-      console.log({payload});
       const editedMessage = await instance.account.service.conversation.send(conversationId, payload);
 
       const editedMessageContent = editedMessage.content as EditedTextContent;
