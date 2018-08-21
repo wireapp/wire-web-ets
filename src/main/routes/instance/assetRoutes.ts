@@ -39,6 +39,26 @@ export interface ImageMessageRequest extends AssetMessageRequest {
   width: number;
 }
 
+export interface LinkPreviewRequest {
+  conversationId: string;
+  image?: {
+    data: string;
+    height: number;
+    type: string;
+    width: number;
+  };
+  permanentUrl: string;
+  summary?: string;
+  text: string;
+  title?: string;
+  tweet?: {
+    author: string;
+    username: string;
+  };
+  url: string;
+  urlOffset: number;
+}
+
 const assetRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
@@ -112,6 +132,77 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
         const data = Buffer.from(base64Data, 'base64');
         const image: ImageContent = {data, height, type, width};
         const messageId = await instanceService.sendImage(instanceId, conversationId, image, messageTimer);
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/sendLinkPreview/?',
+    joiValidate({
+      conversationId: Joi.string().required(),
+      image: Joi.object({
+        data: Joi.string().required(),
+        height: Joi.number().required(),
+        type: Joi.string().required(),
+        width: Joi.number().required(),
+      }).optional(),
+      permanentUrl: Joi.string().required(),
+      summary: Joi.string().optional(),
+      text: Joi.string().required(),
+      title: Joi.string().optional(),
+      tweet: Joi.object({
+        author: Joi.string().required(),
+        username: Joi.string().required(),
+      }).optional(),
+      url: Joi.string().required(),
+      urlOffset: Joi.number().required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {
+        conversationId,
+        text,
+        url,
+        urlOffset,
+        permanentUrl,
+        image,
+        summary,
+        title,
+        tweet,
+      }: LinkPreviewRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        let imageContent: ImageContent | undefined;
+
+        if (image) {
+          const data = Buffer.from(image.data, 'base64');
+          imageContent = {data, height: image.height, type: image.type, width: image.width};
+        }
+
+        const messageId = await instanceService.sendLinkPreview(
+          instanceId,
+          conversationId,
+          text,
+          url,
+          urlOffset,
+          permanentUrl,
+          imageContent,
+          summary,
+          title,
+          tweet
+        );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
