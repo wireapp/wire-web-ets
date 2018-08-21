@@ -427,23 +427,23 @@ class InstanceService {
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const textPayload = instance.account.service.conversation.createText(text);
-      const linkPreview = await instance.account.service.conversation.createLinkPreview(
-        url,
-        urlOffset,
-        permanentUrl,
+      const linkPreview = await instance.account.service.conversation.createLinkPreview({
         image,
+        permanentUrl,
         summary,
         title,
-        tweet
-      );
+        tweet,
+        url,
+        urlOffset,
+      });
       const linkPreviewPayload = instance.account.service.conversation.createText(text, [linkPreview], textPayload.id);
 
       await instance.account.service.conversation.send(conversationId, textPayload);
       const sentMessage = await instance.account.service.conversation.send(conversationId, linkPreviewPayload);
 
-      (sentMessage.content as TextContent).linkPreview!.forEach(preview => {
-        if (preview.image) {
-          delete preview.image.image.data;
+      (sentMessage.content as TextContent).linkPreviews!.forEach(preview => {
+        if (preview.imageUploaded) {
+          delete preview.imageUploaded.image.data;
         }
       });
 
