@@ -30,9 +30,9 @@ import {
   FileContent,
   FileMetaDataContent,
   ImageContent,
+  LinkPreviewContent,
   LocationContent,
   TextContent,
-  TweetContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {
   PayloadBundleIncoming,
@@ -150,7 +150,17 @@ class InstanceService {
 
     this.cachedInstances.set(instanceId, instance);
 
-    account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => {
+      const linkPreviewContent = payload.content as TextContent;
+      if (linkPreviewContent.linkPreviews) {
+        linkPreviewContent.linkPreviews.forEach(preview => {
+          if (preview.image) {
+            delete preview.image.data;
+          }
+        });
+      }
+      instance.messages.set(payload.id, payload);
+    });
     account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => {
       const metaPayload = instance.messages.get(payload.id);
       if (metaPayload && payload) {
@@ -413,37 +423,22 @@ class InstanceService {
     instanceId: string,
     conversationId: string,
     text: string,
-    url: string,
-    urlOffset: number,
-    permanentUrl: string,
-    image?: ImageContent,
-    summary?: string,
-    title?: string,
-    tweet?: TweetContent,
+    linkPreview: LinkPreviewContent,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const textPayload = instance.account.service.conversation.createText(text);
-      const linkPreview = await instance.account.service.conversation.createLinkPreview(
-        url,
-        urlOffset,
-        permanentUrl,
-        image,
-        summary,
-        title,
-        tweet
-      );
-      const linkPreviewPayload = instance.account.service.conversation.createText(text, [linkPreview], textPayload.id);
+      const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
+      const textPayload = instance.account.service.conversation.createText(text, [linkPreviewPayload]);
 
-      await instance.account.service.conversation.send(conversationId, textPayload);
-      const sentMessage = await instance.account.service.conversation.send(conversationId, linkPreviewPayload);
+      const sentMessage = await instance.account.service.conversation.send(conversationId, textPayload);
 
-      (sentMessage.content as TextContent).linkPreview!.forEach(preview => {
-        if (preview.image) {
-          delete preview.image.image.data;
+      (sentMessage.content as TextContent).linkPreviews!.forEach(preview => {
+        if (preview.imageUploaded) {
+          delete preview.imageUploaded.asset;
+          delete preview.imageUploaded.image.data;
         }
       });
 
@@ -519,17 +514,42 @@ class InstanceService {
     }
   }
 
-  async updateText(
+  async sendEditedText(
     instanceId: string,
     conversationId: string,
     originalMessageId: string,
-    newMessageText: string
+    newMessageText: string,
+    newLinkPreview?: LinkPreviewContent
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const payload = instance.account.service.conversation.createEditedText(newMessageText, originalMessageId);
+      const linkPreviewMessages = [];
+
+      if (newLinkPreview) {
+        const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(newLinkPreview);
+        linkPreviewMessages.push(linkPreviewPayload);
+      }
+
+      const payload = instance.account.service.conversation.createEditedText(
+        newMessageText,
+        originalMessageId,
+        linkPreviewMessages
+      );
+      console.log({payload});
       const editedMessage = await instance.account.service.conversation.send(conversationId, payload);
+
+      const editedMessageContent = editedMessage.content as EditedTextContent;
+
+      if (editedMessageContent.linkPreviews) {
+        editedMessageContent.linkPreviews.forEach(preview => {
+          if (preview.imageUploaded) {
+            delete preview.imageUploaded.image.data;
+            delete preview.imageUploaded.asset;
+          }
+        });
+      }
+
       instance.messages.set(originalMessageId, editedMessage);
       return editedMessage.id;
     } else {
