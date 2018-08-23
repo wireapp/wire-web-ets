@@ -345,7 +345,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     "type": "<string>",
     "width": "<number>"
   },
-  "permanentUrl": "<string>",
+  "permanentUrl?": "<string>",
   "summary?": "<string>",
   "text": "<string>",
   "title?": "<string>",
@@ -506,7 +506,25 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 {
   "conversationId": "<string in UUID format>",
   "firstMessageId": "<string in UUID format>",
-  "text": "<string>"
+  "text": "<string>",
+  "linkPreview?": {
+    "image?": {
+      "data": "<string>",
+      "height": "<number>",
+      "type": "<string>",
+      "width": "<number>"
+    },
+    "permanentUrl?": "<string>",
+    "summary?": "<string>",
+    "text": "<string>",
+    "title?": "<string>",
+    "url": "<string>",
+    "urlOffset": "<number>",
+    "tweet?": {
+      "author?": "<string>",
+      "username?": "<string>"
+    }
+  }
 }
 ```
 
