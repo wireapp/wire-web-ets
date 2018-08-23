@@ -37,3 +37,8 @@ process.on('SIGTERM', () => {
   console.log(`[${utils.formatDate()}] Received "SIGTERM" signal. Exiting.`);
   server.stop();
 });
+
+process.on('uncaughtException', error => console.error(`Uncaught exception: ${error.message}`, error));
+process.on('unhandledRejection', error =>
+  console.error(`Uncaught rejection "${error.constructor.name}": ${error.message}`, error)
+);
