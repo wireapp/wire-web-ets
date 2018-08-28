@@ -19,7 +19,7 @@
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
-    "babel-eslint": "8.2.6",
+    "babel-eslint": "9.0.0",
     "cross-env": "5.2.0",
     "eslint": "5.4.0",
     "eslint-config-prettier": "3.0.1",
