@@ -15,7 +15,7 @@
     "helmet": "3.13.0",
     "joi": "13.6.0",
     "pure-uuid": "1.5.3",
-    "typescript": "3.0.1"
+    "typescript": "3.0.3"
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
