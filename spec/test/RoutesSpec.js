@@ -84,7 +84,7 @@ describe('Routes', () => {
 
     nock(backendURL)
       .post(AuthAPI.URL.ACCESS)
-      .reply(HTTP_CODE_OK)
+      .reply(HTTP_CODE_OK, accessTokenData)
       .persist();
 
     nock(backendURL)
