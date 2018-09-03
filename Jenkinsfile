@@ -38,7 +38,15 @@ node("$NODE") {
 cd "\${0%%/*}" || exit 1
 export NODE_DEBUG="@wireapp/*"
 export PATH="\${PATH}:${NODE}/bin"
-yarn start "\$@" >> output.log 2>&1
+npx pm2 install pm2-logrotate
+npx pm2 set pm2-logrotate:max_size 10M
+npx pm2 set pm2-logrotate:retain 10
+npx pm2 set pm2-logrotate:compress true
+npx pm2 set pm2-logrotate:dateFormat YYYY-MM-DD_HH-mm-ss
+npx pm2 set pm2-logrotate:rotateModule true
+npx pm2 set pm2-logrotate:workerInterval 30
+npx pm2 set pm2-logrotate:rotateInterval '0 0 * * *'
+yarn start
 ' \\
 > ${WORKSPACE}/run.sh"""
 
