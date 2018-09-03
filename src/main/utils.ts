@@ -17,6 +17,10 @@
  *
  */
 
+import * as fs from 'fs';
+import * as pm2 from 'pm2';
+import {promisify} from 'util';
+
 const utils = {
   formatDate(): string {
     const localeOptions = {
@@ -29,6 +33,21 @@ const utils = {
     };
     return new Date().toLocaleDateString('de-DE', localeOptions);
   },
+  isReadable: (filePath: string) =>
+    promisify(fs.access)(filePath, fs.constants.F_OK | fs.constants.R_OK)
+      .then(() => true)
+      .catch(() => false),
+  pm2ConnectAsync: (noDaemonMode: boolean) =>
+    new Promise<void>((resolve, reject) =>
+      pm2.connect(
+        noDaemonMode,
+        err => (err ? reject(err) : resolve())
+      )
+    ),
+  pm2ListAsync: () =>
+    new Promise<pm2.ProcessDescription[]>((resolve, reject) =>
+      pm2.list((err, list) => (err ? reject(err) : resolve(list)))
+    ),
 };
 
 export default utils;
