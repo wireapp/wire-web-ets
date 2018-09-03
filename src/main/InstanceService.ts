@@ -45,8 +45,7 @@ import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
-
-import utils from './utils';
+import {formatDate} from './utils';
 
 const {version}: {version: string} = require('../package.json');
 
@@ -111,11 +110,11 @@ class InstanceService {
 
     const engine = new MemoryEngine();
 
-    logger.log(`[${utils.formatDate()}] Initializing MemoryEngine...`);
+    logger.log(`[${formatDate()}] Initializing MemoryEngine...`);
 
     await engine.init('wire-web-ets');
 
-    logger.log(`[${utils.formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
+    logger.log(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
     const client = new APIClient({store: engine, urls: backendType});
     const account = new Account(client);
 
@@ -125,7 +124,7 @@ class InstanceService {
       model: deviceModel || `E2E Test Server v${version}`,
     };
 
-    logger.log(`[${utils.formatDate()}] Logging in ...`);
+    logger.log(`[${formatDate()}] Logging in ...`);
 
     try {
       await account.login(loginData, true, ClientInfo);
@@ -181,7 +180,7 @@ class InstanceService {
       instance.messages.delete(editedContent.originalMessageId);
     });
 
-    logger.log(`[${utils.formatDate()}] Created instance with id "${instanceId}".`);
+    logger.log(`[${formatDate()}] Created instance with id "${instanceId}".`);
 
     return instanceId;
   }
@@ -192,7 +191,7 @@ class InstanceService {
     await instance.account.logout();
 
     this.cachedInstances.delete(instanceId);
-    logger.log(`[${utils.formatDate()}] Deleted instance with id "${instanceId}".`);
+    logger.log(`[${formatDate()}] Deleted instance with id "${instanceId}".`);
   }
 
   async deleteMessageLocal(instanceId: string, conversationId: string, messageId: string): Promise<string> {

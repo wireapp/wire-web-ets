@@ -19,14 +19,32 @@
 
 import * as express from 'express';
 import {ServerConfig} from '../config';
+import {calcPm2Uptime, getPm2Instance} from '../utils';
 
 const router = express.Router();
-
 const {version: nodeVersion} = process;
 
+interface InstanceData {
+  uptime?: string;
+}
+
 const mainRoute = (config: ServerConfig) =>
-  router.get(['/', '/api/v1/?'], (req, res) =>
-    res.json({code: 200, message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`})
-  );
+  router.get(['/', '/api/v1/?'], async (req, res) => {
+    const instanceData: InstanceData = {};
+    try {
+      const instance = await getPm2Instance();
+      if (instance && instance.pm2_env && instance.pm2_env.pm_uptime) {
+        instanceData.uptime = calcPm2Uptime(instance.pm2_env.pm_uptime);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    const infoData = {
+      code: 200,
+      instance: {...instanceData},
+      message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`,
+    };
+    res.json(infoData);
+  });
 
 export default mainRoute;

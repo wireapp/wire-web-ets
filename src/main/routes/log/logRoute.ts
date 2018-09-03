@@ -19,30 +19,26 @@
 
 import * as express from 'express';
 import * as fs from 'fs';
-import * as pm2 from 'pm2';
 import {promisify} from 'util';
-import utils from '../../utils';
+import {fileIsReadable, getPm2Instance} from '../../utils';
 
 const router = express.Router();
 
 const logRoute = () =>
   router.get('/log/?', async (req, res) => {
     try {
-      await utils.pm2ConnectAsync(true);
-      const [instance] = await utils.pm2ListAsync();
-      pm2.disconnect();
-
+      const instance = await getPm2Instance();
       if (instance && instance.pm2_env) {
         const {pm_err_log_path: errorLogPath, pm_out_log_path: outLogPath} = instance.pm2_env;
 
         let logData = '';
 
-        if (errorLogPath && (await utils.fileIsReadable(errorLogPath))) {
+        if (errorLogPath && (await fileIsReadable(errorLogPath))) {
           const errorLogData = await promisify(fs.readFile)(errorLogPath, {encoding: 'utf8'});
           logData += `=== ${errorLogPath} ===\n${errorLogData}\n`;
         }
 
-        if (outLogPath && (await utils.fileIsReadable(outLogPath))) {
+        if (outLogPath && (await fileIsReadable(outLogPath))) {
           const outLogData = await promisify(fs.readFile)(outLogPath, {encoding: 'utf8'});
           logData += `=== ${outLogPath} ===\n${outLogData}`;
         }
