@@ -89,6 +89,7 @@ WantedBy=default.target
           sh 'systemctl --user start wire-web-ets'
           sh 'yarn start'
           sh 'pm2 save'
+          sh 'pm2 reload all'
         }
       }
     } catch(e) {
