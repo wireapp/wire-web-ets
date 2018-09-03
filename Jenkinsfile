@@ -34,8 +34,6 @@ node("$NODE") {
 
   stage('Install') {
     try {
-      def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
-
       sh "mkdir -p ${HOME}/.config/systemd/user/"
 
       sh """printf \\
@@ -74,13 +72,7 @@ WantedBy=default.target
   stage('Restart server') {
     try {
       sh 'systemctl --user daemon-reload'
-
-      def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
-      withEnv(["PATH+NODE=${NODE}/bin"]) {
-        sh 'cd ${WORKSPACE}'
-        sh 'yarn start'
-        sh 'pm2 save'
-      }
+      sh 'systemctl --user restart wire-web-ets'
     } catch(e) {
       currentBuild.result = 'FAILED'
       wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
