@@ -10,6 +10,9 @@ node("$NODE") {
     jenkinsbot_secret = env.JENKINSBOT_SECRET
   }
 
+  def runningStatus = sh returnStatus: true, script: 'test -r "${HOME}/.pm2/dump.pm2"'
+
+
   stage('Checkout & Clean') {
     git branch: "$BRANCH", url: 'https://github.com/wireapp/wire-web-ets.git'
   }
@@ -21,9 +24,11 @@ node("$NODE") {
         sh 'npm install -g yarn pm2'
         sh 'yarn install --no-progress'
         sh 'yarn dist'
-        sh 'pm2 install pm2-logrotate'
-        sh 'pm2 set pm2-logrotate:retain 20'
-        sh 'pm2 set pm2-logrotate:compress true'
+        if (runningStatus == 1) {
+          sh 'pm2 install pm2-logrotate'
+          sh 'pm2 set pm2-logrotate:retain 20'
+          sh 'pm2 set pm2-logrotate:compress true'
+        }
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
@@ -73,8 +78,6 @@ WantedBy=default.target
   stage('Restart server') {
     try {
       sh 'systemctl --user daemon-reload'
-
-      def runningStatus = sh returnStatus: true, script: 'test -r "${HOME}/.pm2/dump.pm2"'
 
       if (runningStatus == 0) {
         sh 'systemctl --user restart wire-web-ets'
