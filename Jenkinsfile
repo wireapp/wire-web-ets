@@ -73,7 +73,19 @@ WantedBy=default.target
   stage('Restart server') {
     try {
       sh 'systemctl --user daemon-reload'
-      sh 'systemctl --user restart wire-web-ets'
+
+      def running = sh returnStatus: true, script: 'test -r "${HOME}/.pm2/dump.pm2"'
+
+      if (running) {
+        sh 'systemctl --user restart wire-web-ets'
+      } else {
+        def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
+        withEnv(["PATH+NODE=${NODE}/bin"]) {
+          sh 'cd ${WORKSPACE}'
+          sh 'yarn start'
+          sh 'pm2 save'
+        }
+      }
     } catch(e) {
       currentBuild.result = 'FAILED'
       wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
