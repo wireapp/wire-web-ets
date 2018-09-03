@@ -74,7 +74,6 @@ WantedBy=default.target
   stage('Restart server') {
     try {
       sh 'systemctl --user daemon-reload'
-      sh 'systemctl --user restart wire-web-ets'
 
       def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
