@@ -21,11 +21,11 @@ node("$NODE") {
         sh 'npm install -g yarn pm2'
         sh 'yarn install --no-progress'
         sh 'yarn dist'
-        sh 'npx pm2 install pm2-logrotate'
-        sh 'npx pm2 set pm2-logrotate:retain 20'
-        sh 'npx pm2 set pm2-logrotate:compress true'
-        sh 'npx pm2 kill "Wire Web ETS"'
-        sh 'npx pm2 start "Wire Web ETS"'
+        sh 'pm2 install pm2-logrotate'
+        sh 'pm2 set pm2-logrotate:retain 20'
+        sh 'pm2 set pm2-logrotate:compress true'
+        sh 'pm2 kill "Wire Web ETS"'
+        sh 'pm2 start "Wire Web ETS"'
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
