@@ -21,6 +21,10 @@ node("$NODE") {
         sh 'npm install -g yarn pm2'
         sh 'yarn install --no-progress'
         sh 'yarn dist'
+        sh 'npx pm2 install pm2-logrotate'
+        sh 'npx pm2 set pm2-logrotate:retain 20'
+        sh 'npx pm2 set pm2-logrotate:compress true'
+        sh 'npx pm2 kill "Wire Web ETS"'
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
@@ -72,9 +76,6 @@ WantedBy=default.target
     try {
       sh 'systemctl --user daemon-reload'
       sh 'systemctl --user restart wire-web-ets'
-      withEnv(["PATH+NODE=${NODE}/bin"]) {
-        sh 'cd ${WORKSPACE} && yarn start'
-      }
     } catch(e) {
       currentBuild.result = 'FAILED'
       wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
