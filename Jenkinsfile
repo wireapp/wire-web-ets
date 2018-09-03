@@ -24,7 +24,6 @@ node("$NODE") {
         sh 'pm2 install pm2-logrotate'
         sh 'pm2 set pm2-logrotate:retain 20'
         sh 'pm2 set pm2-logrotate:compress true'
-        sh 'pm2 kill'
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
