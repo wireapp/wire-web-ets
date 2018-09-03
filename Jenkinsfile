@@ -35,8 +35,6 @@ node("$NODE") {
 
       sh "mkdir -p ${HOME}/.config/systemd/user/"
 
-      sh "pm2 restart \"Wire Web ETS\""
-
       sh """printf \\
 '[Unit]
 Description=wire-web-ets
