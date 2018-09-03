@@ -18,11 +18,17 @@
  */
 
 import * as express from 'express';
+import * as logdown from 'logdown';
 
 const router = express.Router();
 
+const logger = logdown('@wireapp/wire-web-ets/routes/error/errorRoutes', {
+  logger: console,
+  markdown: false,
+});
+
 const internalErrorRoute = (): express.ErrorRequestHandler => (err, req, res, next) => {
-  console.error(err.stack);
+  logger.error(err.stack);
   const error = {
     code: 500,
     message: 'Internal server error',
