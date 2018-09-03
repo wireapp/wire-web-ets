@@ -72,6 +72,9 @@ WantedBy=default.target
     try {
       sh 'systemctl --user daemon-reload'
       sh 'systemctl --user restart wire-web-ets'
+      withEnv(["PATH+NODE=${NODE}/bin"]) {
+        sh 'yarn start'
+      }
     } catch(e) {
       currentBuild.result = 'FAILED'
       wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
