@@ -17,17 +17,40 @@
  *
  */
 
-import {Router} from 'express';
-import {readFile} from 'fs';
-import * as path from 'path';
+import * as express from 'express';
+import * as fs from 'fs';
+import * as pm2 from 'pm2';
 import {promisify} from 'util';
+import utils from '../../utils';
+
+const router = express.Router();
 
 const logRoute = () =>
-  Router().get('/log/?', async (req, res) => {
-    const logFile = path.join(__dirname, '..', '..', '..', 'output.log');
+  router.get('/log/?', async (req, res) => {
     try {
-      const logData = await promisify(readFile)(logFile, {encoding: 'utf8'});
-      return res.contentType('text/plain; charset=UTF-8').send(logData);
+      await utils.pm2ConnectAsync(true);
+      const [instance] = await utils.pm2ListAsync();
+      pm2.disconnect();
+
+      if (instance && instance.pm2_env) {
+        const {pm_err_log_path: errorLogPath, pm_out_log_path: outLogPath} = instance.pm2_env;
+
+        let logData = '';
+
+        if (errorLogPath && (await utils.fileIsReadable(errorLogPath))) {
+          const errorLogData = await promisify(fs.readFile)(errorLogPath, {encoding: 'utf8'});
+          logData += `=== ${errorLogPath} ===\n${errorLogData}\n`;
+        }
+
+        if (outLogPath && (await utils.fileIsReadable(outLogPath))) {
+          const outLogData = await promisify(fs.readFile)(outLogPath, {encoding: 'utf8'});
+          logData += `=== ${outLogPath} ===\n${outLogData}`;
+        }
+
+        return res.contentType('text/plain; charset=UTF-8').send(logData);
+      } else {
+        throw new Error(`pm2 couldn't find any instances.`);
+      }
     } catch (error) {
       return res.status(500).json({error: error.message, stack: error.stack});
     }

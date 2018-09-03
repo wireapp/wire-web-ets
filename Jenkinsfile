@@ -19,7 +19,7 @@ node("$NODE") {
       def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
         sh 'npm install -g yarn'
-        sh 'yarn'
+        sh 'yarn install --production --no-progress'
         sh 'yarn dist'
       }
     } catch(e) {
@@ -38,7 +38,10 @@ node("$NODE") {
 cd "\${0%%/*}" || exit 1
 export NODE_DEBUG="@wireapp/*"
 export PATH="\${PATH}:${NODE}/bin"
-yarn start "\$@" >> output.log 2>&1
+npx pm2 install pm2-logrotate
+npx pm2 set pm2-logrotate:retain 20
+npx pm2 set pm2-logrotate:compress true
+yarn start
 ' \\
 > ${WORKSPACE}/run.sh"""
 
