@@ -2612,6 +2612,10 @@ pure-uuid@1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/pure-uuid/-/pure-uuid-1.5.3.tgz#cafee7e95b5ff96d7fb737346214967e009d5bce"
 
+pure-uuid@1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/pure-uuid/-/pure-uuid-1.5.4.tgz#e762f4950773d81d7a42f8003b948f3510a30925"
+
 qs@6.5.1:
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.1.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
