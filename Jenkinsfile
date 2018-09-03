@@ -74,9 +74,9 @@ WantedBy=default.target
     try {
       sh 'systemctl --user daemon-reload'
 
-      def running = sh returnStatus: true, script: 'test -r "${HOME}/.pm2/dump.pm2"'
+      def runningStatus = sh returnStatus: true, script: 'test -r "${HOME}/.pm2/dump.pm2"'
 
-      if (running) {
+      if (runningStatus = 0) {
         sh 'systemctl --user restart wire-web-ets'
       } else {
         def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
