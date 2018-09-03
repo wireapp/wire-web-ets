@@ -45,16 +45,16 @@ Type=forking
 LimitNOFILE=infinity
 LimitNPROC=infinity
 LimitCORE=infinity
-Environment=PATH=${NODE}/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+Environment=PATH=\${PATH}:${NODE}/bin
 Environment=LOG_OUTPUT=${HOME}/.pm2/logs/Wire-Web-ETS-out.log
 Environment=LOG_ERROR=${HOME}/.pm2/logs/Wire-Web-ETS-error.log
 Environment=NODE_DEBUG=@wireapp/*
 Environment=PM2_HOME=${HOME}/.pm2
 PIDFile=${HOME}/.pm2/pm2.pid
 
-ExecStart=cd ${WORKSPACE} && ${NODE}/bin/npx pm2 resurrect
-ExecReload=cd ${WORKSPACE} && ${NODE}/bin/npx pm2 reload all
-ExecStop=cd ${WORKSPACE} && ${NODE}/bin/npx pm2 kill
+ExecStart=cd ${WORKSPACE} && npx pm2 resurrect
+ExecReload=cd ${WORKSPACE} && npx pm2 reload all
+ExecStop=cd ${WORKSPACE} && npx pm2 kill
 
 [Install]
 WantedBy=default.target
