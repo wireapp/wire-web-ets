@@ -18,7 +18,7 @@ node("$NODE") {
     try {
       def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
-        sh 'npm install -g yarn'
+        sh 'npm install -g yarn pm2'
         sh 'yarn install --no-progress'
         sh 'yarn dist'
       }
@@ -34,6 +34,8 @@ node("$NODE") {
       def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
 
       sh "mkdir -p ${HOME}/.config/systemd/user/"
+
+      sh "pm2 restart \"Wire Web ETS\""
 
       sh """printf \\
 '[Unit]
@@ -51,9 +53,9 @@ Environment=LOG_ERROR=${HOME}/.pm2/logs/Wire-Web-ETS-error.log
 Environment=NODE_DEBUG=@wireapp/*
 Environment=PM2_HOME=${HOME}/.pm2
 PIDFile=${HOME}/.pm2/pm2.pid
-ExecStart=${WORKSPACE}/node_modules/.bin/pm2 resurrect
-ExecReload=${WORKSPACE}/node_modules/.bin/pm2 reload all
-ExecStop=${WORKSPACE}/node_modules/.bin/pm2 kill
+ExecStart=pm2 resurrect
+ExecReload=pm2 reload all
+ExecStop=pm2 kill
 
 [Install]
 WantedBy=default.target
