@@ -84,6 +84,7 @@ WantedBy=default.target
           sh 'cd ${WORKSPACE}'
           sh 'yarn start'
           sh 'pm2 save'
+          sh 'systemctl --user start wire-web-ets'
         }
       }
     } catch(e) {
