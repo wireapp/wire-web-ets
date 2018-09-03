@@ -73,7 +73,7 @@ WantedBy=default.target
       sh 'systemctl --user daemon-reload'
       sh 'systemctl --user restart wire-web-ets'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
-        sh 'yarn start'
+        sh 'cd ${WORKSPACE} && yarn start'
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
