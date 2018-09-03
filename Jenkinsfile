@@ -35,15 +35,13 @@ node("$NODE") {
 
       sh """printf \\
 '#!/usr/bin/env sh
-SCRIPT_DIR="\${0%%/*}"
-cd "\${SCRIPT_DIR}" || exit 1
+cd "\${0%%/*}" || exit 1
 export NODE_DEBUG="@wireapp/*"
 export PATH="\${PATH}:${NODE}/bin"
-LOG_DIR="\${SCRIPT_DIR}/logs"
 npx pm2 stop "Wire Web ETS"
 npx pm2 set pm2-logrotate:retain 20
 npx pm2 set pm2-logrotate:compress true
-yarn start --error "\${LOG_DIR}/error.log" --output "\${LOG_DIR}/output.log"
+yarn start
 ' \\
 > ${WORKSPACE}/run.sh"""
 
