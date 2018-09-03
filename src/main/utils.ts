@@ -18,7 +18,6 @@
  */
 
 import * as fs from 'fs';
-import * as pm2 from 'pm2';
 import {promisify} from 'util';
 
 function fileIsReadable(filePath: string): Promise<boolean> {
@@ -39,38 +38,14 @@ function formatDate(): string {
   return new Date().toLocaleDateString('de-DE', localeOptions);
 }
 
-async function getPm2Instance(): Promise<pm2.ProcessDescription> {
-  await pm2ConnectAsync(true);
-  const [instance] = await pm2ListAsync();
-  pm2.disconnect();
-  return instance;
-}
-
-function pm2ConnectAsync(noDaemonMode: boolean): Promise<void> {
-  return new Promise<void>((resolve, reject) =>
-    pm2.connect(
-      noDaemonMode,
-      err => (err ? reject(err) : resolve())
-    )
-  );
-}
-
-function pm2ListAsync(): Promise<pm2.ProcessDescription[]> {
-  return new Promise<pm2.ProcessDescription[]>((resolve, reject) =>
-    pm2.list((err, list) => (err ? reject(err) : resolve(list)))
-  );
-}
-
-function calcPm2Uptime(rawUptime: number): string {
-  const uptimeInSeconds = Math.round((Date.now() - rawUptime) / 1000);
-
+function toHHMMSS(uptime: number): string {
   const pad = (t: number) => (t < 10 ? '0' + t : t);
 
-  const hours = Math.floor(uptimeInSeconds / 3600);
-  const minutes = Math.floor((uptimeInSeconds - hours * 3600) / 60);
-  const seconds = Math.floor(uptimeInSeconds - hours * 3600 - minutes * 60);
+  const hours = Math.floor(uptime / 3600);
+  const minutes = Math.floor((uptime - hours * 3600) / 60);
+  const seconds = Math.floor(uptime - hours * 3600 - minutes * 60);
 
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
-export {fileIsReadable, formatDate, getPm2Instance, calcPm2Uptime};
+export {fileIsReadable, formatDate, toHHMMSS};

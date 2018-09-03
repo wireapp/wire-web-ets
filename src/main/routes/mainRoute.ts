@@ -18,36 +18,19 @@
  */
 
 import * as express from 'express';
-import * as logdown from 'logdown';
 import {ServerConfig} from '../config';
-import {calcPm2Uptime, getPm2Instance} from '../utils';
+import {toHHMMSS} from '../utils';
 
 const router = express.Router();
-const {version: nodeVersion} = process;
-
-const logger = logdown('@wireapp/wire-web-ets/routes/error/errorRoutes', {
-  logger: console,
-  markdown: false,
-});
-
-interface InstanceData {
-  uptime?: string;
-}
+const {uptime: nodeUptime, version: nodeVersion} = process;
 
 const mainRoute = (config: ServerConfig) =>
   router.get(['/', '/api/v1/?'], async (req, res) => {
-    const instanceData: InstanceData = {};
-    try {
-      const instance = await getPm2Instance();
-      if (instance && instance.pm2_env && instance.pm2_env.pm_uptime) {
-        instanceData.uptime = calcPm2Uptime(instance.pm2_env.pm_uptime);
-      }
-    } catch (error) {
-      logger.error(error.stack);
-    }
     const infoData = {
       code: 200,
-      instance: {...instanceData},
+      instance: {
+        uptime: toHHMMSS(nodeUptime()),
+      },
       message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`,
     };
     res.json(infoData);
