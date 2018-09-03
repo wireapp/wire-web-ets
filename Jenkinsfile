@@ -80,6 +80,7 @@ WantedBy=default.target
       withEnv(["PATH+NODE=${NODE}/bin"]) {
         sh 'cd ${WORKSPACE}'
         sh 'yarn start'
+        sh 'pm2 save'
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
