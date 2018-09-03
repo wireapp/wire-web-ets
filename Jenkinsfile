@@ -60,7 +60,7 @@ Environment=NODE_DEBUG=@wireapp/*
 Environment=PM2_HOME=${HOME}/.pm2
 PIDFile=${HOME}/.pm2/pm2.pid
 ExecStart=${NODE}/bin/pm2 resurrect
-ExecReload=${NODE}/bin/pm2 reload all
+ExecReload=${NODE}/bin/pm2 reload all --update-env
 ExecStop=${NODE}/bin/pm2 kill
 
 [Install]
