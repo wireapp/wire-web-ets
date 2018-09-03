@@ -51,9 +51,9 @@ Environment=LOG_ERROR=${HOME}/.pm2/logs/Wire-Web-ETS-error.log
 Environment=NODE_DEBUG=@wireapp/*
 Environment=PM2_HOME=${HOME}/.pm2
 PIDFile=${HOME}/.pm2/pm2.pid
-ExecStart=pm2 resurrect
-ExecReload=pm2 reload all
-ExecStop=pm2 kill
+ExecStart=${NODE}/bin/pm2 resurrect
+ExecReload=${NODE}/bin/pm2 reload all
+ExecStop=${NODE}/bin/pm2 kill
 
 [Install]
 WantedBy=default.target
