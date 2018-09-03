@@ -22,6 +22,10 @@ import * as pm2 from 'pm2';
 import {promisify} from 'util';
 
 const utils = {
+  fileIsReadable: (filePath: string) =>
+    promisify(fs.access)(filePath, fs.constants.F_OK | fs.constants.R_OK)
+      .then(() => true)
+      .catch(() => false),
   formatDate(): string {
     const localeOptions = {
       day: '2-digit',
@@ -33,10 +37,6 @@ const utils = {
     };
     return new Date().toLocaleDateString('de-DE', localeOptions);
   },
-  isReadable: (filePath: string) =>
-    promisify(fs.access)(filePath, fs.constants.F_OK | fs.constants.R_OK)
-      .then(() => true)
-      .catch(() => false),
   pm2ConnectAsync: (noDaemonMode: boolean) =>
     new Promise<void>((resolve, reject) =>
       pm2.connect(

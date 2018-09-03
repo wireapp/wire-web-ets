@@ -37,12 +37,12 @@ const logRoute = () =>
 
         let logData = '';
 
-        if (errorLogPath && (await utils.isReadable(errorLogPath))) {
+        if (errorLogPath && (await utils.fileIsReadable(errorLogPath))) {
           const errorLogData = await promisify(fs.readFile)(errorLogPath, {encoding: 'utf8'});
           logData += `=== ${errorLogPath} ===\n${errorLogData}\n`;
         }
 
-        if (outLogPath && (await utils.isReadable(outLogPath))) {
+        if (outLogPath && (await utils.fileIsReadable(outLogPath))) {
           const outLogData = await promisify(fs.readFile)(outLogPath, {encoding: 'utf8'});
           logData += `=== ${outLogPath} ===\n${outLogData}`;
         }
