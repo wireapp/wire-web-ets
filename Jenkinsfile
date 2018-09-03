@@ -41,7 +41,6 @@ export NODE_DEBUG="@wireapp/*"
 export PATH="\${PATH}:${NODE}/bin"
 LOG_DIR="\${SCRIPT_DIR}/logs"
 npx pm2 stop "Wire Web ETS"
-npx pm2 install pm2-logrotate
 npx pm2 set pm2-logrotate:retain 20
 npx pm2 set pm2-logrotate:compress true
 yarn start --error "\${LOG_DIR}/error.log" --output "\${LOG_DIR}/output.log"
