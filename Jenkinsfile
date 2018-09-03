@@ -19,7 +19,7 @@ node("$NODE") {
       def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
         sh 'npm install -g yarn'
-        sh 'yarn install --production --no-progress'
+        sh 'yarn install --no-progress'
         sh 'yarn dist'
       }
     } catch(e) {
