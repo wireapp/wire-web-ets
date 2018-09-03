@@ -34,6 +34,7 @@ node("$NODE") {
 
   stage('Install') {
     try {
+      def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
       sh "mkdir -p ${HOME}/.config/systemd/user/"
 
       sh """printf \\
