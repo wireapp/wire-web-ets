@@ -86,10 +86,9 @@ WantedBy=default.target
         def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
         withEnv(["PATH+NODE=${NODE}/bin"]) {
           sh 'cd ${WORKSPACE}'
-          sh 'systemctl --user start wire-web-ets'
           sh 'yarn start'
           sh 'pm2 save'
-          sh 'pm2 reload all'
+          sh 'systemctl --user start wire-web-ets'
         }
       }
     } catch(e) {
