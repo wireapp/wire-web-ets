@@ -18,11 +18,17 @@
  */
 
 import * as express from 'express';
+import * as logdown from 'logdown';
 import {ServerConfig} from '../config';
 import {calcPm2Uptime, getPm2Instance} from '../utils';
 
 const router = express.Router();
 const {version: nodeVersion} = process;
+
+const logger = logdown('@wireapp/wire-web-ets/routes/error/errorRoutes', {
+  logger: console,
+  markdown: false,
+});
 
 interface InstanceData {
   uptime?: string;
@@ -37,7 +43,7 @@ const mainRoute = (config: ServerConfig) =>
         instanceData.uptime = calcPm2Uptime(instance.pm2_env.pm_uptime);
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error.stack);
     }
     const infoData = {
       code: 200,
