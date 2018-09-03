@@ -33,23 +33,6 @@ node("$NODE") {
     try {
       def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
 
-      sh """printf \\
-'#!/usr/bin/env sh
-cd "\${0%%/*}" || exit 1
-export NODE_DEBUG="@wireapp/*"
-export PATH="\${PATH}:${NODE}/bin"
-export LOG_OUTPUT="${HOME}/.pm2/logs/Wire-Web-ETS-out.log"
-export LOG_ERROR="${HOME}/.pm2/logs/Wire-Web-ETS-error.log"
-npx pm2 install pm2-logrotate
-npx pm2 set pm2-logrotate:retain 20
-npx pm2 set pm2-logrotate:compress true
-npx pm2 stop "Wire Web ETS"
-yarn start
-' \\
-> ${WORKSPACE}/run.sh"""
-
-      sh "chmod +x ${WORKSPACE}/run.sh"
-
       sh "mkdir -p ${HOME}/.config/systemd/user/"
 
       sh """printf \\
@@ -58,12 +41,20 @@ Description=wire-web-ets
 After=network.target
 
 [Service]
-ExecStart=${WORKSPACE}/run.sh
-Restart=on-failure
-RestartSec=10
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=wire-web-ets
+Type=forking
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Environment=PATH=${NODE}/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+Environment=LOG_OUTPUT=${HOME}/.pm2/logs/Wire-Web-ETS-out.log
+Environment=LOG_ERROR=${HOME}/.pm2/logs/Wire-Web-ETS-error.log
+Environment=NODE_DEBUG=@wireapp/*
+Environment=PM2_HOME=${HOME}/.pm2
+PIDFile=${HOME}/.pm2/pm2.pid
+
+ExecStart=cd ${WORKSPACE} && ${NODE}/bin/npx pm2 resurrect
+ExecReload=cd ${WORKSPACE} && ${NODE}/bin/npx pm2 reload all
+ExecStop=cd ${WORKSPACE} && ${NODE}/bin/npx pm2 kill
 
 [Install]
 WantedBy=default.target
