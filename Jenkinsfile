@@ -25,6 +25,7 @@ node("$NODE") {
         sh 'npx pm2 set pm2-logrotate:retain 20'
         sh 'npx pm2 set pm2-logrotate:compress true'
         sh 'npx pm2 kill "Wire Web ETS"'
+        sh 'npx pm2 start "Wire Web ETS"'
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
