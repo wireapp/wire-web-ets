@@ -78,7 +78,7 @@
     "precommit": "lint-staged",
     "prettier": "prettier \"**/*.{json,md}\"",
     "preversion": "yarn && yarn test",
-    "start": "pm2 start \"./dist/index.js\" --name \"Wire Web ETS\"",
+    "start": "pm2 start",
     "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" node dist/index.js",
     "test": "yarn dist && jasmine --config=jasmine.json",
     "version": "yarn dist"

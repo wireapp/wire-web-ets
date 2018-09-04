@@ -19,6 +19,7 @@
 
 import * as express from 'express';
 import * as logdown from 'logdown';
+import {formatDate} from '../../utils';
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ const logger = logdown('@wireapp/wire-web-ets/routes/error/errorRoutes', {
 });
 
 const internalErrorRoute = (): express.ErrorRequestHandler => (err, req, res, next) => {
-  logger.error(err.stack);
+  logger.error(`[${formatDate()}] ${err.stack}`);
   const error = {
     code: 500,
     message: 'Internal server error',

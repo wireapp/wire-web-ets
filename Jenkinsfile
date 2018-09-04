@@ -50,11 +50,8 @@ After=network.target
 
 [Service]
 Type=forking
-Environment=PATH=\${PATH}:${NODE}/bin
-Environment=LOG_OUTPUT=${HOME}/.pm2/logs/Wire-Web-ETS-out.log
-Environment=LOG_ERROR=${HOME}/.pm2/logs/Wire-Web-ETS-error.log
-Environment=NODE_DEBUG=@wireapp/*
-Environment=PM2_HOME=${HOME}/.pm2
+Environment="PATH=\${PATH}:${NODE}/bin"
+Environment="PM2_HOME=${HOME}/.pm2"
 PIDFile=${HOME}/.pm2/pm2.pid
 ExecStart=${NODE}/bin/pm2 resurrect
 ExecReload=${NODE}/bin/pm2 reload all --update-env
