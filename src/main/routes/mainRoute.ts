@@ -29,6 +29,11 @@ const mainRoute = (config: ServerConfig) =>
     const infoData = {
       code: 200,
       instance: {
+        env: {
+          LOG_ERROR: process.env.LOG_ERROR,
+          LOG_OUTPUT: process.env.LOG_OUTPUT,
+          NODE_DEBUG: process.env.NODE_DEBUG,
+        },
         uptime: toHHMMSS(nodeUptime()),
       },
       message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`,
