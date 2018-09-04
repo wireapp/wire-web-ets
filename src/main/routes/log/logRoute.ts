@@ -29,15 +29,20 @@ const errorLogFile = process.env.LOG_ERROR;
 const logRoute = () =>
   router.get('/log/?', async (req, res) => {
     try {
-      let logData = '';
+      let logData = `=== ${errorLogFile} ===\n`;
       if (errorLogFile && (await fileIsReadable(errorLogFile))) {
         const errorLogData = await promisify(fs.readFile)(errorLogFile, {encoding: 'utf8'});
-        logData += `=== ${errorLogFile} ===\n${errorLogData}\n`;
+        logData += `${errorLogData}\n`;
+      } else {
+        logData += `Error: Could not find file ${errorLogFile} or it is not readable.`;
       }
 
+      logData += `=== ${outLogFile} ===\n`;
       if (outLogFile && (await fileIsReadable(outLogFile))) {
         const outLogData = await promisify(fs.readFile)(outLogFile, {encoding: 'utf8'});
-        logData += `=== ${outLogFile} ===\n${outLogData}`;
+        logData += outLogData;
+      } else {
+        logData += `Error: Could not find file ${outLogFile} or it is not readable.`;
       }
 
       return res.contentType('text/plain; charset=UTF-8').send(logData);
