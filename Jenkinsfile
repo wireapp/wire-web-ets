@@ -50,9 +50,6 @@ After=network.target
 
 [Service]
 Type=forking
-LimitNOFILE=infinity
-LimitNPROC=infinity
-LimitCORE=infinity
 Environment=PATH=\${PATH}:${NODE}/bin
 Environment=LOG_OUTPUT=${HOME}/.pm2/logs/Wire-Web-ETS-out.log
 Environment=LOG_ERROR=${HOME}/.pm2/logs/Wire-Web-ETS-error.log
