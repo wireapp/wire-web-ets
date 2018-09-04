@@ -35,13 +35,15 @@ const logRoute = () =>
         logData += `=== ${errorLogFile} ===\n`;
         if (await fileIsReadable(errorLogFile)) {
           const errorLogData = await promisify(fs.readFile)(errorLogFile, {encoding: 'utf8'});
-          logData += `${errorLogData}\n`;
+          logData += `${errorLogData}`;
         } else {
           logData += `Error: Could not find error log file "${errorLogFile}" or it is not readable.`;
         }
       } else {
         logData += `Error: No error log file specified.`;
       }
+
+      logData += '\n';
 
       if (outLogFile) {
         logData += `=== ${outLogFile} ===\n`;
