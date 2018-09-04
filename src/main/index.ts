@@ -30,12 +30,16 @@ server
 
 process.on('SIGINT', () => {
   console.log(`[${formatDate()}] Received "SIGINT" signal. Exiting.`);
-  server.stop();
+  try {
+    server.stop();
+  } catch (error) {}
 });
 
 process.on('SIGTERM', () => {
   console.log(`[${formatDate()}] Received "SIGTERM" signal. Exiting.`);
-  server.stop();
+  try {
+    server.stop();
+  } catch (error) {}
 });
 
 process.on('uncaughtException', error =>
