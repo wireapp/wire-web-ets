@@ -17,11 +17,13 @@
  *
  */
 
+import {ImageContent, LinkPreviewContent} from '@wireapp/core/dist/conversation/content/';
 import {ReactionType} from '@wireapp/core/dist/conversation/root';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
+import {LinkPreviewRequest, validateLinkPreview} from './assetRoutes';
 
 export interface MessagesRequest {
   conversationId: string;
@@ -56,6 +58,7 @@ export interface LocationRequest extends MessagesRequest {
 export interface MessageUpdateRequest extends MessagesRequest {
   firstMessageId: string;
   text: string;
+  linkPreview?: LinkPreviewRequest;
 }
 
 const conversationRoutes = (instanceService: InstanceService): express.Router => {
@@ -355,19 +358,53 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       firstMessageId: Joi.string()
         .uuid()
         .required(),
+      linkPreview: Joi.object(validateLinkPreview).optional(),
       text: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, firstMessageId, text}: MessageUpdateRequest = req.body;
+      const {conversationId, firstMessageId, text, linkPreview}: MessageUpdateRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
+      let linkPreviewContent;
+
+      if (linkPreview) {
+        linkPreviewContent = {
+          permanentUrl: linkPreview.permanentUrl,
+          summary: linkPreview.summary,
+          title: linkPreview.title,
+          tweet: linkPreview.tweet,
+          url: linkPreview.url,
+          urlOffset: linkPreview.urlOffset,
+        };
+
+        if (linkPreview.image) {
+          const data = Buffer.from(linkPreview.image.data, 'base64');
+          const imageContent: ImageContent = {
+            data,
+            height: linkPreview.image.height,
+            type: linkPreview.image.type,
+            width: linkPreview.image.width,
+          };
+
+          (linkPreviewContent as LinkPreviewContent).image = imageContent;
+        }
+      }
+
       try {
-        const messageId = await instanceService.updateText(instanceId, conversationId, firstMessageId, text);
+        const messageId = await instanceService.sendEditedText(
+          instanceId,
+          conversationId,
+          firstMessageId,
+          text,
+          linkPreviewContent
+        );
+
         const instanceName = instanceService.getInstance(instanceId).name;
+
         return res.json({
           instanceId,
           messageId,

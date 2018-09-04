@@ -19,14 +19,27 @@
 
 import * as express from 'express';
 import {ServerConfig} from '../config';
+import {toHHMMSS} from '../utils';
 
 const router = express.Router();
-
-const {version: nodeVersion} = process;
+const {uptime: nodeUptime, version: nodeVersion} = process;
+const {LOG_ERROR, LOG_OUTPUT, NODE_DEBUG} = process.env;
 
 const mainRoute = (config: ServerConfig) =>
-  router.get(['/', '/api/v1/?'], (req, res) =>
-    res.json({code: 200, message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`})
-  );
+  router.get(['/', '/api/v1/?'], async (req, res) => {
+    const infoData = {
+      code: 200,
+      instance: {
+        env: {
+          LOG_ERROR,
+          LOG_OUTPUT,
+          NODE_DEBUG,
+        },
+        uptime: toHHMMSS(nodeUptime()),
+      },
+      message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`,
+    };
+    res.json(infoData);
+  });
 
 export default mainRoute;

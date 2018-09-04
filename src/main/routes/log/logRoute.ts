@@ -17,16 +17,46 @@
  *
  */
 
-import {Router} from 'express';
-import {readFile} from 'fs';
-import * as path from 'path';
+import * as express from 'express';
+import * as fs from 'fs';
 import {promisify} from 'util';
+import {fileIsReadable} from '../../utils';
+
+const router = express.Router();
+const outLogFile = process.env.LOG_OUTPUT;
+const errorLogFile = process.env.LOG_ERROR;
 
 const logRoute = () =>
-  Router().get('/log/?', async (req, res) => {
-    const logFile = path.join(__dirname, '..', '..', '..', 'output.log');
+  router.get('/log/?', async (req, res) => {
     try {
-      const logData = await promisify(readFile)(logFile, {encoding: 'utf8'});
+      let logData = '';
+
+      if (errorLogFile) {
+        logData += `=== ${errorLogFile} ===\n`;
+        if (await fileIsReadable(errorLogFile)) {
+          const errorLogData = await promisify(fs.readFile)(errorLogFile, {encoding: 'utf8'});
+          logData += `${errorLogData}`;
+        } else {
+          logData += `Error: Could not find error log file "${errorLogFile}" or it is not readable.`;
+        }
+      } else {
+        logData += `Error: No error log file specified.`;
+      }
+
+      logData += '\n';
+
+      if (outLogFile) {
+        logData += `=== ${outLogFile} ===\n`;
+        if (outLogFile && (await fileIsReadable(outLogFile))) {
+          const outLogData = await promisify(fs.readFile)(outLogFile, {encoding: 'utf8'});
+          logData += outLogData;
+        } else {
+          logData += `Error: Could not find output log file "${outLogFile}" or it is not readable.`;
+        }
+      } else {
+        logData += `Error: No output log file specified.`;
+      }
+
       return res.contentType('text/plain; charset=UTF-8').send(logData);
     } catch (error) {
       return res.status(500).json({error: error.message, stack: error.stack});

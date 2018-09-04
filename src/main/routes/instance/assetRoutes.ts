@@ -17,7 +17,12 @@
  *
  */
 
-import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
+import {
+  FileContent,
+  FileMetaDataContent,
+  ImageContent,
+  LinkPreviewContent,
+} from '@wireapp/core/dist/conversation/content/';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
@@ -40,7 +45,6 @@ export interface ImageMessageRequest extends AssetMessageRequest {
 }
 
 export interface LinkPreviewRequest {
-  conversationId: string;
   image?: {
     data: string;
     height: number;
@@ -49,15 +53,32 @@ export interface LinkPreviewRequest {
   };
   permanentUrl: string;
   summary?: string;
-  text: string;
   title?: string;
   tweet?: {
-    author: string;
-    username: string;
+    author?: string;
+    username?: string;
   };
   url: string;
   urlOffset: number;
 }
+
+export const validateLinkPreview = {
+  image: Joi.object({
+    data: Joi.string().required(),
+    height: Joi.number().required(),
+    type: Joi.string().required(),
+    width: Joi.number().required(),
+  }).optional(),
+  permanentUrl: Joi.string().required(),
+  summary: Joi.string().optional(),
+  title: Joi.string().optional(),
+  tweet: Joi.object({
+    author: Joi.string().optional(),
+    username: Joi.string().optional(),
+  }).optional(),
+  url: Joi.string().required(),
+  urlOffset: Joi.number().required(),
+};
 
 const assetRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
@@ -147,41 +168,36 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
   router.post(
     '/api/v1/instance/:instanceId/sendLinkPreview/?',
     joiValidate({
+      ...validateLinkPreview,
       conversationId: Joi.string().required(),
-      image: Joi.object({
-        data: Joi.string().required(),
-        height: Joi.number().required(),
-        type: Joi.string().required(),
-        width: Joi.number().required(),
-      }).optional(),
-      permanentUrl: Joi.string().required(),
-      summary: Joi.string().optional(),
       text: Joi.string().required(),
-      title: Joi.string().optional(),
-      tweet: Joi.object({
-        author: Joi.string().required(),
-        username: Joi.string().required(),
-      }).optional(),
-      url: Joi.string().required(),
-      urlOffset: Joi.number().required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
       const {
         conversationId,
-        text,
-        url,
-        urlOffset,
-        permanentUrl,
         image,
+        permanentUrl,
         summary,
+        text,
         title,
         tweet,
-      }: LinkPreviewRequest = req.body;
+        url,
+        urlOffset,
+      }: LinkPreviewRequest & {conversationId: string; text: string} = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
+
+      const linkPreview: LinkPreviewContent = {
+        permanentUrl,
+        summary,
+        title,
+        tweet,
+        url,
+        urlOffset,
+      };
 
       try {
         let imageContent: ImageContent | undefined;
@@ -189,20 +205,11 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
         if (image) {
           const data = Buffer.from(image.data, 'base64');
           imageContent = {data, height: image.height, type: image.type, width: image.width};
+
+          linkPreview.image = imageContent;
         }
 
-        const messageId = await instanceService.sendLinkPreview(
-          instanceId,
-          conversationId,
-          text,
-          url,
-          urlOffset,
-          permanentUrl,
-          imageContent,
-          summary,
-          title,
-          tweet
-        );
+        const messageId = await instanceService.sendLinkPreview(instanceId, conversationId, text, linkPreview);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,

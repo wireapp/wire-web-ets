@@ -19,21 +19,32 @@
 
 import config from './config';
 import Server from './Server';
-import utils from './utils';
+import {formatDate} from './utils';
 
 const server = new Server(config);
 
 server
   .start()
-  .then(port => console.info(`[${utils.formatDate()}] Server is running on port ${port}.`))
-  .catch(error => console.error(`[${utils.formatDate()}] ${error.stack}`));
+  .then(port => console.info(`[${formatDate()}] Server is running on port ${port}.`))
+  .catch(error => console.error(`[${formatDate()}] ${error.stack}`));
 
 process.on('SIGINT', () => {
-  console.log(`[${utils.formatDate()}] Received "SIGINT" signal. Exiting.`);
-  server.stop();
+  console.log(`[${formatDate()}] Received "SIGINT" signal. Exiting.`);
+  try {
+    server.stop();
+  } catch (error) {}
 });
 
 process.on('SIGTERM', () => {
-  console.log(`[${utils.formatDate()}] Received "SIGTERM" signal. Exiting.`);
-  server.stop();
+  console.log(`[${formatDate()}] Received "SIGTERM" signal. Exiting.`);
+  try {
+    server.stop();
+  } catch (error) {}
 });
+
+process.on('uncaughtException', error =>
+  console.error(`[${formatDate()}] Uncaught exception: ${error.message}`, error)
+);
+process.on('unhandledRejection', error =>
+  console.error(`[${formatDate()}] Uncaught rejection "${error.constructor.name}": ${error.message}`, error)
+);
