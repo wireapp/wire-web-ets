@@ -23,6 +23,7 @@ import {toHHMMSS} from '../utils';
 
 const router = express.Router();
 const {uptime: nodeUptime, version: nodeVersion} = process;
+const {LOG_ERROR, LOG_OUTPUT, NODE_DEBUG} = process.env;
 
 const mainRoute = (config: ServerConfig) =>
   router.get(['/', '/api/v1/?'], async (req, res) => {
@@ -30,9 +31,9 @@ const mainRoute = (config: ServerConfig) =>
       code: 200,
       instance: {
         env: {
-          LOG_ERROR: process.env.LOG_ERROR,
-          LOG_OUTPUT: process.env.LOG_OUTPUT,
-          NODE_DEBUG: process.env.NODE_DEBUG,
+          LOG_ERROR,
+          LOG_OUTPUT,
+          NODE_DEBUG,
         },
         uptime: toHHMMSS(nodeUptime()),
       },
