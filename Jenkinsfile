@@ -10,6 +10,9 @@ node("$NODE") {
     jenkinsbot_secret = env.JENKINSBOT_SECRET
   }
 
+  def runningStatus = sh returnStatus: true, script: 'test -r "${HOME}/.pm2/dump.pm2"'
+
+
   stage('Checkout & Clean') {
     git branch: "$BRANCH", url: 'https://github.com/wireapp/wire-web-ets.git'
   }
@@ -18,9 +21,15 @@ node("$NODE") {
     try {
       def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
-        sh 'npm install -g yarn'
+        sh 'npm install -g yarn pm2'
         sh 'yarn install --no-progress'
         sh 'yarn dist'
+        if (runningStatus == 1) {
+          sh 'pm2 kill'
+          sh 'pm2 install pm2-logrotate'
+          sh 'pm2 set pm2-logrotate:retain 20'
+          sh 'pm2 set pm2-logrotate:compress true'
+        }
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
@@ -32,24 +41,6 @@ node("$NODE") {
   stage('Install') {
     try {
       def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
-
-      sh """printf \\
-'#!/usr/bin/env sh
-cd "\${0%%/*}" || exit 1
-export NODE_DEBUG="@wireapp/*"
-export PATH="\${PATH}:${NODE}/bin"
-export LOG_OUTPUT="${HOME}/.pm2/logs/Wire-Web-ETS-out.log"
-export LOG_ERROR="${HOME}/.pm2/logs/Wire-Web-ETS-error.log"
-npx pm2 install pm2-logrotate
-npx pm2 set pm2-logrotate:retain 20
-npx pm2 set pm2-logrotate:compress true
-npx pm2 stop "Wire Web ETS"
-yarn start
-' \\
-> ${WORKSPACE}/run.sh"""
-
-      sh "chmod +x ${WORKSPACE}/run.sh"
-
       sh "mkdir -p ${HOME}/.config/systemd/user/"
 
       sh """printf \\
@@ -58,12 +49,19 @@ Description=wire-web-ets
 After=network.target
 
 [Service]
-ExecStart=${WORKSPACE}/run.sh
-Restart=on-failure
-RestartSec=10
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=wire-web-ets
+Type=forking
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Environment=PATH=\${PATH}:${NODE}/bin
+Environment=LOG_OUTPUT=${HOME}/.pm2/logs/Wire-Web-ETS-out.log
+Environment=LOG_ERROR=${HOME}/.pm2/logs/Wire-Web-ETS-error.log
+Environment=NODE_DEBUG=@wireapp/*
+Environment=PM2_HOME=${HOME}/.pm2
+PIDFile=${HOME}/.pm2/pm2.pid
+ExecStart=${NODE}/bin/pm2 resurrect
+ExecReload=${NODE}/bin/pm2 reload all --update-env
+ExecStop=${NODE}/bin/pm2 kill
 
 [Install]
 WantedBy=default.target
@@ -81,7 +79,18 @@ WantedBy=default.target
   stage('Restart server') {
     try {
       sh 'systemctl --user daemon-reload'
-      sh 'systemctl --user restart wire-web-ets'
+
+      if (runningStatus == 0) {
+        sh 'systemctl --user restart wire-web-ets'
+      } else {
+        def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
+        withEnv(["PATH+NODE=${NODE}/bin"]) {
+          sh 'cd ${WORKSPACE}'
+          sh 'yarn start'
+          sh 'pm2 save'
+          sh 'systemctl --user start wire-web-ets'
+        }
+      }
     } catch(e) {
       currentBuild.result = 'FAILED'
       wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
