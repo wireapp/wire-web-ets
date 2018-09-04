@@ -29,20 +29,30 @@ const errorLogFile = process.env.LOG_ERROR;
 const logRoute = () =>
   router.get('/log/?', async (req, res) => {
     try {
-      let logData = `=== ${errorLogFile} ===\n`;
-      if (errorLogFile && (await fileIsReadable(errorLogFile))) {
-        const errorLogData = await promisify(fs.readFile)(errorLogFile, {encoding: 'utf8'});
-        logData += `${errorLogData}\n`;
+      let logData = '';
+
+      if (errorLogFile) {
+        logData += `=== ${errorLogFile} ===\n`;
+        if (await fileIsReadable(errorLogFile)) {
+          const errorLogData = await promisify(fs.readFile)(errorLogFile, {encoding: 'utf8'});
+          logData += `${errorLogData}\n`;
+        } else {
+          logData += `Error: Could not find error log file "${errorLogFile}" or it is not readable.`;
+        }
       } else {
-        logData += `Error: Could not find file ${errorLogFile} or it is not readable.`;
+        logData += `Error: No error log file specified.`;
       }
 
-      logData += `=== ${outLogFile} ===\n`;
-      if (outLogFile && (await fileIsReadable(outLogFile))) {
-        const outLogData = await promisify(fs.readFile)(outLogFile, {encoding: 'utf8'});
-        logData += outLogData;
+      if (outLogFile) {
+        logData += `=== ${outLogFile} ===\n`;
+        if (outLogFile && (await fileIsReadable(outLogFile))) {
+          const outLogData = await promisify(fs.readFile)(outLogFile, {encoding: 'utf8'});
+          logData += outLogData;
+        } else {
+          logData += `Error: Could not find output log file "${outLogFile}" or it is not readable.`;
+        }
       } else {
-        logData += `Error: Could not find file ${outLogFile} or it is not readable.`;
+        logData += `Error: No output log file specified.`;
       }
 
       return res.contentType('text/plain; charset=UTF-8').send(logData);
