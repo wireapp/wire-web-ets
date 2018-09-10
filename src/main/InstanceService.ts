@@ -523,29 +523,31 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const linkPreviewMessages = [];
+      const editedPayload = instance.account.service.conversation.createEditedText(newMessageText, originalMessageId);
+
+      let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
 
       if (newLinkPreview) {
         const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(newLinkPreview);
-        linkPreviewMessages.push(linkPreviewPayload);
-      }
+        const editedWithPreviewPayload = instance.account.service.conversation.createEditedText(
+          newMessageText,
+          originalMessageId,
+          [linkPreviewPayload],
+          editedMessage.id
+        );
 
-      const payload = instance.account.service.conversation.createEditedText(
-        newMessageText,
-        originalMessageId,
-        linkPreviewMessages
-      );
-      const editedMessage = await instance.account.service.conversation.send(conversationId, payload);
+        editedMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
 
-      const editedMessageContent = editedMessage.content as EditedTextContent;
+        const editedMessageContent = editedMessage.content as EditedTextContent;
 
-      if (editedMessageContent.linkPreviews) {
-        editedMessageContent.linkPreviews.forEach(preview => {
-          if (preview.imageUploaded) {
-            delete preview.imageUploaded.image.data;
-            delete preview.imageUploaded.asset;
-          }
-        });
+        if (editedMessageContent.linkPreviews) {
+          editedMessageContent.linkPreviews.forEach(preview => {
+            if (preview.imageUploaded) {
+              delete preview.imageUploaded.image.data;
+              delete preview.imageUploaded.asset;
+            }
+          });
+        }
       }
 
       instance.messages.set(originalMessageId, editedMessage);

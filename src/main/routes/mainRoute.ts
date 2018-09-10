@@ -19,7 +19,7 @@
 
 import * as express from 'express';
 import {ServerConfig} from '../config';
-import {toHHMMSS} from '../utils';
+import {formatUptime} from '../utils';
 
 const router = express.Router();
 const {uptime: nodeUptime, version: nodeVersion} = process;
@@ -35,7 +35,7 @@ const mainRoute = (config: ServerConfig) =>
           LOG_OUTPUT,
           NODE_DEBUG,
         },
-        uptime: toHHMMSS(nodeUptime()),
+        uptime: formatUptime(nodeUptime()),
       },
       message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`,
     };

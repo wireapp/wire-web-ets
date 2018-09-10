@@ -369,16 +369,12 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
-      let linkPreviewContent;
+      let linkPreviewContent: LinkPreviewContent | undefined;
 
       if (linkPreview) {
         linkPreviewContent = {
-          permanentUrl: linkPreview.permanentUrl,
-          summary: linkPreview.summary,
-          title: linkPreview.title,
-          tweet: linkPreview.tweet,
-          url: linkPreview.url,
-          urlOffset: linkPreview.urlOffset,
+          ...linkPreview,
+          image: undefined,
         };
 
         if (linkPreview.image) {
@@ -390,7 +386,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
             width: linkPreview.image.width,
           };
 
-          (linkPreviewContent as LinkPreviewContent).image = imageContent;
+          linkPreviewContent.image = imageContent;
         }
       }
 

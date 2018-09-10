@@ -18,6 +18,7 @@
  */
 
 import * as fs from 'fs';
+import * as moment from 'moment';
 import {promisify} from 'util';
 
 function fileIsReadable(filePath: string): Promise<boolean> {
@@ -27,25 +28,12 @@ function fileIsReadable(filePath: string): Promise<boolean> {
 }
 
 function formatDate(): string {
-  const localeOptions = {
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    month: '2-digit',
-    second: '2-digit',
-    year: 'numeric',
-  };
-  return new Date().toLocaleDateString('de-DE', localeOptions);
+  return moment().format('YYYY-MM-DD HH:mm:ss');
 }
 
-function toHHMMSS(uptime: number): string {
-  const pad = (t: number) => (t < 10 ? '0' + t : t);
-
-  const hours = Math.floor(uptime / 3600);
-  const minutes = Math.floor((uptime - hours * 3600) / 60);
-  const seconds = Math.floor(uptime - hours * 3600 - minutes * 60);
-
-  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+function formatUptime(uptime: number): string {
+  const duration = moment.duration(uptime, 'seconds').asMilliseconds();
+  return moment.utc(duration).format('HH:mm:ss');
 }
 
-export {fileIsReadable, formatDate, toHHMMSS};
+export {fileIsReadable, formatDate, formatUptime};
