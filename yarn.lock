@@ -109,7 +109,7 @@
     tslib "1.9.3"
     vxx "1.2.2"
 
-"@pm2/io@~2.3.9":
+"@pm2/io@~2.3.11":
   version "2.3.11"
   resolved "https://registry.yarnpkg.com/@pm2/io/-/io-2.3.11.tgz#f9b14b8acc9af816dcbeee6c2d027eb89355d8d1"
   dependencies:
@@ -3100,12 +3100,12 @@ pm2-multimeter@^0.1.2:
   dependencies:
     charm "~0.1.1"
 
-pm2@3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/pm2/-/pm2-3.1.1.tgz#0b87577e8860b2189e75c05c97ff74a26f44c2f0"
+pm2@3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/pm2/-/pm2-3.1.2.tgz#dd81f12736897f0889a98654ca1b6c9eb1922dde"
   dependencies:
     "@pm2/agent" "^0.5.11"
-    "@pm2/io" "~2.3.9"
+    "@pm2/io" "~2.3.11"
     "@pm2/js-api" "^0.5.15"
     async "^2.6.1"
     blessed "^0.1.81"
