@@ -336,7 +336,7 @@ class InstanceService {
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.createText(message);
+      const payload = await instance.account.service.conversation.createText(message).build();
       const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
       instance.messages.set(sentMessage.id, sentMessage);
       return sentMessage.id;
@@ -430,7 +430,10 @@ class InstanceService {
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
-      const textPayload = instance.account.service.conversation.createText(text, [linkPreviewPayload]);
+      const textPayload = instance.account.service.conversation
+        .createText(text)
+        .withLinkPreviews([linkPreviewPayload])
+        .build();
 
       const sentMessage = await instance.account.service.conversation.send(conversationId, textPayload);
 
@@ -523,18 +526,18 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const editedPayload = instance.account.service.conversation.createEditedText(newMessageText, originalMessageId);
+      const editedPayload = instance.account.service.conversation
+        .createEditedText(newMessageText, originalMessageId)
+        .build();
 
       let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
 
       if (newLinkPreview) {
         const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(newLinkPreview);
-        const editedWithPreviewPayload = instance.account.service.conversation.createEditedText(
-          newMessageText,
-          originalMessageId,
-          [linkPreviewPayload],
-          editedMessage.id
-        );
+        const editedWithPreviewPayload = instance.account.service.conversation
+          .createEditedText(newMessageText, originalMessageId, editedMessage.id)
+          .withLinkPreviews([linkPreviewPayload])
+          .build();
 
         editedMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
 
