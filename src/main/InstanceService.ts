@@ -117,7 +117,7 @@ class InstanceService {
 
     logger.log(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
     const client = new APIClient({store: engine, urls: backendType});
-    const account = new Account(client as any);
+    const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
       classification: ClientClassification.DESKTOP,
@@ -282,7 +282,7 @@ class InstanceService {
     const engine = new MemoryEngine();
     await engine.init('temporary');
     const apiClient = new APIClient({store: engine, urls: backendType});
-    const account = new Account(apiClient as any);
+    const account = new Account(apiClient);
 
     const ClientInfo: ClientInfo = {
       classification: ClientClassification.DESKTOP,
