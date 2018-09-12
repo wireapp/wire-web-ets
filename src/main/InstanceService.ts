@@ -32,6 +32,7 @@ import {
   ImageContent,
   LinkPreviewContent,
   LocationContent,
+  MentionContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {
@@ -116,7 +117,7 @@ class InstanceService {
 
     logger.log(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
     const client = new APIClient({store: engine, urls: backendType});
-    const account = new Account(client);
+    const account = new Account(client as any);
 
     const ClientInfo: ClientInfo = {
       classification: ClientClassification.DESKTOP,
@@ -281,7 +282,7 @@ class InstanceService {
     const engine = new MemoryEngine();
     await engine.init('temporary');
     const apiClient = new APIClient({store: engine, urls: backendType});
-    const account = new Account(apiClient);
+    const account = new Account(apiClient as any);
 
     const ClientInfo: ClientInfo = {
       classification: ClientClassification.DESKTOP,
@@ -331,12 +332,18 @@ class InstanceService {
     }
   }
 
-  async sendText(instanceId: string, conversationId: string, message: string, expireAfterMillis = 0): Promise<string> {
+  async sendText(
+    instanceId: string,
+    conversationId: string,
+    message: string,
+    mentions?: MentionContent[],
+    expireAfterMillis = 0
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.createText(message);
+      const payload = await instance.account.service.conversation.createText(message, mentions);
       const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
       instance.messages.set(sentMessage.id, sentMessage);
       return sentMessage.id;
@@ -423,6 +430,7 @@ class InstanceService {
     conversationId: string,
     text: string,
     linkPreview: LinkPreviewContent,
+    mentions?: MentionContent[],
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
@@ -430,7 +438,7 @@ class InstanceService {
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
-      const textPayload = instance.account.service.conversation.createText(text, [linkPreviewPayload]);
+      const textPayload = instance.account.service.conversation.createText(text, [linkPreviewPayload], mentions);
 
       const sentMessage = await instance.account.service.conversation.send(conversationId, textPayload);
 
@@ -518,12 +526,17 @@ class InstanceService {
     conversationId: string,
     originalMessageId: string,
     newMessageText: string,
-    newLinkPreview?: LinkPreviewContent
+    newLinkPreview?: LinkPreviewContent,
+    newMentions?: MentionContent[]
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const editedPayload = instance.account.service.conversation.createEditedText(newMessageText, originalMessageId);
+      const editedPayload = instance.account.service.conversation.createEditedText(
+        newMessageText,
+        originalMessageId,
+        newMentions
+      );
 
       let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
 
@@ -533,6 +546,7 @@ class InstanceService {
           newMessageText,
           originalMessageId,
           [linkPreviewPayload],
+          newMentions,
           editedMessage.id
         );
 

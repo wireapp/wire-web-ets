@@ -22,11 +22,13 @@ import {
   FileMetaDataContent,
   ImageContent,
   LinkPreviewContent,
+  MentionContent,
 } from '@wireapp/core/dist/conversation/content/';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
+import {validateMention} from './conversationRoutes';
 
 interface AssetMessageRequest {
   conversationId: string;
@@ -170,6 +172,9 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
     joiValidate({
       ...validateLinkPreview,
       conversationId: Joi.string().required(),
+      mentions: Joi.array()
+        .items(validateMention)
+        .optional(),
       text: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
@@ -177,6 +182,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
       const {
         conversationId,
         image,
+        mentions,
         permanentUrl,
         summary,
         text,
@@ -184,7 +190,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
         tweet,
         url,
         urlOffset,
-      }: LinkPreviewRequest & {conversationId: string; text: string} = req.body;
+      }: LinkPreviewRequest & {conversationId: string; mentions?: MentionContent[]; text: string} = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -209,7 +215,13 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
           linkPreview.image = imageContent;
         }
 
-        const messageId = await instanceService.sendLinkPreview(instanceId, conversationId, text, linkPreview);
+        const messageId = await instanceService.sendLinkPreview(
+          instanceId,
+          conversationId,
+          text,
+          linkPreview,
+          mentions
+        );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
