@@ -33,7 +33,7 @@ const joiValidate = (schema: Joi.SchemaLike) => (
 
   const {error: joiError} = Joi.validate(body, schema);
   if (joiError) {
-    res.status(422).json({error: `Validation error: ${joiError.message}}`});
+    res.status(422).json({error: `Validation error: ${joiError.message}`});
     return;
   }
 
