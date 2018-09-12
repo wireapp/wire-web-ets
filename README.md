@@ -347,21 +347,21 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
   },
   "mentions?": [
     {
-      "userId": "<string in UUID format>",
+      "end": "<number>",
       "start": "<number>",
-      "end": "<number>"
+      "userId": "<string in UUID format>"
     }
   ],
   "permanentUrl?": "<string>",
   "summary?": "<string>",
   "text": "<string>",
   "title?": "<string>",
-  "url": "<string>",
-  "urlOffset": "<number>",
   "tweet?": {
     "author": "<string>",
     "username": "<string>"
-  }
+  },
+  "url": "<string>",
+  "urlOffset": "<number>"
 }
 ```
 
@@ -472,9 +472,9 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
   "conversationId": "<string in UUID format>",
   "mentions?": [
     {
-      "userId": "<string in UUID format>",
+      "end": "<number>",
       "start": "<number>",
-      "end": "<number>"
+      "userId": "<string in UUID format>"
     }
   ],
   "messageTimer?": "<number>",
