@@ -17,37 +17,56 @@
  *
  */
 
-import {ImageContent, LinkPreviewContent} from '@wireapp/core/dist/conversation/content/';
+import {ImageContent, LinkPreviewContent, MentionContent} from '@wireapp/core/dist/conversation/content/';
 import {ReactionType} from '@wireapp/core/dist/conversation/root';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
-import {LinkPreviewRequest, validateLinkPreview} from './assetRoutes';
 
-export interface MessagesRequest {
+export interface MessageRequest {
   conversationId: string;
 }
 
-export interface ArchiveRequest extends MessagesRequest {
+export interface ArchiveRequest extends MessageRequest {
   archive: boolean;
 }
 
-export interface DeletionRequest extends MessagesRequest {
+export interface DeletionRequest extends MessageRequest {
   messageId: string;
 }
 
-export interface TextRequest extends MessagesRequest {
+export interface LinkPreviewRequest {
+  image?: {
+    data: string;
+    height: number;
+    type: string;
+    width: number;
+  };
+  permanentUrl: string;
+  summary?: string;
+  title?: string;
+  tweet?: {
+    author?: string;
+    username?: string;
+  };
+  url: string;
+  urlOffset: number;
+}
+
+export interface TextRequest extends MessageRequest {
+  linkPreview?: LinkPreviewRequest;
+  mentions?: MentionContent[];
   messageTimer?: number;
   text: string;
 }
 
-export interface ReactionRequest extends MessagesRequest {
+export interface ReactionRequest extends MessageRequest {
   originalMessageId: string;
   type: ReactionType;
 }
 
-export interface LocationRequest extends MessagesRequest {
+export interface LocationRequest extends MessageRequest {
   latitude: number;
   locationName?: string;
   longitude: number;
@@ -55,11 +74,42 @@ export interface LocationRequest extends MessagesRequest {
   zoom?: number;
 }
 
-export interface MessageUpdateRequest extends MessagesRequest {
+export interface MessageUpdateRequest extends MessageRequest {
   firstMessageId: string;
+  mentions?: MentionContent[];
   text: string;
   linkPreview?: LinkPreviewRequest;
 }
+
+export const validateMention = Joi.object({
+  end: Joi.number().required(),
+  start: Joi.number().required(),
+  userId: Joi.string()
+    .uuid()
+    .required(),
+});
+
+export interface MessageUpdateRequest extends TextRequest {
+  firstMessageId: string;
+}
+
+const validateLinkPreview = {
+  image: Joi.object({
+    data: Joi.string().required(),
+    height: Joi.number().required(),
+    type: Joi.string().required(),
+    width: Joi.number().required(),
+  }).optional(),
+  permanentUrl: Joi.string().required(),
+  summary: Joi.string().optional(),
+  title: Joi.string().optional(),
+  tweet: Joi.object({
+    author: Joi.string().optional(),
+    username: Joi.string().optional(),
+  }).optional(),
+  url: Joi.string().required(),
+  urlOffset: Joi.number().required(),
+};
 
 const conversationRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
@@ -101,7 +151,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId}: MessagesRequest = req.body;
+      const {conversationId}: MessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -188,7 +238,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId}: MessagesRequest = req.body;
+      const {conversationId}: MessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -255,6 +305,10 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
+      linkPreview: Joi.object(validateLinkPreview).optional(),
+      mentions: Joi.array()
+        .items(validateMention)
+        .optional(),
       messageTimer: Joi.number()
         .optional()
         .default(0),
@@ -262,14 +316,42 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageTimer, text}: TextRequest = req.body;
+      const {conversationId, mentions, messageTimer, text, linkPreview}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
+      let linkPreviewContent: LinkPreviewContent | undefined;
+
+      if (linkPreview) {
+        linkPreviewContent = {
+          ...linkPreview,
+          image: undefined,
+        };
+
+        if (linkPreview.image) {
+          const data = Buffer.from(linkPreview.image.data, 'base64');
+          const imageContent: ImageContent = {
+            data,
+            height: linkPreview.image.height,
+            type: linkPreview.image.type,
+            width: linkPreview.image.width,
+          };
+
+          linkPreviewContent.image = imageContent;
+        }
+      }
+
       try {
-        const messageId = await instanceService.sendText(instanceId, conversationId, text, messageTimer);
+        const messageId = await instanceService.sendText(
+          instanceId,
+          conversationId,
+          text,
+          linkPreviewContent,
+          mentions,
+          messageTimer
+        );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
@@ -359,11 +441,14 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
         .uuid()
         .required(),
       linkPreview: Joi.object(validateLinkPreview).optional(),
+      mentions: Joi.array()
+        .items(validateMention)
+        .optional(),
       text: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, firstMessageId, text, linkPreview}: MessageUpdateRequest = req.body;
+      const {conversationId, firstMessageId, linkPreview, mentions, text}: MessageUpdateRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -396,7 +481,8 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
           conversationId,
           firstMessageId,
           text,
-          linkPreviewContent
+          linkPreviewContent,
+          mentions
         );
 
         const instanceName = instanceService.getInstance(instanceId).name;

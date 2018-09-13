@@ -32,6 +32,7 @@ import {
   ImageContent,
   LinkPreviewContent,
   LocationContent,
+  MentionContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {
@@ -331,13 +332,45 @@ class InstanceService {
     }
   }
 
-  async sendText(instanceId: string, conversationId: string, message: string, expireAfterMillis = 0): Promise<string> {
+  async sendText(
+    instanceId: string,
+    conversationId: string,
+    message: string,
+    linkPreview?: LinkPreviewContent,
+    mentions?: MentionContent[],
+    expireAfterMillis = 0
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.createText(message);
-      const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
+      const payload = await instance.account.service.conversation
+        .createText(message)
+        .withMentions(mentions)
+        .build();
+      let sentMessage = await instance.account.service.conversation.send(conversationId, payload);
+
+      if (linkPreview) {
+        const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
+        const editedWithPreviewPayload = instance.account.service.conversation
+          .createText(message, sentMessage.id)
+          .withLinkPreviews([linkPreviewPayload])
+          .build();
+
+        sentMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
+
+        const messageContent = sentMessage.content as TextContent;
+
+        if (messageContent.linkPreviews) {
+          messageContent.linkPreviews.forEach(preview => {
+            if (preview.imageUploaded) {
+              delete preview.imageUploaded.image.data;
+              delete preview.imageUploaded.asset;
+            }
+          });
+        }
+      }
+
       instance.messages.set(sentMessage.id, sentMessage);
       return sentMessage.id;
     } else {
@@ -418,36 +451,6 @@ class InstanceService {
     }
   }
 
-  async sendLinkPreview(
-    instanceId: string,
-    conversationId: string,
-    text: string,
-    linkPreview: LinkPreviewContent,
-    expireAfterMillis = 0
-  ): Promise<string> {
-    const instance = this.getInstance(instanceId);
-
-    if (instance.account.service) {
-      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
-      const textPayload = instance.account.service.conversation.createText(text, [linkPreviewPayload]);
-
-      const sentMessage = await instance.account.service.conversation.send(conversationId, textPayload);
-
-      (sentMessage.content as TextContent).linkPreviews!.forEach(preview => {
-        if (preview.imageUploaded) {
-          delete preview.imageUploaded.asset;
-          delete preview.imageUploaded.image.data;
-        }
-      });
-
-      instance.messages.set(sentMessage.id, sentMessage);
-      return sentMessage.id;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
-    }
-  }
-
   async sendLocation(
     instanceId: string,
     conversationId: string,
@@ -518,23 +521,26 @@ class InstanceService {
     conversationId: string,
     originalMessageId: string,
     newMessageText: string,
-    newLinkPreview?: LinkPreviewContent
+    newLinkPreview?: LinkPreviewContent,
+    newMentions?: MentionContent[]
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const editedPayload = instance.account.service.conversation.createEditedText(newMessageText, originalMessageId);
+      const editedPayload = instance.account.service.conversation
+        .createEditedText(newMessageText, originalMessageId)
+        .withMentions(newMentions)
+        .build();
 
       let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
 
       if (newLinkPreview) {
         const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(newLinkPreview);
-        const editedWithPreviewPayload = instance.account.service.conversation.createEditedText(
-          newMessageText,
-          originalMessageId,
-          [linkPreviewPayload],
-          editedMessage.id
-        );
+        const editedWithPreviewPayload = instance.account.service.conversation
+          .createEditedText(newMessageText, originalMessageId, editedMessage.id)
+          .withLinkPreviews([linkPreviewPayload])
+          .withMentions(newMentions)
+          .build();
 
         editedMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
 

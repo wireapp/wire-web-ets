@@ -28,7 +28,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`POST /api/v1/instance/<instanceId>/markEphemeralRead`](#post-apiv1instanceinstanceidmarkephemeralread)
 - [`POST /api/v1/instance/<instanceId>/sendFile`](#post-apiv1instanceinstanceidsendfile)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
-- [`POST /api/v1/instance/<instanceId>/sendLinkPreview`](#post-apiv1instanceinstanceidsendlinkpreview)
 - [`POST /api/v1/instance/<instanceId>/sendLocation`](#post-apiv1instanceinstanceidsendlocation)
 - [`POST /api/v1/instance/<instanceId>/sendPing`](#post-apiv1instanceinstanceidsendping)
 - [`POST /api/v1/instance/<instanceId>/sendReaction`](#post-apiv1instanceinstanceidsendreaction)
@@ -345,16 +344,23 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     "type": "<string>",
     "width": "<number>"
   },
+  "mentions?": [
+    {
+      "end": "<number>",
+      "start": "<number>",
+      "userId": "<string in UUID format>"
+    }
+  ],
   "permanentUrl?": "<string>",
   "summary?": "<string>",
   "text": "<string>",
   "title?": "<string>",
-  "url": "<string>",
-  "urlOffset": "<number>",
   "tweet?": {
     "author": "<string>",
     "username": "<string>"
-  }
+  },
+  "url": "<string>",
+  "urlOffset": "<number>"
 }
 ```
 
@@ -463,6 +469,30 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```json
 {
   "conversationId": "<string in UUID format>",
+  "linkPreview?": {
+    "image?": {
+      "data": "<string>",
+      "height": "<number>",
+      "type": "<string>",
+      "width": "<number>"
+    },
+    "permanentUrl?": "<string>",
+    "summary?": "<string>",
+    "title?": "<string>",
+    "url": "<string>",
+    "urlOffset": "<number>",
+    "tweet?": {
+      "author?": "<string>",
+      "username?": "<string>"
+    }
+  },
+  "mentions?": [
+    {
+      "end": "<number>",
+      "start": "<number>",
+      "userId": "<string in UUID format>"
+    }
+  ],
   "messageTimer?": "<number>",
   "text": "<string>"
 }
@@ -506,7 +536,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 {
   "conversationId": "<string in UUID format>",
   "firstMessageId": "<string in UUID format>",
-  "text": "<string>",
   "linkPreview?": {
     "image?": {
       "data": "<string>",
@@ -516,7 +545,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     },
     "permanentUrl?": "<string>",
     "summary?": "<string>",
-    "text": "<string>",
     "title?": "<string>",
     "url": "<string>",
     "urlOffset": "<number>",
@@ -524,7 +552,15 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
       "author?": "<string>",
       "username?": "<string>"
     }
-  }
+  },
+  "mentions?": [
+    {
+      "userId": "<string in UUID format>",
+      "start": "<number>",
+      "end": "<number>"
+    }
+  ],
+  "text": "<string>"
 }
 ```
 
