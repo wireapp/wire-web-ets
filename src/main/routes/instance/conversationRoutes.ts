@@ -23,7 +23,6 @@ import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
-import {LinkPreviewRequest, validateLinkPreview} from './assetRoutes';
 
 export interface MessageRequest {
   conversationId: string;
@@ -37,7 +36,26 @@ export interface DeletionRequest extends MessageRequest {
   messageId: string;
 }
 
+export interface LinkPreviewRequest {
+  image?: {
+    data: string;
+    height: number;
+    type: string;
+    width: number;
+  };
+  permanentUrl: string;
+  summary?: string;
+  title?: string;
+  tweet?: {
+    author?: string;
+    username?: string;
+  };
+  url: string;
+  urlOffset: number;
+}
+
 export interface TextRequest extends MessageRequest {
+  linkPreview?: LinkPreviewRequest;
   mentions?: MentionContent[];
   messageTimer?: number;
   text: string;
@@ -70,6 +88,28 @@ export const validateMention = Joi.object({
     .uuid()
     .required(),
 });
+
+export interface MessageUpdateRequest extends TextRequest {
+  firstMessageId: string;
+}
+
+const validateLinkPreview = {
+  image: Joi.object({
+    data: Joi.string().required(),
+    height: Joi.number().required(),
+    type: Joi.string().required(),
+    width: Joi.number().required(),
+  }).optional(),
+  permanentUrl: Joi.string().required(),
+  summary: Joi.string().optional(),
+  title: Joi.string().optional(),
+  tweet: Joi.object({
+    author: Joi.string().optional(),
+    username: Joi.string().optional(),
+  }).optional(),
+  url: Joi.string().required(),
+  urlOffset: Joi.number().required(),
+};
 
 const conversationRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
@@ -247,42 +287,6 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
           },
           messageTimer
         );
-        const instanceName = instanceService.getInstance(instanceId).name;
-        return res.json({
-          instanceId,
-          messageId,
-          name: instanceName,
-        });
-      } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
-      }
-    }
-  );
-
-  router.post(
-    '/api/v1/instance/:instanceId/sendText/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      mentions: Joi.array()
-        .items(validateMention)
-        .optional(),
-      messageTimer: Joi.number()
-        .optional()
-        .default(0),
-      text: Joi.string().required(),
-    }),
-    async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, mentions, messageTimer, text}: TextRequest = req.body;
-
-      if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
-      }
-
-      try {
-        const messageId = await instanceService.sendText(instanceId, conversationId, text, mentions, messageTimer);
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,

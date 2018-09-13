@@ -332,29 +332,6 @@ class InstanceService {
     }
   }
 
-  async sendText(
-    instanceId: string,
-    conversationId: string,
-    message: string,
-    mentions?: MentionContent[],
-    expireAfterMillis = 0
-  ): Promise<string> {
-    const instance = this.getInstance(instanceId);
-
-    if (instance.account.service) {
-      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation
-        .createText(message)
-        .withMentions(mentions)
-        .build();
-      const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
-      instance.messages.set(sentMessage.id, sentMessage);
-      return sentMessage.id;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
-    }
-  }
-
   async sendConfirmation(instanceId: string, conversationId: string, messageId: string): Promise<string> {
     const instance = this.getInstance(instanceId);
 
@@ -423,41 +400,6 @@ class InstanceService {
       delete (sentFile.content as FileContent).data;
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
-    }
-  }
-
-  async sendLinkPreview(
-    instanceId: string,
-    conversationId: string,
-    text: string,
-    linkPreview: LinkPreviewContent,
-    mentions?: MentionContent[],
-    expireAfterMillis = 0
-  ): Promise<string> {
-    const instance = this.getInstance(instanceId);
-
-    if (instance.account.service) {
-      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
-      const textPayload = instance.account.service.conversation
-        .createText(text)
-        .withLinkPreviews([linkPreviewPayload])
-        .withMentions(mentions)
-        .build();
-
-      const sentMessage = await instance.account.service.conversation.send(conversationId, textPayload);
-
-      (sentMessage.content as TextContent).linkPreviews!.forEach(preview => {
-        if (preview.imageUploaded) {
-          delete preview.imageUploaded.asset;
-          delete preview.imageUploaded.image.data;
-        }
-      });
-
-      instance.messages.set(sentMessage.id, sentMessage);
-      return sentMessage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
