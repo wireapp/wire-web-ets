@@ -300,6 +300,71 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
+    '/api/v1/instance/:instanceId/sendText/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      linkPreview: Joi.object(validateLinkPreview).optional(),
+      mentions: Joi.array()
+        .items(validateMention)
+        .optional(),
+      messageTimer: Joi.number()
+        .optional()
+        .default(0),
+      text: Joi.string().required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {conversationId, mentions, messageTimer, text, linkPreview}: TextRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      let linkPreviewContent: LinkPreviewContent | undefined;
+
+      if (linkPreview) {
+        linkPreviewContent = {
+          ...linkPreview,
+          image: undefined,
+        };
+
+        if (linkPreview.image) {
+          const data = Buffer.from(linkPreview.image.data, 'base64');
+          const imageContent: ImageContent = {
+            data,
+            height: linkPreview.image.height,
+            type: linkPreview.image.type,
+            width: linkPreview.image.width,
+          };
+
+          linkPreviewContent.image = imageContent;
+        }
+      }
+
+      try {
+        const messageId = await instanceService.sendText(
+          instanceId,
+          conversationId,
+          text,
+          linkPreviewContent,
+          mentions,
+          messageTimer
+        );
+        const instanceName = instanceService.getInstance(instanceId).name;
+        return res.json({
+          instanceId,
+          messageId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
     '/api/v1/instance/:instanceId/sendPing/?',
     joiValidate({
       conversationId: Joi.string()
