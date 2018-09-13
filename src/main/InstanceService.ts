@@ -331,13 +331,41 @@ class InstanceService {
     }
   }
 
-  async sendText(instanceId: string, conversationId: string, message: string, expireAfterMillis = 0): Promise<string> {
+  async sendText(
+    instanceId: string,
+    conversationId: string,
+    message: string,
+    linkPreview?: LinkPreviewContent,
+    expireAfterMillis = 0
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await instance.account.service.conversation.createText(message).build();
-      const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
+      let sentMessage = await instance.account.service.conversation.send(conversationId, payload);
+
+      if (linkPreview) {
+        const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
+        const editedWithPreviewPayload = instance.account.service.conversation
+          .createText(message, sentMessage.id)
+          .withLinkPreviews([linkPreviewPayload])
+          .build();
+
+        sentMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
+
+        const messageContent = sentMessage.content as TextContent;
+
+        if (messageContent.linkPreviews) {
+          messageContent.linkPreviews.forEach(preview => {
+            if (preview.imageUploaded) {
+              delete preview.imageUploaded.image.data;
+              delete preview.imageUploaded.asset;
+            }
+          });
+        }
+      }
+
       instance.messages.set(sentMessage.id, sentMessage);
       return sentMessage.id;
     } else {
@@ -413,39 +441,6 @@ class InstanceService {
       delete (sentFile.content as FileContent).data;
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
-    }
-  }
-
-  async sendLinkPreview(
-    instanceId: string,
-    conversationId: string,
-    text: string,
-    linkPreview: LinkPreviewContent,
-    expireAfterMillis = 0
-  ): Promise<string> {
-    const instance = this.getInstance(instanceId);
-
-    if (instance.account.service) {
-      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
-      const textPayload = instance.account.service.conversation
-        .createText(text)
-        .withLinkPreviews([linkPreviewPayload])
-        .build();
-
-      const sentMessage = await instance.account.service.conversation.send(conversationId, textPayload);
-
-      (sentMessage.content as TextContent).linkPreviews!.forEach(preview => {
-        if (preview.imageUploaded) {
-          delete preview.imageUploaded.asset;
-          delete preview.imageUploaded.image.data;
-        }
-      });
-
-      instance.messages.set(sentMessage.id, sentMessage);
-      return sentMessage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }

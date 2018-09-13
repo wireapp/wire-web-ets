@@ -23,7 +23,6 @@ import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
-import {LinkPreviewRequest, validateLinkPreview} from './assetRoutes';
 
 export interface MessagesRequest {
   conversationId: string;
@@ -37,7 +36,26 @@ export interface DeletionRequest extends MessagesRequest {
   messageId: string;
 }
 
+export interface LinkPreviewRequest {
+  image?: {
+    data: string;
+    height: number;
+    type: string;
+    width: number;
+  };
+  permanentUrl: string;
+  summary?: string;
+  title?: string;
+  tweet?: {
+    author?: string;
+    username?: string;
+  };
+  url: string;
+  urlOffset: number;
+}
+
 export interface TextRequest extends MessagesRequest {
+  linkPreview?: LinkPreviewRequest;
   messageTimer?: number;
   text: string;
 }
@@ -55,11 +73,27 @@ export interface LocationRequest extends MessagesRequest {
   zoom?: number;
 }
 
-export interface MessageUpdateRequest extends MessagesRequest {
+export interface MessageUpdateRequest extends TextRequest {
   firstMessageId: string;
-  text: string;
-  linkPreview?: LinkPreviewRequest;
 }
+
+const validateLinkPreview = {
+  image: Joi.object({
+    data: Joi.string().required(),
+    height: Joi.number().required(),
+    type: Joi.string().required(),
+    width: Joi.number().required(),
+  }).optional(),
+  permanentUrl: Joi.string().required(),
+  summary: Joi.string().optional(),
+  title: Joi.string().optional(),
+  tweet: Joi.object({
+    author: Joi.string().optional(),
+    username: Joi.string().optional(),
+  }).optional(),
+  url: Joi.string().required(),
+  urlOffset: Joi.number().required(),
+};
 
 const conversationRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
@@ -255,6 +289,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
+      linkPreview: Joi.object(validateLinkPreview).optional(),
       messageTimer: Joi.number()
         .optional()
         .default(0),
@@ -262,14 +297,41 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageTimer, text}: TextRequest = req.body;
+      const {conversationId, messageTimer, text, linkPreview}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
+      let linkPreviewContent: LinkPreviewContent | undefined;
+
+      if (linkPreview) {
+        linkPreviewContent = {
+          ...linkPreview,
+          image: undefined,
+        };
+
+        if (linkPreview.image) {
+          const data = Buffer.from(linkPreview.image.data, 'base64');
+          const imageContent: ImageContent = {
+            data,
+            height: linkPreview.image.height,
+            type: linkPreview.image.type,
+            width: linkPreview.image.width,
+          };
+
+          linkPreviewContent.image = imageContent;
+        }
+      }
+
       try {
-        const messageId = await instanceService.sendText(instanceId, conversationId, text, messageTimer);
+        const messageId = await instanceService.sendText(
+          instanceId,
+          conversationId,
+          text,
+          linkPreviewContent,
+          messageTimer
+        );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
