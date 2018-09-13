@@ -331,6 +331,49 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 }
 ```
 
+### `POST /api/v1/instance/<instanceId>/sendLinkPreview`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string>",
+  "image?": {
+    "data": "<string>",
+    "height": "<number>",
+    "type": "<string>",
+    "width": "<number>"
+  },
+  "mentions?": [
+    {
+      "end": "<number>",
+      "start": "<number>",
+      "userId": "<string in UUID format>"
+    }
+  ],
+  "permanentUrl?": "<string>",
+  "summary?": "<string>",
+  "text": "<string>",
+  "title?": "<string>",
+  "tweet?": {
+    "author": "<string>",
+    "username": "<string>"
+  },
+  "url": "<string>",
+  "urlOffset": "<number>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "messageId": "<string>",
+  "name": "<string>"
+}
+```
+
 ### `POST /api/v1/instance/<instanceId>/sendLocation`
 
 #### Request
@@ -443,6 +486,13 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
       "username?": "<string>"
     }
   },
+  "mentions?": [
+    {
+      "end": "<number>",
+      "start": "<number>",
+      "userId": "<string in UUID format>"
+    }
+  ],
   "messageTimer?": "<number>",
   "text": "<string>"
 }
@@ -503,6 +553,13 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
       "username?": "<string>"
     }
   },
+  "mentions?": [
+    {
+      "userId": "<string in UUID format>",
+      "start": "<number>",
+      "end": "<number>"
+    }
+  ],
   "text": "<string>"
 }
 ```

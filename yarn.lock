@@ -276,10 +276,6 @@
   version "13.4.4"
   resolved "https://registry.yarnpkg.com/@types/joi/-/joi-13.4.4.tgz#258bda71b30b6f3f9a11eea3e122fccdab8df053"
 
-"@types/long@^3.0.32":
-  version "3.0.32"
-  resolved "https://registry.yarnpkg.com/@types/long/-/long-3.0.32.tgz#f4e5af31e9e9b196d8e5fca8a5e2e20aa3d60b69"
-
 "@types/long@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/long/-/long-4.0.0.tgz#719551d2352d301ac8b81db732acb6bdc28dbdef"
@@ -291,10 +287,6 @@
 "@types/node@*", "@types/node@10.9.4", "@types/node@^10.1.0":
   version "10.9.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.9.4.tgz#0f4cb2dc7c1de6096055357f70179043c33e9897"
-
-"@types/node@^8.9.4":
-  version "8.10.20"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.20.tgz#fe674ea52e13950ab10954433a7824438aabbcac"
 
 "@types/range-parser@*":
   version "1.2.2"
@@ -315,9 +307,9 @@
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.3.tgz#7f226d67d654ec9070e755f46daebf014628e9d9"
 
-"@wireapp/api-client@1.15.12":
-  version "1.15.12"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.15.12.tgz#0e2669bcbe08567b7301888af7bc9827f9a89309"
+"@wireapp/api-client@1.15.13":
+  version "1.15.13"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.15.13.tgz#497542cd07cc43b37966e8deec589e501ad6ef9e"
   dependencies:
     "@types/node" "10.9.4"
     "@types/spark-md5" "3.0.1"
@@ -335,14 +327,14 @@
   version "3.0.80"
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.80.tgz#a92588ea4f937c86b726a09bba7349578d579af1"
 
-"@wireapp/core@6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-6.0.0.tgz#9e3e5344e47f206f8609f4d5bd7f352ab070aac0"
+"@wireapp/core@6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-6.1.0.tgz#f3b631c50f4ebe2fad9179a41aada0efff1ff863"
   dependencies:
     "@types/node" "10.9.4"
-    "@wireapp/api-client" "1.15.12"
+    "@wireapp/api-client" "1.15.13"
     "@wireapp/cryptobox" "8.7.14"
-    "@wireapp/protocol-messaging" "1.20.1"
+    "@wireapp/protocol-messaging" "1.21.0"
     "@wireapp/store-engine" "0.12.14"
     bazinga64 "5.3.9"
     logdown "3.2.7"
@@ -390,11 +382,11 @@
     ed2curve "0.2.1"
     libsodium-wrappers-sumo "0.7.3"
 
-"@wireapp/protocol-messaging@1.20.1":
-  version "1.20.1"
-  resolved "https://registry.yarnpkg.com/@wireapp/protocol-messaging/-/protocol-messaging-1.20.1.tgz#3ff6b21914b628ef62f0092dc1827a99bd9e5b24"
+"@wireapp/protocol-messaging@1.21.0":
+  version "1.21.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/protocol-messaging/-/protocol-messaging-1.21.0.tgz#0798bb455503059a76e27870cb649d0ef8ae3d0e"
   dependencies:
-    protobufjs "6.8.6"
+    protobufjs "6.8.8"
 
 "@wireapp/store-engine@0.12.14":
   version "0.12.14"
@@ -3227,24 +3219,6 @@ prop-types@^15.6.2:
 propagate@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/propagate/-/propagate-1.0.0.tgz#00c2daeedda20e87e3782b344adba1cddd6ad709"
-
-protobufjs@6.8.6:
-  version "6.8.6"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.8.6.tgz#ce3cf4fff9625b62966c455fc4c15e4331a11ca2"
-  dependencies:
-    "@protobufjs/aspromise" "^1.1.2"
-    "@protobufjs/base64" "^1.1.2"
-    "@protobufjs/codegen" "^2.0.4"
-    "@protobufjs/eventemitter" "^1.1.0"
-    "@protobufjs/fetch" "^1.1.0"
-    "@protobufjs/float" "^1.0.2"
-    "@protobufjs/inquire" "^1.1.0"
-    "@protobufjs/path" "^1.1.2"
-    "@protobufjs/pool" "^1.1.0"
-    "@protobufjs/utf8" "^1.1.0"
-    "@types/long" "^3.0.32"
-    "@types/node" "^8.9.4"
-    long "^4.0.0"
 
 protobufjs@6.8.8:
   version "6.8.8"

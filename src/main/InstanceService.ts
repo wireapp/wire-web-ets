@@ -32,6 +32,7 @@ import {
   ImageContent,
   LinkPreviewContent,
   LocationContent,
+  MentionContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {
@@ -336,13 +337,17 @@ class InstanceService {
     conversationId: string,
     message: string,
     linkPreview?: LinkPreviewContent,
+    mentions?: MentionContent[],
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.createText(message).build();
+      const payload = await instance.account.service.conversation
+        .createText(message)
+        .withMentions(mentions)
+        .build();
       let sentMessage = await instance.account.service.conversation.send(conversationId, payload);
 
       if (linkPreview) {
@@ -516,13 +521,15 @@ class InstanceService {
     conversationId: string,
     originalMessageId: string,
     newMessageText: string,
-    newLinkPreview?: LinkPreviewContent
+    newLinkPreview?: LinkPreviewContent,
+    newMentions?: MentionContent[]
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       const editedPayload = instance.account.service.conversation
         .createEditedText(newMessageText, originalMessageId)
+        .withMentions(newMentions)
         .build();
 
       let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
@@ -532,6 +539,7 @@ class InstanceService {
         const editedWithPreviewPayload = instance.account.service.conversation
           .createEditedText(newMessageText, originalMessageId, editedMessage.id)
           .withLinkPreviews([linkPreviewPayload])
+          .withMentions(newMentions)
           .build();
 
         editedMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);

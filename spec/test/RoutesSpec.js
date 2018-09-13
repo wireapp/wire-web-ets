@@ -148,6 +148,7 @@ describe('Routes', () => {
     if (etsServer && etsServer.server) {
       await etsServer.stop();
     }
+    nock.cleanAll();
   });
 
   const createInstance = data => {
@@ -198,6 +199,31 @@ describe('Routes', () => {
     const conversationId = new UUID(UUID_VERSION).format();
     const requestUrl = `${baseURL}/instance/${instanceId}/sendText`;
     const requestData = {conversationId, text: 'Hello from Jasmine'};
+    const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
+    expect(requestedStatusCode).toBe(HTTP_CODE_OK);
+
+    const {instanceId: requestedId} = JSON.parse(requestedBody);
+    expect(requestedId).toBe(instanceId);
+  });
+
+  it('can send a text message with mention', async () => {
+    const {statusCode, body} = await createInstance();
+    expect(statusCode).toBe(HTTP_CODE_OK);
+    const {instanceId} = JSON.parse(body);
+
+    const conversationId = new UUID(UUID_VERSION).format();
+    const requestUrl = `${baseURL}/instance/${instanceId}/sendText`;
+    const requestData = {
+      conversationId,
+      mentions: [
+        {
+          end: 14,
+          start: 6,
+          userId: new UUID(UUID_VERSION).format(),
+        },
+      ],
+      text: 'Hello @Jasmine!',
+    };
     const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
     expect(requestedStatusCode).toBe(HTTP_CODE_OK);
 
