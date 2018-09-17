@@ -217,7 +217,7 @@ describe('Routes', () => {
       conversationId,
       mentions: [
         {
-          end: 14,
+          length: 8,
           start: 6,
           userId: new UUID(UUID_VERSION).format(),
         },
