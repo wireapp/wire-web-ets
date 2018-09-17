@@ -488,7 +488,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
   },
   "mentions?": [
     {
-      "end": "<number>",
+      "length": "<number>",
       "start": "<number>",
       "userId": "<string in UUID format>"
     }
@@ -555,9 +555,9 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
   },
   "mentions?": [
     {
-      "userId": "<string in UUID format>",
+      "length": "<number>",
       "start": "<number>",
-      "end": "<number>"
+      "userId": "<string in UUID format>"
     }
   ],
   "text": "<string>"
