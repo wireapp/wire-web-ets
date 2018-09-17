@@ -82,7 +82,7 @@ export interface MessageUpdateRequest extends MessageRequest {
 }
 
 export const validateMention = Joi.object({
-  end: Joi.number().required(),
+  length: Joi.number().required(),
   start: Joi.number().required(),
   userId: Joi.string()
     .uuid()
