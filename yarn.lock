@@ -360,10 +360,6 @@
     fs-extra "7.0.0"
     logdown "3.2.7"
 
-"@wireapp/lru-cache@2.1.53":
-  version "2.1.53"
-  resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-2.1.53.tgz#d2bde4a7d4e6c99753e8891aae751fbce8da65aa"
-
 "@wireapp/lru-cache@2.1.54":
   version "2.1.54"
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-2.1.54.tgz#6fb2f396395b0eb0c6ea684033dbdd3244e31225"
