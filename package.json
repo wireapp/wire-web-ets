@@ -4,7 +4,7 @@
     "@types/dotenv": "4.0.3",
     "@types/express": "4.16.0",
     "@types/helmet": "0.0.40",
-    "@types/joi": "13.4.4",
+    "@types/joi": "13.4.5",
     "@types/node": "10.9.4",
     "@wireapp/core": "6.1.1",
     "@wireapp/lru-cache": "2.1.53",
