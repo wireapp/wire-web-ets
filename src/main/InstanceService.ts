@@ -121,10 +121,13 @@ class InstanceService {
     account.on(PayloadBundleType.CLEARED, (payload: PayloadBundleIncoming) => {
       const clearedContent = payload.content as ClearedContent;
 
-      const messages = instance.messages.getAll().map(message => message[0]);
-      for (const message in messages) {
-        if (messages[message].conversation === clearedContent.conversationId) {
-          instance.messages.delete(message);
+      const messages = instance.messages.getAll();
+
+      for (const message of messages) {
+        const messageId = Object.keys(message)[0];
+        const messageContent = message[messageId];
+        if (messageContent.conversation === clearedContent.conversationId) {
+          instance.messages.delete(messageContent.id);
         }
       }
     });
