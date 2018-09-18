@@ -25,6 +25,7 @@ import joiValidate from '../../middlewares/joiValidate';
 
 export interface InstanceRequest {
   backend: string;
+  deviceLabel?: string;
   deviceName: string;
   email: string;
   name?: string;
@@ -49,6 +50,9 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       backend: Joi.string()
         .valid(['prod', 'production', 'staging'])
         .required(),
+      deviceLabel: Joi.string()
+        .allow('')
+        .optional(),
       deviceName: Joi.string()
         .allow('')
         .optional(),
@@ -61,7 +65,7 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       password: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
-      const {backend, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
+      const {backend, deviceLabel, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
 
       const loginData = {
         clientType: ClientType.PERMANENT,
@@ -70,7 +74,13 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       };
 
       try {
-        const instanceId = await instanceService.createInstance(backend, loginData, deviceName, instanceName);
+        const instanceId = await instanceService.createInstance(
+          backend,
+          loginData,
+          deviceName,
+          deviceLabel,
+          instanceName
+        );
         return res.json({
           instanceId,
           name: instanceName,
