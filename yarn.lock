@@ -307,9 +307,9 @@
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.3.tgz#7f226d67d654ec9070e755f46daebf014628e9d9"
 
-"@wireapp/api-client@1.15.15":
-  version "1.15.15"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.15.15.tgz#325c8af4206391c3398fce97df38847f5d62308a"
+"@wireapp/api-client@1.15.16":
+  version "1.15.16"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.15.16.tgz#063ff15b6cdde1c71356e299675536e00c81ccd3"
   dependencies:
     "@types/node" "10.10.1"
     "@types/spark-md5" "3.0.1"
@@ -327,13 +327,13 @@
   version "3.0.82"
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.82.tgz#9f593ec2953094bd2b351903187199e729abce86"
 
-"@wireapp/core@6.1.3":
-  version "6.1.3"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-6.1.3.tgz#9f48bd8dd22887847d48ab3de8879741611b05aa"
+"@wireapp/core@6.1.4":
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-6.1.4.tgz#c8347478ddae61b15083201d134998fff66a17d6"
   dependencies:
     "@types/node" "10.10.1"
-    "@wireapp/api-client" "1.15.15"
-    "@wireapp/cryptobox" "8.7.16"
+    "@wireapp/api-client" "1.15.16"
+    "@wireapp/cryptobox" "8.7.17"
     "@wireapp/protocol-messaging" "1.21.6"
     "@wireapp/store-engine" "0.12.16"
     bazinga64 "5.3.10"
@@ -341,13 +341,13 @@
     protobufjs "6.8.8"
     pure-uuid "1.5.4"
 
-"@wireapp/cryptobox@8.7.16":
-  version "8.7.16"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-8.7.16.tgz#8843da6cc9fd2171d9fbc72e1fa96e221636e282"
+"@wireapp/cryptobox@8.7.17":
+  version "8.7.17"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-8.7.17.tgz#59c45c59683e945b6382c1975dc3296d58c46017"
   dependencies:
     "@types/fs-extra" "5.0.4"
     "@types/node" "10.10.1"
-    "@wireapp/lru-cache" "2.1.54"
+    "@wireapp/lru-cache" "2.2.0"
     "@wireapp/priority-queue" "0.2.16"
     "@wireapp/proteus" "7.3.27"
     "@wireapp/store-engine" "0.12.16"
@@ -359,6 +359,10 @@
 "@wireapp/lru-cache@2.1.54":
   version "2.1.54"
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-2.1.54.tgz#6fb2f396395b0eb0c6ea684033dbdd3244e31225"
+
+"@wireapp/lru-cache@2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-2.2.0.tgz#27788b708bac13dce5ecf0d29cba37e49b76e621"
 
 "@wireapp/priority-queue@0.2.16":
   version "0.2.16"
