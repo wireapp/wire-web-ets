@@ -266,15 +266,15 @@
   dependencies:
     "@types/node" "*"
 
-"@types/helmet@0.0.40":
-  version "0.0.40"
-  resolved "https://registry.yarnpkg.com/@types/helmet/-/helmet-0.0.40.tgz#133e1e3f0d7142d7244bf0ddaad4678798e9b4cf"
+"@types/helmet@0.0.41":
+  version "0.0.41"
+  resolved "https://registry.yarnpkg.com/@types/helmet/-/helmet-0.0.41.tgz#c113fc815bc18cf69999adff5323daf9bd46bf0d"
   dependencies:
     "@types/express" "*"
 
-"@types/joi@13.4.4":
-  version "13.4.4"
-  resolved "https://registry.yarnpkg.com/@types/joi/-/joi-13.4.4.tgz#258bda71b30b6f3f9a11eea3e122fccdab8df053"
+"@types/joi@13.4.5":
+  version "13.4.5"
+  resolved "https://registry.yarnpkg.com/@types/joi/-/joi-13.4.5.tgz#1329006d79c4db16d1e201d1e35f7bf371137f64"
 
 "@types/long@^4.0.0":
   version "4.0.0"
@@ -284,9 +284,9 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.0.tgz#5a7306e367c539b9f6543499de8dd519fac37a8b"
 
-"@types/node@*", "@types/node@10.9.4", "@types/node@^10.1.0":
-  version "10.9.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.9.4.tgz#0f4cb2dc7c1de6096055357f70179043c33e9897"
+"@types/node@*", "@types/node@10.10.1", "@types/node@^10.1.0":
+  version "10.10.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.10.1.tgz#d5c96ca246a418404914d180b7fdd625ad18eca6"
 
 "@types/range-parser@*":
   version "1.2.2"
@@ -307,15 +307,15 @@
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.3.tgz#7f226d67d654ec9070e755f46daebf014628e9d9"
 
-"@wireapp/api-client@1.15.14":
-  version "1.15.14"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.15.14.tgz#7fdad433287e3d2fecfa3dcfaaf8a2476a91437b"
+"@wireapp/api-client@1.15.16":
+  version "1.15.16"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.15.16.tgz#063ff15b6cdde1c71356e299675536e00c81ccd3"
   dependencies:
-    "@types/node" "10.9.4"
+    "@types/node" "10.10.1"
     "@types/spark-md5" "3.0.1"
     "@types/tough-cookie" "2.3.3"
-    "@wireapp/priority-queue" "0.2.15"
-    "@wireapp/store-engine" "0.12.15"
+    "@wireapp/priority-queue" "0.2.16"
+    "@wireapp/store-engine" "0.12.16"
     axios "0.18.0"
     html5-websocket "2.0.3"
     logdown "3.2.7"
@@ -323,62 +323,62 @@
     spark-md5 "3.0.0"
     tough-cookie "2.4.3"
 
-"@wireapp/cbor@3.0.81":
-  version "3.0.81"
-  resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.81.tgz#3e97cec3355b19d48392514a79f673a50374533d"
+"@wireapp/cbor@3.0.82":
+  version "3.0.82"
+  resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.82.tgz#9f593ec2953094bd2b351903187199e729abce86"
 
-"@wireapp/core@6.1.1":
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-6.1.1.tgz#5c660b4219e00d1432f28c3cfe04f3c47cf0f42b"
+"@wireapp/core@6.2.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-6.2.0.tgz#c4a09a821a73c6411f4c18b9b84159ce80218c5f"
   dependencies:
-    "@types/node" "10.9.4"
-    "@wireapp/api-client" "1.15.14"
-    "@wireapp/cryptobox" "8.7.15"
+    "@types/node" "10.10.1"
+    "@wireapp/api-client" "1.15.16"
+    "@wireapp/cryptobox" "8.7.17"
     "@wireapp/protocol-messaging" "1.21.6"
-    "@wireapp/store-engine" "0.12.15"
+    "@wireapp/store-engine" "0.12.16"
     bazinga64 "5.3.10"
     logdown "3.2.7"
     protobufjs "6.8.8"
     pure-uuid "1.5.4"
 
-"@wireapp/cryptobox@8.7.15":
-  version "8.7.15"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-8.7.15.tgz#54d6e6d3dd30ed07a1760e6f789c4ecc029dfdce"
+"@wireapp/cryptobox@8.7.17":
+  version "8.7.17"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-8.7.17.tgz#59c45c59683e945b6382c1975dc3296d58c46017"
   dependencies:
     "@types/fs-extra" "5.0.4"
-    "@types/node" "10.9.4"
-    "@wireapp/lru-cache" "2.1.54"
-    "@wireapp/priority-queue" "0.2.15"
-    "@wireapp/proteus" "7.3.26"
-    "@wireapp/store-engine" "0.12.15"
+    "@types/node" "10.10.1"
+    "@wireapp/lru-cache" "2.2.0"
+    "@wireapp/priority-queue" "0.2.16"
+    "@wireapp/proteus" "7.3.27"
+    "@wireapp/store-engine" "0.12.16"
     bazinga64 "5.3.10"
     dexie "2.0.4"
     fs-extra "7.0.0"
     logdown "3.2.7"
 
-"@wireapp/lru-cache@2.1.53":
-  version "2.1.53"
-  resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-2.1.53.tgz#d2bde4a7d4e6c99753e8891aae751fbce8da65aa"
-
 "@wireapp/lru-cache@2.1.54":
   version "2.1.54"
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-2.1.54.tgz#6fb2f396395b0eb0c6ea684033dbdd3244e31225"
 
-"@wireapp/priority-queue@0.2.15":
-  version "0.2.15"
-  resolved "https://registry.yarnpkg.com/@wireapp/priority-queue/-/priority-queue-0.2.15.tgz#df330d241685aadf2c2094d1ad09009a61c99a99"
+"@wireapp/lru-cache@2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-2.2.0.tgz#27788b708bac13dce5ecf0d29cba37e49b76e621"
+
+"@wireapp/priority-queue@0.2.16":
+  version "0.2.16"
+  resolved "https://registry.yarnpkg.com/@wireapp/priority-queue/-/priority-queue-0.2.16.tgz#7af61dc412425448de3db2d50833fa75d905c8d3"
   dependencies:
-    "@types/node" "10.9.4"
+    "@types/node" "10.10.1"
     pure-uuid "1.5.4"
 
-"@wireapp/proteus@7.3.26":
-  version "7.3.26"
-  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-7.3.26.tgz#edf200b9702c3b1915ac47b641e2081fe6bbc6a9"
+"@wireapp/proteus@7.3.27":
+  version "7.3.27"
+  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-7.3.27.tgz#fc69777442fbb3027ea71ffee84d5163612395de"
   dependencies:
     "@types/chai" "4.1.4"
     "@types/ed2curve" "0.2.2"
-    "@types/node" "10.9.4"
-    "@wireapp/cbor" "3.0.81"
+    "@types/node" "10.10.1"
+    "@wireapp/cbor" "3.0.82"
     ed2curve "0.2.1"
     libsodium-wrappers-sumo "0.7.3"
 
@@ -388,13 +388,13 @@
   dependencies:
     protobufjs "6.8.8"
 
-"@wireapp/store-engine@0.12.15":
-  version "0.12.15"
-  resolved "https://registry.yarnpkg.com/@wireapp/store-engine/-/store-engine-0.12.15.tgz#bda8df3c42399905c06913927cf4532f2d978fe6"
+"@wireapp/store-engine@0.12.16":
+  version "0.12.16"
+  resolved "https://registry.yarnpkg.com/@wireapp/store-engine/-/store-engine-0.12.16.tgz#4d74c66033539759dc67342851f559c2bc333d0e"
   dependencies:
     "@types/bro-fs" "0.4.1"
     "@types/filesystem" "0.0.29"
-    "@types/node" "10.9.4"
+    "@types/node" "10.10.1"
     bro-fs "0.4.0"
     dexie "2.0.4"
     fs-extra "7.0.0"
@@ -1323,9 +1323,9 @@ eslint-visitor-keys@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#3f3180fb2e291017716acb4c9d6d5b5c34a6a81d"
 
-eslint@5.5.0:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-5.5.0.tgz#8557fcceab5141a8197da9ffd9904f89f64425c6"
+eslint@5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-5.6.0.tgz#b6f7806041af01f71b3f1895cbb20971ea4b6223"
   dependencies:
     "@babel/code-frame" "^7.0.0"
     ajv "^6.5.3"
@@ -2751,9 +2751,9 @@ nocache@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/nocache/-/nocache-2.0.0.tgz#202b48021a0c4cbde2df80de15a17443c8b43980"
 
-nock@9.6.1:
-  version "9.6.1"
-  resolved "https://registry.yarnpkg.com/nock/-/nock-9.6.1.tgz#d96e099be9bc1d0189a77f4490bbbb265c381b49"
+nock@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/nock/-/nock-10.0.0.tgz#bcbd2c003961baffcae2ecd28e074574233d3869"
   dependencies:
     chai "^4.1.2"
     debug "^3.1.0"
@@ -3868,9 +3868,9 @@ tslint-config-prettier@1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/tslint-config-prettier/-/tslint-config-prettier-1.15.0.tgz#76b9714399004ab6831fdcf76d89b73691c812cf"
 
-tslint-plugin-prettier@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/tslint-plugin-prettier/-/tslint-plugin-prettier-1.3.0.tgz#7eb65d19ea786a859501a42491b78c5de2031a3f"
+tslint-plugin-prettier@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tslint-plugin-prettier/-/tslint-plugin-prettier-2.0.0.tgz#ade328b26c71f37418d4d01187dca232a7447b49"
   dependencies:
     eslint-plugin-prettier "^2.2.0"
     tslib "^1.7.1"

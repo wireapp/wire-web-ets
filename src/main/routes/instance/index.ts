@@ -27,6 +27,7 @@ import confirmationRoutes from './confirmationRoutes';
 import conversationRoutes from './conversationRoutes';
 import mainRoutes from './mainRoutes';
 import sessionRoutes from './sessionRoutes';
+import typingRoutes from './typingRoutes';
 
 const routes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
@@ -37,6 +38,7 @@ const routes = (instanceService: InstanceService): express.Router => {
   router.use(conversationRoutes(instanceService));
   router.use(mainRoutes(instanceService));
   router.use(sessionRoutes(instanceService));
+  router.use(typingRoutes(instanceService));
 
   return router;
 };
