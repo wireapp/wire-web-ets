@@ -196,7 +196,7 @@ class InstanceService {
     const ClientInfo: ClientInfo = {
       classification: ClientClassification.DESKTOP,
       cookieLabel: 'default',
-      deviceLabel,
+      label: deviceLabel,
       model: deviceName || `E2E Test Server v${version}`,
     };
 
