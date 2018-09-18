@@ -26,9 +26,11 @@ import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {
   AssetContent,
+  DeletedContent,
   EditedTextContent,
   FileContent,
   FileMetaDataContent,
+  HiddenContent,
   ImageContent,
   LinkPreviewContent,
   LocationContent,
@@ -126,13 +128,15 @@ class InstanceService {
       instance.messages.set(payload.id, payload)
     );
 
-    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundleIncoming) =>
-      instance.messages.delete(payload.id)
-    );
+    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundleIncoming) => {
+      const deleteContent = payload.content as DeletedContent;
+      instance.messages.delete(deleteContent.originalMessageId);
+    });
 
-    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundleIncoming) =>
-      instance.messages.delete(payload.id)
-    );
+    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundleIncoming) => {
+      const hideContent = payload.content as HiddenContent;
+      instance.messages.delete(hideContent.originalMessageId);
+    });
 
     account.on(PayloadBundleType.REACTION, (payload: PayloadBundleIncoming) =>
       instance.messages.set(payload.id, payload)
