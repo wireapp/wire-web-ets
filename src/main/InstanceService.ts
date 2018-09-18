@@ -151,11 +151,22 @@ class InstanceService {
     );
   }
 
-  async archiveConversation(instanceId: string, conversationId: string, archive: boolean): Promise<string> {
+  async toggleArchiveConversation(instanceId: string, conversationId: string, archived: boolean): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.toggleArchiveConversation(conversationId, archive);
+      await instance.account.service.conversation.toggleArchiveConversation(conversationId, archived);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async toggleMuteConversation(instanceId: string, conversationId: string, muted: boolean): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.toggleMuteConversation(conversationId, muted);
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
