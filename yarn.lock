@@ -307,9 +307,9 @@
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.3.tgz#7f226d67d654ec9070e755f46daebf014628e9d9"
 
-"@wireapp/api-client@1.15.16":
-  version "1.15.16"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.15.16.tgz#063ff15b6cdde1c71356e299675536e00c81ccd3"
+"@wireapp/api-client@1.15.17":
+  version "1.15.17"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.15.17.tgz#a1cc690b42e2d0be5454e005a7eeb2982c62f6db"
   dependencies:
     "@types/node" "10.10.1"
     "@types/spark-md5" "3.0.1"
@@ -327,12 +327,12 @@
   version "3.0.82"
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.82.tgz#9f593ec2953094bd2b351903187199e729abce86"
 
-"@wireapp/core@6.3.0":
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-6.3.0.tgz#8d301bcc0af5db30cc42732b08005e6dba4b5e7a"
+"@wireapp/core@6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-6.3.1.tgz#7b4f9f56aea2522f7559cfaaed8444d73a1c1cee"
   dependencies:
     "@types/node" "10.10.1"
-    "@wireapp/api-client" "1.15.16"
+    "@wireapp/api-client" "1.15.17"
     "@wireapp/cryptobox" "8.7.17"
     "@wireapp/protocol-messaging" "1.21.6"
     "@wireapp/store-engine" "0.12.16"
