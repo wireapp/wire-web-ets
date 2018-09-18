@@ -26,6 +26,7 @@ import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {
   AssetContent,
+  ClearedContent,
   DeletedContent,
   EditedTextContent,
   FileContent,
@@ -117,10 +118,14 @@ class InstanceService {
       instance.messages.delete(editedContent.originalMessageId);
     });
 
-    account.on(PayloadBundleType.CLEARED, () => {
-      const messages = instance.messages.getAll();
+    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundleIncoming) => {
+      const clearedContent = payload.content as ClearedContent;
+
+      const messages = instance.messages.getAll().map(message => message[0]);
       for (const message in messages) {
-        instance.messages.delete(message);
+        if (messages[message].conversation === clearedContent.conversationId) {
+          instance.messages.delete(message);
+        }
       }
     });
 
