@@ -27,6 +27,7 @@ export interface InstanceRequest {
   backend: string;
   deviceName: string;
   email: string;
+  label?: string;
   name?: string;
   password: string;
 }
@@ -55,13 +56,16 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       email: Joi.string()
         .email()
         .required(),
+      label: Joi.string()
+        .allow('')
+        .optional(),
       name: Joi.string()
         .allow('')
         .optional(),
       password: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
-      const {backend, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
+      const {backend, deviceName, email, label, name: instanceName, password}: InstanceRequest = req.body;
 
       const loginData = {
         clientType: ClientType.PERMANENT,
@@ -70,7 +74,7 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       };
 
       try {
-        const instanceId = await instanceService.createInstance(backend, loginData, deviceName, instanceName);
+        const instanceId = await instanceService.createInstance(backend, loginData, deviceName, label, instanceName);
         return res.json({
           instanceId,
           name: instanceName,
