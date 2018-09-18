@@ -176,8 +176,8 @@ class InstanceService {
   async createInstance(
     backend: string,
     loginData: LoginData,
-    deviceModel?: string,
-    label?: string,
+    deviceName?: string,
+    deviceLabel?: string,
     instanceName?: string
   ): Promise<string> {
     const instanceId = new UUID(4).format();
@@ -196,8 +196,8 @@ class InstanceService {
     const ClientInfo: ClientInfo = {
       classification: ClientClassification.DESKTOP,
       cookieLabel: 'default',
-      label,
-      model: deviceModel || `E2E Test Server v${version}`,
+      deviceLabel,
+      model: deviceName || `E2E Test Server v${version}`,
     };
 
     logger.log(`[${formatDate()}] Logging in ...`);

@@ -113,9 +113,9 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```json
 {
   "backend": "<'prod'|'production'|'staging'>",
+  "deviceLabel?": "<string>",
   "deviceName?": "<string>",
   "email": "<string in email format>",
-  "label?": "<string>",
   "name?": "<string>",
   "password": "<string>"
 }
