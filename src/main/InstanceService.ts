@@ -26,9 +26,12 @@ import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {
   AssetContent,
+  ClearedContent,
+  DeletedContent,
   EditedTextContent,
   FileContent,
   FileMetaDataContent,
+  HiddenContent,
   ImageContent,
   LinkPreviewContent,
   LocationContent,
@@ -76,6 +79,76 @@ class InstanceService {
 
   constructor(private maximumInstances = 100) {
     this.cachedInstances = new LRUCache(this.maximumInstances);
+  }
+
+  private attachListeners(account: Account, instance: Instance): void {
+    account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => {
+      const linkPreviewContent = payload.content as TextContent;
+      if (linkPreviewContent.linkPreviews) {
+        linkPreviewContent.linkPreviews.forEach(preview => {
+          if (preview.image) {
+            delete preview.image.data;
+          }
+        });
+      }
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => {
+      const metaPayload = instance.messages.get(payload.id);
+      if (metaPayload && payload) {
+        (payload.content as AssetContent).uploaded = (metaPayload.content as AssetContent).uploaded;
+      }
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) =>
+      instance.messages.set(payload.id, payload)
+    );
+
+    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
+      instance.messages.set(payload.id, payload)
+    );
+
+    account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+
+    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
+      const editedContent = payload.content as EditedTextContent;
+      instance.messages.set(payload.id, payload);
+      instance.messages.delete(editedContent.originalMessageId);
+    });
+
+    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundleIncoming) => {
+      const clearedContent = payload.content as ClearedContent;
+
+      const messages = instance.messages.getAll();
+
+      for (const message of messages) {
+        const messageId = Object.keys(message)[0];
+        const messageContent = message[messageId];
+        if (messageContent.conversation === clearedContent.conversationId) {
+          instance.messages.delete(messageContent.id);
+        }
+      }
+    });
+
+    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundleIncoming) =>
+      instance.messages.set(payload.id, payload)
+    );
+
+    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundleIncoming) => {
+      const deleteContent = payload.content as DeletedContent;
+      instance.messages.delete(deleteContent.originalMessageId);
+    });
+
+    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundleIncoming) => {
+      const hideContent = payload.content as HiddenContent;
+      instance.messages.delete(hideContent.originalMessageId);
+    });
+
+    account.on(PayloadBundleType.REACTION, (payload: PayloadBundleIncoming) =>
+      instance.messages.set(payload.id, payload)
+    );
   }
 
   async archiveConversation(instanceId: string, conversationId: string, archive: boolean): Promise<string> {
@@ -150,36 +223,7 @@ class InstanceService {
 
     this.cachedInstances.set(instanceId, instance);
 
-    account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => {
-      const linkPreviewContent = payload.content as TextContent;
-      if (linkPreviewContent.linkPreviews) {
-        linkPreviewContent.linkPreviews.forEach(preview => {
-          if (preview.image) {
-            delete preview.image.data;
-          }
-        });
-      }
-      instance.messages.set(payload.id, payload);
-    });
-    account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => {
-      const metaPayload = instance.messages.get(payload.id);
-      if (metaPayload && payload) {
-        (payload.content as AssetContent).uploaded = (metaPayload.content as AssetContent).uploaded;
-      }
-      instance.messages.set(payload.id, payload);
-    });
-    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
-    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
-    account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
-    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
-      const editedContent = payload.content as EditedTextContent;
-      instance.messages.set(payload.id, payload);
-      instance.messages.delete(editedContent.originalMessageId);
-    });
+    this.attachListeners(account, instance);
 
     logger.log(`[${formatDate()}] Created instance with id "${instanceId}".`);
 
