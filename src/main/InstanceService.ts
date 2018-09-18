@@ -145,10 +145,6 @@ class InstanceService {
       const hideContent = payload.content as HiddenContent;
       instance.messages.delete(hideContent.originalMessageId);
     });
-
-    account.on(PayloadBundleType.REACTION, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
   }
 
   async toggleArchiveConversation(instanceId: string, conversationId: string, archived: boolean): Promise<string> {
