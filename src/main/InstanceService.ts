@@ -33,7 +33,6 @@ import {
   LinkPreviewContent,
   LocationContent,
   MentionContent,
-  ReactionContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {
