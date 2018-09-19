@@ -579,14 +579,12 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      let editedMessage: PayloadBundleOutgoing;
-
       const editedPayload = instance.account.service.conversation
         .createEditedText(newMessageText, originalMessageId)
         .withMentions(newMentions)
         .build();
 
-      editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
+      let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
 
       if (newLinkPreview) {
         const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(newLinkPreview);
