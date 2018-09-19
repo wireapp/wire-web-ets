@@ -360,6 +360,10 @@
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-2.2.0.tgz#27788b708bac13dce5ecf0d29cba37e49b76e621"
 
+"@wireapp/lru-cache@3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.0.1.tgz#88b3567518fdcb03c163c121bf6ac7ccf7b4009f"
+
 "@wireapp/priority-queue@0.2.16":
   version "0.2.16"
   resolved "https://registry.yarnpkg.com/@wireapp/priority-queue/-/priority-queue-0.2.16.tgz#7af61dc412425448de3db2d50833fa75d905c8d3"
