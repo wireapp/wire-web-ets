@@ -136,18 +136,18 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       return res.json({});
     }
 
-    const reducedInstances = instances.reduce((instances: ReducedInstances, instance) => {
-      const instanceId = Object.keys(instance)[0];
-      const {backendType, client, name} = instance[instanceId];
+    const reducedInstances: ReducedInstances = {};
 
-      instances[instanceId] = {
+    for (const instanceId in instances) {
+      const {backendType, client, name} = instances[instanceId];
+
+      reducedInstances[instanceId] = {
         backend: backendType.name,
         clientId: client.context!.clientId!,
         instanceId,
         name,
       };
-      return instances;
-    }, {});
+    }
 
     return res.json(reducedInstances);
   });
