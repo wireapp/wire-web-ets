@@ -396,21 +396,19 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
+      let sentMessage: PayloadBundleOutgoing;
+
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation
-        .createText(message)
-        .withMentions(mentions)
-        .build();
-      let sentMessage = await instance.account.service.conversation.send(conversationId, payload);
 
       if (linkPreview) {
         const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
-        const editedWithPreviewPayload = instance.account.service.conversation
-          .createText(message, sentMessage.id)
+        const textPayload = instance.account.service.conversation
+          .createText(message)
           .withLinkPreviews([linkPreviewPayload])
+          .withMentions(mentions)
           .build();
 
-        sentMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
+        sentMessage = await instance.account.service.conversation.send(conversationId, textPayload);
 
         const messageContent = sentMessage.content as TextContent;
 
@@ -422,6 +420,13 @@ class InstanceService {
             }
           });
         }
+      } else {
+        const textPayload = await instance.account.service.conversation
+          .createText(message)
+          .withMentions(mentions)
+          .build();
+
+        sentMessage = await instance.account.service.conversation.send(conversationId, textPayload);
       }
 
       instance.messages.set(sentMessage.id, sentMessage);
@@ -580,22 +585,17 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const editedPayload = instance.account.service.conversation
-        .createEditedText(newMessageText, originalMessageId)
-        .withMentions(newMentions)
-        .build();
-
-      let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
+      let editedMessage: PayloadBundleOutgoing;
 
       if (newLinkPreview) {
         const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(newLinkPreview);
-        const editedWithPreviewPayload = instance.account.service.conversation
-          .createEditedText(newMessageText, originalMessageId, editedMessage.id)
+        const editedPayload = instance.account.service.conversation
+          .createEditedText(newMessageText, originalMessageId)
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(newMentions)
           .build();
 
-        editedMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
+        editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
 
         const editedMessageContent = editedMessage.content as EditedTextContent;
 
@@ -607,6 +607,13 @@ class InstanceService {
             }
           });
         }
+      } else {
+        const editedPayload = instance.account.service.conversation
+          .createEditedText(newMessageText, originalMessageId)
+          .withMentions(newMentions)
+          .build();
+
+        editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
       }
 
       instance.messages.set(originalMessageId, editedMessage);

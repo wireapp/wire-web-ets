@@ -344,7 +344,13 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       messageTimer: Joi.number()
         .optional()
         .default(0),
-      text: Joi.string().required(),
+      text: Joi.string().when('linkPreview', {
+        is: Joi.exist(),
+        otherwise: Joi.required(),
+        then: Joi.allow('')
+          .optional()
+          .default(''),
+      }),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -476,11 +482,23 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       mentions: Joi.array()
         .items(validateMention)
         .optional(),
-      text: Joi.string().required(),
+      text: Joi.string().when('linkPreview', {
+        is: Joi.exist(),
+        otherwise: Joi.required(),
+        then: Joi.allow('')
+          .optional()
+          .default(''),
+      }),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, firstMessageId, linkPreview, mentions, text}: MessageUpdateRequest = req.body;
+      const {
+        conversationId,
+        firstMessageId: originalMessageId,
+        linkPreview,
+        mentions,
+        text,
+      }: MessageUpdateRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -511,7 +529,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
         const messageId = await instanceService.sendEditedText(
           instanceId,
           conversationId,
-          firstMessageId,
+          originalMessageId,
           text,
           linkPreviewContent,
           mentions
