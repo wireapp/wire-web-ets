@@ -579,28 +579,35 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      let linkPreviewPayload: LinkPreviewUploadedContent[] | undefined;
-
-      if (newLinkPreview) {
-        linkPreviewPayload = [await instance.account.service.conversation.createLinkPreview(newLinkPreview)];
-      }
+      let editedMessage: PayloadBundleOutgoing;
 
       const editedPayload = instance.account.service.conversation
         .createEditedText(newMessageText, originalMessageId)
-        .withLinkPreviews(linkPreviewPayload)
         .withMentions(newMentions)
         .build();
 
-      const editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
-      const messageContent = editedMessage.content as EditedTextContent;
+      editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
 
-      if (messageContent.linkPreviews) {
-        messageContent.linkPreviews.forEach(preview => {
-          if (preview.imageUploaded) {
-            delete preview.imageUploaded.image.data;
-            delete preview.imageUploaded.asset;
-          }
-        });
+      if (newLinkPreview) {
+        const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(newLinkPreview);
+        const messageContent = editedMessage.content as EditedTextContent;
+
+        const editedPayload = instance.account.service.conversation
+          .createEditedText(newMessageText, originalMessageId, editedMessage.id)
+          .withLinkPreviews([linkPreviewPayload])
+          .withMentions(newMentions)
+          .build();
+
+        editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
+
+        if (messageContent.linkPreviews) {
+          messageContent.linkPreviews.forEach(preview => {
+            if (preview.imageUploaded) {
+              delete preview.imageUploaded.image.data;
+              delete preview.imageUploaded.asset;
+            }
+          });
+        }
       }
 
       instance.messages.set(originalMessageId, editedMessage);
