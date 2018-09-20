@@ -488,8 +488,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 #### Request
 
-⚠️ **Note**: Either `linkPreview` or `text` must be given.
-
 ```json
 {
   "conversationId": "<string in UUID format>",
@@ -518,7 +516,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
     }
   ],
   "messageTimer?": "<number>",
-  "text?": "<string>"
+  "text": "<string>"
 }
 ```
 
@@ -556,8 +554,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 #### Request
 
-⚠️ **Note**: Either `linkPreview` or `text` must be given.
-
 ```json
 {
   "conversationId": "<string in UUID format>",
@@ -586,7 +582,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
       "userId": "<string in UUID format>"
     }
   ],
-  "text?": "<string>"
+  "text": "<string>"
 }
 ```
 

@@ -344,13 +344,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       messageTimer: Joi.number()
         .optional()
         .default(0),
-      text: Joi.string().when('linkPreview', {
-        is: Joi.exist(),
-        otherwise: Joi.required(),
-        then: Joi.allow('')
-          .optional()
-          .default(''),
-      }),
+      text: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -482,13 +476,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       mentions: Joi.array()
         .items(validateMention)
         .optional(),
-      text: Joi.string().when('linkPreview', {
-        is: Joi.exist(),
-        otherwise: Joi.required(),
-        then: Joi.allow('')
-          .optional()
-          .default(''),
-      }),
+      text: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
