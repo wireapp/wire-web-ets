@@ -26,6 +26,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceiddeleteeverywhere)
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
 - [`POST /api/v1/instance/<instanceId>/markEphemeralRead`](#post-apiv1instanceinstanceidmarkephemeralread)
+- [`POST /api/v1/instance/<instanceId>/mute`](#post-apiv1instanceinstanceidmute)
 - [`POST /api/v1/instance/<instanceId>/sendFile`](#post-apiv1instanceinstanceidsendfile)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendLocation`](#post-apiv1instanceinstanceidsendlocation)
@@ -113,9 +114,10 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ```json
 {
   "backend": "<'prod'|'production'|'staging'>",
-  "deviceName": "<string>",
+  "deviceLabel?": "<string>",
+  "deviceName?": "<string>",
   "email": "<string in email format>",
-  "name": "<string>",
+  "name?": "<string>",
   "password": "<string>"
 }
 ```
@@ -270,6 +272,26 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 {
   "conversationId": "<string in UUID format>",
   "messageId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/mute`
+
+#### Request
+
+```json
+{
+  "mute": "<boolean>",
+  "conversationId": "<string in UUID format>"
 }
 ```
 

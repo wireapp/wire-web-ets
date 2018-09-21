@@ -26,9 +26,12 @@ import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/root';
 import {
   AssetContent,
+  ClearedContent,
+  DeletedContent,
   EditedTextContent,
   FileContent,
   FileMetaDataContent,
+  HiddenContent,
   ImageContent,
   LinkPreviewContent,
   LocationContent,
@@ -41,7 +44,7 @@ import {
   PayloadBundleType,
   ReactionType,
 } from '@wireapp/core/dist/conversation/root';
-import {LRUCache} from '@wireapp/lru-cache';
+import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
 import * as logdown from 'logdown';
@@ -78,11 +81,84 @@ class InstanceService {
     this.cachedInstances = new LRUCache(this.maximumInstances);
   }
 
-  async archiveConversation(instanceId: string, conversationId: string, archive: boolean): Promise<string> {
+  private attachListeners(account: Account, instance: Instance): void {
+    account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => {
+      const linkPreviewContent = payload.content as TextContent;
+      if (linkPreviewContent.linkPreviews) {
+        linkPreviewContent.linkPreviews.forEach(preview => {
+          if (preview.image) {
+            delete preview.image.data;
+          }
+        });
+      }
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => {
+      const metaPayload = instance.messages.get(payload.id);
+      if (metaPayload && payload) {
+        (payload.content as AssetContent).uploaded = (metaPayload.content as AssetContent).uploaded;
+      }
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) =>
+      instance.messages.set(payload.id, payload)
+    );
+
+    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
+      instance.messages.set(payload.id, payload)
+    );
+
+    account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+
+    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
+      const editedContent = payload.content as EditedTextContent;
+      instance.messages.set(payload.id, payload);
+      instance.messages.delete(editedContent.originalMessageId);
+    });
+
+    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundleIncoming) => {
+      const clearedContent = payload.content as ClearedContent;
+
+      for (const message of instance.messages) {
+        if (message.conversation === clearedContent.conversationId) {
+          instance.messages.delete(message.id);
+        }
+      }
+    });
+
+    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundleIncoming) =>
+      instance.messages.set(payload.id, payload)
+    );
+
+    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundleIncoming) => {
+      const deleteContent = payload.content as DeletedContent;
+      instance.messages.delete(deleteContent.originalMessageId);
+    });
+
+    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundleIncoming) => {
+      const hideContent = payload.content as HiddenContent;
+      instance.messages.delete(hideContent.originalMessageId);
+    });
+  }
+
+  async toggleArchiveConversation(instanceId: string, conversationId: string, archived: boolean): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.toggleArchiveConversation(conversationId, archive);
+      await instance.account.service.conversation.toggleArchiveConversation(conversationId, archived);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async toggleMuteConversation(instanceId: string, conversationId: string, muted: boolean): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.toggleMuteConversation(conversationId, muted);
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -103,7 +179,8 @@ class InstanceService {
   async createInstance(
     backend: string,
     loginData: LoginData,
-    deviceModel?: string,
+    deviceName?: string,
+    deviceLabel?: string,
     instanceName?: string
   ): Promise<string> {
     const instanceId = new UUID(4).format();
@@ -122,7 +199,8 @@ class InstanceService {
     const ClientInfo: ClientInfo = {
       classification: ClientClassification.DESKTOP,
       cookieLabel: 'default',
-      model: deviceModel || `E2E Test Server v${version}`,
+      label: deviceLabel,
+      model: deviceName || `E2E Test Server v${version}`,
     };
 
     logger.log(`[${formatDate()}] Logging in ...`);
@@ -150,36 +228,7 @@ class InstanceService {
 
     this.cachedInstances.set(instanceId, instance);
 
-    account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => {
-      const linkPreviewContent = payload.content as TextContent;
-      if (linkPreviewContent.linkPreviews) {
-        linkPreviewContent.linkPreviews.forEach(preview => {
-          if (preview.image) {
-            delete preview.image.data;
-          }
-        });
-      }
-      instance.messages.set(payload.id, payload);
-    });
-    account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => {
-      const metaPayload = instance.messages.get(payload.id);
-      if (metaPayload && payload) {
-        (payload.content as AssetContent).uploaded = (metaPayload.content as AssetContent).uploaded;
-      }
-      instance.messages.set(payload.id, payload);
-    });
-    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
-    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
-    account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
-    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
-      const editedContent = payload.content as EditedTextContent;
-      instance.messages.set(payload.id, payload);
-      instance.messages.delete(editedContent.originalMessageId);
-    });
+    this.attachListeners(account, instance);
 
     logger.log(`[${formatDate()}] Created instance with id "${instanceId}".`);
 
@@ -246,22 +295,22 @@ class InstanceService {
     return instance;
   }
 
-  getInstances(): Array<{[id: string]: Instance}> {
+  getInstances(): NodeMap<Instance> {
     return this.cachedInstances.getAll();
   }
 
   getMessages(instanceId: string, conversationId: string): MessagePayload[] {
     const instance = this.getInstance(instanceId);
+    const allMessages: MessagePayload[] = [];
 
     if (instance.account.service) {
-      const allMessages = instance.messages.getAll();
-      const messageArray = allMessages.reduce((messages: MessagePayload[], message) => {
-        const messageId = Object.keys(message)[0];
-        messages.push(message[messageId]);
-        return messages;
-      }, []);
+      for (const message of instance.messages) {
+        if (message.conversation === conversationId) {
+          allMessages.push(message);
+        }
+      }
 
-      return messageArray.filter(message => message.conversation === conversationId);
+      return allMessages;
     } else {
       throw new Error('Account service not set.');
     }

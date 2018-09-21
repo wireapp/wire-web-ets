@@ -25,6 +25,7 @@ import joiValidate from '../../middlewares/joiValidate';
 
 export interface InstanceRequest {
   backend: string;
+  deviceLabel?: string;
   deviceName: string;
   email: string;
   name?: string;
@@ -49,6 +50,9 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       backend: Joi.string()
         .valid(['prod', 'production', 'staging'])
         .required(),
+      deviceLabel: Joi.string()
+        .allow('')
+        .optional(),
       deviceName: Joi.string()
         .allow('')
         .optional(),
@@ -61,7 +65,7 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       password: Joi.string().required(),
     }),
     async (req: express.Request, res: express.Response) => {
-      const {backend, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
+      const {backend, deviceLabel, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
 
       const loginData = {
         clientType: ClientType.PERMANENT,
@@ -70,7 +74,13 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       };
 
       try {
-        const instanceId = await instanceService.createInstance(backend, loginData, deviceName, instanceName);
+        const instanceId = await instanceService.createInstance(
+          backend,
+          loginData,
+          deviceName,
+          deviceLabel,
+          instanceName
+        );
         return res.json({
           instanceId,
           name: instanceName,
@@ -126,18 +136,18 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       return res.json({});
     }
 
-    const reducedInstances = instances.reduce((instances: ReducedInstances, instance) => {
-      const instanceId = Object.keys(instance)[0];
-      const {backendType, client, name} = instance[instanceId];
+    const reducedInstances: ReducedInstances = {};
 
-      instances[instanceId] = {
+    for (const instanceId in instances) {
+      const {backendType, client, name} = instances[instanceId];
+
+      reducedInstances[instanceId] = {
         backend: backendType.name,
         clientId: client.context!.clientId!,
         instanceId,
         name,
       };
-      return instances;
-    }, {});
+    }
 
     return res.json(reducedInstances);
   });

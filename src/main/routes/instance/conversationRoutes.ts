@@ -32,6 +32,10 @@ export interface ArchiveRequest extends MessageRequest {
   archive: boolean;
 }
 
+export interface MuteRequest extends MessageRequest {
+  mute: boolean;
+}
+
 export interface DeletionRequest extends MessageRequest {
   messageId: string;
 }
@@ -131,7 +135,35 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       }
 
       try {
-        const instanceName = await instanceService.archiveConversation(instanceId, conversationId, archive);
+        const instanceName = await instanceService.toggleArchiveConversation(instanceId, conversationId, archive);
+        return res.json({
+          instanceId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/mute/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      mute: Joi.boolean().required(),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {mute, conversationId}: MuteRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const instanceName = await instanceService.toggleMuteConversation(instanceId, conversationId, mute);
         return res.json({
           instanceId,
           name: instanceName,
