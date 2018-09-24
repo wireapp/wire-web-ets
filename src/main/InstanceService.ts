@@ -301,16 +301,12 @@ class InstanceService {
 
   getMessages(instanceId: string, conversationId: string): MessagePayload[] {
     const instance = this.getInstance(instanceId);
-    const allMessages: MessagePayload[] = [];
 
     if (instance.account.service) {
-      for (const message of instance.messages) {
-        if (message.conversation === conversationId) {
-          allMessages.push(message);
-        }
-      }
-
-      return allMessages;
+      const allMessages = instance.messages.getAll();
+      return Object.keys(allMessages)
+        .map(messageId => allMessages[messageId])
+        .filter(message => message.conversation === conversationId);
     } else {
       throw new Error('Account service not set.');
     }
