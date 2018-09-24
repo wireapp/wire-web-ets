@@ -400,6 +400,7 @@ class InstanceService {
         const editedWithPreviewPayload = instance.account.service.conversation
           .createText(message, sentMessage.id)
           .withLinkPreviews([linkPreviewPayload])
+          .withMentions(mentions)
           .build();
 
         sentMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
