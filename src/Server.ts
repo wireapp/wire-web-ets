@@ -31,11 +31,11 @@ import logRoute from './routes/log/logRoute';
 import mainRoute from './routes/mainRoute';
 
 class Server {
-  private app: express.Express;
+  private readonly app: express.Express;
   private server?: http.Server;
-  private instanceService: InstanceService;
+  private readonly instanceService: InstanceService;
 
-  constructor(private config: ServerConfig) {
+  constructor(private readonly config: ServerConfig) {
     this.app = express();
     this.instanceService = new InstanceService();
     this.init();
