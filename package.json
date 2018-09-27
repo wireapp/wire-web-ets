@@ -28,7 +28,7 @@
     "eslint-config-prettier": "3.1.0",
     "eslint-plugin-prettier": "2.7.0",
     "eslint-plugin-react": "7.11.1",
-    "husky": "0.14.3",
+    "husky": "1.0.1",
     "jasmine": "3.2.0",
     "lint-staged": "7.3.0",
     "logdown": "3.2.7",
@@ -43,6 +43,11 @@
   "files": [
     "dist"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "license": "GPL-3.0",
   "lint-staged": {
     "*.js": [
@@ -76,7 +81,6 @@
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts\"",
     "postversion": "git push && git push --tags",
-    "precommit": "lint-staged",
     "prettier": "prettier \"**/*.{json,md}\"",
     "preversion": "yarn && yarn test",
     "start": "pm2 start",
