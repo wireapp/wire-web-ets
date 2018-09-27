@@ -32,8 +32,8 @@ import mainRoute from './routes/mainRoute';
 
 class Server {
   private readonly app: express.Express;
-  private server?: http.Server;
   private readonly instanceService: InstanceService;
+  private server?: http.Server;
 
   constructor(private readonly config: ServerConfig) {
     this.app = express();
