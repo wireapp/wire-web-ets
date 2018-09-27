@@ -73,7 +73,7 @@
     "prettier": "prettier \"**/*.{json,md}\"",
     "preversion": "yarn && yarn test",
     "start": "pm2 start",
-    "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" node dist/index.js",
+    "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" ts-node src/index.ts",
     "test": "ts-node -P tsconfig.jasmine.json node_modules/jasmine/bin/jasmine --config=jasmine.json",
     "version": "yarn dist"
   },

@@ -9,7 +9,7 @@
     "noUnusedLocals": true,
     "outDir": "dist",
     "removeComments": true,
-    "rootDir": "src/main",
+    "rootDir": "src",
     "sourceMap": true,
     "strict": true,
     "target": "ES6"
