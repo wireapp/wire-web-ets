@@ -75,9 +75,9 @@ export interface Instance {
 }
 
 class InstanceService {
-  private readonly cachedInstances: LRUCache<Instance>;
+  private cachedInstances: LRUCache<Instance>;
 
-  constructor(private readonly maximumInstances = 100) {
+  constructor(private maximumInstances = 100) {
     this.cachedInstances = new LRUCache(this.maximumInstances);
   }
 
