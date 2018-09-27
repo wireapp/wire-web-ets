@@ -272,9 +272,9 @@
   dependencies:
     "@types/express" "*"
 
-"@types/joi@13.4.5":
-  version "13.4.5"
-  resolved "https://registry.yarnpkg.com/@types/joi/-/joi-13.4.5.tgz#1329006d79c4db16d1e201d1e35f7bf371137f64"
+"@types/joi@13.6.0":
+  version "13.6.0"
+  resolved "https://registry.yarnpkg.com/@types/joi/-/joi-13.6.0.tgz#69b289d18619efb298aed9a3efdc9ad286fb0c64"
 
 "@types/long@^4.0.0":
   version "4.0.0"
