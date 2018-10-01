@@ -360,10 +360,10 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.3.tgz#7f226d67d654ec9070e755f46daebf014628e9d9"
   integrity sha512-MDQLxNFRLasqS4UlkWMSACMKeSm1x4Q3TxzUC7KQUsh6RK1ZrQ0VEyE3yzXcBu+K8ejVj4wuX32eUG02yNp+YQ==
 
-"@wireapp/api-client@1.16.0":
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.16.0.tgz#11c8755d7f3f0c3955b990fcc9ca547aaee9daba"
-  integrity sha512-N4D4SQFgVhQXVCVod8WD7+yBlWkGZrGUBNCjgPySt0AZ5VZ1E+AqZ64hoEr7jOY0CfbzSuN43iRQRtpRNEQ0zQ==
+"@wireapp/api-client@1.16.3":
+  version "1.16.3"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-1.16.3.tgz#fe7730325203d5620a7f5b0cad8c0c971d8dea43"
+  integrity sha512-ZIiXb6ADOWjeKYZlavFvJaKqHNJZEn+Rxz4yQ0nxqzHJ+Z+ur3+E3NcpoI7aU685+0dGqxdlLmIP40chXzH6ng==
   dependencies:
     "@types/node" "10.11.3"
     "@types/spark-md5" "3.0.1"
@@ -382,13 +382,13 @@
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.88.tgz#d3671621103aa2b20611c7dc4c5ca061f88f40c1"
   integrity sha512-sRepcSsrnt9o8NMQ8WBb4+3pM401sip0kYHGN/Bw5ObFS6E53Dv9laDdS2eyMYK1moUZ51xdkTZM/Fgwde0JSw==
 
-"@wireapp/core@6.5.0":
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-6.5.0.tgz#4b26d89dd6ebe1ebc908c0a9dca1067906e52760"
-  integrity sha512-DyVodqGWLP9s+HC13E/1a2bvZ8VkfrSX/9iI16HQKQOXl0S+n60XzUkhNKUcXKNfW8Gk5vYYT4O0xLUlQjdUvw==
+"@wireapp/core@6.5.3":
+  version "6.5.3"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-6.5.3.tgz#f7169c7eaa3b99c6d4278af7bfcdd21464c35fc0"
+  integrity sha512-Mh2b8Jofbk5xQlbTyrr49YM0JRuBA0AG5RI7mjHycM7s2uiurkFz41OXuUOA0twCxICBE3N1kwJPEd/IYxj/ZQ==
   dependencies:
     "@types/node" "10.11.3"
-    "@wireapp/api-client" "1.16.0"
+    "@wireapp/api-client" "1.16.3"
     "@wireapp/cryptobox" "8.7.26"
     "@wireapp/protocol-messaging" "1.21.6"
     "@wireapp/store-engine" "0.12.22"
