@@ -9,10 +9,10 @@
     "noUnusedLocals": true,
     "outDir": "dist",
     "removeComments": true,
-    "rootDir": "src",
+    "rootDir": "src/main",
     "sourceMap": true,
     "strict": true,
     "target": "ES6"
   },
-  "exclude": ["dist", "node_modules", "spec"]
+  "exclude": ["dist", "node_modules", "**/*.spec.ts"]
 }

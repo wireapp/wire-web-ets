@@ -78,7 +78,7 @@
     "preversion": "yarn && yarn test && yarn dist",
     "start": "pm2 start",
     "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" ts-node src/index.ts",
-    "test": "ts-node -P tsconfig.jasmine.json node_modules/jasmine/bin/jasmine --config=jasmine.json",
+    "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json",
     "version": "yarn dist"
   },
   "types": "dist/index.d.ts",

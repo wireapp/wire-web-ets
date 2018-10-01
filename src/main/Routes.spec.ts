@@ -24,8 +24,8 @@ import {ConversationAPI} from '@wireapp/api-client/dist/commonjs/conversation/';
 import {NotificationAPI} from '@wireapp/api-client/dist/commonjs/notification/';
 import {UserAPI} from '@wireapp/api-client/dist/commonjs/user/';
 import UUID from 'pure-uuid';
-import config from '../../src/config';
-import Server from '../../src/Server';
+import config from './config';
+import Server from './Server';
 
 import * as nock from 'nock';
 import * as request from 'request';
