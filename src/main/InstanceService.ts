@@ -34,6 +34,7 @@ import {
   HiddenContent,
   ImageContent,
   LinkPreviewContent,
+  LinkPreviewUploadedContent,
   LocationContent,
   MentionContent,
   TextContent,
@@ -388,33 +389,30 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
+      let linkPreviewPayload: LinkPreviewUploadedContent[] | undefined;
+
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation
-        .createText(message)
-        .withMentions(mentions)
-        .build();
-      let sentMessage = await instance.account.service.conversation.send(conversationId, payload);
 
       if (linkPreview) {
-        const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
-        const editedWithPreviewPayload = instance.account.service.conversation
-          .createText(message, sentMessage.id)
-          .withLinkPreviews([linkPreviewPayload])
-          .withMentions(mentions)
-          .build();
+        linkPreviewPayload = [await instance.account.service.conversation.createLinkPreview(linkPreview)];
+      }
 
-        sentMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
+      const textPayload = instance.account.service.conversation
+        .createText(message)
+        .withLinkPreviews(linkPreviewPayload)
+        .withMentions(mentions)
+        .build();
 
-        const messageContent = sentMessage.content as TextContent;
+      const sentMessage = await instance.account.service.conversation.send(conversationId, textPayload);
+      const messageContent = sentMessage.content as TextContent;
 
-        if (messageContent.linkPreviews) {
-          messageContent.linkPreviews.forEach(preview => {
-            if (preview.imageUploaded) {
-              delete preview.imageUploaded.image.data;
-              delete preview.imageUploaded.asset;
-            }
-          });
-        }
+      if (messageContent.linkPreviews) {
+        messageContent.linkPreviews.forEach(preview => {
+          if (preview.imageUploaded) {
+            delete preview.imageUploaded.image.data;
+            delete preview.imageUploaded.asset;
+          }
+        });
       }
 
       instance.messages.set(sentMessage.id, sentMessage);
@@ -582,18 +580,19 @@ class InstanceService {
 
       if (newLinkPreview) {
         const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(newLinkPreview);
-        const editedWithPreviewPayload = instance.account.service.conversation
+
+        const editedPayload = instance.account.service.conversation
           .createEditedText(newMessageText, originalMessageId, editedMessage.id)
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(newMentions)
           .build();
 
-        editedMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
+        editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
 
-        const editedMessageContent = editedMessage.content as EditedTextContent;
+        const messageContent = editedMessage.content as EditedTextContent;
 
-        if (editedMessageContent.linkPreviews) {
-          editedMessageContent.linkPreviews.forEach(preview => {
+        if (messageContent.linkPreviews) {
+          messageContent.linkPreviews.forEach(preview => {
             if (preview.imageUploaded) {
               delete preview.imageUploaded.image.data;
               delete preview.imageUploaded.asset;
