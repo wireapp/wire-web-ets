@@ -5,3 +5,7 @@ node_js:
 
 notifications:
   email: false
+
+before_install:
+  - curl https://yarnpkg.com/install.sh -sSfL | bash -s --
+  - export PATH="${HOME}/.yarn/bin:${PATH}"

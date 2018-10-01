@@ -3,37 +3,37 @@
     "@types/compression": "0.0.36",
     "@types/dotenv": "4.0.3",
     "@types/express": "4.16.0",
-    "@types/helmet": "0.0.41",
-    "@types/joi": "13.4.5",
-    "@types/node": "10.10.1",
-    "@wireapp/core": "6.3.0",
-    "@wireapp/lru-cache": "2.2.0",
+    "@types/helmet": "0.0.42",
+    "@types/joi": "13.6.0",
+    "@types/node": "10.11.2",
+    "@wireapp/core": "6.3.6",
+    "@wireapp/lru-cache": "3.0.3",
     "body-parser": "1.18.3",
     "compression": "1.7.3",
     "dotenv": "6.0.0",
     "express": "4.16.3",
     "helmet": "3.13.0",
-    "joi": "13.6.0",
+    "joi": "13.7.0",
     "moment": "2.22.2",
-    "pm2": "3.1.2",
+    "pm2": "3.1.3",
     "pm2-logrotate": "2.6.0",
     "pure-uuid": "1.5.4",
-    "typescript": "3.0.3"
+    "typescript": "3.1.1"
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
     "babel-eslint": "9.0.0",
     "cross-env": "5.2.0",
-    "eslint": "5.6.0",
-    "eslint-config-prettier": "3.0.1",
-    "eslint-plugin-prettier": "2.6.2",
+    "eslint": "5.6.1",
+    "eslint-config-prettier": "3.1.0",
+    "eslint-plugin-prettier": "3.0.0",
     "eslint-plugin-react": "7.11.1",
-    "husky": "0.14.3",
+    "husky": "1.0.1",
     "jasmine": "3.2.0",
-    "lint-staged": "7.2.2",
+    "lint-staged": "7.3.0",
     "logdown": "3.2.7",
     "nock": "10.0.0",
-    "prettier": "1.14.2",
+    "prettier": "1.14.3",
     "request": "2.88.0",
     "rimraf": "2.6.2",
     "tslint": "5.11.0",
@@ -43,6 +43,11 @@
   "files": [
     "dist"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "license": "GPL-3.0",
   "lint-staged": {
     "*.js": [
@@ -76,7 +81,6 @@
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts\"",
     "postversion": "git push && git push --tags",
-    "precommit": "lint-staged",
     "prettier": "prettier \"**/*.{json,md}\"",
     "preversion": "yarn && yarn test",
     "start": "pm2 start",
@@ -85,5 +89,5 @@
     "version": "yarn dist"
   },
   "types": "dist/index.d.ts",
-  "version": "1.11.0"
+  "version": "1.13.0"
 }

@@ -45,7 +45,7 @@ import {
   PayloadBundleType,
   ReactionType,
 } from '@wireapp/core/dist/conversation/root';
-import {LRUCache} from '@wireapp/lru-cache';
+import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
 import * as logdown from 'logdown';
@@ -122,13 +122,9 @@ class InstanceService {
     account.on(PayloadBundleType.CLEARED, (payload: PayloadBundleIncoming) => {
       const clearedContent = payload.content as ClearedContent;
 
-      const messages = instance.messages.getAll();
-
-      for (const message of messages) {
-        const messageId = Object.keys(message)[0];
-        const messageContent = message[messageId];
-        if (messageContent.conversation === clearedContent.conversationId) {
-          instance.messages.delete(messageContent.id);
+      for (const message of instance.messages) {
+        if (message.conversation === clearedContent.conversationId) {
+          instance.messages.delete(message.id);
         }
       }
     });
@@ -300,7 +296,7 @@ class InstanceService {
     return instance;
   }
 
-  getInstances(): Array<{[id: string]: Instance}> {
+  getInstances(): NodeMap<Instance> {
     return this.cachedInstances.getAll();
   }
 
@@ -309,13 +305,9 @@ class InstanceService {
 
     if (instance.account.service) {
       const allMessages = instance.messages.getAll();
-      const messageArray = allMessages.reduce((messages: MessagePayload[], message) => {
-        const messageId = Object.keys(message)[0];
-        messages.push(message[messageId]);
-        return messages;
-      }, []);
-
-      return messageArray.filter(message => message.conversation === conversationId);
+      return Object.keys(allMessages)
+        .map(messageId => allMessages[messageId])
+        .filter(message => message.conversation === conversationId);
     } else {
       throw new Error('Account service not set.');
     }
