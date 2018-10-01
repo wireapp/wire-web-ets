@@ -12,12 +12,15 @@ node("$NODE") {
 
   def runningStatus = sh returnStatus: true, script: 'test -r "${HOME}/.pm2/dump.pm2"'
 
-
+  def commit_hash = ""
   stage('Checkout & Clean') {
-    git branch: "$BRANCH", url: 'https://github.com/wireapp/wire-web-ets.git'
+    def scmVars = git branch: "$BRANCH", url: 'https://github.com/wireapp/wire-web-ets.git'
+    commit_hash = scmVars.GIT_COMMIT
   }
 
+  def commit_msg = ""
   stage('Build') {
+    commit_msg = sh returnStdout: true, script: 'git log -n 1 --pretty=format:"%ar - %an: %s"'
     try {
       def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
@@ -33,7 +36,7 @@ node("$NODE") {
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} build failed** see: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} build failed**\n${commit_msg}\nSee: ${JOB_URL}"
       throw e
     }
   }
@@ -65,7 +68,7 @@ WantedBy=default.target
       sh 'systemctl --user enable wire-web-ets'
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} install failed** see: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} install failed**\n${commit_msg}\nSee: ${JOB_URL}"
       throw e
     }
   }
@@ -87,12 +90,12 @@ WantedBy=default.target
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed** see: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed**\n${commit_msg}\nSee: ${JOB_URL}"
       throw e
     }
   }
 
-  wireSend secret: "${jenkinsbot_secret}", message: "🐛 **ETS ${BRANCH} on ${NODE} is up and running**"
+  wireSend secret: "${jenkinsbot_secret}", message: "🐛 **New ETS ${BRANCH} on ${NODE} is up and running**\n${commit_msg}"
 
   if("$BRANCH" == "dev") {
     stage('Test') {
