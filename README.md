@@ -27,6 +27,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
 - [`POST /api/v1/instance/<instanceId>/markEphemeralRead`](#post-apiv1instanceinstanceidmarkephemeralread)
 - [`POST /api/v1/instance/<instanceId>/mute`](#post-apiv1instanceinstanceidmute)
+- [`POST /api/v1/instance/<instanceId>/muteStatus`](#post-apiv1instanceinstanceidmutestatus)
 - [`POST /api/v1/instance/<instanceId>/sendConfirmation`](#post-apiv1instanceinstanceidsendconfirmation)
 - [`POST /api/v1/instance/<instanceId>/sendFile`](#post-apiv1instanceinstanceidsendfile)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
@@ -287,12 +288,34 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ### `POST /api/v1/instance/<instanceId>/mute`
 
+⚠️ **Deprecated**
+
 #### Request
 
 ```json
 {
-  "mute": "<boolean>",
-  "conversationId": "<string in UUID format>"
+  "conversationId": "<string in UUID format>",
+  "mute": "<boolean>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/mutedStatus`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "mutedStatus": "<'ALL_NOTIFICATIONS' | 'NO_NOTIFICATIONS' | 'ONLY_MENTIONS'>"
 }
 ```
 

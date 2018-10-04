@@ -17,6 +17,7 @@
  *
  */
 
+import {MutedStatus} from '@wireapp/api-client/dist/commonjs/conversation';
 import {ImageContent, LinkPreviewContent, MentionContent} from '@wireapp/core/dist/conversation/content/';
 import {ReactionType} from '@wireapp/core/dist/conversation/root';
 import * as express from 'express';
@@ -34,6 +35,10 @@ export interface ArchiveRequest extends MessageRequest {
 
 export interface MuteRequest extends MessageRequest {
   mute: boolean;
+}
+
+export interface MutedStatusRequest extends MessageRequest {
+  mutedStatus: keyof typeof MutedStatus;
 }
 
 export interface DeletionRequest extends MessageRequest {
@@ -80,9 +85,9 @@ export interface LocationRequest extends MessageRequest {
 
 export interface MessageUpdateRequest extends MessageRequest {
   firstMessageId: string;
+  linkPreview?: LinkPreviewRequest;
   mentions?: MentionContent[];
   text: string;
-  linkPreview?: LinkPreviewRequest;
 }
 
 export const validateMention = Joi.object({
@@ -164,6 +169,34 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
       try {
         const instanceName = await instanceService.toggleMuteConversation(instanceId, conversationId, mute);
+        return res.json({
+          instanceId,
+          name: instanceName,
+        });
+      } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack});
+      }
+    }
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/mutedStatus/?',
+    joiValidate({
+      conversationId: Joi.string()
+        .uuid()
+        .required(),
+      mutedStatus: Joi.string().valid(['ALL_NOTIFICATIONS', 'NO_NOTIFICATIONS', 'ONLY_MENTIONS']),
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {mutedStatus, conversationId}: MutedStatusRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      }
+
+      try {
+        const instanceName = await instanceService.setConversationMutedStatus(instanceId, conversationId, mutedStatus);
         return res.json({
           instanceId,
           name: instanceName,
