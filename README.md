@@ -27,7 +27,7 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
 - [`POST /api/v1/instance/<instanceId>/markEphemeralRead`](#post-apiv1instanceinstanceidmarkephemeralread)
 - [`POST /api/v1/instance/<instanceId>/mute`](#post-apiv1instanceinstanceidmute)
-- [`POST /api/v1/instance/<instanceId>/muteStatus`](#post-apiv1instanceinstanceidmutestatus)
+- [`POST /api/v1/instance/<instanceId>/mutedStatus`](#post-apiv1instanceinstanceidmutedstatus)
 - [`POST /api/v1/instance/<instanceId>/sendConfirmation`](#post-apiv1instanceinstanceidsendconfirmation)
 - [`POST /api/v1/instance/<instanceId>/sendFile`](#post-apiv1instanceinstanceidsendfile)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
