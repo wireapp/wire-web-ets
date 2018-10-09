@@ -43,6 +43,11 @@
   "files": [
     "dist"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "license": "GPL-3.0",
   "lint-staged": {
     "*.js": [
@@ -76,7 +81,6 @@
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts\"",
     "postversion": "git push && git push --tags",
-    "precommit": "lint-staged",
     "prettier": "prettier \"**/*.{json,md}\"",
     "preversion": "yarn && yarn test",
     "start": "pm2 start",
