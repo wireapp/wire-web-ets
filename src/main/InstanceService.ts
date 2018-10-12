@@ -20,6 +20,7 @@
 import {APIClient} from '@wireapp/api-client';
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
 import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/dist/commonjs/client/';
+import {MutedStatus} from '@wireapp/api-client/dist/commonjs/conversation/';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/commonjs/http/';
 import {Account} from '@wireapp/core';
@@ -159,6 +160,34 @@ class InstanceService {
 
     if (instance.account.service) {
       await instance.account.service.conversation.toggleMuteConversation(conversationId, muted);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async setConversationMutedStatus(instanceId: string, conversationId: string, mutedStatus: string): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    const mappedMutedStatus = (() => {
+      switch (mutedStatus) {
+        case 'ALL_NOTIFICATIONS': {
+          return MutedStatus.ALL_NOTIFICATIONS;
+        }
+        case 'NO_NOTIFICATIONS': {
+          return MutedStatus.NO_NOTIFICATIONS;
+        }
+        case 'ONLY_MENTIONS': {
+          return MutedStatus.ONLY_MENTIONS;
+        }
+        default: {
+          throw new Error(`Invalid muted status "${mutedStatus}".`);
+        }
+      }
+    })();
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.setConversationMutedStatus(conversationId, mappedMutedStatus);
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
