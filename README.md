@@ -187,7 +187,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 
 ```json
 {
-  "teamId": string,
+  "teamId": "<string in UUID format>",
   "type": "<0|1|2|3>"
 }
 ```
