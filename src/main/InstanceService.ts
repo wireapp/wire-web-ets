@@ -23,6 +23,7 @@ import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-c
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/commonjs/http/';
 import {Account} from '@wireapp/core';
+import {AvailabilityType} from '@wireapp/core/dist/broadcast/';
 import {ClientInfo} from '@wireapp/core/dist/client/';
 import {
   PayloadBundleIncoming,
@@ -604,6 +605,16 @@ class InstanceService {
 
       instance.messages.set(originalMessageId, editedMessage);
       return editedMessage.id;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async setAvailability(instanceId: string, teamId: string, type: AvailabilityType) {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.user.setAvailability(teamId, type);
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
