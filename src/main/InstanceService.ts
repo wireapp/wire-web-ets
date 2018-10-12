@@ -23,7 +23,13 @@ import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-c
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/commonjs/http/';
 import {Account} from '@wireapp/core';
-import {ClientInfo} from '@wireapp/core/dist/client/root';
+import {ClientInfo} from '@wireapp/core/dist/client/';
+import {
+  PayloadBundleIncoming,
+  PayloadBundleOutgoing,
+  PayloadBundleType,
+  ReactionType,
+} from '@wireapp/core/dist/conversation/';
 import {
   AssetContent,
   ClearedContent,
@@ -38,15 +44,9 @@ import {
   MentionContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content/';
-import {
-  PayloadBundleIncoming,
-  PayloadBundleOutgoing,
-  PayloadBundleType,
-  ReactionType,
-} from '@wireapp/core/dist/conversation/root';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
-import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine';
+import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 import {formatDate} from './utils';
