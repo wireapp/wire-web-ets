@@ -21,12 +21,14 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 - [`DELETE /api/v1/instance/<instanceId>`](#delete-apiv1instanceinstanceid)
 - [`DELETE /api/v1/clients`](#delete-apiv1clients)
 - [`POST /api/v1/instance/<instanceId>/archive`](#post-apiv1instanceinstanceidarchive)
+- [`POST /api/v1/instance/<instanceId>/availability`](#post-apiv1instanceinstanceidavailability)
 - [`POST /api/v1/instance/<instanceId>/clear`](#post-apiv1instanceinstanceidclear)
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceiddelete)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceiddeleteeverywhere)
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
 - [`POST /api/v1/instance/<instanceId>/markEphemeralRead`](#post-apiv1instanceinstanceidmarkephemeralread)
 - [`POST /api/v1/instance/<instanceId>/mute`](#post-apiv1instanceinstanceidmute)
+- [`POST /api/v1/instance/<instanceId>/sendConfirmation`](#post-apiv1instanceinstanceidsendconfirmation)
 - [`POST /api/v1/instance/<instanceId>/sendFile`](#post-apiv1instanceinstanceidsendfile)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendLocation`](#post-apiv1instanceinstanceidsendlocation)
@@ -177,6 +179,28 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 }
 ```
 
+### POST `/api/v1/instance/<instanceId>/availability`
+
+#### Request
+
+Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
+
+```json
+{
+  "teamId": "<string in UUID format>",
+  "type": "<0|1|2|3>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
+```
+
 ### `POST /api/v1/instance/<instanceId>/clear`
 
 #### Request
@@ -292,6 +316,26 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 {
   "mute": "<boolean>",
   "conversationId": "<string in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/sendConfirmation`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "messageId": "<string in UUID format>"
 }
 ```
 

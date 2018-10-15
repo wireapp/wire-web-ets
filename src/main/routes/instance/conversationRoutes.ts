@@ -17,8 +17,8 @@
  *
  */
 
+import {ReactionType} from '@wireapp/core/dist/conversation/';
 import {ImageContent, LinkPreviewContent, MentionContent} from '@wireapp/core/dist/conversation/content/';
-import {ReactionType} from '@wireapp/core/dist/conversation/root';
 import * as express from 'express';
 import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
