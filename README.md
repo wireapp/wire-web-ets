@@ -518,7 +518,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
   ],
   "quote?": {
     "quotedMessageId": "<string in UUID format>",
-    "quotedMessageSha256": "<string in SHA256 format">
+    "quotedMessageSha256": "<string in SHA256 format>"
   },
   "messageTimer?": "<number>",
   "text": "<string>"
@@ -589,7 +589,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
   ],
   "quote?": {
     "quotedMessageId": "<string in UUID format>",
-    "quotedMessageSha256": "<string in SHA256 format">
+    "quotedMessageSha256": "<string in SHA256 format>"
   },
   "text": "<string>"
 }
