@@ -397,49 +397,6 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 }
 ```
 
-### `POST /api/v1/instance/<instanceId>/sendLinkPreview`
-
-#### Request
-
-```json
-{
-  "conversationId": "<string>",
-  "image?": {
-    "data": "<string>",
-    "height": "<number>",
-    "type": "<string>",
-    "width": "<number>"
-  },
-  "mentions?": [
-    {
-      "end": "<number>",
-      "start": "<number>",
-      "userId": "<string in UUID format>"
-    }
-  ],
-  "permanentUrl?": "<string>",
-  "summary?": "<string>",
-  "text": "<string>",
-  "title?": "<string>",
-  "tweet?": {
-    "author": "<string>",
-    "username": "<string>"
-  },
-  "url": "<string>",
-  "urlOffset": "<number>"
-}
-```
-
-#### Response
-
-```json
-{
-  "instanceId": "<string in UUID format>",
-  "messageId": "<string>",
-  "name": "<string>"
-}
-```
-
 ### `POST /api/v1/instance/<instanceId>/sendLocation`
 
 #### Request
@@ -559,6 +516,10 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
       "userId": "<string in UUID format>"
     }
   ],
+  "quote?": {
+    "quotedMessageId": "<string in UUID format>",
+    "quotedMessageSha256": "<string in SHA256 format">
+  },
   "messageTimer?": "<number>",
   "text": "<string>"
 }
@@ -626,6 +587,10 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
       "userId": "<string in UUID format>"
     }
   ],
+  "quote?": {
+    "quotedMessageId": "<string in UUID format>",
+    "quotedMessageSha256": "<string in SHA256 format">
+  },
   "text": "<string>"
 }
 ```

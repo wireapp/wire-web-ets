@@ -43,6 +43,7 @@ import {
   LinkPreviewContent,
   LocationContent,
   MentionContent,
+  QuoteContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
@@ -50,6 +51,7 @@ import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
+
 import {formatDate} from './utils';
 
 const {version}: {version: string} = require('../package.json');
@@ -384,6 +386,7 @@ class InstanceService {
     message: string,
     linkPreview?: LinkPreviewContent,
     mentions?: MentionContent[],
+    quote?: QuoteContent,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
@@ -393,6 +396,7 @@ class InstanceService {
       const payload = await instance.account.service.conversation
         .createText(message)
         .withMentions(mentions)
+        .withQuote(quote)
         .build();
       let sentMessage = await instance.account.service.conversation.send(conversationId, payload);
 
@@ -402,6 +406,7 @@ class InstanceService {
           .createText(message, sentMessage.id)
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(mentions)
+          .withQuote(quote)
           .build();
 
         sentMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
@@ -569,7 +574,8 @@ class InstanceService {
     originalMessageId: string,
     newMessageText: string,
     newLinkPreview?: LinkPreviewContent,
-    newMentions?: MentionContent[]
+    newMentions?: MentionContent[],
+    newQuote?: QuoteContent
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
@@ -577,6 +583,7 @@ class InstanceService {
       const editedPayload = instance.account.service.conversation
         .createEditedText(newMessageText, originalMessageId)
         .withMentions(newMentions)
+        .withQuote(newQuote)
         .build();
 
       let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
@@ -587,6 +594,7 @@ class InstanceService {
           .createEditedText(newMessageText, originalMessageId, editedMessage.id)
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(newMentions)
+          .withQuote(newQuote)
           .build();
 
         editedMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
