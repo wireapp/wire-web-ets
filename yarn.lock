@@ -423,6 +423,11 @@
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.0.8.tgz#2a3e91e0a9b25a910db6520fb807c67438a0fedd"
   integrity sha512-XMk/ACsxGivUwIXf6mkGpp23m7vqI03V4Hy+SZicxx7zsThzyfOOxCPZ3EyUG1qMLz12CJ6GgXwbzGr09ueNVw==
 
+"@wireapp/lru-cache@3.0.9":
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.0.9.tgz#a855628a2d79d2bf4530d782d1d8039abafb95ec"
+  integrity sha512-gI9x//NInXelxsE0AuXaLwjLWgtlTCGW2v3imQ2z2dSe+mH93FTfsIazyWtR81n4MQk6bJmp5o6GHTEQNmGADw==
+
 "@wireapp/priority-queue@0.2.28":
   version "0.2.28"
   resolved "https://registry.yarnpkg.com/@wireapp/priority-queue/-/priority-queue-0.2.28.tgz#ec05aef486b00bb63f6a94a2250f10b393c18a7f"
