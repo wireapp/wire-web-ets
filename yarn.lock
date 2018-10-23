@@ -365,10 +365,10 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.3.tgz#7f226d67d654ec9070e755f46daebf014628e9d9"
   integrity sha512-MDQLxNFRLasqS4UlkWMSACMKeSm1x4Q3TxzUC7KQUsh6RK1ZrQ0VEyE3yzXcBu+K8ejVj4wuX32eUG02yNp+YQ==
 
-"@wireapp/api-client@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.0.0.tgz#299d6b0597f5ae8ad1f3364774add9cf71f67dd7"
-  integrity sha512-YAGrsk/Ch6+kudN0QALngO1qopcZa93aAbgEQkQLro/E6CTQTsYSp3UPapStkBMkBBBC+O2RKR5e30eshRScaA==
+"@wireapp/api-client@3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.0.1.tgz#88a84fff2115e82b48d9d28d767796f7d3668816"
+  integrity sha512-Fbakk7yRckEjA1axmvmJOi5EOzMkWPY8Sfd8ri7l9aneKcG1cerHsLDmWLUEGu60UXEuHFU7EoVadEMOT8hdAQ==
   dependencies:
     "@types/node" "10.12.0"
     "@types/spark-md5" "3.0.1"
@@ -387,15 +387,15 @@
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.93.tgz#b099e3436011d6367de536b360e6e4a9dfaca733"
   integrity sha512-a1eBRPw7BeRWQC4mzTQusOaPn5mdFoB4ipPkK0reysfk8crhjMi8Kar2pmvL5ViHUDdn7Q/ABj3vF+YIbcuU3w==
 
-"@wireapp/core@7.1.7":
-  version "7.1.7"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-7.1.7.tgz#69a257a366e36e79a1efa3ab59f02f70ba4a2aa4"
-  integrity sha512-I9GcSYvqtOyLcAxJNZ7JDu0RS8cqv0xNaj7Kf/OYa/9t176VeOu1eEkGWP4Q79huuWsO6+3lEbE25JqvtW19hA==
+"@wireapp/core@7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-7.2.0.tgz#2074ed18e5ed63240ecb1b77aaead7de516f81ea"
+  integrity sha512-t5mrQI9NEs6sfR3HwuCaYjABKTgC6UYcn5Ie1GcqyLPHqrKp0HeUhwM8gHR5bABJLwS23C5TT/NydtbF9gGZhw==
   dependencies:
     "@types/node" "10.12.0"
-    "@wireapp/api-client" "3.0.0"
+    "@wireapp/api-client" "3.0.1"
     "@wireapp/cryptobox" "9.0.4"
-    "@wireapp/protocol-messaging" "1.21.6"
+    "@wireapp/protocol-messaging" "1.22.1"
     "@wireapp/store-engine" "1.0.3"
     bazinga64 "5.3.17"
     logdown "3.2.7"
@@ -443,10 +443,10 @@
     ed2curve "0.2.1"
     libsodium-wrappers-sumo "0.7.3"
 
-"@wireapp/protocol-messaging@1.21.6":
-  version "1.21.6"
-  resolved "https://registry.yarnpkg.com/@wireapp/protocol-messaging/-/protocol-messaging-1.21.6.tgz#f182e075eaf9fd3a334368b4404a05a2ea8ed2c9"
-  integrity sha512-iEGKcyMjZD5FTJRBROr+8V9AThrC0mvypywZafro76F/5aql34ZTGs7zFuf0U3G+s5+175kfjNKS1frRrijypw==
+"@wireapp/protocol-messaging@1.22.1":
+  version "1.22.1"
+  resolved "https://registry.yarnpkg.com/@wireapp/protocol-messaging/-/protocol-messaging-1.22.1.tgz#2cdfde7ce51487fd38a52c2cce1ec2f4c100372e"
+  integrity sha512-yw95stCSbaBcAU8iXBXle5xDpJecpbhO6GEeMV4huA2hlNTtZIe3i+V4zpUu9QpeXQhIAKTnJMVDZh3TQN9lKw==
   dependencies:
     protobufjs "6.8.8"
 
