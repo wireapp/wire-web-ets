@@ -36,4 +36,9 @@ function formatUptime(uptime: number): string {
   return moment.utc(duration).format('HH:mm:ss');
 }
 
-export {fileIsReadable, formatDate, formatUptime};
+function stringToUint8Array(inputString: string): Uint8Array {
+  const buffer = Buffer.from(inputString);
+  return new Uint8Array(buffer);
+}
+
+export {fileIsReadable, formatDate, formatUptime, stringToUint8Array};
