@@ -322,10 +322,10 @@
   dependencies:
     "@types/express" "*"
 
-"@types/joi@13.6.1":
-  version "13.6.1"
-  resolved "https://registry.yarnpkg.com/@types/joi/-/joi-13.6.1.tgz#325486a397504f8e22c8c551dc8b0e1d41d5d5ae"
-  integrity sha512-JxZ0NP8NuB0BJOXi1KvAA6rySLTPmhOy4n2gzSFq/IFM3LNFm0h+2Vn/bPPgEYlWqzS2NPeLgKqfm75baX+Hog==
+"@types/joi@13.6.2":
+  version "13.6.2"
+  resolved "https://registry.yarnpkg.com/@types/joi/-/joi-13.6.2.tgz#7eb18c092ac2b16ea387922f8095f981e460ad6e"
+  integrity sha512-kSN/T4PaYvgwOdi05+FomchGj6vTJ1XeBbeVMz/yESZqfem6WZGeG0Ckog9Uz+8nao1jdmqaJlycHU7VmQRD5Q==
 
 "@types/long@^4.0.0":
   version "4.0.0"
