@@ -24,7 +24,7 @@ import * as Joi from 'joi';
 
 import InstanceService from '../../InstanceService';
 import joiValidate from '../../middlewares/joiValidate';
-import {stringToUint8Array} from '../../utils';
+import {hexToUint8Array} from '../../utils';
 
 export interface MessageRequest {
   conversationId: string;
@@ -397,7 +397,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       if (quote) {
         quoteContent = {
           quotedMessageId: quote.quotedMessageId,
-          quotedMessageSha256: stringToUint8Array(quote.quotedMessageSha256),
+          quotedMessageSha256: hexToUint8Array(quote.quotedMessageSha256),
         };
       }
 
@@ -539,7 +539,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       if (quote) {
         quoteContent = {
           quotedMessageId: quote.quotedMessageId,
-          quotedMessageSha256: stringToUint8Array(quote.quotedMessageSha256),
+          quotedMessageSha256: hexToUint8Array(quote.quotedMessageSha256),
         };
       }
 
