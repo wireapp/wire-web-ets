@@ -18,7 +18,7 @@
     "pm2": "3.2.2",
     "pm2-logrotate": "2.6.0",
     "pure-uuid": "1.5.5",
-    "typescript": "3.1.5"
+    "typescript": "3.1.6"
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
