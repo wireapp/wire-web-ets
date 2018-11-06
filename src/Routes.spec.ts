@@ -17,20 +17,18 @@
  *
  */
 
-// @ts-check
+import {APIClient} from '@wireapp/api-client';
+import {AuthAPI} from '@wireapp/api-client/dist/commonjs/auth/';
+import {ClientAPI} from '@wireapp/api-client/dist/commonjs/client/';
+import {ConversationAPI} from '@wireapp/api-client/dist/commonjs/conversation/';
+import {NotificationAPI} from '@wireapp/api-client/dist/commonjs/notification/';
+import {UserAPI} from '@wireapp/api-client/dist/commonjs/user/';
+import UUID from 'pure-uuid';
+import config from './config';
+import Server from './Server';
 
-const {APIClient} = require('@wireapp/api-client');
-const {AuthAPI} = require('@wireapp/api-client/dist/commonjs/auth/');
-const {ClientAPI} = require('@wireapp/api-client/dist/commonjs/client/');
-const {ConversationAPI} = require('@wireapp/api-client/dist/commonjs/conversation/');
-const {UserAPI} = require('@wireapp/api-client/dist/commonjs/user/');
-const {default: config} = require('../../dist/config');
-const {default: Server} = require('../../dist/Server');
-const {default: UUID} = require('pure-uuid');
-const {NotificationAPI} = require('@wireapp/api-client/dist/commonjs/notification/');
-
-const nock = require('nock');
-const request = require('request');
+import * as nock from 'nock';
+import * as request from 'request';
 
 const backendURL = APIClient.BACKEND.PRODUCTION.rest;
 const UUID_VERSION = 4;
@@ -38,8 +36,12 @@ const HTTP_CODE_OK = 200;
 const HTTP_CODE_NOT_FOUND = 404;
 const HTTP_CODE_UNPROCESSABLE_ENTITY = 422;
 
-const sendRequest = (method, url, data) => {
-  let options = {method};
+interface RequestOptions {
+  [key: string]: string | any[];
+}
+
+const sendRequest = (method: string, url: string, data?: RequestOptions): Promise<request.Response> => {
+  let options: request.CoreOptions = {method};
   if (data) {
     const body = JSON.stringify(data);
     options = {body, headers: {'Content-Type': 'application/json'}, method};
@@ -56,7 +58,7 @@ const sendRequest = (method, url, data) => {
 };
 
 describe('Routes', () => {
-  let etsServer;
+  let etsServer: Server;
   const baseURL = `http://localhost:${config.PORT_HTTP}/api/v1`;
 
   const accessTokenData = {
@@ -145,13 +147,13 @@ describe('Routes', () => {
   });
 
   afterEach(async () => {
-    if (etsServer && etsServer.server) {
+    if (etsServer && etsServer['server']) {
       await etsServer.stop();
     }
     nock.cleanAll();
   });
 
-  const createInstance = data => {
+  const createInstance = (data?: RequestOptions) => {
     const url = baseURL + '/instance';
     data = data || {backend: 'production', email: 'test@example.com', password: 'supersecret'};
     return sendRequest('put', url, data);

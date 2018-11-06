@@ -22,7 +22,9 @@
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
-    "babel-eslint": "10.0.1",
+    "@types/jasmine": "2.8.8",
+    "@types/nock": "9.3.0",
+    "@types/request": "2.47.1",
     "cross-env": "5.2.0",
     "eslint": "5.8.0",
     "eslint-config-prettier": "3.1.0",
@@ -36,6 +38,7 @@
     "prettier": "1.14.3",
     "request": "2.88.0",
     "rimraf": "2.6.2",
+    "ts-node": "7.0.1",
     "tslint": "5.11.0",
     "tslint-config-prettier": "1.15.0",
     "tslint-plugin-prettier": "2.0.1"
@@ -50,10 +53,6 @@
   },
   "license": "GPL-3.0",
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ],
     "*.ts": [
       "tslint -c tslint.json --fix",
       "git add"
@@ -72,20 +71,18 @@
     "build:node": "tsc",
     "clean": "rimraf dist",
     "dist": "yarn clean && yarn build",
-    "fix": "yarn fix:other && yarn fix:js && yarn fix:ts",
-    "fix:js": "yarn lint:js --fix",
+    "fix": "yarn fix:other && yarn fix:ts",
     "fix:other": "yarn prettier --write",
     "fix:ts": "yarn lint:ts --fix",
-    "lint": "yarn lint:js && yarn lint:other && yarn lint:ts",
-    "lint:js": "eslint --ignore-path .gitignore **/*.js",
+    "lint": "yarn lint:ts && yarn lint:other",
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts\"",
     "postversion": "git push && git push --tags",
     "prettier": "prettier \"**/*.{json,md}\"",
-    "preversion": "yarn && yarn test",
+    "preversion": "yarn && yarn test && yarn dist",
     "start": "pm2 start",
-    "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" node dist/index.js",
-    "test": "yarn dist && jasmine --config=jasmine.json",
+    "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" ts-node src/index.ts",
+    "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json",
     "version": "yarn dist"
   },
   "types": "dist/index.d.ts",
