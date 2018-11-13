@@ -54,7 +54,7 @@ import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 
-import {formatDate, stripAssetData, stripLinkPreviewData} from './utils';
+import {formatDate, stripAsset, stripLinkPreview} from './utils';
 
 const {version}: {version: string} = require('../package.json');
 
@@ -91,7 +91,7 @@ class InstanceService {
       const linkPreviewContent = payload.content as TextContent;
       if (linkPreviewContent.linkPreviews) {
         linkPreviewContent.linkPreviews.forEach(preview => {
-          stripLinkPreviewData(preview);
+          stripLinkPreview(preview);
         });
       }
       instance.messages.set(payload.id, payload);
@@ -415,7 +415,7 @@ class InstanceService {
 
         if (messageContent.linkPreviews) {
           messageContent.linkPreviews.forEach(preview => {
-            stripLinkPreviewData(preview);
+            stripLinkPreview(preview);
           });
         }
       }
@@ -469,7 +469,7 @@ class InstanceService {
       const payload = await instance.account.service.conversation.createImage(image);
       const sentImage = await instance.account.service.conversation.send(conversationId, payload);
 
-      stripAssetData(sentImage.content as ImageAssetContent);
+      stripAsset(sentImage.content as ImageAssetContent);
 
       instance.messages.set(sentImage.id, sentImage);
       return sentImage.id;
@@ -495,7 +495,7 @@ class InstanceService {
       const filePayload = await instance.account.service.conversation.createFileData(file, metadataPayload.id);
       const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
 
-      stripAssetData(sentFile.content as FileAssetContent);
+      stripAsset(sentFile.content as FileAssetContent);
 
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
@@ -605,7 +605,7 @@ class InstanceService {
 
         if (editedMessageContent.linkPreviews) {
           editedMessageContent.linkPreviews.forEach(preview => {
-            stripLinkPreviewData(preview);
+            stripLinkPreview(preview);
           });
         }
       }
