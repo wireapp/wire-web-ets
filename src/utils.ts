@@ -91,14 +91,4 @@ function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
   }
 }
 
-export {
-  fileIsReadable,
-  formatDate,
-  formatUptime,
-  hexToUint8Array,
-  isAssetContent,
-  isFileAssetContent,
-  isImageAssetContent,
-  stripAsset,
-  stripLinkPreview,
-};
+export {fileIsReadable, formatDate, formatUptime, hexToUint8Array, isAssetContent, stripAsset, stripLinkPreview};
