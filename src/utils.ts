@@ -23,15 +23,7 @@ import {
   LinkPreviewUploadedContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {EncryptedAssetUploaded} from '@wireapp/core/dist/cryptography';
-import * as fs from 'fs';
 import * as moment from 'moment';
-import {promisify} from 'util';
-
-function fileIsReadable(filePath: string): Promise<boolean> {
-  return promisify(fs.access)(filePath, fs.constants.F_OK | fs.constants.R_OK)
-    .then(() => true)
-    .catch(() => false);
-}
 
 function formatDate(): string {
   return moment().format('YYYY-MM-DD HH:mm:ss');
@@ -76,4 +68,4 @@ function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
   }
 }
 
-export {fileIsReadable, formatDate, formatUptime, hexToUint8Array, stripAsset, stripLinkPreview};
+export {formatDate, formatUptime, hexToUint8Array, stripAsset, stripLinkPreview};
