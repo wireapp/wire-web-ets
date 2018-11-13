@@ -17,15 +17,18 @@
  *
  */
 
+import * as fs from 'fs';
+import * as moment from 'moment';
+import {promisify} from 'util';
+
 import {
+  AssetContent,
+  ConversationContent,
   FileAssetContent,
   ImageAssetContent,
   LinkPreviewUploadedContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {EncryptedAssetUploaded} from '@wireapp/core/dist/cryptography';
-import * as fs from 'fs';
-import * as moment from 'moment';
-import {promisify} from 'util';
 
 function fileIsReadable(filePath: string): Promise<boolean> {
   return promisify(fs.access)(filePath, fs.constants.F_OK | fs.constants.R_OK)
@@ -47,21 +50,33 @@ function hexToUint8Array(inputString: string): Uint8Array {
   return new Uint8Array(buffer);
 }
 
+function isAssetContent(content: any): content is AssetContent {
+  return !!((content as AssetContent).uploaded || (content as AssetContent).preview);
+}
+
+function isFileAssetContent(content: any): content is FileAssetContent {
+  return !!(content as FileAssetContent).file && !!(content as FileAssetContent).asset;
+}
+
+function isImageAssetContent(content: any): content is ImageAssetContent {
+  return !!(content as ImageAssetContent).image && !!(content as ImageAssetContent).asset;
+}
+
 function stripAssetData(asset: EncryptedAssetUploaded): void {
   delete asset.cipherText;
   delete asset.keyBytes;
   delete asset.sha256;
 }
 
-function stripAsset(content: ImageAssetContent | FileAssetContent): void {
-  stripAssetData(content.asset);
-
-  if ((content as ImageAssetContent).image) {
-    delete (content as ImageAssetContent).image.data;
-  }
-
-  if ((content as FileAssetContent).file) {
-    delete (content as FileAssetContent).file;
+function stripAsset(content?: ConversationContent): void {
+  if (isFileAssetContent(content)) {
+    stripAssetData(content.asset);
+    delete content.file;
+  } else if (isAssetContent(content) && content.uploaded) {
+    delete content.uploaded.sha256;
+    delete content.uploaded.otrKey;
+  } else if (isImageAssetContent(content)) {
+    delete content.image.data;
   }
 }
 
@@ -76,4 +91,4 @@ function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
   }
 }
 
-export {fileIsReadable, formatDate, formatUptime, hexToUint8Array, stripAsset, stripLinkPreview};
+export {fileIsReadable, formatDate, formatUptime, hexToUint8Array, isAssetContent, stripAsset, stripLinkPreview};
