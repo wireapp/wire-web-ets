@@ -18,13 +18,17 @@
  */
 
 import * as express from 'express';
-import * as fs from 'fs';
-import {promisify} from 'util';
-import {fileIsReadable} from '../../utils';
+import * as fs from 'fs-extra';
+import * as logdown from 'logdown';
 
 const router = express.Router();
 const outLogFile = process.env.LOG_OUTPUT;
 const errorLogFile = process.env.LOG_ERROR;
+
+const logger = logdown('@wireapp/wire-web-ets/routes/log/logRoute', {
+  logger: console,
+  markdown: false,
+});
 
 const logRoute = () =>
   router.get('/log/?', async (req, res) => {
@@ -33,10 +37,11 @@ const logRoute = () =>
 
       if (errorLogFile) {
         logData += `=== ${errorLogFile} ===\n`;
-        if (await fileIsReadable(errorLogFile)) {
-          const errorLogData = await promisify(fs.readFile)(errorLogFile, {encoding: 'utf8'});
+        try {
+          const errorLogData = await fs.readFile(errorLogFile, {encoding: 'utf8'});
           logData += `${errorLogData}`;
-        } else {
+        } catch (error) {
+          logger.error(error);
           logData += `Error: Could not find error log file "${errorLogFile}" or it is not readable.`;
         }
       } else {
@@ -47,10 +52,11 @@ const logRoute = () =>
 
       if (outLogFile) {
         logData += `=== ${outLogFile} ===\n`;
-        if (outLogFile && (await fileIsReadable(outLogFile))) {
-          const outLogData = await promisify(fs.readFile)(outLogFile, {encoding: 'utf8'});
+        try {
+          const outLogData = await fs.readFile(outLogFile, {encoding: 'utf8'});
           logData += outLogData;
-        } else {
+        } catch (error) {
+          logger.error(error);
           logData += `Error: Could not find output log file "${outLogFile}" or it is not readable.`;
         }
       } else {

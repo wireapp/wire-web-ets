@@ -33,6 +33,7 @@ process.on('SIGINT', () => {
   try {
     server.stop();
   } catch (error) {}
+  process.exit();
 });
 
 process.on('SIGTERM', () => {
@@ -40,6 +41,7 @@ process.on('SIGTERM', () => {
   try {
     server.stop();
   } catch (error) {}
+  process.exit();
 });
 
 process.on('uncaughtException', error =>

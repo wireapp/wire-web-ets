@@ -10,6 +10,36 @@ For licensing information, see the attached LICENSE file and the list of third-p
 
 End-to-end Test Service (ETS) for Wire's test automation suite.
 
+### Usage in testing environment
+
+First, make sure you have all dependencies installed by running
+
+```
+yarn
+```
+
+Then run the server with
+
+```
+yarn start:dev
+```
+
+The ETS will now be running locally and is ready to process requests.
+
+### Testing
+
+```
+yarn test
+```
+
+### Running in production environment
+
+```
+yarn
+yarn dist
+yarn start
+```
+
 ## API v1
 
 - [`GET /log`](#get-log)

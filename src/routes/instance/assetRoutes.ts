@@ -65,10 +65,17 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
 
       try {
         const data = Buffer.from(base64Data, 'base64');
-        const file: FileContent = {data};
+        const fileContent: FileContent = {data};
         const metadata: FileMetaDataContent = {length: data.length, name: fileName, type};
-        const messageId = await instanceService.sendFile(instanceId, conversationId, file, metadata, messageTimer);
+        const messageId = await instanceService.sendFile(
+          instanceId,
+          conversationId,
+          fileContent,
+          metadata,
+          messageTimer
+        );
         const instanceName = instanceService.getInstance(instanceId).name;
+
         return res.json({
           instanceId,
           messageId,
@@ -113,6 +120,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
         const image: ImageContent = {data, height, type, width};
         const messageId = await instanceService.sendImage(instanceId, conversationId, image, messageTimer);
         const instanceName = instanceService.getInstance(instanceId).name;
+
         return res.json({
           instanceId,
           messageId,

@@ -17,21 +17,19 @@
  *
  */
 
-// @ts-check
-
-const {default: config} = require('../../dist/config');
-const request = require('request');
-const {default: Server} = require('../../dist/Server');
+import * as request from 'request';
+import config from './config';
+import Server from './Server';
 
 const HTTP_CODE_OK = 200;
 
 describe('Server', () => {
-  let etsServer;
+  let etsServer: Server;
 
   beforeEach(() => (etsServer = new Server(config)));
 
   afterEach(async () => {
-    if (etsServer && etsServer.server) {
+    if (etsServer && etsServer['server']) {
       await etsServer.stop();
     }
   });

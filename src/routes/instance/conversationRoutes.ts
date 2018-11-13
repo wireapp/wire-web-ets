@@ -324,19 +324,17 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
+      const location = {
+        latitude,
+        longitude,
+        name: locationName,
+        zoom,
+      };
+
       try {
-        const messageId = await instanceService.sendLocation(
-          instanceId,
-          conversationId,
-          {
-            latitude,
-            longitude,
-            name: locationName,
-            zoom,
-          },
-          messageTimer
-        );
+        const messageId = await instanceService.sendLocation(instanceId, conversationId, location, messageTimer);
         const instanceName = instanceService.getInstance(instanceId).name;
+
         return res.json({
           instanceId,
           messageId,
