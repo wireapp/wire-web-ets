@@ -32,15 +32,12 @@ import {
   ReactionType,
 } from '@wireapp/core/dist/conversation/';
 import {
-  AssetContent,
   ClearedContent,
   DeletedContent,
   EditedTextContent,
-  FileAssetContent,
   FileContent,
   FileMetaDataContent,
   HiddenContent,
-  ImageAssetContent,
   ImageContent,
   LinkPreviewContent,
   LocationContent,
@@ -54,7 +51,7 @@ import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 
-import {formatDate, stripAsset, stripLinkPreview} from './utils';
+import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from './utils';
 
 const {version}: {version: string} = require('../package.json');
 
@@ -99,9 +96,10 @@ class InstanceService {
 
     account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => {
       const metaPayload = instance.messages.get(payload.id);
-      if (metaPayload && payload) {
-        (payload.content as AssetContent).uploaded = (metaPayload.content as AssetContent).uploaded;
+      if (metaPayload && isAssetContent(payload.content) && isAssetContent(metaPayload.content)) {
+        payload.content.original = metaPayload.content.original;
       }
+      stripAsset(payload.content);
       instance.messages.set(payload.id, payload);
     });
 
@@ -469,7 +467,7 @@ class InstanceService {
       const payload = await instance.account.service.conversation.createImage(image);
       const sentImage = await instance.account.service.conversation.send(conversationId, payload);
 
-      stripAsset(sentImage.content as ImageAssetContent);
+      stripAsset(sentImage.content);
 
       instance.messages.set(sentImage.id, sentImage);
       return sentImage.id;
@@ -495,7 +493,7 @@ class InstanceService {
       const filePayload = await instance.account.service.conversation.createFileData(file, metadataPayload.id);
       const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
 
-      stripAsset(sentFile.content as FileAssetContent);
+      stripAsset(sentFile.content);
 
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
