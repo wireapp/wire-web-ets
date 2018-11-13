@@ -17,6 +17,12 @@
  *
  */
 
+import {
+  FileAssetContent,
+  ImageAssetContent,
+  LinkPreviewUploadedContent,
+} from '@wireapp/core/dist/conversation/content/';
+import {EncryptedAssetUploaded} from '@wireapp/core/dist/cryptography';
 import * as fs from 'fs';
 import * as moment from 'moment';
 import {promisify} from 'util';
@@ -41,4 +47,33 @@ function hexToUint8Array(inputString: string): Uint8Array {
   return new Uint8Array(buffer);
 }
 
-export {fileIsReadable, formatDate, formatUptime, hexToUint8Array};
+function stripAssetData(asset: EncryptedAssetUploaded): void {
+  delete asset.cipherText;
+  delete asset.keyBytes;
+  delete asset.sha256;
+}
+
+function stripAsset(content: ImageAssetContent | FileAssetContent): void {
+  stripAssetData(content.asset);
+
+  if ((content as ImageAssetContent).image) {
+    delete (content as ImageAssetContent).image.data;
+  }
+
+  if ((content as FileAssetContent).file) {
+    delete (content as FileAssetContent).file;
+  }
+}
+
+function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
+  if (linkPreview.imageUploaded) {
+    stripAssetData(linkPreview.imageUploaded.asset);
+    delete linkPreview.imageUploaded.image.data;
+  }
+
+  if (linkPreview.image) {
+    delete linkPreview.image.data;
+  }
+}
+
+export {fileIsReadable, formatDate, formatUptime, hexToUint8Array, stripAsset, stripLinkPreview};

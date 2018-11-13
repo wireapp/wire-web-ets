@@ -36,9 +36,11 @@ import {
   ClearedContent,
   DeletedContent,
   EditedTextContent,
+  FileAssetContent,
   FileContent,
   FileMetaDataContent,
   HiddenContent,
+  ImageAssetContent,
   ImageContent,
   LinkPreviewContent,
   LocationContent,
@@ -52,7 +54,7 @@ import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 
-import {formatDate} from './utils';
+import {formatDate, stripAsset, stripLinkPreview} from './utils';
 
 const {version}: {version: string} = require('../package.json');
 
@@ -89,9 +91,7 @@ class InstanceService {
       const linkPreviewContent = payload.content as TextContent;
       if (linkPreviewContent.linkPreviews) {
         linkPreviewContent.linkPreviews.forEach(preview => {
-          if (preview.image) {
-            delete preview.image.data;
-          }
+          stripLinkPreview(preview);
         });
       }
       instance.messages.set(payload.id, payload);
@@ -415,10 +415,7 @@ class InstanceService {
 
         if (messageContent.linkPreviews) {
           messageContent.linkPreviews.forEach(preview => {
-            if (preview.imageUploaded) {
-              delete preview.imageUploaded.image.data;
-              delete preview.imageUploaded.asset;
-            }
+            stripLinkPreview(preview);
           });
         }
       }
@@ -471,7 +468,9 @@ class InstanceService {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await instance.account.service.conversation.createImage(image);
       const sentImage = await instance.account.service.conversation.send(conversationId, payload);
-      delete (sentImage.content as ImageContent).data;
+
+      stripAsset(sentImage.content as ImageAssetContent);
+
       instance.messages.set(sentImage.id, sentImage);
       return sentImage.id;
     } else {
@@ -495,7 +494,9 @@ class InstanceService {
 
       const filePayload = await instance.account.service.conversation.createFileData(file, metadataPayload.id);
       const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
-      delete (sentFile.content as FileContent).data;
+
+      stripAsset(sentFile.content as FileAssetContent);
+
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
     } else {
@@ -530,6 +531,7 @@ class InstanceService {
       const payload = instance.account.service.conversation.createPing();
       const sentPing = await instance.account.service.conversation.send(conversationId, payload);
       instance.messages.set(sentPing.id, sentPing);
+
       return sentPing.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -603,10 +605,7 @@ class InstanceService {
 
         if (editedMessageContent.linkPreviews) {
           editedMessageContent.linkPreviews.forEach(preview => {
-            if (preview.imageUploaded) {
-              delete preview.imageUploaded.image.data;
-              delete preview.imageUploaded.asset;
-            }
+            stripLinkPreview(preview);
           });
         }
       }
