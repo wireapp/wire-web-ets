@@ -54,7 +54,7 @@ import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 
-import {formatDate} from './utils';
+import {formatDate, stripAssetData, stripLinkPreviewData} from './utils';
 
 const {version}: {version: string} = require('../package.json');
 
@@ -91,9 +91,7 @@ class InstanceService {
       const linkPreviewContent = payload.content as TextContent;
       if (linkPreviewContent.linkPreviews) {
         linkPreviewContent.linkPreviews.forEach(preview => {
-          if (preview.image) {
-            delete preview.image.data;
-          }
+          stripLinkPreviewData(preview);
         });
       }
       instance.messages.set(payload.id, payload);
@@ -417,12 +415,7 @@ class InstanceService {
 
         if (messageContent.linkPreviews) {
           messageContent.linkPreviews.forEach(preview => {
-            if (preview.imageUploaded) {
-              delete preview.imageUploaded.asset.cipherText;
-              delete preview.imageUploaded.asset.keyBytes;
-              delete preview.imageUploaded.asset.sha256;
-              delete preview.imageUploaded.image.data;
-            }
+            stripLinkPreviewData(preview);
           });
         }
       }
@@ -476,10 +469,7 @@ class InstanceService {
       const payload = await instance.account.service.conversation.createImage(image);
       const sentImage = await instance.account.service.conversation.send(conversationId, payload);
 
-      delete (sentImage.content as ImageAssetContent).asset.cipherText;
-      delete (sentImage.content as ImageAssetContent).asset.keyBytes;
-      delete (sentImage.content as ImageAssetContent).asset.sha256;
-      delete (sentImage.content as ImageAssetContent).image.data;
+      stripAssetData(sentImage.content as ImageAssetContent);
 
       instance.messages.set(sentImage.id, sentImage);
       return sentImage.id;
@@ -505,10 +495,7 @@ class InstanceService {
       const filePayload = await instance.account.service.conversation.createFileData(file, metadataPayload.id);
       const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
 
-      delete (sentFile.content as FileAssetContent).asset.cipherText;
-      delete (sentFile.content as FileAssetContent).asset.keyBytes;
-      delete (sentFile.content as FileAssetContent).asset.sha256;
-      delete (sentFile.content as FileAssetContent).file;
+      stripAssetData(sentFile.content as FileAssetContent);
 
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
@@ -618,12 +605,7 @@ class InstanceService {
 
         if (editedMessageContent.linkPreviews) {
           editedMessageContent.linkPreviews.forEach(preview => {
-            if (preview.imageUploaded) {
-              delete preview.imageUploaded.asset.cipherText;
-              delete preview.imageUploaded.asset.keyBytes;
-              delete preview.imageUploaded.asset.sha256;
-              delete preview.imageUploaded.image.data;
-            }
+            stripLinkPreviewData(preview);
           });
         }
       }
