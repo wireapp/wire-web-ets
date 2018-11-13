@@ -36,9 +36,11 @@ import {
   ClearedContent,
   DeletedContent,
   EditedTextContent,
+  FileAssetContent,
   FileContent,
   FileMetaDataContent,
   HiddenContent,
+  ImageAssetContent,
   ImageContent,
   LinkPreviewContent,
   LocationContent,
@@ -416,8 +418,10 @@ class InstanceService {
         if (messageContent.linkPreviews) {
           messageContent.linkPreviews.forEach(preview => {
             if (preview.imageUploaded) {
+              delete preview.imageUploaded.asset.cipherText;
+              delete preview.imageUploaded.asset.keyBytes;
+              delete preview.imageUploaded.asset.sha256;
               delete preview.imageUploaded.image.data;
-              delete preview.imageUploaded.asset;
             }
           });
         }
@@ -471,7 +475,12 @@ class InstanceService {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await instance.account.service.conversation.createImage(image);
       const sentImage = await instance.account.service.conversation.send(conversationId, payload);
-      delete (sentImage.content as ImageContent).data;
+
+      delete (sentImage.content as ImageAssetContent).asset.cipherText;
+      delete (sentImage.content as ImageAssetContent).asset.keyBytes;
+      delete (sentImage.content as ImageAssetContent).asset.sha256;
+      delete (sentImage.content as ImageAssetContent).image.data;
+
       instance.messages.set(sentImage.id, sentImage);
       return sentImage.id;
     } else {
@@ -495,7 +504,12 @@ class InstanceService {
 
       const filePayload = await instance.account.service.conversation.createFileData(file, metadataPayload.id);
       const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
-      delete (sentFile.content as FileContent).data;
+
+      delete (sentFile.content as FileAssetContent).asset.cipherText;
+      delete (sentFile.content as FileAssetContent).asset.keyBytes;
+      delete (sentFile.content as FileAssetContent).asset.sha256;
+      delete (sentFile.content as FileAssetContent).file;
+
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
     } else {
@@ -530,6 +544,7 @@ class InstanceService {
       const payload = instance.account.service.conversation.createPing();
       const sentPing = await instance.account.service.conversation.send(conversationId, payload);
       instance.messages.set(sentPing.id, sentPing);
+
       return sentPing.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -604,8 +619,10 @@ class InstanceService {
         if (editedMessageContent.linkPreviews) {
           editedMessageContent.linkPreviews.forEach(preview => {
             if (preview.imageUploaded) {
+              delete preview.imageUploaded.asset.cipherText;
+              delete preview.imageUploaded.asset.keyBytes;
+              delete preview.imageUploaded.asset.sha256;
               delete preview.imageUploaded.image.data;
-              delete preview.imageUploaded.asset;
             }
           });
         }
