@@ -19,10 +19,16 @@
 
 import * as express from 'express';
 import * as fs from 'fs-extra';
+import * as logdown from 'logdown';
 
 const router = express.Router();
 const outLogFile = process.env.LOG_OUTPUT;
 const errorLogFile = process.env.LOG_ERROR;
+
+const logger = logdown('@wireapp/wire-web-ets/routes/log/logRoute', {
+  logger: console,
+  markdown: false,
+});
 
 const logRoute = () =>
   router.get('/log/?', async (req, res) => {
@@ -35,6 +41,7 @@ const logRoute = () =>
           const errorLogData = await fs.readFile(errorLogFile, {encoding: 'utf8'});
           logData += `${errorLogData}`;
         } catch (error) {
+          logger.error(error);
           logData += `Error: Could not find error log file "${errorLogFile}" or it is not readable.`;
         }
       } else {
@@ -49,6 +56,7 @@ const logRoute = () =>
           const outLogData = await fs.readFile(outLogFile, {encoding: 'utf8'});
           logData += outLogData;
         } catch (error) {
+          logger.error(error);
           logData += `Error: Could not find output log file "${outLogFile}" or it is not readable.`;
         }
       } else {
