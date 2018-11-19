@@ -23,7 +23,7 @@
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
-    "@types/jasmine": "3.0.0",
+    "@types/jasmine": "3.3.0",
     "@types/nock": "9.3.0",
     "@types/request": "2.48.1",
     "cross-env": "5.2.0",
