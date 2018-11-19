@@ -346,16 +346,16 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.4.tgz#821878b81bfab971b93a265a561d54ea61f9059f"
   integrity sha512-Set5ZdrAaKI/qHdFlVMgm/GsAv/wkXhSTuZFkJ+JI7HK+wIkIlOaUXSXieIvJ0+OvGIqtREFoE+NHJtEq0gtEw==
 
-"@wireapp/api-client@3.1.15":
-  version "3.1.15"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.1.15.tgz#b1ca132a79e4068f67c32d370831edad20dde1a6"
-  integrity sha512-fQbTLOXEscGTIEqxneWlkI5K4dvIugpkQxpzgeEBf12NFKVW7PG8CIMKiciWCfPfqOXiqg9yXXqhl/rtoVaxwg==
+"@wireapp/api-client@3.1.16":
+  version "3.1.16"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.1.16.tgz#c4934efc8d28d9aaff69aaecb5f4ab9d041548e8"
+  integrity sha512-d2wQcdbZH8KyfLrQrKocg/uDz1X+xplFENMkb0Ogy+EOFQHob7dodlOkxhyvUU51ZDpbAD0qr99Hy5Zu5ZIi/g==
   dependencies:
     "@types/node" "10.12.9"
     "@types/spark-md5" "3.0.1"
     "@types/tough-cookie" "2.3.4"
     "@wireapp/priority-queue" "0.2.44"
-    "@wireapp/store-engine" "1.0.19"
+    "@wireapp/store-engine" "1.1.0"
     axios "0.18.0"
     html5-websocket "2.0.4"
     logdown "3.2.7"
@@ -368,32 +368,32 @@
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.104.tgz#12a06ee1a3238c2722dad17aeb05b06e4b1ccc0d"
   integrity sha512-+OG5mAAmrndKnM/m5XeRUO1wri6Up53HNVLOKYwS2fzFZe+5Rd5PuD41wxiBrxWYSE/9tv96k6fh/v+fWaMA0A==
 
-"@wireapp/core@7.2.22":
-  version "7.2.22"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-7.2.22.tgz#542db525b4c324760fda37965008809577d04fc7"
-  integrity sha512-yT/v6ZtGqCK+QGGDrR5x0n5aPBiyVr1htT2jVDTH4H126t3vB9E7dYIT7lyqsGh7MyV7ywP4sWGh54xFjs0MqA==
+"@wireapp/core@7.2.23":
+  version "7.2.23"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-7.2.23.tgz#3d5c80f4f3d39bd3fbbb45a545e133ee66e69c5b"
+  integrity sha512-5ZrbWdDCq5jxf7HYHiS2dCVwvuR4leNV6UhYpYeqjIUOfILLdveFR1nQhM+KCol3fGqPrWR6jSU9CK1YYL3hIA==
   dependencies:
     "@types/node" "10.12.9"
-    "@wireapp/api-client" "3.1.15"
-    "@wireapp/cryptobox" "9.0.21"
+    "@wireapp/api-client" "3.1.16"
+    "@wireapp/cryptobox" "9.0.22"
     "@wireapp/protocol-messaging" "1.22.1"
-    "@wireapp/store-engine" "1.0.19"
+    "@wireapp/store-engine" "1.1.0"
     bazinga64 "5.3.28"
     logdown "3.2.7"
     protobufjs "6.8.8"
     pure-uuid "1.5.5"
 
-"@wireapp/cryptobox@9.0.21":
-  version "9.0.21"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-9.0.21.tgz#350fb21563cc3b59589a04f3a394427412909fa5"
-  integrity sha512-hEmVciDvIgDhA9iT+tnDtSEVGSl1gCp9ZGaHr1zdBP/nWsD+EOUDBKmP8Un05kBFmXEs77J6M7WwwdCigtgk9w==
+"@wireapp/cryptobox@9.0.22":
+  version "9.0.22"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-9.0.22.tgz#c3ee2f267ac748ea7d89109358e9894b03ec8b96"
+  integrity sha512-g5NUaqxRJfeTYmedoKRpxhQaSuOq78vICpRhv6emXcEXjM+yErdqj4fTEYt4UveJ6dWnldaFU/IuAHzJmNVMrw==
   dependencies:
     "@types/fs-extra" "5.0.4"
     "@types/node" "10.12.9"
     "@wireapp/lru-cache" "3.0.15"
     "@wireapp/priority-queue" "0.2.44"
     "@wireapp/proteus" "8.0.16"
-    "@wireapp/store-engine" "1.0.19"
+    "@wireapp/store-engine" "1.1.0"
     bazinga64 "5.3.28"
     dexie "2.0.4"
     fs-extra "7.0.1"
@@ -431,10 +431,10 @@
   dependencies:
     protobufjs "6.8.8"
 
-"@wireapp/store-engine@1.0.19":
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/@wireapp/store-engine/-/store-engine-1.0.19.tgz#bac9f692c96a209539124a9986d83b8e57e585a4"
-  integrity sha512-BmrMAWKoJD6S6VIw+NutIRYRP6hCoIqI4aIE/6fcPgh/ZY63ySEjK4lVxr0S7aymhTp7J+gA7LfBtfPyopoLfg==
+"@wireapp/store-engine@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/store-engine/-/store-engine-1.1.0.tgz#20a144d42ea7b968d1bc6e27e411b9d4f4e4f5fb"
+  integrity sha512-JyfB3t6TXIfrmLULDE/p7MtDAPChMZ1FO3ATZczaW39bdKXfH8pWACkmrQ8vemRnKq2ISCTUHXYbtwQMfZqBaQ==
   dependencies:
     "@types/bro-fs" "0.4.1"
     "@types/filesystem" "0.0.29"
