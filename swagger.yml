@@ -1,0 +1,1125 @@
+swagger: '2.0'
+info:
+  description: "End-to-end Test Service (ETS) for Wire's test automation suite."
+  version: '1.0.0'
+  title: 'E2E Test Service'
+  termsOfService: 'https://wire.com/legal/'
+  contact:
+    email: 'opensource@wire.com'
+  license:
+    name: 'GPL-3.0'
+    url: 'https://github.com/wireapp/wire-web-ets/blob/master/LICENSE'
+host: 'localhost'
+basePath: '/api/v1'
+tags:
+  - name: 'Instance'
+    description: 'Wire Client Instance'
+  - name: 'Instances'
+    description: 'Wire Client Instances'
+  - name: 'Clients'
+    description: 'Wire User Clients'
+  - name: 'Logging'
+    description: 'ETS Logging'
+schemes:
+  - 'http'
+paths:
+  /clients:
+    delete:
+      tags:
+        - 'Clients'
+      summary: 'Delete all clients'
+      description: ''
+      operationId: 'deleteAllClients'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Login data'
+          required: true
+          schema:
+            $ref: '#/definitions/BasicLogin'
+      responses:
+        200:
+          description: ''
+          schema:
+            type: 'object'
+  /instance:
+    put:
+      description: ''
+      operationId: 'createInstance'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Login data'
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+      summary: 'Create a new instance'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}:
+    get:
+      tags:
+        - 'Instance'
+      summary: 'Get information about an instance'
+      operationId: 'getInstance'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/Instance'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+    delete:
+      description: ''
+      operationId: 'deleteInstance'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            type: 'object'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Delete an instance'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/archive:
+    post:
+      operationId: 'archiveConversation'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              archive:
+                type: 'boolean'
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Archive a conversation'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/availability:
+    post:
+      operationId: 'setAvailability'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: 'Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`).'
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              teamId:
+                type: 'string'
+                format: 'uuid'
+              type:
+                type: 'string'
+                enum:
+                  - 0
+                  - 1
+                  - 2
+                  - 3
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: "Set a user's availability"
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/clear:
+    post:
+      operationId: 'clearConversation'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Clear a conversation'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/clients:
+    get:
+      operationId: 'getClients'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Client'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Get all clients of an instance'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/delete:
+    post:
+      operationId: 'deleteMessage'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              messageId:
+                type: 'string'
+                format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Delete a message locally'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/deleteEverywhere:
+    post:
+      operationId: 'deleteMessageEverywhere'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              messageId:
+                type: 'string'
+                format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Delete a message for everyone'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/fingerprint:
+    get:
+      operationId: 'getFingerprint'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            type: 'object'
+            properties:
+              fingerprint:
+                type: 'string'
+              instanceId:
+                type: 'string'
+                format: 'uuid'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: "Get the fingerprint from the instance's client"
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/getMessages:
+    post:
+      operationId: 'getMessages'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              name:
+                type: 'string'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Message'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Get all messages'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/markEphemeralRead:
+    post:
+      operationId: 'markEphemeralRead'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              messageId:
+                type: 'string'
+                format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Mark an ephemeral message as read'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/mute:
+    post:
+      operationId: 'muteConversation'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              mute:
+                type: 'boolean'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Mute a conversation'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/sendConfirmation:
+    post:
+      operationId: 'sendConfirmation'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              messageId:
+                type: 'string'
+                format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Send a receive confirmation for a message'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/sendFile:
+    post:
+      operationId: 'sendFile'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              data:
+                type: 'string'
+                format: 'base64'
+              fileName:
+                type: 'string'
+              messageTimer:
+                type: 'string'
+                format: 'number'
+              type:
+                type: 'string'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            allOf:
+              - $ref: '#/definitions/InstanceAndName'
+              - properties:
+                  messageId:
+                    format: 'uuid'
+                    type: 'string'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Send a file to a conversation'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/sendImage:
+    post:
+      operationId: 'sendImage'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              data:
+                type: 'string'
+                format: 'base64'
+              height:
+                type: 'string'
+                format: 'number'
+              messageTimer:
+                type: 'string'
+                format: 'number'
+              type:
+                type: 'string'
+              width:
+                type: 'string'
+                format: 'number'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            allOf:
+              - $ref: '#/definitions/InstanceAndName'
+              - properties:
+                  messageId:
+                    format: 'uuid'
+                    type: 'string'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Send an image to a conversation'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/sendLocation:
+    post:
+      operationId: 'sendLocation'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              latitude:
+                type: 'string'
+                format: 'number'
+              locationName:
+                type: 'string'
+              longitude:
+                type: 'string'
+                format: 'number'
+              messageTimer:
+                type: 'string'
+                format: 'number'
+              zoom:
+                type: 'string'
+                format: 'number'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            allOf:
+              - $ref: '#/definitions/InstanceAndName'
+              - properties:
+                  messageId:
+                    format: 'uuid'
+                    type: 'string'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Send a location to a conversation'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/sendPing:
+    post:
+      operationId: 'sendPing'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              messageTimer:
+                type: 'string'
+                format: 'number'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            allOf:
+              - $ref: '#/definitions/InstanceAndName'
+              - properties:
+                  messageId:
+                    format: 'uuid'
+                    type: 'string'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Send a ping to a conversation'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/sendReaction:
+    post:
+      operationId: 'sendReaction'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              originalMessageId:
+                type: 'string'
+                format: 'uuid'
+              type:
+                type: 'string'
+                enum:
+                  - '❤'
+                  - ''
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            allOf:
+              - $ref: '#/definitions/InstanceAndName'
+              - properties:
+                  messageId:
+                    format: 'uuid'
+                    type: 'string'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Send a reaction to a message'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/sendSessionReset:
+    post:
+      operationId: 'sendSessionReset'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            allOf:
+              - $ref: '#/definitions/InstanceAndName'
+              - properties:
+                  messageId:
+                    format: 'uuid'
+                    type: 'string'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Send a session reset message'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/sendText:
+    post:
+      operationId: 'sendText'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            $ref: '#/definitions/TextMessage'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            allOf:
+              - $ref: '#/definitions/InstanceAndName'
+              - properties:
+                  messageId:
+                    format: 'uuid'
+                    type: 'string'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Send a text message to a conversation'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/sendTyping:
+    post:
+      operationId: 'sendTyping'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            properties:
+              conversationId:
+                type: 'string'
+                format: 'uuid'
+              status:
+                type: 'string'
+                enum:
+                  - 'started'
+                  - 'stopped'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Send a typing indicator to a conversation'
+      tags:
+        - 'Instance'
+  /instance/{instanceId}/updateText:
+    post:
+      operationId: 'updateText'
+      parameters:
+        - name: 'instanceId'
+          in: 'path'
+          description: 'ID of instance to return'
+          required: true
+          type: 'string'
+          format: 'uuid'
+        - in: 'body'
+          name: 'body'
+          description: ''
+          required: true
+          schema:
+            $ref: '#/definitions/TextMessage'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            allOf:
+              - $ref: '#/definitions/InstanceAndName'
+              - properties:
+                  messageId:
+                    format: 'uuid'
+                    type: 'string'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Update a text message in a conversation'
+      tags:
+        - 'Instance'
+  /instances:
+    get:
+      operationId: 'getInstances'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: ''
+          schema:
+            type: 'object'
+            additionalProperties:
+              $ref: '#/definitions/Instance'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: 'Get all instances'
+      tags:
+        - 'Instances'
+  /log:
+    get:
+      operationId: 'getLog'
+      produces:
+        - 'text/plain'
+      responses:
+        200:
+          description: 'The log as plain text'
+      summary: 'Get the ETS log as plain text'
+      tags:
+        - 'Logging'
+definitions:
+  BasicLogin:
+    properties:
+      backend:
+        type: 'string'
+        enum:
+          - 'prod'
+          - 'production'
+          - 'staging'
+      email:
+        type: 'string'
+        format: 'email'
+      password:
+        type: 'string'
+        format: 'password'
+    type: 'object'
+  Client:
+    properties:
+      class:
+        type: 'string'
+      # enum:
+      #   - "desktop"
+      cookie:
+        type: 'string'
+      id:
+        type: 'string'
+        format: 'uuid'
+      location:
+        properties:
+          lat:
+            type: 'integer'
+            format: 'float'
+          lon:
+            type: 'integer'
+            format: 'float'
+        required:
+          - lat
+          - lon
+        type: 'object'
+      model:
+        type: 'string'
+      time:
+        type: 'string'
+        format: 'date-time'
+      type:
+        type: 'string'
+    type: 'object'
+  Instance:
+    allOf:
+      - $ref: '#/definitions/InstanceAndName'
+      - properties:
+          backend:
+            type: 'string'
+          clientId:
+            type: 'string'
+            format: 'uuid'
+        type: 'object'
+  InstanceAndName:
+    properties:
+      instanceId:
+        type: 'string'
+        format: 'uuid'
+      name:
+        type: 'string'
+    type: 'object'
+  Login:
+    allOf:
+      - $ref: '#/definitions/BasicLogin'
+      - type: 'object'
+        properties:
+          deviceLabel:
+            type: 'string'
+          deviceName:
+            type: 'string'
+          name:
+            type: 'string'
+    required:
+      - backend
+      - email
+      - password
+  Message:
+    properties:
+      content:
+        properties:
+          text:
+            type: 'string'
+        type: 'object'
+      conversation:
+        format: 'uuid'
+        type: 'string'
+      from:
+        format: 'uuid'
+        type: 'string'
+      id:
+        format: 'uuid'
+        type: 'string'
+      messageTimer:
+        format: 'number'
+        type: 'string'
+      state:
+        enum:
+          - 'PayloadBundleState.INCOMING'
+          - 'PayloadBundleState.OUTGOING_SENT'
+        format: 'string'
+      type:
+        format: 'string'
+    required:
+      - conversation
+      - from
+      - id
+      - messageTimer
+      - state
+      - timestamp
+      - type
+    type: 'object'
+  NotFound:
+    properties:
+      error:
+        type: 'string'
+      stack:
+        type: 'string'
+    type: 'object'
+  LinkPreview:
+    properties:
+      image:
+        properties:
+          data:
+            type: 'string'
+            format: 'base64'
+          height:
+            type: 'string'
+            format: 'number'
+          type:
+            type: 'string'
+          width:
+            type: 'string'
+            format: 'number'
+        type: 'object'
+      permanentUrl:
+        type: 'string'
+      summary:
+        type: 'string'
+      title:
+        type: 'string'
+      tweet:
+        type: 'object'
+        properties:
+          author:
+            type: 'string'
+          username:
+            type: 'string'
+      url:
+        type: 'string'
+        format: 'url'
+      urlOffset:
+        type: 'string'
+        format: 'number'
+    type: 'object'
+  Mention:
+    properties:
+      length:
+        type: 'string'
+        format: 'number'
+      start:
+        type: 'string'
+        format: 'number'
+      userId:
+        type: 'string'
+        format: 'uuid'
+    type: 'object'
+  TextMessage:
+    properties:
+      conversationId:
+        type: 'string'
+        format: 'uuid'
+      linkPreview:
+        $ref: '#/definitions/LinkPreview'
+      mentions:
+        items:
+          $ref: '#/definitions/Mention'
+        type: 'array'
+      quote:
+        properties:
+          quotedMessageId:
+            type: 'string'
+            format: 'uuid'
+          quotedMessageSha256:
+            type: 'string'
+            format: 'sha256'
+        type: 'object'
+      messageTimer:
+        type: 'string'
+        format: 'number'
+      text:
+        type: 'string'
+    type: 'object'
