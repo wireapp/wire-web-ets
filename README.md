@@ -524,7 +524,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
   "conversationId": "<string in UUID format>",
   "linkPreview?": {
     "image?": {
-      "data": "<string>",
+      "data": "<string in base64 format>",
       "height": "<number>",
       "type": "<string>",
       "width": "<number>"
@@ -532,12 +532,12 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
     "permanentUrl?": "<string>",
     "summary?": "<string>",
     "title?": "<string>",
-    "url": "<string>",
-    "urlOffset": "<number>",
     "tweet?": {
       "author?": "<string>",
       "username?": "<string>"
-    }
+    },
+    "url": "<string>",
+    "urlOffset": "<number>"
   },
   "mentions?": [
     {
@@ -595,7 +595,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
   "firstMessageId": "<string in UUID format>",
   "linkPreview?": {
     "image?": {
-      "data": "<string>",
+      "data": "<string in base64 format>",
       "height": "<number>",
       "type": "<string>",
       "width": "<number>"
@@ -603,12 +603,12 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
     "permanentUrl?": "<string>",
     "summary?": "<string>",
     "title?": "<string>",
-    "url": "<string>",
-    "urlOffset": "<number>",
     "tweet?": {
       "author?": "<string>",
       "username?": "<string>"
-    }
+    },
+    "url": "<string>",
+    "urlOffset": "<number>"
   },
   "mentions?": [
     {
@@ -630,6 +630,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ```json
 {
   "instanceId": "<string in UUID format>",
-  "messageId": "<string>"
+  "messageId": "<string>",
+  "name": "<string>"
 }
 ```
