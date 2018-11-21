@@ -43,7 +43,7 @@ yarn start
 ## API documentation (Swagger)
 
 - [swagger.md](./docs/swagger.md)
-- Swagger is available at `/api-docs` when the ETS is running.
+- Swagger UI is available at `/api-docs` when the ETS is running.
 
 ## API documentation (old)
 
