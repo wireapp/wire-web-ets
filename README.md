@@ -40,7 +40,12 @@ yarn dist
 yarn start
 ```
 
-## API v1
+## API documentation (Swagger)
+
+- [swagger.md](./docs/swagger.md)
+- Swagger UI is available at `/api-docs` when the ETS is running.
+
+## API documentation (old)
 
 - [`GET /log`](#get-log)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)

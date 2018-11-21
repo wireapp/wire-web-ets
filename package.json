@@ -19,13 +19,17 @@
     "pm2": "3.2.2",
     "pm2-logrotate": "2.6.0",
     "pure-uuid": "1.5.5",
-    "typescript": "3.1.6"
+    "swagger-ui-express": "4.0.1",
+    "typescript": "3.1.6",
+    "yamljs": "0.3.0"
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
     "@types/jasmine": "3.3.0",
     "@types/nock": "9.3.0",
     "@types/request": "2.48.1",
+    "@types/swagger-ui-express": "3.0.0",
+    "@types/yamljs": "0.2.30",
     "cross-env": "5.2.0",
     "eslint": "5.9.0",
     "eslint-config-prettier": "3.3.0",
@@ -39,13 +43,15 @@
     "prettier": "1.15.2",
     "request": "2.88.0",
     "rimraf": "2.6.2",
+    "swagger-markdown": "1.1.5",
     "ts-node": "7.0.1",
     "tslint": "5.11.0",
     "tslint-config-prettier": "1.16.0",
     "tslint-plugin-prettier": "2.0.1"
   },
   "files": [
-    "dist"
+    "dist",
+    "swagger.yml"
   ],
   "husky": {
     "hooks": {
@@ -68,8 +74,9 @@
   "private": true,
   "repository": "https://github.com/wireapp/wire-web-ets",
   "scripts": {
-    "build": "yarn build:node",
+    "build": "yarn build:node && yarn build:docs",
     "build:node": "tsc",
+    "build:docs": "swagger-markdown -i swagger.yml -o docs/swagger.md",
     "clean": "rimraf dist",
     "dist": "yarn clean && yarn build",
     "fix": "yarn fix:other && yarn fix:ts",
