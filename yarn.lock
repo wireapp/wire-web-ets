@@ -359,10 +359,10 @@
   resolved "https://registry.yarnpkg.com/@types/yamljs/-/yamljs-0.2.30.tgz#d034e1d329e46e8d0f737c9a8db97f68f81b5382"
   integrity sha1-0DTh0ynkbo0Pc3yajbl/aPgbU4I=
 
-"@wireapp/api-client@3.1.18":
-  version "3.1.18"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.1.18.tgz#4dea43625f6fc58b772ed95d902bfae97423a117"
-  integrity sha512-t5bXf2ITN79OTvx0FHZIYUqFLmWvXII/j4oAi3C8UhCxSIWQpPl5fsnNmCf17agDie1VMgr4EZDiLPChko/c9A==
+"@wireapp/api-client@3.1.19":
+  version "3.1.19"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.1.19.tgz#b95957a427aa992a3a17b6949139ca13cfc79495"
+  integrity sha512-U8Eerb61HhjqYhApxXAMInG73lrd7FquIdIE52Xvkd1LMpiewj7akpmS//IXw4fkM9XDYnNnkpRIXiVLGsrGbg==
   dependencies:
     "@types/node" "10.12.9"
     "@types/spark-md5" "3.0.1"
@@ -381,13 +381,13 @@
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.105.tgz#7f40598b6c75ed3374ba2ce6789178e4df3c4328"
   integrity sha512-XUIJdcdMXY9SWPIGIn4GK1+YMMHkMrSsrC1sicbkqvCiAUYUvrMFhxy18ZL6f4ri+IAquA7pwnsdbnvXq/5Dzw==
 
-"@wireapp/core@7.2.26":
-  version "7.2.26"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-7.2.26.tgz#0e80a5832b4e54207aff7eb38b6f7254155b9ef1"
-  integrity sha512-e1qBTcb3rxAMOMP5W+urLSaRGS47GCFo7Vjc0ipIvrkRUwMwhIt2UteZfCTpKgqL3cPuW4bKG3MVqRCiHMYdgg==
+"@wireapp/core@7.2.27":
+  version "7.2.27"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-7.2.27.tgz#f9de94e1e8b273de3814ca4a8f551f3fb9958d0e"
+  integrity sha512-wvTskxw+OPN0QGl3m4manOsU+noGe9laCzobZS6XQPJoqu9TFpI1gaDlX7rjNC6EgOnRzGdh00qBeUMWeEWmag==
   dependencies:
     "@types/node" "10.12.9"
-    "@wireapp/api-client" "3.1.18"
+    "@wireapp/api-client" "3.1.19"
     "@wireapp/cryptobox" "9.0.24"
     "@wireapp/protocol-messaging" "1.22.1"
     "@wireapp/store-engine" "1.1.2"
@@ -2244,10 +2244,10 @@ http-signature@~1.2.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-husky@1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/husky/-/husky-1.1.4.tgz#92f61383527d2571e9586234e5864356bfaceaa9"
-  integrity sha512-cZjGpS7qsaBSo3fOMUuR7erQloX3l5XzL1v/RkIqU6zrQImDdU70z5Re9fGDp7+kbYlM2EtS4aYMlahBeiCUGw==
+husky@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-1.2.0.tgz#d631dda1e4a9ee8ba69a10b0c51a0e2c66e711e5"
+  integrity sha512-/ib3+iycykXC0tYIxsyqierikVa9DA2DrT32UEirqNEFVqOj1bFMTgP3jAz8HM7FgC/C8pc/BTUa9MV2GEkZaA==
   dependencies:
     cosmiconfig "^5.0.6"
     execa "^1.0.0"
