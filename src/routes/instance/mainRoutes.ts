@@ -132,7 +132,7 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
   router.get('/api/v1/instances/?', (req, res) => {
     const instances = instanceService.getInstances();
 
-    if (!instances.length) {
+    if (!Object.keys(instances).length) {
       return res.json({});
     }
 
