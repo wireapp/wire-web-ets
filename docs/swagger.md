@@ -4,9 +4,11 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 **Version:** 1.0.0
 
-**Terms of service:** https://wire.com/legal/
+**Terms of service:**  
+https://wire.com/legal/
 
-**Contact information:** opensource@wire.com
+**Contact information:**  
+opensource@wire.com
 
 **License:** [GPL-3.0](https://github.com/wireapp/wire-web-ets/blob/master/LICENSE)
 
@@ -58,23 +60,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 
 ---
 
-##### **_GET_**
-
-**Summary:** Get information about an instance
-
-**Parameters**
-
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-
-**Responses**
-
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             | [Instance](#instance) |
-| 404  | Not found   | [NotFound](#notfound) |
-
 ##### **_DELETE_**
 
 **Summary:** Delete an instance
@@ -92,6 +77,23 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 | Code | Description | Schema                |
 | ---- | ----------- | --------------------- |
 | 200  |             | object                |
+| 404  | Not found   | [NotFound](#notfound) |
+
+##### **_GET_**
+
+**Summary:** Get information about an instance
+
+**Parameters**
+
+| Name       | Located in | Description              | Required | Schema        |
+| ---------- | ---------- | ------------------------ | -------- | ------------- |
+| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+
+**Responses**
+
+| Code | Description | Schema                |
+| ---- | ----------- | --------------------- |
+| 200  |             | [Instance](#instance) |
 | 404  | Not found   | [NotFound](#notfound) |
 
 ### /instance/{instanceId}/archive
@@ -598,11 +600,31 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 | instanceId | string (uuid) |             | No       |
 | name       | string        |             | No       |
 
+### LinkPreview
+
+| Name         | Type            | Description | Required |
+| ------------ | --------------- | ----------- | -------- |
+| image        | object          |             | No       |
+| permanentUrl | string          |             | No       |
+| summary      | string          |             | No       |
+| title        | string          |             | No       |
+| tweet        | object          |             | No       |
+| url          | string (url)    |             | No       |
+| urlOffset    | string (number) |             | No       |
+
 ### Login
 
 | Name  | Type | Description | Required |
 | ----- | ---- | ----------- | -------- |
 | Login |      |             |          |
+
+### Mention
+
+| Name   | Type            | Description | Required |
+| ------ | --------------- | ----------- | -------- |
+| length | string (number) |             | No       |
+| start  | string (number) |             | No       |
+| userId | string (uuid)   |             | No       |
 
 ### Message
 
@@ -623,26 +645,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 | error | string |             | No       |
 | stack | string |             | No       |
 
-### LinkPreview
-
-| Name         | Type            | Description | Required |
-| ------------ | --------------- | ----------- | -------- |
-| image        | object          |             | No       |
-| permanentUrl | string          |             | No       |
-| summary      | string          |             | No       |
-| title        | string          |             | No       |
-| tweet        | object          |             | No       |
-| url          | string (url)    |             | No       |
-| urlOffset    | string (number) |             | No       |
-
-### Mention
-
-| Name   | Type            | Description | Required |
-| ------ | --------------- | ----------- | -------- |
-| length | string (number) |             | No       |
-| start  | string (number) |             | No       |
-| userId | string (uuid)   |             | No       |
-
 ### TextMessage
 
 | Name           | Type                        | Description | Required |
@@ -650,6 +652,6 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 | conversationId | string (uuid)               |             | No       |
 | linkPreview    | [LinkPreview](#linkpreview) |             | No       |
 | mentions       | [ [Mention](#mention) ]     |             | No       |
-| quote          | object                      |             | No       |
 | messageTimer   | string (number)             |             | No       |
+| quote          | object                      |             | No       |
 | text           | string                      |             | No       |
