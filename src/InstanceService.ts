@@ -159,7 +159,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.toggleMuteConversation(conversationId, muted);
+      await instance.account.service.conversation.toggleMuteConversation(conversationId, muted, new Date());
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
