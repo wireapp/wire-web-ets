@@ -2659,10 +2659,10 @@ jest-validate@^23.5.0:
     leven "^2.1.0"
     pretty-format "^23.5.0"
 
-joi@14.1.0:
-  version "14.1.0"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-14.1.0.tgz#98a7923108a9f361192551b29f538488d07953cc"
-  integrity sha512-oJDBwllD6VjSMquuv56W0fQlegJdsr8+905zuEQhnE/eTSh5GYUHlwn/UATnlDepuXZF8BnxggdxqQTYrtit6Q==
+joi@14.1.1:
+  version "14.1.1"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-14.1.1.tgz#7b548b146b7809b9e3495a18ede234748642262e"
+  integrity sha512-v/aWz/iam4olepSLgdA8St8eA7W3AQPvwAJd8Qi7I8UDuoR9rLXF8CJfrakORgOPf7vDEQihPUS6kXN3Rl1ycA==
   dependencies:
     hoek "6.x.x"
     isemail "3.x.x"
