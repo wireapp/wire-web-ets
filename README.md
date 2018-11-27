@@ -392,6 +392,8 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 
 ### `POST /api/v1/instance/<instanceId>/sendEphemeralConfirmationDelivered`
 
+#### Request
+
 ```json
 {
   "conversationId": "<string in UUID format>",
