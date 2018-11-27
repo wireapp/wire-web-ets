@@ -21,10 +21,17 @@ import * as express from 'express';
 import * as path from 'path';
 import * as swaggerUi from 'swagger-ui-express';
 import * as yaml from 'yamljs';
+import {ServerConfig} from '../../config';
 
 const yamlFile = path.join(__dirname, '..', '..', '..', 'swagger.yml');
 const swaggerDocument = yaml.load(yamlFile);
 
-export function initSwaggerRoute(app: express.Express) {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+export function initSwaggerRoute(app: express.Express, config: ServerConfig) {
+  app.use(
+    '/swagger-ui',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument, {
+      host: `localhost:${config.PORT_HTTP}`,
+    })
+  );
 }

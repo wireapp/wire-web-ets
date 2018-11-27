@@ -26,11 +26,11 @@ import * as http from 'http';
 import {ServerConfig} from './config';
 import InstanceService from './InstanceService';
 import healthCheckRoute from './routes/_health/healthCheckRoute';
-import {initSwaggerRoute} from './routes/api-docs/swaggerRoute';
 import {internalErrorRoute, notFoundRoute} from './routes/error/errorRoutes';
 import InstanceRoutes from './routes/instance/';
 import logRoute from './routes/log/logRoute';
 import mainRoute from './routes/mainRoute';
+import {initSwaggerRoute} from './routes/swagger-ui/swaggerRoute';
 
 class Server {
   private app: express.Express;
@@ -64,7 +64,7 @@ class Server {
     this.app.use(logRoute());
     this.app.use(healthCheckRoute());
     this.app.use(mainRoute(this.config));
-    initSwaggerRoute(this.app);
+    initSwaggerRoute(this.app, this.config);
     this.app.use(notFoundRoute());
     this.app.use(internalErrorRoute());
   }

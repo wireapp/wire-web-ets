@@ -193,7 +193,6 @@ definitions:
       text:
         type: string
     type: object
-host: localhost
 info:
   contact:
     email: opensource@wire.com
@@ -558,8 +557,6 @@ paths:
             properties:
               conversationId:
                 format: uuid
-                type: string
-              name:
                 type: string
             type: object
       produces:
