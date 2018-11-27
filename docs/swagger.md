@@ -672,15 +672,16 @@ opensource@wire.com
 
 ### Message
 
-| Name         | Type               | Description | Required |
-| ------------ | ------------------ | ----------- | -------- |
-| content      | object             |             | No       |
-| conversation | string (uuid)      |             | Yes      |
-| from         | string (uuid)      |             | Yes      |
-| id           | string (uuid)      |             | Yes      |
-| messageTimer | string (number)    |             | Yes      |
-| state        | undefined (string) |             | Yes      |
-| type         | undefined (string) |             | Yes      |
+| Name                    | Type               | Description | Required |
+| ----------------------- | ------------------ | ----------- | -------- |
+| content                 | object             |             | No       |
+| conversation            | string (uuid)      |             | Yes      |
+| expectsReadConfirmation | boolean            |             | No       |
+| from                    | string (uuid)      |             | Yes      |
+| id                      | string (uuid)      |             | Yes      |
+| messageTimer            | string (number)    |             | Yes      |
+| state                   | undefined (string) |             | Yes      |
+| type                    | undefined (string) |             | Yes      |
 
 ### NotFound
 
@@ -691,11 +692,12 @@ opensource@wire.com
 
 ### TextMessage
 
-| Name           | Type                        | Description | Required |
-| -------------- | --------------------------- | ----------- | -------- |
-| conversationId | string (uuid)               |             | No       |
-| linkPreview    | [LinkPreview](#linkpreview) |             | No       |
-| mentions       | [ [Mention](#mention) ]     |             | No       |
-| messageTimer   | string (number)             |             | No       |
-| quote          | object                      |             | No       |
-| text           | string                      |             | No       |
+| Name                    | Type                        | Description | Required |
+| ----------------------- | --------------------------- | ----------- | -------- |
+| conversationId          | string (uuid)               |             | No       |
+| expectsReadConfirmation | boolean                     |             | No       |
+| linkPreview             | [LinkPreview](#linkpreview) |             | No       |
+| mentions                | [ [Mention](#mention) ]     |             | No       |
+| messageTimer            | string (number)             |             | No       |
+| quote                   | object                      |             | No       |
+| text                    | string                      |             | No       |

@@ -135,6 +135,8 @@ definitions:
       conversation:
         format: uuid
         type: string
+      expectsReadConfirmation:
+        type: boolean
       from:
         format: uuid
         type: string
@@ -172,6 +174,8 @@ definitions:
       conversationId:
         format: uuid
         type: string
+      expectsReadConfirmation:
+        type: boolean
       linkPreview:
         $ref: '#/definitions/LinkPreview'
       mentions:
@@ -793,6 +797,8 @@ paths:
               data:
                 format: base64
                 type: string
+              expectsReadConfirmation:
+                type: boolean
               fileName:
                 type: string
               messageTimer:
@@ -842,6 +848,8 @@ paths:
               data:
                 format: base64
                 type: string
+              expectsReadConfirmation:
+                type: boolean
               height:
                 format: number
                 type: string
@@ -892,6 +900,8 @@ paths:
               conversationId:
                 format: uuid
                 type: string
+              expectsReadConfirmation:
+                type: boolean
               latitude:
                 format: number
                 type: string
@@ -945,6 +955,8 @@ paths:
               conversationId:
                 format: uuid
                 type: string
+              expectsReadConfirmation:
+                type: boolean
               messageTimer:
                 format: number
                 type: string

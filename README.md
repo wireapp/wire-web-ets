@@ -314,6 +314,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 [
   {
     "content?": {
+      "expectsReadConfirmation?": "<boolean>",
       "text": "<string>"
     },
     "conversation": "<string in UUID format>",
@@ -435,6 +436,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 {
   "conversationId": "<string in UUID format>",
   "data": "<string in base64 format>",
+  "expectsReadConfirmation?": "<boolean>",
   "fileName": "<string>",
   "messageTimer?": "<number>",
   "type": "<string>"
@@ -459,6 +461,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 {
   "conversationId": "<string in UUID format>",
   "data": "<string in base64 format>",
+  "expectsReadConfirmation?": "<boolean>",
   "height": "<number>",
   "messageTimer?": "<number>",
   "type": "<string>",
@@ -483,6 +486,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ```json
 {
   "conversationId": "<string>",
+  "expectsReadConfirmation?": "<boolean>",
   "latitude": "<number>",
   "locationName": "<string>",
   "longitude": "<number>",
@@ -508,6 +512,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ```json
 {
   "conversationId": "<string in UUID format>",
+  "expectsReadConfirmation?": "<boolean>",
   "messageTimer?": "<number>"
 }
 ```
@@ -571,6 +576,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ```json
 {
   "conversationId": "<string in UUID format>",
+  "expectsReadConfirmation?": "<boolean>",
   "linkPreview?": {
     "image?": {
       "data": "<string in base64 format>",
@@ -595,11 +601,11 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
       "userId": "<string in UUID format>"
     }
   ],
+  "messageTimer?": "<number>",
   "quote?": {
     "quotedMessageId": "<string in UUID format>",
     "quotedMessageSha256": "<string in SHA256 format>"
   },
-  "messageTimer?": "<number>",
   "text": "<string>"
 }
 ```
@@ -641,6 +647,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ```json
 {
   "conversationId": "<string in UUID format>",
+  "expectsReadConfirmation?": "<boolean>",
   "firstMessageId": "<string in UUID format>",
   "linkPreview?": {
     "image?": {
