@@ -385,6 +385,7 @@ class InstanceService {
     linkPreview?: LinkPreviewContent,
     mentions?: MentionContent[],
     quote?: QuoteContent,
+    expectsReadConfirmation?: boolean,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
@@ -395,7 +396,9 @@ class InstanceService {
         .createText(message)
         .withMentions(mentions)
         .withQuote(quote)
+        .withReadConfirmation(expectsReadConfirmation)
         .build();
+
       let sentMessage = await instance.account.service.conversation.send(conversationId, payload);
 
       if (linkPreview) {
@@ -405,6 +408,7 @@ class InstanceService {
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(mentions)
           .withQuote(quote)
+          .withReadConfirmation(expectsReadConfirmation)
           .build();
 
         sentMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
@@ -542,12 +546,13 @@ class InstanceService {
     instanceId: string,
     conversationId: string,
     image: ImageContent,
+    expectsReadConfirmation?: boolean,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.createImage(image);
+      const payload = await instance.account.service.conversation.createImage(image, expectsReadConfirmation);
       const sentImage = await instance.account.service.conversation.send(conversationId, payload);
 
       stripAsset(sentImage.content);
@@ -564,16 +569,24 @@ class InstanceService {
     conversationId: string,
     file: FileContent,
     metadata: FileMetaDataContent,
+    expectsReadConfirmation?: boolean,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
-      const metadataPayload = await instance.account.service.conversation.createFileMetadata(metadata);
+      const metadataPayload = await instance.account.service.conversation.createFileMetadata(
+        metadata,
+        expectsReadConfirmation
+      );
       await instance.account.service.conversation.send(conversationId, metadataPayload);
 
-      const filePayload = await instance.account.service.conversation.createFileData(file, metadataPayload.id);
+      const filePayload = await instance.account.service.conversation.createFileData(
+        file,
+        metadataPayload.id,
+        expectsReadConfirmation
+      );
       const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
 
       stripAsset(sentFile.content);
@@ -604,12 +617,17 @@ class InstanceService {
     }
   }
 
-  async sendPing(instanceId: string, conversationId: string, expireAfterMillis = 0): Promise<string> {
+  async sendPing(
+    instanceId: string,
+    conversationId: string,
+    expectsReadConfirmation?: boolean,
+    expireAfterMillis = 0
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = instance.account.service.conversation.createPing();
+      const payload = instance.account.service.conversation.createPing({expectsReadConfirmation});
       const sentPing = await instance.account.service.conversation.send(conversationId, payload);
       instance.messages.set(sentPing.id, sentPing);
 
@@ -658,7 +676,8 @@ class InstanceService {
     newMessageText: string,
     newLinkPreview?: LinkPreviewContent,
     newMentions?: MentionContent[],
-    newQuote?: QuoteContent
+    newQuote?: QuoteContent,
+    expectsReadConfirmation?: boolean
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
@@ -667,6 +686,7 @@ class InstanceService {
         .createEditedText(newMessageText, originalMessageId)
         .withMentions(newMentions)
         .withQuote(newQuote)
+        .withReadConfirmation(expectsReadConfirmation)
         .build();
 
       let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
@@ -678,6 +698,7 @@ class InstanceService {
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(newMentions)
           .withQuote(newQuote)
+          .withReadConfirmation(expectsReadConfirmation)
           .build();
 
         editedMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
