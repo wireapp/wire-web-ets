@@ -425,11 +425,16 @@ class InstanceService {
     }
   }
 
-  async sendConfirmation(instanceId: string, conversationId: string, messageId: string): Promise<string> {
+  async sendConfirmationDelivered(
+    instanceId: string,
+    conversationId: string,
+    firstMessageId: string,
+    moreMessageIds?: string[]
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const payload = instance.account.service.conversation.createConfirmation(messageId);
+      const payload = instance.account.service.conversation.createConfirmationDelivered(firstMessageId, moreMessageIds);
       await instance.account.service.conversation.send(conversationId, payload);
       return instance.name;
     } else {
@@ -437,18 +442,96 @@ class InstanceService {
     }
   }
 
-  async sendConfirmationEphemeral(instanceId: string, conversationId: string, messageId: string): Promise<string> {
+  async sendConfirmationRead(
+    instanceId: string,
+    conversationId: string,
+    firstMessageId: string,
+    moreMessageIds?: string[]
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
-    const message = instance.messages.get(messageId);
+
+    if (instance.account.service) {
+      const payload = instance.account.service.conversation.createConfirmationRead(firstMessageId, moreMessageIds);
+      await instance.account.service.conversation.send(conversationId, payload);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendEphemeralConfirmationDelivered(
+    instanceId: string,
+    conversationId: string,
+    firstMssageId: string,
+    moreMessageIds?: string[]
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const message = instance.messages.get(firstMssageId);
 
     if (!message) {
-      throw new Error(`Message with ID "${messageId}" not found.`);
+      throw new Error(`Message with ID "${firstMssageId}" not found.`);
     }
 
     if (instance.account.service) {
-      const confirmationPayload = instance.account.service.conversation.createConfirmation(messageId);
+      const confirmationPayload = instance.account.service.conversation.createConfirmationDelivered(
+        firstMssageId,
+        moreMessageIds
+      );
       await instance.account.service.conversation.send(conversationId, confirmationPayload);
-      await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [message.from]);
+      await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMssageId, [message.from]);
+
+      if (moreMessageIds && moreMessageIds.length) {
+        for (const messageId of moreMessageIds) {
+          const furtherMessage = instance.messages.get(messageId);
+
+          if (!furtherMessage) {
+            throw new Error(`Message with ID "${firstMssageId}" not found.`);
+          }
+
+          await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [
+            furtherMessage.from,
+          ]);
+        }
+      }
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendEphemeralConfirmationRead(
+    instanceId: string,
+    conversationId: string,
+    firstMssageId: string,
+    moreMessageIds?: string[]
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const message = instance.messages.get(firstMssageId);
+
+    if (!message) {
+      throw new Error(`Message with ID "${firstMssageId}" not found.`);
+    }
+
+    if (instance.account.service) {
+      const confirmationPayload = instance.account.service.conversation.createConfirmationRead(
+        firstMssageId,
+        moreMessageIds
+      );
+      await instance.account.service.conversation.send(conversationId, confirmationPayload);
+      await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMssageId, [message.from]);
+      if (moreMessageIds && moreMessageIds.length) {
+        for (const messageId of moreMessageIds) {
+          const furtherMessage = instance.messages.get(messageId);
+
+          if (!furtherMessage) {
+            throw new Error(`Message with ID "${firstMssageId}" not found.`);
+          }
+
+          await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [
+            furtherMessage.from,
+          ]);
+        }
+      }
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);

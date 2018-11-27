@@ -61,9 +61,11 @@ yarn start
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceiddelete)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceiddeleteeverywhere)
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
-- [`POST /api/v1/instance/<instanceId>/markEphemeralRead`](#post-apiv1instanceinstanceidmarkephemeralread)
 - [`POST /api/v1/instance/<instanceId>/mute`](#post-apiv1instanceinstanceidmute)
-- [`POST /api/v1/instance/<instanceId>/sendConfirmation`](#post-apiv1instanceinstanceidsendconfirmation)
+- [`POST /api/v1/instance/<instanceId>/sendConfirmationDelivered`](#post-apiv1instanceinstanceidsendconfirmationdelivered)
+- [`POST /api/v1/instance/<instanceId>/sendConfirmationRead`](#post-apiv1instanceinstanceidsendconfirmationread)
+- [`POST /api/v1/instance/<instanceId>/sendEphemeralConfirmationDelivered`](#post-apiv1instanceinstanceidsendephemeralconfirmationdelivered)
+- [`POST /api/v1/instance/<instanceId>/sendEphemeralConfirmationRead`](#post-apiv1instanceinstanceidsendephemeralconfirmationread)
 - [`POST /api/v1/instance/<instanceId>/sendFile`](#post-apiv1instanceinstanceidsendfile)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendLocation`](#post-apiv1instanceinstanceidsendlocation)
@@ -325,32 +327,14 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ]
 ```
 
-### `POST /api/v1/instance/<instanceId>/markEphemeralRead`
-
-```json
-{
-  "conversationId": "<string in UUID format>",
-  "messageId": "<string in UUID format>"
-}
-```
-
-#### Response
-
-```json
-{
-  "instanceId": "<string in UUID format>",
-  "name": "<string>"
-}
-```
-
 ### `POST /api/v1/instance/<instanceId>/mute`
 
 #### Request
 
 ```json
 {
-  "mute": "<boolean>",
-  "conversationId": "<string in UUID format>"
+  "conversationId": "<string in UUID format>",
+  "mute": "<boolean>"
 }
 ```
 
@@ -363,14 +347,74 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 }
 ```
 
-### `POST /api/v1/instance/<instanceId>/sendConfirmation`
+### `POST /api/v1/instance/<instanceId>/sendConfirmationDelivered`
 
 #### Request
 
 ```json
 {
   "conversationId": "<string in UUID format>",
-  "messageId": "<string in UUID format>"
+  "firstMessageId": "<string in UUID format>",
+  "moreMessageIds?": "<Array of strings in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/sendConfirmationRead`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "firstMessageId": "<string in UUID format>",
+  "moreMessageIds?": "<Array of strings in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/sendEphemeralConfirmationDelivered`
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "firstMessageId": "<string in UUID format>",
+  "moreMessageIds?": "<Array of strings in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/sendEphemeralConfirmationRead`
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "firstMessageId": "<string in UUID format>",
+  "moreMessageIds?": "<Array of strings in UUID format>"
 }
 ```
 

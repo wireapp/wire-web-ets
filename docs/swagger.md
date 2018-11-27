@@ -270,28 +270,6 @@ opensource@wire.com
 | 200  |             | [ [Message](#message) ] |
 | 404  | Not found   | [NotFound](#notfound)   |
 
-### /instance/{instanceId}/markEphemeralRead
-
----
-
-##### **_POST_**
-
-**Summary:** Mark an ephemeral message as read
-
-**Parameters**
-
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
-
-**Responses**
-
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
-
 ### /instance/{instanceId}/mute
 
 ---
@@ -314,13 +292,79 @@ opensource@wire.com
 | 200  |             | [InstanceAndName](#instanceandname) |
 | 404  | Not found   | [NotFound](#notfound)               |
 
-### /instance/{instanceId}/sendConfirmation
+### /instance/{instanceId}/sendConfirmationDelivered
 
 ---
 
 ##### **_POST_**
 
-**Summary:** Send a receive confirmation for a message
+**Summary:** Send a delivery confirmation for a message
+
+**Parameters**
+
+| Name       | Located in | Description              | Required | Schema        |
+| ---------- | ---------- | ------------------------ | -------- | ------------- |
+| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+| body       | body       |                          | Yes      | object        |
+
+**Responses**
+
+| Code | Description | Schema                              |
+| ---- | ----------- | ----------------------------------- |
+| 200  |             | [InstanceAndName](#instanceandname) |
+| 404  | Not found   | [NotFound](#notfound)               |
+
+### /instance/{instanceId}/sendConfirmationRead
+
+---
+
+##### **_POST_**
+
+**Summary:** Send a read confirmation for a message
+
+**Parameters**
+
+| Name       | Located in | Description              | Required | Schema        |
+| ---------- | ---------- | ------------------------ | -------- | ------------- |
+| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+| body       | body       |                          | Yes      | object        |
+
+**Responses**
+
+| Code | Description | Schema                              |
+| ---- | ----------- | ----------------------------------- |
+| 200  |             | [InstanceAndName](#instanceandname) |
+| 404  | Not found   | [NotFound](#notfound)               |
+
+### /instance/{instanceId}/sendEphemeralConfirmationDelivered
+
+---
+
+##### **_POST_**
+
+**Summary:** Send a delivery confirmation for an ephemeral message
+
+**Parameters**
+
+| Name       | Located in | Description              | Required | Schema        |
+| ---------- | ---------- | ------------------------ | -------- | ------------- |
+| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+| body       | body       |                          | Yes      | object        |
+
+**Responses**
+
+| Code | Description | Schema                              |
+| ---- | ----------- | ----------------------------------- |
+| 200  |             | [InstanceAndName](#instanceandname) |
+| 404  | Not found   | [NotFound](#notfound)               |
+
+### /instance/{instanceId}/sendEphemeralConfirmationRead
+
+---
+
+##### **_POST_**
+
+**Summary:** Send a read confirmation for an ephemeral message
 
 **Parameters**
 
