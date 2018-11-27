@@ -364,10 +364,10 @@
   resolved "https://registry.yarnpkg.com/@types/yamljs/-/yamljs-0.2.30.tgz#d034e1d329e46e8d0f737c9a8db97f68f81b5382"
   integrity sha1-0DTh0ynkbo0Pc3yajbl/aPgbU4I=
 
-"@wireapp/api-client@3.2.6":
-  version "3.2.6"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.2.6.tgz#b642c95095521e58690d05bc2c901df295e25c10"
-  integrity sha512-YEe2yUP4psZswh7Uk5UP9vekbyCLBr/sa9G378S/VGLWCh/Vhe/8nOC0jc8py0j2UJp5g7dElLta9V/rS2OLKg==
+"@wireapp/api-client@3.2.7":
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.2.7.tgz#f642e870688fc4020a72a9dd9091e7874d23d712"
+  integrity sha512-SEwM551gBbYuhh83VhIRFCYIFwPO7GlpW3snyRK1eb53WjL6HdqiIfnIioOhrmk7kzRJAfub17aHdJqGVHPs4w==
   dependencies:
     "@types/node" "10.12.10"
     "@types/spark-md5" "3.0.1"
@@ -379,20 +379,20 @@
     logdown "3.2.7"
     reconnecting-websocket "3.2.2"
     spark-md5 "3.0.0"
-    tough-cookie "2.4.3"
+    tough-cookie "2.5.0"
 
 "@wireapp/cbor@3.0.107":
   version "3.0.107"
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.107.tgz#52647ae59a52f78995f6bfdd986c58f597ac6100"
   integrity sha512-A5AzGWNghavKrZfubZbpMDqyWg1klAgo4NwaUon9hKy6mHRBTk323rjqhfQSup3bPcEvJUKG5Z9gHtVMO3vxAQ==
 
-"@wireapp/core@7.3.7":
-  version "7.3.7"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-7.3.7.tgz#30817ad625e76c996eb8e40bbbd6436d4892c31a"
-  integrity sha512-7hK0bHOOzR/iLCacf+f8ehgiuR+0TO0lHVqv4oNLXyBofVNGt4f9iMx7A4QEt8LHOPLeBJIoFKhXl+Awr1yjDQ==
+"@wireapp/core@7.3.8":
+  version "7.3.8"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-7.3.8.tgz#ea323a1d6b633143209844796efdbacb0b512bed"
+  integrity sha512-kgCd6NriuntvSt4QFw9+jGUng8kHj8idlDIT0voezE6KGhyKvba8xj9Cf5P0SJAWPmpO0MyowClJH2vvgxfpIA==
   dependencies:
     "@types/node" "10.12.10"
-    "@wireapp/api-client" "3.2.6"
+    "@wireapp/api-client" "3.2.7"
     "@wireapp/cryptobox" "9.0.29"
     "@wireapp/protocol-messaging" "1.22.1"
     "@wireapp/store-engine" "1.1.7"
@@ -3809,7 +3809,7 @@ proxy-addr@~2.0.4:
     forwarded "~0.1.2"
     ipaddr.js "1.8.0"
 
-psl@^1.1.24:
+psl@^1.1.24, psl@^1.1.28:
   version "1.1.29"
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.1.29.tgz#60f580d360170bb722a797cc704411e6da850c67"
   integrity sha512-AeUmQ0oLN02flVHXWh9sSJF7mcdFq0ppid/JkErufc3hGIV/AMa8Fo9VgDo/cT2jFdOWoFvHp90qqBH54W+gjQ==
@@ -3822,7 +3822,7 @@ pump@^3.0.0:
     end-of-stream "^1.1.0"
     once "^1.3.1"
 
-punycode@2.x.x, punycode@^2.1.0:
+punycode@2.x.x, punycode@^2.1.0, punycode@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
@@ -4544,7 +4544,15 @@ topo@3.x.x:
   dependencies:
     hoek "5.x.x"
 
-tough-cookie@2.4.3, tough-cookie@~2.4.3:
+tough-cookie@2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-2.5.0.tgz#cd9fb2a0aa1d5a12b473bd9fb96fa3dcff65ade2"
+  integrity sha512-nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==
+  dependencies:
+    psl "^1.1.28"
+    punycode "^2.1.1"
+
+tough-cookie@~2.4.3:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-2.4.3.tgz#53f36da3f47783b0925afa06ff9f3b165280f781"
   integrity sha512-Q5srk/4vDM54WJsJio3XNn6K2sCG+CQ8G5Wz6bZhRZoAe/+TxjWB/GlFAnYEbkYVlON9FMk/fE3h2RLpPXo4lQ==
