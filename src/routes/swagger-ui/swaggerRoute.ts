@@ -27,11 +27,9 @@ const yamlFile = path.join(__dirname, '..', '..', '..', 'swagger.yml');
 const swaggerDocument = yaml.load(yamlFile);
 
 export function initSwaggerRoute(app: express.Express, config: ServerConfig) {
-  app.use(
-    '/swagger-ui',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerDocument, {
-      host: `localhost:${config.PORT_HTTP}`,
-    })
-  );
+  const swaggerUiOptions = {
+    host: `localhost:${config.PORT_HTTP}`,
+  };
+
+  app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerUiOptions));
 }
