@@ -40,7 +40,12 @@ yarn dist
 yarn start
 ```
 
-## API v1
+## API documentation (Swagger)
+
+- [swagger.md](./docs/swagger.md)
+- Swagger UI is available at `/swagger-ui` when the ETS is running.
+
+## API documentation (old)
 
 - [`GET /log`](#get-log)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
@@ -56,9 +61,11 @@ yarn start
 - [`POST /api/v1/instance/<instanceId>/delete`](#post-apiv1instanceinstanceiddelete)
 - [`POST /api/v1/instance/<instanceId>/deleteEverywhere`](#post-apiv1instanceinstanceiddeleteeverywhere)
 - [`POST /api/v1/instance/<instanceId>/getMessages`](#post-apiv1instanceinstanceidgetmessages)
-- [`POST /api/v1/instance/<instanceId>/markEphemeralRead`](#post-apiv1instanceinstanceidmarkephemeralread)
 - [`POST /api/v1/instance/<instanceId>/mute`](#post-apiv1instanceinstanceidmute)
-- [`POST /api/v1/instance/<instanceId>/sendConfirmation`](#post-apiv1instanceinstanceidsendconfirmation)
+- [`POST /api/v1/instance/<instanceId>/sendConfirmationDelivered`](#post-apiv1instanceinstanceidsendconfirmationdelivered)
+- [`POST /api/v1/instance/<instanceId>/sendConfirmationRead`](#post-apiv1instanceinstanceidsendconfirmationread)
+- [`POST /api/v1/instance/<instanceId>/sendEphemeralConfirmationDelivered`](#post-apiv1instanceinstanceidsendephemeralconfirmationdelivered)
+- [`POST /api/v1/instance/<instanceId>/sendEphemeralConfirmationRead`](#post-apiv1instanceinstanceidsendephemeralconfirmationread)
 - [`POST /api/v1/instance/<instanceId>/sendFile`](#post-apiv1instanceinstanceidsendfile)
 - [`POST /api/v1/instance/<instanceId>/sendImage`](#post-apiv1instanceinstanceidsendimage)
 - [`POST /api/v1/instance/<instanceId>/sendLocation`](#post-apiv1instanceinstanceidsendlocation)
@@ -307,6 +314,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 [
   {
     "content?": {
+      "expectsReadConfirmation?": "<boolean>",
       "text": "<string>"
     },
     "conversation": "<string in UUID format>",
@@ -320,32 +328,14 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ]
 ```
 
-### `POST /api/v1/instance/<instanceId>/markEphemeralRead`
-
-```json
-{
-  "conversationId": "<string in UUID format>",
-  "messageId": "<string in UUID format>"
-}
-```
-
-#### Response
-
-```json
-{
-  "instanceId": "<string in UUID format>",
-  "name": "<string>"
-}
-```
-
 ### `POST /api/v1/instance/<instanceId>/mute`
 
 #### Request
 
 ```json
 {
-  "mute": "<boolean>",
-  "conversationId": "<string in UUID format>"
+  "conversationId": "<string in UUID format>",
+  "mute": "<boolean>"
 }
 ```
 
@@ -358,14 +348,78 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 }
 ```
 
-### `POST /api/v1/instance/<instanceId>/sendConfirmation`
+### `POST /api/v1/instance/<instanceId>/sendConfirmationDelivered`
 
 #### Request
 
 ```json
 {
   "conversationId": "<string in UUID format>",
-  "messageId": "<string in UUID format>"
+  "firstMessageId": "<string in UUID format>",
+  "moreMessageIds?": "<Array of strings in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/sendConfirmationRead`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "firstMessageId": "<string in UUID format>",
+  "moreMessageIds?": "<Array of strings in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/sendEphemeralConfirmationDelivered`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "firstMessageId": "<string in UUID format>",
+  "moreMessageIds?": "<Array of strings in UUID format>"
+}
+```
+
+#### Response
+
+```json
+{
+  "instanceId": "<string in UUID format>",
+  "name": "<string>"
+}
+```
+
+### `POST /api/v1/instance/<instanceId>/sendEphemeralConfirmationRead`
+
+#### Request
+
+```json
+{
+  "conversationId": "<string in UUID format>",
+  "firstMessageId": "<string in UUID format>",
+  "moreMessageIds?": "<Array of strings in UUID format>"
 }
 ```
 
@@ -386,6 +440,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 {
   "conversationId": "<string in UUID format>",
   "data": "<string in base64 format>",
+  "expectsReadConfirmation?": "<boolean>",
   "fileName": "<string>",
   "messageTimer?": "<number>",
   "type": "<string>"
@@ -410,6 +465,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 {
   "conversationId": "<string in UUID format>",
   "data": "<string in base64 format>",
+  "expectsReadConfirmation?": "<boolean>",
   "height": "<number>",
   "messageTimer?": "<number>",
   "type": "<string>",
@@ -434,6 +490,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ```json
 {
   "conversationId": "<string>",
+  "expectsReadConfirmation?": "<boolean>",
   "latitude": "<number>",
   "locationName": "<string>",
   "longitude": "<number>",
@@ -459,6 +516,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ```json
 {
   "conversationId": "<string in UUID format>",
+  "expectsReadConfirmation?": "<boolean>",
   "messageTimer?": "<number>"
 }
 ```
@@ -522,9 +580,10 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ```json
 {
   "conversationId": "<string in UUID format>",
+  "expectsReadConfirmation?": "<boolean>",
   "linkPreview?": {
     "image?": {
-      "data": "<string>",
+      "data": "<string in base64 format>",
       "height": "<number>",
       "type": "<string>",
       "width": "<number>"
@@ -532,12 +591,12 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
     "permanentUrl?": "<string>",
     "summary?": "<string>",
     "title?": "<string>",
-    "url": "<string>",
-    "urlOffset": "<number>",
     "tweet?": {
       "author?": "<string>",
       "username?": "<string>"
-    }
+    },
+    "url": "<string>",
+    "urlOffset": "<number>"
   },
   "mentions?": [
     {
@@ -546,11 +605,11 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
       "userId": "<string in UUID format>"
     }
   ],
+  "messageTimer?": "<number>",
   "quote?": {
     "quotedMessageId": "<string in UUID format>",
     "quotedMessageSha256": "<string in SHA256 format>"
   },
-  "messageTimer?": "<number>",
   "text": "<string>"
 }
 ```
@@ -592,10 +651,11 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ```json
 {
   "conversationId": "<string in UUID format>",
+  "expectsReadConfirmation?": "<boolean>",
   "firstMessageId": "<string in UUID format>",
   "linkPreview?": {
     "image?": {
-      "data": "<string>",
+      "data": "<string in base64 format>",
       "height": "<number>",
       "type": "<string>",
       "width": "<number>"
@@ -603,12 +663,12 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
     "permanentUrl?": "<string>",
     "summary?": "<string>",
     "title?": "<string>",
-    "url": "<string>",
-    "urlOffset": "<number>",
     "tweet?": {
       "author?": "<string>",
       "username?": "<string>"
-    }
+    },
+    "url": "<string>",
+    "urlOffset": "<number>"
   },
   "mentions?": [
     {
@@ -630,6 +690,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 ```json
 {
   "instanceId": "<string in UUID format>",
-  "messageId": "<string>"
+  "messageId": "<string>",
+  "name": "<string>"
 }
 ```

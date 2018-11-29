@@ -26,6 +26,7 @@ import joiValidate from '../../middlewares/joiValidate';
 interface AssetMessageRequest {
   conversationId: string;
   data: string;
+  expectsReadConfirmation?: boolean;
   messageTimer?: number;
   type: string;
 }
@@ -49,6 +50,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
         .uuid()
         .required(),
       data: Joi.string().required(),
+      expectsReadConfirmation: Joi.boolean().optional(),
       fileName: Joi.string().required(),
       messageTimer: Joi.number()
         .optional()
@@ -57,7 +59,14 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, data: base64Data, fileName, messageTimer, type}: FileMessageRequest = req.body;
+      const {
+        conversationId,
+        data: base64Data,
+        expectsReadConfirmation,
+        fileName,
+        messageTimer,
+        type,
+      }: FileMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -72,6 +81,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
           conversationId,
           fileContent,
           metadata,
+          expectsReadConfirmation,
           messageTimer
         );
         const instanceName = instanceService.getInstance(instanceId).name;
@@ -96,6 +106,7 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
       data: Joi.string()
         .base64()
         .required(),
+      expectsReadConfirmation: Joi.boolean().optional(),
       height: Joi.number()
         .min(1)
         .required(),
@@ -109,7 +120,15 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, data: base64Data, height, messageTimer, type, width}: ImageMessageRequest = req.body;
+      const {
+        conversationId,
+        data: base64Data,
+        expectsReadConfirmation,
+        height,
+        messageTimer,
+        type,
+        width,
+      }: ImageMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -118,7 +137,13 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
       try {
         const data = Buffer.from(base64Data, 'base64');
         const image: ImageContent = {data, height, type, width};
-        const messageId = await instanceService.sendImage(instanceId, conversationId, image, messageTimer);
+        const messageId = await instanceService.sendImage(
+          instanceId,
+          conversationId,
+          image,
+          expectsReadConfirmation,
+          messageTimer
+        );
         const instanceName = instanceService.getInstance(instanceId).name;
 
         return res.json({

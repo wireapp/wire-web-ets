@@ -159,7 +159,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.toggleMuteConversation(conversationId, muted);
+      await instance.account.service.conversation.toggleMuteConversation(conversationId, muted, new Date());
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -385,6 +385,7 @@ class InstanceService {
     linkPreview?: LinkPreviewContent,
     mentions?: MentionContent[],
     quote?: QuoteContent,
+    expectsReadConfirmation?: boolean,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
@@ -395,7 +396,9 @@ class InstanceService {
         .createText(message)
         .withMentions(mentions)
         .withQuote(quote)
+        .withReadConfirmation(expectsReadConfirmation)
         .build();
+
       let sentMessage = await instance.account.service.conversation.send(conversationId, payload);
 
       if (linkPreview) {
@@ -405,6 +408,7 @@ class InstanceService {
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(mentions)
           .withQuote(quote)
+          .withReadConfirmation(expectsReadConfirmation)
           .build();
 
         sentMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
@@ -425,11 +429,16 @@ class InstanceService {
     }
   }
 
-  async sendConfirmation(instanceId: string, conversationId: string, messageId: string): Promise<string> {
+  async sendConfirmationDelivered(
+    instanceId: string,
+    conversationId: string,
+    firstMessageId: string,
+    moreMessageIds?: string[]
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const payload = instance.account.service.conversation.createConfirmation(messageId);
+      const payload = instance.account.service.conversation.createConfirmationDelivered(firstMessageId, moreMessageIds);
       await instance.account.service.conversation.send(conversationId, payload);
       return instance.name;
     } else {
@@ -437,18 +446,96 @@ class InstanceService {
     }
   }
 
-  async sendConfirmationEphemeral(instanceId: string, conversationId: string, messageId: string): Promise<string> {
+  async sendConfirmationRead(
+    instanceId: string,
+    conversationId: string,
+    firstMessageId: string,
+    moreMessageIds?: string[]
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
-    const message = instance.messages.get(messageId);
+
+    if (instance.account.service) {
+      const payload = instance.account.service.conversation.createConfirmationRead(firstMessageId, moreMessageIds);
+      await instance.account.service.conversation.send(conversationId, payload);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendEphemeralConfirmationDelivered(
+    instanceId: string,
+    conversationId: string,
+    firstMssageId: string,
+    moreMessageIds?: string[]
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const message = instance.messages.get(firstMssageId);
 
     if (!message) {
-      throw new Error(`Message with ID "${messageId}" not found.`);
+      throw new Error(`Message with ID "${firstMssageId}" not found.`);
     }
 
     if (instance.account.service) {
-      const confirmationPayload = instance.account.service.conversation.createConfirmation(messageId);
+      const confirmationPayload = instance.account.service.conversation.createConfirmationDelivered(
+        firstMssageId,
+        moreMessageIds
+      );
       await instance.account.service.conversation.send(conversationId, confirmationPayload);
-      await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [message.from]);
+      await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMssageId, [message.from]);
+
+      if (moreMessageIds && moreMessageIds.length) {
+        for (const messageId of moreMessageIds) {
+          const furtherMessage = instance.messages.get(messageId);
+
+          if (!furtherMessage) {
+            throw new Error(`Message with ID "${firstMssageId}" not found.`);
+          }
+
+          await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [
+            furtherMessage.from,
+          ]);
+        }
+      }
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendEphemeralConfirmationRead(
+    instanceId: string,
+    conversationId: string,
+    firstMssageId: string,
+    moreMessageIds?: string[]
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const message = instance.messages.get(firstMssageId);
+
+    if (!message) {
+      throw new Error(`Message with ID "${firstMssageId}" not found.`);
+    }
+
+    if (instance.account.service) {
+      const confirmationPayload = instance.account.service.conversation.createConfirmationRead(
+        firstMssageId,
+        moreMessageIds
+      );
+      await instance.account.service.conversation.send(conversationId, confirmationPayload);
+      await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMssageId, [message.from]);
+      if (moreMessageIds && moreMessageIds.length) {
+        for (const messageId of moreMessageIds) {
+          const furtherMessage = instance.messages.get(messageId);
+
+          if (!furtherMessage) {
+            throw new Error(`Message with ID "${firstMssageId}" not found.`);
+          }
+
+          await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [
+            furtherMessage.from,
+          ]);
+        }
+      }
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -459,12 +546,13 @@ class InstanceService {
     instanceId: string,
     conversationId: string,
     image: ImageContent,
+    expectsReadConfirmation?: boolean,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.createImage(image);
+      const payload = await instance.account.service.conversation.createImage(image, expectsReadConfirmation);
       const sentImage = await instance.account.service.conversation.send(conversationId, payload);
 
       stripAsset(sentImage.content);
@@ -481,16 +569,24 @@ class InstanceService {
     conversationId: string,
     file: FileContent,
     metadata: FileMetaDataContent,
+    expectsReadConfirmation?: boolean,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
-      const metadataPayload = await instance.account.service.conversation.createFileMetadata(metadata);
+      const metadataPayload = await instance.account.service.conversation.createFileMetadata(
+        metadata,
+        expectsReadConfirmation
+      );
       await instance.account.service.conversation.send(conversationId, metadataPayload);
 
-      const filePayload = await instance.account.service.conversation.createFileData(file, metadataPayload.id);
+      const filePayload = await instance.account.service.conversation.createFileData(
+        file,
+        metadataPayload.id,
+        expectsReadConfirmation
+      );
       const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
 
       stripAsset(sentFile.content);
@@ -521,12 +617,17 @@ class InstanceService {
     }
   }
 
-  async sendPing(instanceId: string, conversationId: string, expireAfterMillis = 0): Promise<string> {
+  async sendPing(
+    instanceId: string,
+    conversationId: string,
+    expectsReadConfirmation?: boolean,
+    expireAfterMillis = 0
+  ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = instance.account.service.conversation.createPing();
+      const payload = instance.account.service.conversation.createPing({expectsReadConfirmation});
       const sentPing = await instance.account.service.conversation.send(conversationId, payload);
       instance.messages.set(sentPing.id, sentPing);
 
@@ -575,7 +676,8 @@ class InstanceService {
     newMessageText: string,
     newLinkPreview?: LinkPreviewContent,
     newMentions?: MentionContent[],
-    newQuote?: QuoteContent
+    newQuote?: QuoteContent,
+    expectsReadConfirmation?: boolean
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
 
@@ -584,6 +686,7 @@ class InstanceService {
         .createEditedText(newMessageText, originalMessageId)
         .withMentions(newMentions)
         .withQuote(newQuote)
+        .withReadConfirmation(expectsReadConfirmation)
         .build();
 
       let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
@@ -595,6 +698,7 @@ class InstanceService {
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(newMentions)
           .withQuote(newQuote)
+          .withReadConfirmation(expectsReadConfirmation)
           .build();
 
         editedMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);

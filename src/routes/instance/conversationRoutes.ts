@@ -18,7 +18,13 @@
  */
 
 import {ReactionType} from '@wireapp/core/dist/conversation/';
-import {ImageContent, LinkPreviewContent, MentionContent, QuoteContent} from '@wireapp/core/dist/conversation/content/';
+import {
+  ImageContent,
+  LinkPreviewContent,
+  LocationContent,
+  MentionContent,
+  QuoteContent,
+} from '@wireapp/core/dist/conversation/content/';
 import * as express from 'express';
 import * as Joi from 'joi';
 
@@ -61,6 +67,7 @@ export interface LinkPreviewRequest {
 }
 
 export interface TextRequest extends MessageRequest {
+  expectsReadConfirmation?: boolean;
   linkPreview?: LinkPreviewRequest;
   mentions?: MentionContent[];
   messageTimer?: number;
@@ -74,18 +81,12 @@ export interface ReactionRequest extends MessageRequest {
 }
 
 export interface LocationRequest extends MessageRequest {
+  expectsReadConfirmation?: boolean;
   latitude: number;
   locationName?: string;
   longitude: number;
   messageTimer?: number;
   zoom?: number;
-}
-
-export interface MessageUpdateRequest extends MessageRequest {
-  firstMessageId: string;
-  mentions?: MentionContent[];
-  text: string;
-  linkPreview?: LinkPreviewRequest;
 }
 
 export interface MessageUpdateRequest extends TextRequest {
@@ -308,6 +309,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
+      expectsReadConfirmation: Joi.boolean().optional(),
       latitude: Joi.number().required(),
       locationName: Joi.string().optional(),
       longitude: Joi.number().required(),
@@ -318,13 +320,22 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, latitude, longitude, locationName, messageTimer, zoom}: LocationRequest = req.body;
+      const {
+        conversationId,
+        expectsReadConfirmation,
+        latitude,
+        longitude,
+        locationName,
+        messageTimer,
+        zoom,
+      }: LocationRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
-      const location = {
+      const location: LocationContent = {
+        expectsReadConfirmation,
         latitude,
         longitude,
         name: locationName,
@@ -352,6 +363,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
+      expectsReadConfirmation: Joi.boolean().optional(),
       linkPreview: Joi.object(validateLinkPreview).optional(),
       mentions: Joi.array()
         .items(validateMention)
@@ -364,7 +376,15 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, linkPreview, mentions, messageTimer, quote, text}: TextRequest = req.body;
+      const {
+        conversationId,
+        expectsReadConfirmation,
+        linkPreview,
+        mentions,
+        messageTimer,
+        quote,
+        text,
+      }: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -407,6 +427,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
           linkPreviewContent,
           mentions,
           quoteContent,
+          expectsReadConfirmation,
           messageTimer
         );
         const instanceName = instanceService.getInstance(instanceId).name;
@@ -427,20 +448,26 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
+      expectsReadConfirmation: Joi.boolean().optional(),
       messageTimer: Joi.number()
         .optional()
         .default(0),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, messageTimer}: TextRequest = req.body;
+      const {conversationId, expectsReadConfirmation, messageTimer}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
       try {
-        const messageId = await instanceService.sendPing(instanceId, conversationId, messageTimer);
+        const messageId = await instanceService.sendPing(
+          instanceId,
+          conversationId,
+          expectsReadConfirmation,
+          messageTimer
+        );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,
@@ -494,6 +521,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
+      expectsReadConfirmation: Joi.boolean().optional(),
       firstMessageId: Joi.string()
         .uuid()
         .required(),
@@ -506,7 +534,15 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, firstMessageId, linkPreview, mentions, quote, text}: MessageUpdateRequest = req.body;
+      const {
+        conversationId,
+        expectsReadConfirmation,
+        firstMessageId,
+        linkPreview,
+        mentions,
+        quote,
+        text,
+      }: MessageUpdateRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -549,7 +585,8 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
           text,
           linkPreviewContent,
           mentions,
-          quoteContent
+          quoteContent,
+          expectsReadConfirmation
         );
 
         const instanceName = instanceService.getInstance(instanceId).name;
