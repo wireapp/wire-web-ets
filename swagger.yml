@@ -135,6 +135,8 @@ definitions:
       conversation:
         format: uuid
         type: string
+      expectsReadConfirmation:
+        type: boolean
       from:
         format: uuid
         type: string
@@ -172,6 +174,8 @@ definitions:
       conversationId:
         format: uuid
         type: string
+      expectsReadConfirmation:
+        type: boolean
       linkPreview:
         $ref: '#/definitions/LinkPreview'
       mentions:
@@ -575,43 +579,6 @@ paths:
       summary: Get all messages
       tags:
         - Instance
-  /instance/{instanceId}/markEphemeralRead:
-    post:
-      operationId: markEphemeralRead
-      parameters:
-        - description: ID of instance to return
-          format: uuid
-          in: path
-          name: instanceId
-          required: true
-          type: string
-        - description: ''
-          in: body
-          name: body
-          required: true
-          schema:
-            properties:
-              conversationId:
-                format: uuid
-                type: string
-              messageId:
-                format: uuid
-                type: string
-            type: object
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ''
-          schema:
-            $ref: '#/definitions/InstanceAndName'
-        404:
-          description: Not found
-          schema:
-            $ref: '#/definitions/NotFound'
-      summary: Mark an ephemeral message as read
-      tags:
-        - Instance
   /instance/{instanceId}/mute:
     post:
       operationId: muteConversation
@@ -648,9 +615,95 @@ paths:
       summary: Mute a conversation
       tags:
         - Instance
-  /instance/{instanceId}/sendConfirmation:
+  /instance/{instanceId}/sendConfirmationDelivered:
     post:
-      operationId: sendConfirmation
+      operationId: sendConfirmationDelivered
+      parameters:
+        - description: ID of instance to return
+          format: uuid
+          in: path
+          name: instanceId
+          required: true
+          type: string
+        - description: ''
+          in: body
+          name: body
+          required: true
+          schema:
+            properties:
+              conversationId:
+                format: uuid
+                type: string
+              firstMessageId:
+                format: uuid
+                type: string
+              moreMessageIds:
+                format: uuid
+                type: string
+            required:
+              - conversationId
+              - firstMessageId
+            type: object
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: Send a delivery confirmation for a message
+      tags:
+        - Instance
+  /instance/{instanceId}/sendConfirmationRead:
+    post:
+      operationId: sendConfirmationRead
+      parameters:
+        - description: ID of instance to return
+          format: uuid
+          in: path
+          name: instanceId
+          required: true
+          type: string
+        - description: ''
+          in: body
+          name: body
+          required: true
+          schema:
+            properties:
+              conversationId:
+                format: uuid
+                type: string
+              firstMessageId:
+                format: uuid
+                type: string
+              moreMessageIds:
+                format: uuid
+                type: string
+            required:
+              - conversationId
+              - firstMessageId
+            type: object
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: Send a read confirmation for a message
+      tags:
+        - Instance
+  /instance/{instanceId}/sendEphemeralConfirmationDelivered:
+    post:
+      operationId: sendEphemeralConfirmationDelivered
       parameters:
         - description: ID of instance to return
           format: uuid
@@ -682,7 +735,44 @@ paths:
           description: Not found
           schema:
             $ref: '#/definitions/NotFound'
-      summary: Send a receive confirmation for a message
+      summary: Send a delivery confirmation for an ephemeral message
+      tags:
+        - Instance
+  /instance/{instanceId}/sendEphemeralConfirmationRead:
+    post:
+      operationId: sendEphemeralConfirmationRead
+      parameters:
+        - description: ID of instance to return
+          format: uuid
+          in: path
+          name: instanceId
+          required: true
+          type: string
+        - description: ''
+          in: body
+          name: body
+          required: true
+          schema:
+            properties:
+              conversationId:
+                format: uuid
+                type: string
+              messageId:
+                format: uuid
+                type: string
+            type: object
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/InstanceAndName'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+      summary: Send a read confirmation for an ephemeral message
       tags:
         - Instance
   /instance/{instanceId}/sendFile:
@@ -707,6 +797,8 @@ paths:
               data:
                 format: base64
                 type: string
+              expectsReadConfirmation:
+                type: boolean
               fileName:
                 type: string
               messageTimer:
@@ -756,6 +848,8 @@ paths:
               data:
                 format: base64
                 type: string
+              expectsReadConfirmation:
+                type: boolean
               height:
                 format: number
                 type: string
@@ -806,6 +900,8 @@ paths:
               conversationId:
                 format: uuid
                 type: string
+              expectsReadConfirmation:
+                type: boolean
               latitude:
                 format: number
                 type: string
@@ -859,6 +955,8 @@ paths:
               conversationId:
                 format: uuid
                 type: string
+              expectsReadConfirmation:
+                type: boolean
               messageTimer:
                 format: number
                 type: string

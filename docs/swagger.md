@@ -270,28 +270,6 @@ opensource@wire.com
 | 200  |             | [ [Message](#message) ] |
 | 404  | Not found   | [NotFound](#notfound)   |
 
-### /instance/{instanceId}/markEphemeralRead
-
----
-
-##### **_POST_**
-
-**Summary:** Mark an ephemeral message as read
-
-**Parameters**
-
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
-
-**Responses**
-
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
-
 ### /instance/{instanceId}/mute
 
 ---
@@ -314,13 +292,79 @@ opensource@wire.com
 | 200  |             | [InstanceAndName](#instanceandname) |
 | 404  | Not found   | [NotFound](#notfound)               |
 
-### /instance/{instanceId}/sendConfirmation
+### /instance/{instanceId}/sendConfirmationDelivered
 
 ---
 
 ##### **_POST_**
 
-**Summary:** Send a receive confirmation for a message
+**Summary:** Send a delivery confirmation for a message
+
+**Parameters**
+
+| Name       | Located in | Description              | Required | Schema        |
+| ---------- | ---------- | ------------------------ | -------- | ------------- |
+| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+| body       | body       |                          | Yes      | object        |
+
+**Responses**
+
+| Code | Description | Schema                              |
+| ---- | ----------- | ----------------------------------- |
+| 200  |             | [InstanceAndName](#instanceandname) |
+| 404  | Not found   | [NotFound](#notfound)               |
+
+### /instance/{instanceId}/sendConfirmationRead
+
+---
+
+##### **_POST_**
+
+**Summary:** Send a read confirmation for a message
+
+**Parameters**
+
+| Name       | Located in | Description              | Required | Schema        |
+| ---------- | ---------- | ------------------------ | -------- | ------------- |
+| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+| body       | body       |                          | Yes      | object        |
+
+**Responses**
+
+| Code | Description | Schema                              |
+| ---- | ----------- | ----------------------------------- |
+| 200  |             | [InstanceAndName](#instanceandname) |
+| 404  | Not found   | [NotFound](#notfound)               |
+
+### /instance/{instanceId}/sendEphemeralConfirmationDelivered
+
+---
+
+##### **_POST_**
+
+**Summary:** Send a delivery confirmation for an ephemeral message
+
+**Parameters**
+
+| Name       | Located in | Description              | Required | Schema        |
+| ---------- | ---------- | ------------------------ | -------- | ------------- |
+| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+| body       | body       |                          | Yes      | object        |
+
+**Responses**
+
+| Code | Description | Schema                              |
+| ---- | ----------- | ----------------------------------- |
+| 200  |             | [InstanceAndName](#instanceandname) |
+| 404  | Not found   | [NotFound](#notfound)               |
+
+### /instance/{instanceId}/sendEphemeralConfirmationRead
+
+---
+
+##### **_POST_**
+
+**Summary:** Send a read confirmation for an ephemeral message
 
 **Parameters**
 
@@ -628,15 +672,16 @@ opensource@wire.com
 
 ### Message
 
-| Name         | Type               | Description | Required |
-| ------------ | ------------------ | ----------- | -------- |
-| content      | object             |             | No       |
-| conversation | string (uuid)      |             | Yes      |
-| from         | string (uuid)      |             | Yes      |
-| id           | string (uuid)      |             | Yes      |
-| messageTimer | string (number)    |             | Yes      |
-| state        | undefined (string) |             | Yes      |
-| type         | undefined (string) |             | Yes      |
+| Name                    | Type               | Description | Required |
+| ----------------------- | ------------------ | ----------- | -------- |
+| content                 | object             |             | No       |
+| conversation            | string (uuid)      |             | Yes      |
+| expectsReadConfirmation | boolean            |             | No       |
+| from                    | string (uuid)      |             | Yes      |
+| id                      | string (uuid)      |             | Yes      |
+| messageTimer            | string (number)    |             | Yes      |
+| state                   | undefined (string) |             | Yes      |
+| type                    | undefined (string) |             | Yes      |
 
 ### NotFound
 
@@ -647,11 +692,12 @@ opensource@wire.com
 
 ### TextMessage
 
-| Name           | Type                        | Description | Required |
-| -------------- | --------------------------- | ----------- | -------- |
-| conversationId | string (uuid)               |             | No       |
-| linkPreview    | [LinkPreview](#linkpreview) |             | No       |
-| mentions       | [ [Mention](#mention) ]     |             | No       |
-| messageTimer   | string (number)             |             | No       |
-| quote          | object                      |             | No       |
-| text           | string                      |             | No       |
+| Name                    | Type                        | Description | Required |
+| ----------------------- | --------------------------- | ----------- | -------- |
+| conversationId          | string (uuid)               |             | No       |
+| expectsReadConfirmation | boolean                     |             | No       |
+| linkPreview             | [LinkPreview](#linkpreview) |             | No       |
+| mentions                | [ [Mention](#mention) ]     |             | No       |
+| messageTimer            | string (number)             |             | No       |
+| quote                   | object                      |             | No       |
+| text                    | string                      |             | No       |
