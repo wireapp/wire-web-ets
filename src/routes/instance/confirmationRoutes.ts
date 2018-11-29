@@ -108,7 +108,7 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/markEphemeralDelivered',
+    '/api/v1/instance/:instanceId/sendEphemeralConfirmationDelivered',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
@@ -143,7 +143,7 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
   );
 
   router.post(
-    '/api/v1/instance/:instanceId/markEphemeralRead',
+    '/api/v1/instance/:instanceId/sendEphemeralConfirmationRead',
     joiValidate({
       conversationId: Joi.string()
         .uuid()
