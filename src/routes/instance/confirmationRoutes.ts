@@ -113,9 +113,12 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
-      messageId: Joi.string()
+      firstMessageId: Joi.string()
         .uuid()
         .required(),
+      moreMessageIds: Joi.array()
+        .items(Joi.string().uuid())
+        .optional(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -148,9 +151,12 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
-      messageId: Joi.string()
+      firstMessageId: Joi.string()
         .uuid()
         .required(),
+      moreMessageIds: Joi.array()
+        .items(Joi.string().uuid())
+        .optional(),
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
