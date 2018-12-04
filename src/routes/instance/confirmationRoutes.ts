@@ -75,7 +75,7 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
       conversationId: Joi.string()
         .uuid()
         .required(),
-      messageId: Joi.string()
+      firstMessageId: Joi.string()
         .uuid()
         .required(),
       moreMessageIds: Joi.array()

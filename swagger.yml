@@ -720,7 +720,7 @@ paths:
               conversationId:
                 format: uuid
                 type: string
-              messageId:
+              firstMessageId:
                 format: uuid
                 type: string
             type: object
@@ -757,7 +757,7 @@ paths:
               conversationId:
                 format: uuid
                 type: string
-              messageId:
+              firstMessageId:
                 format: uuid
                 type: string
             type: object
