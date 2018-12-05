@@ -25,11 +25,10 @@ import {
   MentionContent,
   QuoteContent,
 } from '@wireapp/core/dist/conversation/content/';
+import {celebrate, Joi} from 'celebrate';
 import * as express from 'express';
-import * as Joi from 'joi';
 
 import InstanceService from '../../InstanceService';
-import joiValidate from '../../middlewares/joiValidate';
 import {hexToUint8Array} from '../../utils';
 
 export interface MessageRequest {
@@ -138,11 +137,13 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/archive/?',
-    joiValidate({
-      archive: Joi.boolean().required(),
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
+    celebrate({
+      body: {
+        archive: Joi.boolean().required(),
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -166,11 +167,13 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/mute/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      mute: Joi.boolean().required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        mute: Joi.boolean().required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -194,10 +197,12 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/clear/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -221,13 +226,15 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/delete/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      messageId: Joi.string()
-        .uuid()
-        .required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        messageId: Joi.string()
+          .uuid()
+          .required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -251,13 +258,15 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/deleteEverywhere/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      messageId: Joi.string()
-        .uuid()
-        .required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        messageId: Joi.string()
+          .uuid()
+          .required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -281,10 +290,12 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/getMessages/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -305,18 +316,20 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/sendLocation/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      expectsReadConfirmation: Joi.boolean().optional(),
-      latitude: Joi.number().required(),
-      locationName: Joi.string().optional(),
-      longitude: Joi.number().required(),
-      messageTimer: Joi.number()
-        .optional()
-        .default(0),
-      zoom: Joi.number().optional(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        expectsReadConfirmation: Joi.boolean().default(false),
+        latitude: Joi.number().required(),
+        locationName: Joi.string().optional(),
+        longitude: Joi.number().required(),
+        messageTimer: Joi.number()
+          .default(0)
+          .optional(),
+        zoom: Joi.number().optional(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -359,20 +372,24 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/sendText/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      expectsReadConfirmation: Joi.boolean().optional(),
-      linkPreview: Joi.object(validateLinkPreview).optional(),
-      mentions: Joi.array()
-        .items(validateMention)
-        .optional(),
-      messageTimer: Joi.number()
-        .optional()
-        .default(0),
-      quote: Joi.object(validateQuote).optional(),
-      text: Joi.string().required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        expectsReadConfirmation: Joi.boolean()
+          .default(false)
+          .optional(),
+        linkPreview: Joi.object(validateLinkPreview).optional(),
+        mentions: Joi.array()
+          .items(validateMention)
+          .optional(),
+        messageTimer: Joi.number()
+          .default(0)
+          .optional(),
+        quote: Joi.object(validateQuote).optional(),
+        text: Joi.string().required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -444,14 +461,16 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/sendPing/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      expectsReadConfirmation: Joi.boolean().optional(),
-      messageTimer: Joi.number()
-        .optional()
-        .default(0),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        expectsReadConfirmation: Joi.boolean().default(false),
+        messageTimer: Joi.number()
+          .default(0)
+          .optional(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -482,16 +501,18 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/sendReaction/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      originalMessageId: Joi.string()
-        .uuid()
-        .required(),
-      type: Joi.string()
-        .valid(ReactionType.LIKE, ReactionType.NONE)
-        .required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        originalMessageId: Joi.string()
+          .uuid()
+          .required(),
+        type: Joi.string()
+          .valid(ReactionType.LIKE, ReactionType.NONE)
+          .required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -517,20 +538,24 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/updateText/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      expectsReadConfirmation: Joi.boolean().optional(),
-      firstMessageId: Joi.string()
-        .uuid()
-        .required(),
-      linkPreview: Joi.object(validateLinkPreview).optional(),
-      mentions: Joi.array()
-        .items(validateMention)
-        .optional(),
-      quote: Joi.object(validateQuote).optional(),
-      text: Joi.string().required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        expectsReadConfirmation: Joi.boolean()
+          .default(false)
+          .optional(),
+        firstMessageId: Joi.string()
+          .uuid()
+          .required(),
+        linkPreview: Joi.object(validateLinkPreview).optional(),
+        mentions: Joi.array()
+          .items(validateMention)
+          .optional(),
+        quote: Joi.object(validateQuote).optional(),
+        text: Joi.string().required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;

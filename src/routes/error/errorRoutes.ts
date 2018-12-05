@@ -17,8 +17,10 @@
  *
  */
 
+import {isCelebrate} from 'celebrate';
 import * as express from 'express';
 import * as logdown from 'logdown';
+
 import {formatDate} from '../../utils';
 
 const router = express.Router();
@@ -27,6 +29,13 @@ const logger = logdown('@wireapp/wire-web-ets/routes/error/errorRoutes', {
   logger: console,
   markdown: false,
 });
+
+const celebrateErrorRoute = (): express.ErrorRequestHandler => (err, req, res, next) => {
+  if (isCelebrate(err)) {
+    return res.status(422).json({error: `Validation error: ${err.message}`});
+  }
+  return next();
+};
 
 const internalErrorRoute = (): express.ErrorRequestHandler => (err, req, res, next) => {
   logger.error(`[${formatDate()}] ${err.stack}`);
@@ -47,4 +56,4 @@ const notFoundRoute = () =>
     return res.status(error.code).json(error);
   });
 
-export {internalErrorRoute, notFoundRoute};
+export {celebrateErrorRoute, internalErrorRoute, notFoundRoute};

@@ -17,10 +17,9 @@
  *
  */
 
+import {celebrate, Joi} from 'celebrate';
 import * as express from 'express';
-import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
-import joiValidate from '../../middlewares/joiValidate';
 
 export interface ConfirmationMessageRequest {
   conversationId: string;
@@ -33,16 +32,18 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/sendConfirmationDelivered',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      firstMessageId: Joi.string()
-        .uuid()
-        .required(),
-      moreMessageIds: Joi.array()
-        .items(Joi.string().uuid())
-        .optional(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        firstMessageId: Joi.string()
+          .uuid()
+          .required(),
+        moreMessageIds: Joi.array()
+          .items(Joi.string().uuid())
+          .optional(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -71,16 +72,18 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/sendConfirmationRead',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      firstMessageId: Joi.string()
-        .uuid()
-        .required(),
-      moreMessageIds: Joi.array()
-        .items(Joi.string().uuid())
-        .optional(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        firstMessageId: Joi.string()
+          .uuid()
+          .required(),
+        moreMessageIds: Joi.array()
+          .items(Joi.string().uuid())
+          .optional(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -109,16 +112,18 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/sendEphemeralConfirmationDelivered',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      firstMessageId: Joi.string()
-        .uuid()
-        .required(),
-      moreMessageIds: Joi.array()
-        .items(Joi.string().uuid())
-        .optional(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        firstMessageId: Joi.string()
+          .uuid()
+          .required(),
+        moreMessageIds: Joi.array()
+          .items(Joi.string().uuid())
+          .optional(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -147,16 +152,18 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
 
   router.post(
     '/api/v1/instance/:instanceId/sendEphemeralConfirmationRead',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      firstMessageId: Joi.string()
-        .uuid()
-        .required(),
-      moreMessageIds: Joi.array()
-        .items(Joi.string().uuid())
-        .optional(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        firstMessageId: Joi.string()
+          .uuid()
+          .required(),
+        moreMessageIds: Joi.array()
+          .items(Joi.string().uuid())
+          .optional(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;

@@ -866,6 +866,14 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
+celebrate@9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/celebrate/-/celebrate-9.0.1.tgz#2a41d04afbebf825a3bb68b55f87b307df0de366"
+  integrity sha512-LCffktX5Gu2sAGFOCnyJZ+wDtBnPmjzaW238+cB6q7l8nS5UjriGhX4NjAGMDw5DpC+21841GgmWkpzvotQy4g==
+  dependencies:
+    escape-html "1.0.3"
+    joi "14.x.x"
+
 chai@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chai/-/chai-4.1.2.tgz#0f64584ba642f0f2ace2806279f4f06ca23ad73c"
@@ -1437,7 +1445,7 @@ es-to-primitive@^1.1.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-escape-html@~1.0.3:
+escape-html@1.0.3, escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=
@@ -2668,7 +2676,7 @@ jest-validate@^23.5.0:
     leven "^2.1.0"
     pretty-format "^23.5.0"
 
-joi@14.3.0:
+joi@14.x.x:
   version "14.3.0"
   resolved "https://registry.yarnpkg.com/joi/-/joi-14.3.0.tgz#55f7c5caa8256de74ccb12eb22ab1c19eea02db3"
   integrity sha512-0HKd1z8MWogez4GaU0LkY1FgW30vR2Kwy414GISfCU41OYgUC2GWpNe5amsvBZtDqPtt7DohykfOOMIw1Z5hvQ==

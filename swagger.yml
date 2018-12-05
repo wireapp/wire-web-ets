@@ -162,7 +162,7 @@ definitions:
       - timestamp
       - type
     type: object
-  NotFound:
+  NotFoundError:
     properties:
       error:
         type: string
@@ -197,6 +197,11 @@ definitions:
       text:
         type: string
     type: object
+  ValidationError:
+    properties:
+      error:
+        type: string
+    type: object
 info:
   contact:
     email: opensource@wire.com
@@ -228,6 +233,10 @@ paths:
           description: ''
           schema:
             type: object
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Delete all clients
       tags:
         - Clients
@@ -251,6 +260,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/InstanceAndName'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Create a new instance
       tags:
         - Instance
@@ -275,7 +288,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Delete an instance
       tags:
         - Instance
@@ -298,7 +315,7 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
       summary: Get information about an instance
       tags:
         - Instance
@@ -334,7 +351,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Archive a conversation
       tags:
         - Instance
@@ -375,7 +396,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Set a user's availability
       tags:
         - Instance
@@ -409,7 +434,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Clear a conversation
       tags:
         - Instance
@@ -435,7 +464,7 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
       summary: Get all clients of an instance
       tags:
         - Instance
@@ -472,7 +501,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Delete a message locally
       tags:
         - Instance
@@ -509,7 +542,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Delete a message for everyone
       tags:
         - Instance
@@ -539,7 +576,7 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
       summary: Get the fingerprint from the instance's client
       tags:
         - Instance
@@ -575,7 +612,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Get all messages
       tags:
         - Instance
@@ -611,7 +652,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Mute a conversation
       tags:
         - Instance
@@ -654,7 +699,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a delivery confirmation for a message
       tags:
         - Instance
@@ -697,7 +746,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a read confirmation for a message
       tags:
         - Instance
@@ -734,7 +787,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a delivery confirmation for an ephemeral message
       tags:
         - Instance
@@ -771,7 +828,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a read confirmation for an ephemeral message
       tags:
         - Instance
@@ -822,7 +883,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a file to a conversation
       tags:
         - Instance
@@ -877,7 +942,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send an image to a conversation
       tags:
         - Instance
@@ -932,7 +1001,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a location to a conversation
       tags:
         - Instance
@@ -976,7 +1049,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a ping to a conversation
       tags:
         - Instance
@@ -1023,7 +1100,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a reaction to a message
       tags:
         - Instance
@@ -1062,7 +1143,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a session reset message
       tags:
         - Instance
@@ -1097,7 +1182,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a text message to a conversation
       tags:
         - Instance
@@ -1135,7 +1224,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Send a typing indicator to a conversation
       tags:
         - Instance
@@ -1170,7 +1263,11 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
+        422:
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ValidationError'
       summary: Update a text message in a conversation
       tags:
         - Instance
@@ -1189,7 +1286,7 @@ paths:
         404:
           description: Not found
           schema:
-            $ref: '#/definitions/NotFound'
+            $ref: '#/definitions/NotFoundError'
       summary: Get all instances
       tags:
         - Instances

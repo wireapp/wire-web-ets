@@ -30,9 +30,10 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200  |             | object |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | object                              |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance
 
@@ -52,9 +53,10 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}
 
@@ -74,10 +76,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             | object                |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | object                              |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ##### **_GET_**
 
@@ -91,10 +94,10 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             | [Instance](#instance) |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description | Schema                          |
+| ---- | ----------- | ------------------------------- |
+| 200  |             | [Instance](#instance)           |
+| 404  | Not found   | [NotFoundError](#notfounderror) |
 
 ### /instance/{instanceId}/archive
 
@@ -113,10 +116,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/availability
 
@@ -135,10 +139,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/clear
 
@@ -157,10 +162,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/clients
 
@@ -178,10 +184,10 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             | [ [Client](#client) ] |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description | Schema                          |
+| ---- | ----------- | ------------------------------- |
+| 200  |             | [ [Client](#client) ]           |
+| 404  | Not found   | [NotFoundError](#notfounderror) |
 
 ### /instance/{instanceId}/delete
 
@@ -200,10 +206,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/deleteEverywhere
 
@@ -222,10 +229,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/fingerprint
 
@@ -243,10 +251,10 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             | object                |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description | Schema                          |
+| ---- | ----------- | ------------------------------- |
+| 200  |             | object                          |
+| 404  | Not found   | [NotFoundError](#notfounderror) |
 
 ### /instance/{instanceId}/getMessages
 
@@ -265,10 +273,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                  |
-| ---- | ----------- | ----------------------- |
-| 200  |             | [ [Message](#message) ] |
-| 404  | Not found   | [NotFound](#notfound)   |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [ [Message](#message) ]             |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/mute
 
@@ -287,10 +296,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendConfirmationDelivered
 
@@ -309,10 +319,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendConfirmationRead
 
@@ -331,10 +342,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendEphemeralConfirmationDelivered
 
@@ -353,10 +365,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendEphemeralConfirmationRead
 
@@ -375,10 +388,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendFile
 
@@ -397,10 +411,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             |                       |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  |                                     |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendImage
 
@@ -419,10 +434,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             |                       |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  |                                     |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendLocation
 
@@ -441,10 +457,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             |                       |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  |                                     |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendPing
 
@@ -463,10 +480,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             |                       |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  |                                     |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendReaction
 
@@ -485,10 +503,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             |                       |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  |                                     |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendSessionReset
 
@@ -507,10 +526,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             |                       |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  |                                     |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendText
 
@@ -529,10 +549,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             |                       |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  |                                     |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendTyping
 
@@ -551,10 +572,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                              |
-| ---- | ----------- | ----------------------------------- |
-| 200  |             | [InstanceAndName](#instanceandname) |
-| 404  | Not found   | [NotFound](#notfound)               |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  | [InstanceAndName](#instanceandname) |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/updateText
 
@@ -573,10 +595,11 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             |                       |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description      | Schema                              |
+| ---- | ---------------- | ----------------------------------- |
+| 200  |                  |                                     |
+| 404  | Not found        | [NotFoundError](#notfounderror)     |
+| 422  | Validation error | [ValidationError](#validationerror) |
 
 ### /instances
 
@@ -588,10 +611,10 @@ opensource@wire.com
 
 **Responses**
 
-| Code | Description | Schema                |
-| ---- | ----------- | --------------------- |
-| 200  |             | object                |
-| 404  | Not found   | [NotFound](#notfound) |
+| Code | Description | Schema                          |
+| ---- | ----------- | ------------------------------- |
+| 200  |             | object                          |
+| 404  | Not found   | [NotFoundError](#notfounderror) |
 
 ### /log
 
@@ -683,7 +706,7 @@ opensource@wire.com
 | state                   | undefined (string) |             | Yes      |
 | type                    | undefined (string) |             | Yes      |
 
-### NotFound
+### NotFoundError
 
 | Name  | Type   | Description | Required |
 | ----- | ------ | ----------- | -------- |
@@ -701,3 +724,9 @@ opensource@wire.com
 | messageTimer            | string (number)             |             | No       |
 | quote                   | object                      |             | No       |
 | text                    | string                      |             | No       |
+
+### ValidationError
+
+| Name  | Type   | Description | Required |
+| ----- | ------ | ----------- | -------- |
+| error | string |             | No       |
