@@ -4,9 +4,9 @@ definitions:
     properties:
       backend:
         enum:
+          - staging
           - prod
           - production
-          - staging
         type: string
       email:
         format: email
@@ -51,7 +51,6 @@ definitions:
           backend:
             type: string
           clientId:
-            format: uuid
             type: string
         type: object
   InstanceAndName:
@@ -211,7 +210,7 @@ info:
     url: https://github.com/wireapp/wire-web-ets/blob/master/LICENSE
   termsOfService: https://wire.com/legal/
   title: E2E Test Service
-  version: 1.0.0
+  version: 1.16.1
 paths:
   /clients:
     delete:
@@ -1290,17 +1289,6 @@ paths:
       summary: Get all instances
       tags:
         - Instances
-  /log:
-    get:
-      operationId: getLog
-      produces:
-        - text/plain
-      responses:
-        200:
-          description: The log as plain text
-      summary: Get the ETS log as plain text
-      tags:
-        - Logging
 schemes:
   - http
 swagger: '2.0'
@@ -1311,5 +1299,3 @@ tags:
     name: Instances
   - description: Wire User Clients
     name: Clients
-  - description: ETS Logging
-    name: Logging

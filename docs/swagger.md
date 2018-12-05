@@ -2,7 +2,7 @@
 
 End-to-end Test Service (ETS) for Wire's test automation suite.
 
-**Version:** 1.0.0
+**Version:** 1.16.1
 
 **Terms of service:**  
 https://wire.com/legal/
@@ -615,20 +615,6 @@ opensource@wire.com
 | ---- | ----------- | ------------------------------- |
 | 200  |             | object                          |
 | 404  | Not found   | [NotFoundError](#notfounderror) |
-
-### /log
-
----
-
-##### **_GET_**
-
-**Summary:** Get the ETS log as plain text
-
-**Responses**
-
-| Code | Description           |
-| ---- | --------------------- |
-| 200  | The log as plain text |
 
 ### Models
 
