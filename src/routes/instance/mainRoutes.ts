@@ -18,10 +18,9 @@
  */
 
 import {ClientType} from '@wireapp/api-client/dist/commonjs/client/';
+import {celebrate, Joi} from 'celebrate';
 import * as express from 'express';
-import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
-import joiValidate from '../../middlewares/joiValidate';
 
 export interface InstanceRequest {
   backend: string;
@@ -46,23 +45,25 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
 
   router.put(
     '/api/v1/instance/?',
-    joiValidate({
-      backend: Joi.string()
-        .valid(['prod', 'production', 'staging'])
-        .required(),
-      deviceLabel: Joi.string()
-        .allow('')
-        .optional(),
-      deviceName: Joi.string()
-        .allow('')
-        .optional(),
-      email: Joi.string()
-        .email()
-        .required(),
-      name: Joi.string()
-        .allow('')
-        .optional(),
-      password: Joi.string().required(),
+    celebrate({
+      body: {
+        backend: Joi.string()
+          .valid(['prod', 'production', 'staging'])
+          .required(),
+        deviceLabel: Joi.string()
+          .allow('')
+          .optional(),
+        deviceName: Joi.string()
+          .allow('')
+          .optional(),
+        email: Joi.string()
+          .email()
+          .required(),
+        name: Joi.string()
+          .allow('')
+          .optional(),
+        password: Joi.string().required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {backend, deviceLabel, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
@@ -154,14 +155,16 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
 
   router.delete(
     '/api/v1/clients/?',
-    joiValidate({
-      backend: Joi.string()
-        .valid(['prod', 'production', 'staging'])
-        .required(),
-      email: Joi.string()
-        .email()
-        .required(),
-      password: Joi.string().required(),
+    celebrate({
+      body: {
+        backend: Joi.string()
+          .valid(['prod', 'production', 'staging'])
+          .required(),
+        email: Joi.string()
+          .email()
+          .required(),
+        password: Joi.string().required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {backend, email, password}: InstanceRequest = req.body;

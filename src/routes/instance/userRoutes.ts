@@ -18,10 +18,9 @@
  */
 
 import {AvailabilityType} from '@wireapp/core/dist/broadcast/';
+import {celebrate, Joi} from 'celebrate';
 import * as express from 'express';
-import * as Joi from 'joi';
 import InstanceService from '../../InstanceService';
-import joiValidate from '../../middlewares/joiValidate';
 
 export interface AvailabilityRequest {
   teamId: string;
@@ -33,13 +32,15 @@ const userRoutes = (instanceService: InstanceService): express.Router => {
 
   router.post(
     '/api/v1/instance/:instanceId/availability/?',
-    joiValidate({
-      teamId: Joi.string()
-        .uuid()
-        .required(),
-      type: Joi.number()
-        .valid([0, 1, 2, 3])
-        .required(),
+    celebrate({
+      body: {
+        teamId: Joi.string()
+          .uuid()
+          .required(),
+        type: Joi.number()
+          .valid([0, 1, 2, 3])
+          .required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
