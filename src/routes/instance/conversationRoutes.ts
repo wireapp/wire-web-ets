@@ -510,7 +510,7 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
           .uuid()
           .required(),
         type: Joi.string()
-          .valid(ReactionType.LIKE, ReactionType.NONE)
+          .valid([ReactionType.LIKE, ReactionType.NONE])
           .required(),
       },
     }),

@@ -1080,7 +1080,7 @@ paths:
                 type: string
               type:
                 enum:
-                  - ❤
+                  - ❤️
                   - ''
                 type: string
             type: object
