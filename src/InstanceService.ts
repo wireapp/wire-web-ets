@@ -84,6 +84,8 @@ class InstanceService {
   }
 
   private attachListeners(account: Account, instance: Instance): void {
+    account.on('error', error => logger.error(`[${formatDate()}]`, error));
+
     account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => {
       const linkPreviewContent = payload.content as TextContent;
       if (linkPreviewContent.linkPreviews) {
@@ -103,15 +105,17 @@ class InstanceService {
       instance.messages.set(payload.id, payload);
     });
 
-    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
+    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) => {
+      instance.messages.set(payload.id, payload);
+    });
 
-    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
+    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) => {
+      instance.messages.set(payload.id, payload);
+    });
 
-    account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => {
+      instance.messages.set(payload.id, payload);
+    });
 
     account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
       const editedContent = payload.content as EditedTextContent;
@@ -129,9 +133,9 @@ class InstanceService {
       }
     });
 
-    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
+    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundleIncoming) => {
+      instance.messages.set(payload.id, payload);
+    });
 
     account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundleIncoming) => {
       const deleteContent = payload.content as DeletedContent;
@@ -194,6 +198,7 @@ class InstanceService {
     await engine.init('wire-web-ets');
 
     logger.log(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
+
     const client = new APIClient({store: engine, urls: backendType});
     const account = new Account(client);
 
@@ -214,6 +219,7 @@ class InstanceService {
         throw new Error(`Backend error: ${error.response.data.message}`);
       }
 
+      logger.error(`[${formatDate()}]`, error);
       throw error;
     }
 
@@ -345,6 +351,8 @@ class InstanceService {
     try {
       await account.login(loginData, true, ClientInfo);
     } catch (error) {
+      logger.error(`[${formatDate()}]`, error);
+
       if (error.code !== StatusCode.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
         throw error;
       }
