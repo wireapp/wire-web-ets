@@ -47,7 +47,9 @@ yarn start
 
 ## API documentation (old)
 
+- [`GET /`](#get-)
 - [`GET /log`](#get-log)
+- [`GET /commit`](#get-commit)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
 - [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
 - [`GET /api/v1/instance/<instanceId>/clients`](#get-apiv1instanceinstanceidclients)
@@ -78,12 +80,40 @@ yarn start
 
 ---
 
+### `GET /`
+
+#### Response
+
+```json
+{
+  "code": "<number in HTTP status format>",
+  "commit?": "<string>",
+  "instance": {
+    "env": {
+      "LOG_ERROR?": "<string>",
+      "LOG_OUTPUT?": "<string>",
+      "NODE_DEBUG?": "<string>"
+    },
+    "uptime": "<string in HH:mm:ss format>"
+  },
+  "message": "<string>"
+}
+```
+
 ### `GET /log`
 
 #### Response
 
 ```
 <complete log as plain text>
+```
+
+### `GET /commit`
+
+#### Response
+
+```
+<latest commit hash as plain text>
 ```
 
 ### `GET /api/v1/instance/<instanceId>`

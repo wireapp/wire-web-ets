@@ -26,6 +26,7 @@ import * as http from 'http';
 import {ServerConfig} from './config';
 import InstanceService from './InstanceService';
 import healthCheckRoute from './routes/_health/healthCheckRoute';
+import commitRoute from './routes/commit/commitRoute';
 import {celebrateErrorRoute, internalErrorRoute, notFoundRoute} from './routes/error/errorRoutes';
 import InstanceRoutes from './routes/instance/';
 import logRoute from './routes/log/logRoute';
@@ -65,6 +66,7 @@ class Server {
     this.app.use(healthCheckRoute());
     this.app.use(mainRoute(this.config));
     initSwaggerRoute(this.app, this.config);
+    this.app.use(commitRoute(this.config));
     this.app.use(notFoundRoute());
     this.app.use(celebrateErrorRoute());
     this.app.use(internalErrorRoute());
