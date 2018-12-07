@@ -17,34 +17,24 @@
  *
  */
 
-import * as dotenv from 'dotenv';
+import * as express from 'express';
+import * as fs from 'fs-extra';
 import * as path from 'path';
+import {ServerConfig} from '../../config';
 
-const {version}: {version: string} = require('../package.json');
+const router = express.Router();
 
-dotenv.config();
+const commitRoute = (config: ServerConfig) => {
+  const commitHashFile = path.join(config.DIST_DIR, 'commit');
 
-export interface ServerConfig {
-  CACHE_DURATION_SECONDS: number;
-  COMPRESS_LEVEL: number;
-  COMPRESS_MIN_SIZE: number;
-  DEVELOPMENT?: boolean;
-  DIST_DIR: string;
-  ENVIRONMENT: string;
-  PORT_HTTP: number;
-  VERSION: string;
-}
-
-const config: ServerConfig = {
-  CACHE_DURATION_SECONDS: 300, // 5 minutes
-  COMPRESS_LEVEL: 6,
-  COMPRESS_MIN_SIZE: 500,
-  DIST_DIR: path.resolve(__dirname),
-  ENVIRONMENT: process.env.ENVIRONMENT || 'prod',
-  PORT_HTTP: Number(process.env.PORT) || 21080,
-  VERSION: version,
+  return router.get('/commit/?', async (req, res) => {
+    try {
+      const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
+      return res.contentType('text/plain; charset=UTF-8').send(commitHash);
+    } catch (error) {
+      return res.status(500).json({error: error.message, stack: error.stack});
+    }
+  });
 };
 
-config.DEVELOPMENT = config.ENVIRONMENT === 'dev';
-
-export default config;
+export default commitRoute;

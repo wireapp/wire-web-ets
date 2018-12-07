@@ -48,6 +48,7 @@ yarn start
 ## API documentation (old)
 
 - [`GET /log`](#get-log)
+- [`GET /commit`](#get-commit)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
 - [`GET /api/v1/instance/<instanceId>/fingerprint`](#get-apiv1instanceinstanceidfingerprint)
 - [`GET /api/v1/instance/<instanceId>/clients`](#get-apiv1instanceinstanceidclients)
@@ -84,6 +85,14 @@ yarn start
 
 ```
 <complete log as plain text>
+```
+
+### `GET /commit`
+
+#### Response
+
+```
+<latest commit hash as plain text>
 ```
 
 ### `GET /api/v1/instance/<instanceId>`
