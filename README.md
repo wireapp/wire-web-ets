@@ -86,7 +86,7 @@ yarn start
 
 ```json
 {
-  "code": "<number>",
+  "code": "<number in HTTP status format>",
   "commit?": "<string>",
   "instance": {
     "env": {
@@ -94,7 +94,7 @@ yarn start
       "LOG_OUTPUT?": "<string>",
       "NODE_DEBUG?": "<string>"
     },
-    "uptime": "<string>"
+    "uptime": "<string in HH:mm:ss format>"
   },
   "message": "<string>"
 }
