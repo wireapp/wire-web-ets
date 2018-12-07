@@ -47,7 +47,7 @@ yarn start
 
 ## API documentation (old)
 
-- [`GET /`](#get)
+- [`GET /`](#get-)
 - [`GET /log`](#get-log)
 - [`GET /commit`](#get-commit)
 - [`GET /api/v1/instance/<instanceId>`](#get-apiv1instanceinstanceid)
