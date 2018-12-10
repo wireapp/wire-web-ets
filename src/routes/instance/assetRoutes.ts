@@ -20,10 +20,11 @@
 import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
 import {celebrate, Joi} from 'celebrate';
 import * as express from 'express';
-import InstanceService from '../../InstanceService';
 
-interface AssetMessageRequest {
-  conversationId: string;
+import InstanceService from '../../InstanceService';
+import {MessageRequest} from './conversationRoutes';
+
+interface AssetMessageRequest extends MessageRequest {
   data: string;
   expectsReadConfirmation?: boolean;
   messageTimer?: number;

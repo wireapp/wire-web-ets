@@ -19,10 +19,11 @@
 
 import {celebrate, Joi} from 'celebrate';
 import * as express from 'express';
-import InstanceService from '../../InstanceService';
 
-export interface ConfirmationMessageRequest {
-  conversationId: string;
+import InstanceService from '../../InstanceService';
+import {MessageRequest} from './conversationRoutes';
+
+export interface ConfirmationMessageRequest extends MessageRequest {
   firstMessageId: string;
   moreMessageIds?: string[];
 }

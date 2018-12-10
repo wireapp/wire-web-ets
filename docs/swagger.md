@@ -640,6 +640,14 @@ opensource@wire.com
 | time     | dateTime      |             | No       |
 | type     | string        |             | No       |
 
+### Confirmation
+
+| Name           | Type              | Description | Required |
+| -------------- | ----------------- | ----------- | -------- |
+| firstMessageId | string (uuid)     |             | Yes      |
+| moreMessageIds | [ string (uuid) ] |             | No       |
+| type           | number            |             | Yes      |
+
 ### Instance
 
 | Name     | Type | Description | Required |
@@ -681,16 +689,17 @@ opensource@wire.com
 
 ### Message
 
-| Name                    | Type               | Description | Required |
-| ----------------------- | ------------------ | ----------- | -------- |
-| content                 | object             |             | No       |
-| conversation            | string (uuid)      |             | Yes      |
-| expectsReadConfirmation | boolean            |             | No       |
-| from                    | string (uuid)      |             | Yes      |
-| id                      | string (uuid)      |             | Yes      |
-| messageTimer            | string (number)    |             | Yes      |
-| state                   | undefined (string) |             | Yes      |
-| type                    | undefined (string) |             | Yes      |
+| Name                    | Type                              | Description | Required |
+| ----------------------- | --------------------------------- | ----------- | -------- |
+| content                 | object                            |             | No       |
+| confirmations           | [ [Confirmation](#confirmation) ] |             | No       |
+| conversation            | string (uuid)                     |             | Yes      |
+| expectsReadConfirmation | boolean                           |             | No       |
+| from                    | string (uuid)                     |             | Yes      |
+| id                      | string (uuid)                     |             | Yes      |
+| messageTimer            | string (number)                   |             | Yes      |
+| state                   | undefined (string)                |             | Yes      |
+| type                    | undefined (string)                |             | Yes      |
 
 ### NotFoundError
 

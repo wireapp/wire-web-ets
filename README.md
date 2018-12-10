@@ -347,6 +347,13 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
       "expectsReadConfirmation?": "<boolean>",
       "text": "<string>"
     },
+    "confirmations?": [
+      {
+        "firstMessageId": "<string in UUID format>",
+        "moreMessageIds?": "<Array of strings in UUID format>",
+        "type": "0|1"
+      }
+    ],
     "conversation": "<string in UUID format>",
     "from": "<string in UUID format>",
     "id": "<string in UUID format>",
