@@ -19,7 +19,9 @@
 
 import {celebrate, Joi} from 'celebrate';
 import * as express from 'express';
+
 import InstanceService from '../../InstanceService';
+import {MessageRequest} from './conversationRoutes';
 
 const sessionRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
@@ -35,7 +37,7 @@ const sessionRoutes = (instanceService: InstanceService): express.Router => {
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId}: {conversationId: string} = req.body;
+      const {conversationId}: MessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
