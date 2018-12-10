@@ -17,24 +17,27 @@
  *
  */
 
+import {celebrate, Joi} from 'celebrate';
 import * as express from 'express';
-import * as Joi from 'joi';
+
 import InstanceService from '../../InstanceService';
-import joiValidate from '../../middlewares/joiValidate';
+import {MessageRequest} from './conversationRoutes';
 
 const sessionRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
     '/api/v1/instance/:instanceId/sendSessionReset/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId}: {conversationId: string} = req.body;
+      const {conversationId}: MessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});

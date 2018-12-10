@@ -27,6 +27,7 @@ node("$NODE") {
         sh 'npm install -g yarn pm2'
         sh 'yarn install --no-progress'
         sh 'yarn dist'
+        sh 'git rev-parse HEAD > ./dist/commit'
         if (runningStatus == 1) {
           sh 'pm2 kill'
           sh 'pm2 install pm2-logrotate'

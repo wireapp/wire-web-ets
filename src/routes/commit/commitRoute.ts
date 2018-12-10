@@ -18,26 +18,23 @@
  */
 
 import * as express from 'express';
-import * as Joi from 'joi';
+import * as fs from 'fs-extra';
+import * as path from 'path';
+import {ServerConfig} from '../../config';
 
-const joiValidate = (schema: Joi.SchemaLike) => (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-): void => {
-  const {body, method} = req;
+const router = express.Router();
 
-  if (method === 'GET' || method === 'DELETE') {
-    return next();
-  }
+const commitRoute = (config: ServerConfig) => {
+  const commitHashFile = path.join(config.DIST_DIR, 'commit');
 
-  const {error: joiError} = Joi.validate(body, schema);
-  if (joiError) {
-    res.status(422).json({error: `Validation error: ${joiError.message}`});
-    return;
-  }
-
-  return next();
+  return router.get('/commit/?', async (req, res) => {
+    try {
+      const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
+      return res.contentType('text/plain; charset=UTF-8').send(commitHash);
+    } catch (error) {
+      return res.status(500).json({error: error.message, stack: error.stack});
+    }
+  });
 };
 
-export default joiValidate;
+export default commitRoute;

@@ -18,16 +18,41 @@
  */
 
 import * as express from 'express';
+import * as fs from 'fs-extra';
+import * as logdown from 'logdown';
+import * as path from 'path';
+
 import {ServerConfig} from '../config';
-import {formatUptime} from '../utils';
+import {formatDate, formatUptime} from '../utils';
+
+const logger = logdown('@wireapp/wire-web-ets/instanceService', {
+  logger: console,
+  markdown: false,
+});
 
 const router = express.Router();
 const {uptime: nodeUptime, version: nodeVersion} = process;
 const {LOG_ERROR, LOG_OUTPUT, NODE_DEBUG} = process.env;
 
-const mainRoute = (config: ServerConfig) =>
-  router.get(['/', '/api/v1/?'], async (req, res) => {
-    const infoData = {
+interface InfoData {
+  code: number;
+  commit?: string;
+  instance: {
+    env: {
+      LOG_ERROR?: string;
+      LOG_OUTPUT?: string;
+      NODE_DEBUG?: string;
+    };
+    uptime: string;
+  };
+  message: string;
+}
+
+const mainRoute = (config: ServerConfig) => {
+  const commitHashFile = path.join(config.DIST_DIR, 'commit');
+
+  return router.get(['/', '/api/v1/?'], async (req, res) => {
+    const infoData: InfoData = {
       code: 200,
       instance: {
         env: {
@@ -39,7 +64,16 @@ const mainRoute = (config: ServerConfig) =>
       },
       message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`,
     };
+
+    try {
+      const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
+      infoData.commit = commitHash;
+    } catch (error) {
+      logger.error(`[${formatDate()}]`, error);
+    }
+
     res.json(infoData);
   });
+};
 
 export default mainRoute;

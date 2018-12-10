@@ -17,36 +17,47 @@
  *
  */
 
+import * as logdown from 'logdown';
+
 import config from './config';
 import Server from './Server';
 import {formatDate} from './utils';
+
+const logger = logdown('@wireapp/wire-web-ets/index', {
+  logger: console,
+  markdown: false,
+});
 
 const server = new Server(config);
 
 server
   .start()
-  .then(port => console.info(`[${formatDate()}] Server is running on port ${port}.`))
-  .catch(error => console.error(`[${formatDate()}] ${error.stack}`));
+  .then(port => logger.info(`[${formatDate()}] Server is running on port ${port}.`))
+  .catch(error => logger.error(`[${formatDate()}]`, error));
 
 process.on('SIGINT', () => {
-  console.log(`[${formatDate()}] Received "SIGINT" signal. Exiting.`);
+  logger.log(`[${formatDate()}] Received "SIGINT" signal. Exiting.`);
   try {
     server.stop();
-  } catch (error) {}
+  } catch (error) {
+    logger.error(`[${formatDate()}]`, error);
+  }
   process.exit();
 });
 
 process.on('SIGTERM', () => {
-  console.log(`[${formatDate()}] Received "SIGTERM" signal. Exiting.`);
+  logger.log(`[${formatDate()}] Received "SIGTERM" signal. Exiting.`);
   try {
     server.stop();
-  } catch (error) {}
+  } catch (error) {
+    logger.error(`[${formatDate()}]`, error);
+  }
   process.exit();
 });
 
-process.on('uncaughtException', error =>
-  console.error(`[${formatDate()}] Uncaught exception: ${error.message}`, error)
-);
-process.on('unhandledRejection', error =>
-  console.error(`[${formatDate()}] Uncaught rejection "${error.constructor.name}": ${error.message}`, error)
-);
+process.on('uncaughtException', error => {
+  logger.error(`[${formatDate()}] Uncaught exception: ${error.message}`, error);
+});
+process.on('unhandledRejection', error => {
+  logger.error(`[${formatDate()}] Uncaught rejection: ${error.message}`, error);
+});

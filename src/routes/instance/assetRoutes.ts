@@ -18,13 +18,13 @@
  */
 
 import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
+import {celebrate, Joi} from 'celebrate';
 import * as express from 'express';
-import * as Joi from 'joi';
-import InstanceService from '../../InstanceService';
-import joiValidate from '../../middlewares/joiValidate';
 
-interface AssetMessageRequest {
-  conversationId: string;
+import InstanceService from '../../InstanceService';
+import {MessageRequest} from './conversationRoutes';
+
+interface AssetMessageRequest extends MessageRequest {
   data: string;
   expectsReadConfirmation?: boolean;
   messageTimer?: number;
@@ -45,17 +45,21 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
 
   router.post(
     '/api/v1/instance/:instanceId/sendFile/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      data: Joi.string().required(),
-      expectsReadConfirmation: Joi.boolean().optional(),
-      fileName: Joi.string().required(),
-      messageTimer: Joi.number()
-        .optional()
-        .default(0),
-      type: Joi.string().required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        data: Joi.string().required(),
+        expectsReadConfirmation: Joi.boolean()
+          .default(false)
+          .optional(),
+        fileName: Joi.string().required(),
+        messageTimer: Joi.number()
+          .default(0)
+          .optional(),
+        type: Joi.string().required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
@@ -99,24 +103,28 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
 
   router.post(
     '/api/v1/instance/:instanceId/sendImage/?',
-    joiValidate({
-      conversationId: Joi.string()
-        .uuid()
-        .required(),
-      data: Joi.string()
-        .base64()
-        .required(),
-      expectsReadConfirmation: Joi.boolean().optional(),
-      height: Joi.number()
-        .min(1)
-        .required(),
-      messageTimer: Joi.number()
-        .optional()
-        .default(0),
-      type: Joi.string().required(),
-      width: Joi.number()
-        .min(1)
-        .required(),
+    celebrate({
+      body: {
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        data: Joi.string()
+          .base64()
+          .required(),
+        expectsReadConfirmation: Joi.boolean()
+          .default(false)
+          .optional(),
+        height: Joi.number()
+          .min(1)
+          .required(),
+        messageTimer: Joi.number()
+          .default(0)
+          .optional(),
+        type: Joi.string().required(),
+        width: Joi.number()
+          .min(1)
+          .required(),
+      },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;

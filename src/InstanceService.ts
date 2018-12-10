@@ -84,6 +84,8 @@ class InstanceService {
   }
 
   private attachListeners(account: Account, instance: Instance): void {
+    account.on('error', error => logger.error(`[${formatDate()}]`, error));
+
     account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => {
       const linkPreviewContent = payload.content as TextContent;
       if (linkPreviewContent.linkPreviews) {
@@ -103,15 +105,13 @@ class InstanceService {
       instance.messages.set(payload.id, payload);
     });
 
-    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
+    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) => {
+      instance.messages.set(payload.id, payload);
+    });
 
-    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
-
-    account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => instance.messages.set(payload.id, payload));
+    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) => {
+      instance.messages.set(payload.id, payload);
+    });
 
     account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
       const editedContent = payload.content as EditedTextContent;
@@ -129,9 +129,9 @@ class InstanceService {
       }
     });
 
-    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundleIncoming) =>
-      instance.messages.set(payload.id, payload)
-    );
+    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundleIncoming) => {
+      instance.messages.set(payload.id, payload);
+    });
 
     account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundleIncoming) => {
       const deleteContent = payload.content as DeletedContent;
@@ -141,6 +141,10 @@ class InstanceService {
     account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundleIncoming) => {
       const hideContent = payload.content as HiddenContent;
       instance.messages.delete(hideContent.originalMessageId);
+    });
+
+    account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => {
+      instance.messages.set(payload.id, payload);
     });
   }
 
@@ -194,6 +198,7 @@ class InstanceService {
     await engine.init('wire-web-ets');
 
     logger.log(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
+
     const client = new APIClient({store: engine, urls: backendType});
     const account = new Account(client);
 
@@ -214,6 +219,7 @@ class InstanceService {
         throw new Error(`Backend error: ${error.response.data.message}`);
       }
 
+      logger.error(`[${formatDate()}]`, error);
       throw error;
     }
 
@@ -305,6 +311,7 @@ class InstanceService {
 
     if (instance.account.service) {
       const allMessages = instance.messages.getAll();
+
       return Object.keys(allMessages)
         .map(messageId => allMessages[messageId])
         .filter(message => message.conversation === conversationId);
@@ -345,6 +352,8 @@ class InstanceService {
     try {
       await account.login(loginData, true, ClientInfo);
     } catch (error) {
+      logger.error(`[${formatDate()}]`, error);
+
       if (error.code !== StatusCode.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
         throw error;
       }
@@ -466,30 +475,30 @@ class InstanceService {
   async sendEphemeralConfirmationDelivered(
     instanceId: string,
     conversationId: string,
-    firstMssageId: string,
+    firstMessageId: string,
     moreMessageIds?: string[]
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
-    const message = instance.messages.get(firstMssageId);
+    const message = instance.messages.get(firstMessageId);
 
     if (!message) {
-      throw new Error(`Message with ID "${firstMssageId}" not found.`);
+      throw new Error(`Message with ID "${firstMessageId}" not found.`);
     }
 
     if (instance.account.service) {
       const confirmationPayload = instance.account.service.conversation.createConfirmationDelivered(
-        firstMssageId,
+        firstMessageId,
         moreMessageIds
       );
       await instance.account.service.conversation.send(conversationId, confirmationPayload);
-      await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMssageId, [message.from]);
+      await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
 
       if (moreMessageIds && moreMessageIds.length) {
         for (const messageId of moreMessageIds) {
           const furtherMessage = instance.messages.get(messageId);
 
           if (!furtherMessage) {
-            throw new Error(`Message with ID "${firstMssageId}" not found.`);
+            throw new Error(`Message with ID "${firstMessageId}" not found.`);
           }
 
           await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [
@@ -506,29 +515,29 @@ class InstanceService {
   async sendEphemeralConfirmationRead(
     instanceId: string,
     conversationId: string,
-    firstMssageId: string,
+    firstMessageId: string,
     moreMessageIds?: string[]
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
-    const message = instance.messages.get(firstMssageId);
+    const message = instance.messages.get(firstMessageId);
 
     if (!message) {
-      throw new Error(`Message with ID "${firstMssageId}" not found.`);
+      throw new Error(`Message with ID "${firstMessageId}" not found.`);
     }
 
     if (instance.account.service) {
       const confirmationPayload = instance.account.service.conversation.createConfirmationRead(
-        firstMssageId,
+        firstMessageId,
         moreMessageIds
       );
       await instance.account.service.conversation.send(conversationId, confirmationPayload);
-      await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMssageId, [message.from]);
+      await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
       if (moreMessageIds && moreMessageIds.length) {
         for (const messageId of moreMessageIds) {
           const furtherMessage = instance.messages.get(messageId);
 
           if (!furtherMessage) {
-            throw new Error(`Message with ID "${firstMssageId}" not found.`);
+            throw new Error(`Message with ID "${firstMessageId}" not found.`);
           }
 
           await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [
@@ -550,6 +559,7 @@ class InstanceService {
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
+
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await instance.account.service.conversation.createImage(image, expectsReadConfirmation);
@@ -609,9 +619,10 @@ class InstanceService {
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await instance.account.service.conversation.createLocation(location);
-      const sentMessage = await instance.account.service.conversation.send(conversationId, payload);
-      instance.messages.set(sentMessage.id, sentMessage);
-      return sentMessage.id;
+      const sentLocation = await instance.account.service.conversation.send(conversationId, payload);
+
+      instance.messages.set(sentLocation.id, sentLocation);
+      return sentLocation.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
@@ -629,8 +640,8 @@ class InstanceService {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = instance.account.service.conversation.createPing({expectsReadConfirmation});
       const sentPing = await instance.account.service.conversation.send(conversationId, payload);
-      instance.messages.set(sentPing.id, sentPing);
 
+      instance.messages.set(sentPing.id, sentPing);
       return sentPing.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
