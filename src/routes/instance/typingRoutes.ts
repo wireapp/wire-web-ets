@@ -20,10 +20,11 @@
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
 import {celebrate, Joi} from 'celebrate';
 import * as express from 'express';
-import InstanceService from '../../InstanceService';
 
-export interface TypingMessageRequest {
-  conversationId: string;
+import InstanceService from '../../InstanceService';
+import {MessageRequest} from './conversationRoutes';
+
+export interface TypingMessageRequest extends MessageRequest {
   status: CONVERSATION_TYPING;
 }
 
