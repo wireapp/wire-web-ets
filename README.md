@@ -340,6 +340,8 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 
 #### Response
 
+Confirmation type can be `0` (Delivered) or `1` (Read).
+
 ```json
 [
   {
