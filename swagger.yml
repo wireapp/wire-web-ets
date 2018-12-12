@@ -710,8 +710,10 @@ paths:
                 format: uuid
                 type: string
               moreMessageIds:
-                format: uuid
-                type: string
+                items:
+                  format: uuid
+                  type: string
+                type: array
             required:
               - conversationId
               - firstMessageId
@@ -757,8 +759,10 @@ paths:
                 format: uuid
                 type: string
               moreMessageIds:
-                format: uuid
-                type: string
+                items:
+                  format: uuid
+                  type: string
+                type: array
             required:
               - conversationId
               - firstMessageId
