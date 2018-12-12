@@ -33,6 +33,7 @@ import {
 } from '@wireapp/core/dist/conversation/';
 import {
   ClearedContent,
+  ConfirmationContent,
   DeletedContent,
   EditedTextContent,
   FileContent,
@@ -60,7 +61,11 @@ const logger = logdown('@wireapp/wire-web-ets/instanceService', {
   markdown: false,
 });
 
-type MessagePayload = PayloadBundleIncoming | PayloadBundleOutgoing;
+type ConfirmationWithSender = ConfirmationContent & {from: string};
+
+type MessagePayload = (PayloadBundleIncoming | PayloadBundleOutgoing) & {
+  confirmations?: ConfirmationWithSender[];
+};
 
 export interface Instance {
   account: Account;
@@ -145,6 +150,35 @@ class InstanceService {
 
     account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => {
       instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.CONFIRMATION, (payload: PayloadBundleIncoming) => {
+      const confirmationContent = payload.content as ConfirmationContent;
+      const confirmationWithSender = {...confirmationContent, from: payload.from};
+
+      const messageToConfirm = instance.messages.get(confirmationContent.firstMessageId);
+
+      if (messageToConfirm) {
+        if (!messageToConfirm.confirmations) {
+          messageToConfirm.confirmations = [];
+        }
+        messageToConfirm.confirmations.push(confirmationWithSender);
+        instance.messages.set(messageToConfirm.id, messageToConfirm);
+      }
+
+      if (confirmationContent.moreMessageIds) {
+        for (const furtherMessageId in confirmationContent.moreMessageIds) {
+          const furtherMessageToConfirm = instance.messages.get(furtherMessageId);
+
+          if (furtherMessageToConfirm) {
+            if (!furtherMessageToConfirm.confirmations) {
+              furtherMessageToConfirm.confirmations = [];
+            }
+            furtherMessageToConfirm.confirmations.push(confirmationWithSender);
+            instance.messages.set(furtherMessageToConfirm.id, furtherMessageToConfirm);
+          }
+        }
+      }
     });
   }
 

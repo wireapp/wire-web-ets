@@ -44,6 +44,23 @@ definitions:
       type:
         type: string
     type: object
+  Confirmation:
+    properties:
+      firstMessageId:
+        format: uuid
+        type: string
+      moreMessageIds:
+        items:
+          format: uuid
+          type: string
+        type: array
+      type:
+        enum: [0, 1]
+        type: integer
+    required:
+      - firstMessageId
+      - type
+    type: object
   Instance:
     allOf:
       - $ref: '#/definitions/InstanceAndName'
@@ -131,6 +148,15 @@ definitions:
           text:
             type: string
         type: object
+      confirmations:
+        items:
+          allOf:
+            - $ref: '#/definitions/Confirmation'
+            - properties:
+                from:
+                  format: uuid
+                  type: string
+        type: array
       conversation:
         format: uuid
         type: string
@@ -682,8 +708,10 @@ paths:
                 format: uuid
                 type: string
               moreMessageIds:
-                format: uuid
-                type: string
+                items:
+                  format: uuid
+                  type: string
+                type: array
             required:
               - conversationId
               - firstMessageId
@@ -729,8 +757,10 @@ paths:
                 format: uuid
                 type: string
               moreMessageIds:
-                format: uuid
-                type: string
+                items:
+                  format: uuid
+                  type: string
+                type: array
             required:
               - conversationId
               - firstMessageId
