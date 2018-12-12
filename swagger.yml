@@ -152,7 +152,12 @@ definitions:
         type: object
       confirmations:
         items:
-          $ref: '#/definitions/Confirmation'
+          allOf:
+            - $ref: '#/definitions/Confirmation'
+            - properties:
+                from:
+                  format: uuid
+                  type: string
         type: array
       conversation:
         format: uuid

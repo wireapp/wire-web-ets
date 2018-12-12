@@ -61,8 +61,10 @@ const logger = logdown('@wireapp/wire-web-ets/instanceService', {
   markdown: false,
 });
 
+type ConfirmationWithSender = ConfirmationContent & {from: string};
+
 type MessagePayload = (PayloadBundleIncoming | PayloadBundleOutgoing) & {
-  confirmations?: ConfirmationContent[];
+  confirmations?: ConfirmationWithSender[];
 };
 
 export interface Instance {
@@ -152,13 +154,15 @@ class InstanceService {
 
     account.on(PayloadBundleType.CONFIRMATION, (payload: PayloadBundleIncoming) => {
       const confirmationContent = payload.content as ConfirmationContent;
+      const confirmationWithSender = {...confirmationContent, from: payload.from};
+
       const messageToConfirm = instance.messages.get(confirmationContent.firstMessageId);
 
       if (messageToConfirm) {
         if (!messageToConfirm.confirmations) {
           messageToConfirm.confirmations = [];
         }
-        messageToConfirm.confirmations.push(confirmationContent);
+        messageToConfirm.confirmations.push(confirmationWithSender);
         instance.messages.set(messageToConfirm.id, messageToConfirm);
       }
 
@@ -170,7 +174,7 @@ class InstanceService {
             if (!furtherMessageToConfirm.confirmations) {
               furtherMessageToConfirm.confirmations = [];
             }
-            furtherMessageToConfirm.confirmations.push(confirmationContent);
+            furtherMessageToConfirm.confirmations.push(confirmationWithSender);
             instance.messages.set(furtherMessageToConfirm.id, furtherMessageToConfirm);
           }
         }
