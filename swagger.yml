@@ -55,10 +55,8 @@ definitions:
           type: string
         type: array
       type:
-        enum:
-          - 0
-          - 1
-        type: number
+        enum: [0, 1]
+        type: integer
     required:
       - firstMessageId
       - type

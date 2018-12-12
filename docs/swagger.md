@@ -646,7 +646,7 @@ opensource@wire.com
 | -------------- | ----------------- | ----------- | -------- |
 | firstMessageId | string (uuid)     |             | Yes      |
 | moreMessageIds | [ string (uuid) ] |             | No       |
-| type           | number            |             | Yes      |
+| type           | integer           |             | Yes      |
 
 ### Instance
 
