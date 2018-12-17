@@ -640,6 +640,14 @@ opensource@wire.com
 | time     | dateTime      |             | No       |
 | type     | string        |             | No       |
 
+### Confirmation
+
+| Name           | Type              | Description | Required |
+| -------------- | ----------------- | ----------- | -------- |
+| firstMessageId | string (uuid)     |             | Yes      |
+| moreMessageIds | [ string (uuid) ] |             | No       |
+| type           | integer           |             | Yes      |
+
 ### Instance
 
 | Name     | Type | Description | Required |
@@ -684,6 +692,7 @@ opensource@wire.com
 | Name                    | Type               | Description | Required |
 | ----------------------- | ------------------ | ----------- | -------- |
 | content                 | object             |             | No       |
+| confirmations           | [ ]                |             | No       |
 | conversation            | string (uuid)      |             | Yes      |
 | expectsReadConfirmation | boolean            |             | No       |
 | from                    | string (uuid)      |             | Yes      |

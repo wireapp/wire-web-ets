@@ -30,7 +30,7 @@ const commitRoute = (config: ServerConfig) => {
   return router.get('/commit/?', async (req, res) => {
     try {
       const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
-      return res.contentType('text/plain; charset=UTF-8').send(commitHash);
+      return res.contentType('text/plain; charset=UTF-8').send(commitHash.trim());
     } catch (error) {
       return res.status(500).json({error: error.message, stack: error.stack});
     }

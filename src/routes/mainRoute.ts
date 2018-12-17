@@ -67,7 +67,7 @@ const mainRoute = (config: ServerConfig) => {
 
     try {
       const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
-      infoData.commit = commitHash;
+      infoData.commit = commitHash.trim();
     } catch (error) {
       logger.error(`[${formatDate()}]`, error);
     }
