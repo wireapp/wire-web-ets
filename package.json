@@ -5,7 +5,7 @@
     "@types/express": "4.16.0",
     "@types/helmet": "0.0.42",
     "@types/joi": "14.0.1",
-    "@types/node": "10.12.15",
+    "@types/node": "10.12.16",
     "@wireapp/core": "8.1.4",
     "@wireapp/lru-cache": "3.0.20",
     "body-parser": "1.18.3",
