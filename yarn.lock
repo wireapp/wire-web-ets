@@ -276,10 +276,10 @@
   dependencies:
     "@types/express" "*"
 
-"@types/jasmine@3.3.3":
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.3.3.tgz#e11cbe32639640f15d2356f8013472743047dcf8"
-  integrity sha512-5br1BmlnoFZNlH6z2hnLut9qD4ojyP2Gr4yLsYbSvXcR+X2b2BqPqhRyaArKBkFqejhBOP5N98KiZHKQlJKqhA==
+"@types/jasmine@3.3.4":
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.3.4.tgz#492cc70364f6dee047887b4fa2135bedd41fb143"
+  integrity sha512-543S+ZCJfN4jKWzRkptbJqTY2vc4h7+lPVqU2hXb1XFofDcUxNANAimdZPYaH6/yhezVAsNeujoZjAFU06bfmA==
 
 "@types/joi@14.0.1":
   version "14.0.1"
