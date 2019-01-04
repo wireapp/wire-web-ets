@@ -22,7 +22,7 @@ node("$NODE") {
   stage('Build') {
     commit_msg = sh returnStdout: true, script: 'git log -n 1 --pretty=format:"%ar - %an: %s"'
     try {
-      def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
+      def NODE = tool name: 'node-v10.15.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
         sh 'npm install -g yarn pm2'
         sh 'yarn install --no-progress'
@@ -44,7 +44,7 @@ node("$NODE") {
 
   stage('Install') {
     try {
-      def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
+      def NODE = tool name: 'node-v10.15.0', type: 'nodejs'
       sh "mkdir -p ${HOME}/.config/systemd/user/"
 
       sh """printf \\
@@ -81,7 +81,7 @@ WantedBy=default.target
       if (runningStatus == 0) {
         sh 'systemctl --user restart wire-web-ets'
       } else {
-        def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
+        def NODE = tool name: 'node-v10.15.0', type: 'nodejs'
         withEnv(["PATH+NODE=${NODE}/bin"]) {
           sh 'cd ${WORKSPACE}'
           sh 'yarn start'
