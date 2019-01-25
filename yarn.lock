@@ -419,11 +419,6 @@
     fs-extra "7.0.1"
     logdown "3.2.7"
 
-"@wireapp/lru-cache@3.0.26":
-  version "3.0.26"
-  resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.0.26.tgz#cbd1ac2096a15178c07480cfafb41eca98508f1e"
-  integrity sha512-kqDrNsIekdc59t0jeqvFIrX3lXd3YfYTjtCmjhfDhxy60fGx2pUW1TZ8/f2ycigp3JD/vEeh+rxhfRLEMFhgrg==
-
 "@wireapp/lru-cache@3.0.27":
   version "3.0.27"
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.0.27.tgz#d10db29cc7f759d8173b0cb7fc07af7102b04c00"
