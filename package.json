@@ -44,7 +44,7 @@
     "request": "2.88.0",
     "rimraf": "2.6.3",
     "swagger-markdown": "1.1.5",
-    "ts-node": "8.0.1",
+    "ts-node": "8.0.2",
     "tslint": "5.12.1",
     "tslint-config-prettier": "1.17.0",
     "tslint-plugin-prettier": "2.0.1"
