@@ -4784,10 +4784,10 @@ supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
-swagger-markdown@1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/swagger-markdown/-/swagger-markdown-1.1.5.tgz#73b74fcc56586b010efe59e7a45da537aeea6cdd"
-  integrity sha512-97KvpMJfIHFO10HWzKcVmJloVLpBemPsu0wGMbsjnZuzaqpjnhCq8b5u6fKE04g55yVriM+jEFQ4xYuvTF5XsA==
+swagger-markdown@1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/swagger-markdown/-/swagger-markdown-1.1.6.tgz#d48300c680a4af4bf081893084797b7ea94a26bf"
+  integrity sha512-PcU94LjuszcKplvqvh0gCgQZIzhy/sMvT8/oNttz9QXatNQaPGh0Z8A4MGET68+BXIvegYh59EdyQaqar6Wh1w==
   dependencies:
     argparse "^1.0.10"
     js-yaml "^3.12.0"
