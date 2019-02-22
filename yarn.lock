@@ -407,10 +407,10 @@
   resolved "https://registry.yarnpkg.com/@types/yamljs/-/yamljs-0.2.30.tgz#d034e1d329e46e8d0f737c9a8db97f68f81b5382"
   integrity sha1-0DTh0ynkbo0Pc3yajbl/aPgbU4I=
 
-"@wireapp/api-client@3.2.26":
-  version "3.2.26"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.2.26.tgz#147a8269d1a654fe44c339b04b4fa3ce15514792"
-  integrity sha512-Zz754AWOQPrGNvu8T2Yu1fBIg24HU4W81v9mj2AZJI0KeRP4apvZ7/wthtraZEhxLXcJ4LevGu/tOGZ+r0eA3A==
+"@wireapp/api-client@3.2.27":
+  version "3.2.27"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.2.27.tgz#4c938bd14215e782a17c5253c24e27d677cbe8be"
+  integrity sha512-I5zDN4CctD9AHkjft+pPl4rRufMYsUaMeGVAdXqq/Iw/MpFvH2XbajX+5PXMJFGKcsrGnXAwvoRdcs+6U0carg==
   dependencies:
     "@types/node" "11.9.4"
     "@types/spark-md5" "3.0.1"
@@ -429,13 +429,13 @@
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.120.tgz#136a353837fa3045799668ef001ff3c16820d41b"
   integrity sha512-CzrM8oiM3wFhWpwVFL75wZdF0ZSnoTl3b6RnizrHLOBjVjQQH5vGw4szrg83bMJmvmKcqqjryhEEMl06plDsGA==
 
-"@wireapp/core@8.1.16":
-  version "8.1.16"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-8.1.16.tgz#87585bd0f669ea9cf047e327c5287b6a1e8a6e2d"
-  integrity sha512-04agPn3LBUXcvhPLp2e+g7FoS8R7rQUFp3oWbxuk7ne7avy83iRe2CUHHuPEMzAEFDhmqEq7Pfmkq4sICmQEvA==
+"@wireapp/core@8.1.17":
+  version "8.1.17"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-8.1.17.tgz#dc76bab8657002fddee8764a7b35a8fbe127824f"
+  integrity sha512-2xwIWYOjUvDZmNDaVruDcwO5W9XKuTqhy0fW532WIf+8abjvfFU94IzpOapqTgAuK9sZbj8rb+y7svPyoqGctw==
   dependencies:
     "@types/node" "11.9.4"
-    "@wireapp/api-client" "3.2.26"
+    "@wireapp/api-client" "3.2.27"
     "@wireapp/cryptobox" "9.0.46"
     "@wireapp/protocol-messaging" "1.23.0"
     "@wireapp/store-engine" "1.1.23"
