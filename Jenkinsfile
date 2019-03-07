@@ -37,7 +37,7 @@ node("$NODE") {
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} build failed**\n${commit_msg}\nSee: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "❌ 🐛 **${JOB_NAME} ${BRANCH} on ${NODE} build failed**\n${commit_msg}\nSee: ${JOB_URL}"
       throw e
     }
   }
@@ -69,7 +69,7 @@ WantedBy=default.target
       sh 'systemctl --user enable wire-web-ets'
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} install failed**\n${commit_msg}\nSee: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "❌ 🐛 **${JOB_NAME} ${BRANCH} on ${NODE} install failed**\n${commit_msg}\nSee: ${JOB_URL}"
       throw e
     }
   }
@@ -91,7 +91,7 @@ WantedBy=default.target
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed**\n${commit_msg}\nSee: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "❌ 🐛 **Restarting ETS ${BRANCH} on ${NODE} failed**\n${commit_msg}\nSee: ${JOB_URL}"
       throw e
     }
   }
