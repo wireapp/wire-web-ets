@@ -3,9 +3,16 @@ workflow "Build, lint and test" {
   resolves = ["Test", "Lint"]
 }
 
-action "Build" {
+action "Install" {
   uses = "docker://node:10"
   runs = "yarn"
+}
+
+action "Build" {
+  uses = "docker://node:10"
+  needs = ["Install"]
+  runs = "yarn"
+  args = "dist"
 }
 
 action "Test" {
