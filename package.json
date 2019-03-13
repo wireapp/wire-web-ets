@@ -45,7 +45,7 @@
     "rimraf": "2.6.3",
     "swagger-markdown": "1.1.6",
     "ts-node": "8.0.3",
-    "tslint": "5.13.1",
+    "tslint": "5.14.0",
     "tslint-config-prettier": "1.18.0",
     "tslint-plugin-prettier": "2.0.1"
   },
