@@ -9,7 +9,7 @@
     "@wireapp/core": "8.2.2",
     "@wireapp/lru-cache": "3.1.0",
     "body-parser": "1.18.3",
-    "celebrate": "9.0.2",
+    "celebrate": "9.1.0",
     "compression": "1.7.3",
     "dotenv": "7.0.0",
     "express": "4.16.4",
