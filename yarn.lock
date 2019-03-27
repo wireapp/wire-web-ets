@@ -417,10 +417,10 @@
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.130.tgz#38a6a55f2a900ac5c460003702cc57b700d54b07"
   integrity sha512-TPIhGu6D9hfUu+PlkyL7vdDOy599oOwCiNI63MuxdyX87yhAoucrG5LzSSdjuRCm1dI5GEeorVHU2T6hA4VTeg==
 
-"@wireapp/core@8.2.10":
-  version "8.2.10"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-8.2.10.tgz#6bd38d674013db2b3164921182189e62ef54142c"
-  integrity sha512-HRE1n4cYikshiSG4820X609dxMgfWLtL78fujYozXgPMxvRqtAdptyGc3khqmYT+ffZFP+IyswNDU54sJs4HHQ==
+"@wireapp/core@9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-9.0.0.tgz#22aa05e61b46d7ae97223bef488ff835164efea7"
+  integrity sha512-ZsGoy5vQULZSufo9UglpcNJZR7KbCcHNgvH95RqciyLGnepb2T/UGuDlDSXP/ReN7PT3/soVQU/pvVKzzZQbfQ==
   dependencies:
     "@types/node" "11.11.6"
     "@wireapp/api-client" "3.3.8"
