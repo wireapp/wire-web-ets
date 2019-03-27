@@ -483,6 +483,7 @@ class InstanceService {
       const payload = instance.account.service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
+        // TODO use future ConfirmationType
         0,
         moreMessageIds
       );
@@ -505,6 +506,7 @@ class InstanceService {
       const payload = instance.account.service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
+        // TODO use future ConfirmationType
         1,
         moreMessageIds
       );
@@ -532,6 +534,7 @@ class InstanceService {
       const confirmationPayload = instance.account.service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
+        // TODO use future ConfirmationType
         0,
         moreMessageIds
       );
@@ -574,6 +577,7 @@ class InstanceService {
       const confirmationPayload = instance.account.service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
+        // TODO use future ConfirmationType
         1,
         moreMessageIds
       );
