@@ -25,11 +25,7 @@ import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/commonjs/h
 import {Account} from '@wireapp/core';
 import {AvailabilityType} from '@wireapp/core/dist/broadcast/';
 import {ClientInfo} from '@wireapp/core/dist/client/';
-import {
-  PayloadBundle,
-  PayloadBundleType,
-  ReactionType,
-} from '@wireapp/core/dist/conversation/';
+import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation/';
 import {
   ClearedContent,
   ConfirmationContent,
@@ -196,7 +192,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.setConversationMutedStatus(conversationId, muted ? 3 : 0, new Date())
+      await instance.account.service.conversation.setConversationMutedStatus(conversationId, muted ? 3 : 0, new Date());
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -412,7 +408,9 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const sessionResetPayload = instance.account.service.conversation.messageBuilder.createSessionReset(conversationId);
+      const sessionResetPayload = instance.account.service.conversation.messageBuilder.createSessionReset(
+        conversationId
+      );
       const {id: messageId} = await instance.account.service.conversation.send(sessionResetPayload);
       return messageId;
     } else {
@@ -444,7 +442,9 @@ class InstanceService {
       let sentMessage = await instance.account.service.conversation.send(payload);
 
       if (linkPreview) {
-        const linkPreviewPayload = await instance.account.service.conversation.messageBuilder.createLinkPreview(linkPreview);
+        const linkPreviewPayload = await instance.account.service.conversation.messageBuilder.createLinkPreview(
+          linkPreview
+        );
         const editedWithPreviewPayload = instance.account.service.conversation.messageBuilder
           .createText(conversationId, message, sentMessage.id)
           .withLinkPreviews([linkPreviewPayload])
@@ -480,7 +480,12 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const payload = instance.account.service.conversation.messageBuilder.createConfirmation(conversationId, firstMessageId, 0, moreMessageIds);
+      const payload = instance.account.service.conversation.messageBuilder.createConfirmation(
+        conversationId,
+        firstMessageId,
+        0,
+        moreMessageIds
+      );
       await instance.account.service.conversation.send(payload);
       return instance.name;
     } else {
@@ -497,7 +502,12 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const payload = instance.account.service.conversation.messageBuilder.createConfirmation(conversationId, firstMessageId, 1, moreMessageIds);
+      const payload = instance.account.service.conversation.messageBuilder.createConfirmation(
+        conversationId,
+        firstMessageId,
+        1,
+        moreMessageIds
+      );
       await instance.account.service.conversation.send(payload);
       return instance.name;
     } else {
@@ -519,7 +529,8 @@ class InstanceService {
     }
 
     if (instance.account.service) {
-      const confirmationPayload = instance.account.service.conversation.messageBuilder.createConfirmation(conversationId,
+      const confirmationPayload = instance.account.service.conversation.messageBuilder.createConfirmation(
+        conversationId,
         firstMessageId,
         0,
         moreMessageIds
@@ -598,7 +609,11 @@ class InstanceService {
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.messageBuilder.createImage(conversationId, image, expectsReadConfirmation);
+      const payload = await instance.account.service.conversation.messageBuilder.createImage(
+        conversationId,
+        image,
+        expectsReadConfirmation
+      );
       const sentImage = await instance.account.service.conversation.send(payload);
 
       stripAsset(sentImage.content);
@@ -656,7 +671,10 @@ class InstanceService {
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.messageBuilder.createLocation(conversationId, location);
+      const payload = await instance.account.service.conversation.messageBuilder.createLocation(
+        conversationId,
+        location
+      );
       const sentLocation = await instance.account.service.conversation.send(payload);
 
       instance.messages.set(sentLocation.id, sentLocation);
@@ -676,7 +694,9 @@ class InstanceService {
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = instance.account.service.conversation.messageBuilder.createPing(conversationId, {expectsReadConfirmation});
+      const payload = instance.account.service.conversation.messageBuilder.createPing(conversationId, {
+        expectsReadConfirmation,
+      });
       const sentPing = await instance.account.service.conversation.send(payload);
 
       instance.messages.set(sentPing.id, sentPing);
@@ -710,7 +730,11 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const payload = instance.account.service.conversation.messageBuilder.createReaction(conversationId, originalMessageId, type);
+      const payload = instance.account.service.conversation.messageBuilder.createReaction(
+        conversationId,
+        originalMessageId,
+        type
+      );
       const {id: messageId} = await instance.account.service.conversation.send(payload);
       return messageId;
     } else {
@@ -741,7 +765,9 @@ class InstanceService {
       let editedMessage = await instance.account.service.conversation.send(editedPayload);
 
       if (newLinkPreview) {
-        const linkPreviewPayload = await instance.account.service.conversation.messageBuilder.createLinkPreview(newLinkPreview);
+        const linkPreviewPayload = await instance.account.service.conversation.messageBuilder.createLinkPreview(
+          newLinkPreview
+        );
         const editedWithPreviewPayload = instance.account.service.conversation.messageBuilder
           .createEditedText(conversationId, newMessageText, originalMessageId, editedMessage.id)
           .withLinkPreviews([linkPreviewPayload])

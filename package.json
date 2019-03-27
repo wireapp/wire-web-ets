@@ -56,7 +56,7 @@
   "license": "GPL-3.0",
   "lint-staged": {
     "*.ts": [
-      "tslint -c tslint.json --fix",
+      "tslint --config tslint.json --project tsconfig.json --fix",
       "git add"
     ],
     "*.{json,md}": [
@@ -88,6 +88,5 @@
     "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json",
     "version": "yarn dist"
   },
-  "types": "dist/index.d.ts",
   "version": "1.16.3"
 }
