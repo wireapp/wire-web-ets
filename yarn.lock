@@ -194,10 +194,10 @@
     "@types/connect" "*"
     "@types/node" "*"
 
-"@types/bro-fs@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@types/bro-fs/-/bro-fs-0.4.1.tgz#02e7e29fa94a5521631cd51317a14019312c8405"
-  integrity sha512-/JVVuoolSE3Js0hsQ2Sxk6vw+DXQ+2Qo+gFzHIIz0LQPdsZn5SMu+AeBII7XM6f3BFwxpicUvacIc5lBRikdkw==
+"@types/bro-fs@0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@types/bro-fs/-/bro-fs-0.4.2.tgz#c8a84901cc2872130bd84cdb18554afe50934002"
+  integrity sha512-JATRI4WgTL3yOOkG8Kmw45FKwZGFque+3kn6dzTQl6zmW5WhsNo3+40WlyhjoU2Vapt+bG7PT29RosB7DmnK7A==
   dependencies:
     "@types/filesystem" "*"
 
@@ -329,10 +329,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@11.11.6":
-  version "11.11.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.11.6.tgz#df929d1bb2eee5afdda598a41930fe50b43eaa6a"
-  integrity sha512-Exw4yUWMBXM3X+8oqzJNRqZSwUAaS4+7NdvHqQuFi/d+synz++xmX3QIf+BFqneW8N31R8Ky+sikfZUXq07ggQ==
+"@types/node@*", "@types/node@11.12.0":
+  version "11.12.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.12.0.tgz#ec5594728811dc2797e42396cfcdf786f2052c12"
+  integrity sha512-Lg00egj78gM+4aE0Erw05cuDbvX9sLJbaaPwwRtdCdAMnIudqrQZ0oZX98Ek0yiSK/A2nubHgJfvII/rTT2Dwg==
 
 "@types/node@10.12.29", "@types/node@^10.1.0":
   version "10.12.29"
@@ -395,82 +395,82 @@
   resolved "https://registry.yarnpkg.com/@types/yamljs/-/yamljs-0.2.30.tgz#d034e1d329e46e8d0f737c9a8db97f68f81b5382"
   integrity sha1-0DTh0ynkbo0Pc3yajbl/aPgbU4I=
 
-"@wireapp/api-client@3.3.8":
-  version "3.3.8"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.3.8.tgz#db626f557833eb025ac97a97864cd3384bcfe90b"
-  integrity sha512-4jScIhusXdjqh8bJKO1Uz8rIjykVzPeIZjAUeoQnSUfgwTgCm5+fcagkd0BuvN3xgqyFSLsrv3BWYjNVDSTIQw==
+"@wireapp/api-client@3.3.9":
+  version "3.3.9"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-3.3.9.tgz#c942265a654c8eaf30af253aa2e88e77d0984e8c"
+  integrity sha512-jzQjR9esKdTSsC4ayjFcnD/BeZC2Am4r/h2csKbAX9KA/Nue8MiVNw7RpZXOc3v336GRVaP7GXBlxO5RDoEGFw==
   dependencies:
-    "@types/node" "11.11.6"
+    "@types/node" "11.12.0"
     "@types/spark-md5" "3.0.1"
     "@types/tough-cookie" "2.3.5"
-    "@wireapp/priority-queue" "0.2.75"
-    "@wireapp/store-engine" "1.1.38"
+    "@wireapp/priority-queue" "0.2.76"
+    "@wireapp/store-engine" "1.1.39"
     axios "0.18.0"
     html5-websocket "2.0.4"
-    logdown "3.2.7"
+    logdown "3.2.8"
     reconnecting-websocket "3.2.2"
     spark-md5 "3.0.0"
     tough-cookie "3.0.1"
 
-"@wireapp/cbor@3.0.130":
-  version "3.0.130"
-  resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.130.tgz#38a6a55f2a900ac5c460003702cc57b700d54b07"
-  integrity sha512-TPIhGu6D9hfUu+PlkyL7vdDOy599oOwCiNI63MuxdyX87yhAoucrG5LzSSdjuRCm1dI5GEeorVHU2T6hA4VTeg==
+"@wireapp/cbor@3.0.131":
+  version "3.0.131"
+  resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-3.0.131.tgz#ee9d8f0d816453e7f80f8e31f9b1d36c7805ce18"
+  integrity sha512-1VQd8O8rttD0MtJ7iPYJJsPhJb8USbxqWLsqspwPmBAK/jKbU3i0CUQjnZK/SQbuMndmkrIVeNae79tIhAyb5A==
 
-"@wireapp/core@8.2.10":
-  version "8.2.10"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-8.2.10.tgz#6bd38d674013db2b3164921182189e62ef54142c"
-  integrity sha512-HRE1n4cYikshiSG4820X609dxMgfWLtL78fujYozXgPMxvRqtAdptyGc3khqmYT+ffZFP+IyswNDU54sJs4HHQ==
+"@wireapp/core@9.0.2":
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-9.0.2.tgz#81aef05a236756ef8d7b6dadb1e5b9e46c01bb5f"
+  integrity sha512-yA+VmSuyNCTXZfEcAYaVBQIDQBy/8eorWJAIlkqkCp3fxfcIObypfeH3b5Ed20P9ybobYxo2U2AX7hpa9b9OcA==
   dependencies:
-    "@types/node" "11.11.6"
-    "@wireapp/api-client" "3.3.8"
-    "@wireapp/cryptobox" "9.0.67"
+    "@types/node" "11.12.0"
+    "@wireapp/api-client" "3.3.9"
+    "@wireapp/cryptobox" "9.0.68"
     "@wireapp/protocol-messaging" "1.23.0"
-    "@wireapp/store-engine" "1.1.38"
+    "@wireapp/store-engine" "1.1.39"
     bazinga64 "5.3.53"
     hash.js "1.1.7"
-    logdown "3.2.7"
+    logdown "3.2.8"
     protobufjs "6.8.8"
     pure-uuid "1.5.7"
 
-"@wireapp/cryptobox@9.0.67":
-  version "9.0.67"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-9.0.67.tgz#46f8038382822443308d7bb5073c43f0edb9df30"
-  integrity sha512-74bgqXIsOw80XQ1KoMfDDE+vWz2QbueZpGUuzYc65vwB2mbk5sqQY0tRIwrQigCC7VKA33z7K266kFnVBjxILg==
+"@wireapp/cryptobox@9.0.68":
+  version "9.0.68"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-9.0.68.tgz#d97db517a95a1f6bfe8f769692b3be3cc7e17826"
+  integrity sha512-GkNzh+fwEg4hx/+Qi63pNdShfFCaw58ENgUE5RGF4EHTo2WzZm+LtYCm+H9dlIMT/H9N7q+kLinDWRBCrWa0ug==
   dependencies:
     "@types/fs-extra" "5.0.5"
-    "@types/node" "11.11.6"
+    "@types/node" "11.12.0"
     "@wireapp/lru-cache" "3.1.3"
-    "@wireapp/priority-queue" "0.2.75"
-    "@wireapp/proteus" "8.0.45"
-    "@wireapp/store-engine" "1.1.38"
+    "@wireapp/priority-queue" "0.2.76"
+    "@wireapp/proteus" "8.0.46"
+    "@wireapp/store-engine" "1.1.39"
     bazinga64 "5.3.53"
     dexie "2.0.4"
     fs-extra "7.0.1"
-    logdown "3.2.7"
+    logdown "3.2.8"
 
 "@wireapp/lru-cache@3.1.3":
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.1.3.tgz#4f7e02b5b000ba49dcca1938cf09e553e5010016"
   integrity sha512-cPtpKLU7kRJxwG8+qKXMrTumSel337+iJLj3uvTs4rft8DZQs+wdR2PHv5FYV4dYLjGc29JN0KoZCzZjHlcy7A==
 
-"@wireapp/priority-queue@0.2.75":
-  version "0.2.75"
-  resolved "https://registry.yarnpkg.com/@wireapp/priority-queue/-/priority-queue-0.2.75.tgz#fa2d17fe0162bcd7b6c62fe090dc7a1a16e064e9"
-  integrity sha512-a2IXq/6XnGKTyEHe3B50jc9N5+qwIFTuSwk+dTZeIe8ySHZEZQ6GSKvOD6tQYfnyYUUOsCu0wBZHv7IVefiyWQ==
+"@wireapp/priority-queue@0.2.76":
+  version "0.2.76"
+  resolved "https://registry.yarnpkg.com/@wireapp/priority-queue/-/priority-queue-0.2.76.tgz#795bf79f9fe3ed1572f4ab6b76699d812f953ebd"
+  integrity sha512-lzNh4YQ42ORunWoSszQGXp+6a3iQyU1dtehKI1d9TxN5guOZ7o+GYs5AhRIZb49eqKoWi5iGkdVXKac76/djpw==
   dependencies:
-    "@types/node" "11.11.6"
+    "@types/node" "11.12.0"
     pure-uuid "1.5.7"
 
-"@wireapp/proteus@8.0.45":
-  version "8.0.45"
-  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-8.0.45.tgz#cdc83b62a2e615467eaf557aec9fcea5b3f46e48"
-  integrity sha512-WhT00dHFjFM4JXGeHtQkV02YKW6S6fOmzEnbrhqButHb1ZykeutN4wIkemCncAHMifGiirTZrSykvo7yR2Xo8Q==
+"@wireapp/proteus@8.0.46":
+  version "8.0.46"
+  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-8.0.46.tgz#0f71c5d5ae42cb3473432b8ce8f161983fe10f57"
+  integrity sha512-O7/f53lf3yXsBbL7yBAa8MUoUqlIa1B0wSzpZjMp9Tdg3K41CvHuqbtBJaXLdA/dWaZm0DkCMalvhoYGIA02JA==
   dependencies:
     "@types/chai" "4.1.7"
     "@types/ed2curve" "0.2.2"
-    "@types/node" "11.11.6"
-    "@wireapp/cbor" "3.0.130"
+    "@types/node" "11.12.0"
+    "@wireapp/cbor" "3.0.131"
     ed2curve "0.2.1"
     libsodium-wrappers-sumo "0.7.4"
 
@@ -481,15 +481,15 @@
   dependencies:
     protobufjs "6.8.8"
 
-"@wireapp/store-engine@1.1.38":
-  version "1.1.38"
-  resolved "https://registry.yarnpkg.com/@wireapp/store-engine/-/store-engine-1.1.38.tgz#784a43f990a8b4bd6a8af975da9fc68b0f6fe544"
-  integrity sha512-LVmlaL8TEeR30cplkajNbBw6nosAy3SiyhDe8mlLi5brrJOunm/xrKIW6Aw/fdQJMlk2bcf+ZDcB0JV6GfcOrg==
+"@wireapp/store-engine@1.1.39":
+  version "1.1.39"
+  resolved "https://registry.yarnpkg.com/@wireapp/store-engine/-/store-engine-1.1.39.tgz#485e32d4f95d1f328bd59fc21ecc5204c3c53380"
+  integrity sha512-y9bBIN9p2ncFyl4CrzXwdDtLO0pN6QmshfCs5AB1fGiDQ2K3r4ndCrG++pMnCfR9kj8nE+H2OV35OISdO2a0Yg==
   dependencies:
-    "@types/bro-fs" "0.4.1"
+    "@types/bro-fs" "0.4.2"
     "@types/filesystem" "0.0.29"
     "@types/fs-extra" "5.0.5"
-    "@types/node" "11.11.6"
+    "@types/node" "11.12.0"
     bro-fs "0.5.0"
     dexie "2.0.4"
     fs-extra "7.0.1"
@@ -3148,13 +3148,6 @@ log-update@^2.3.0:
     ansi-escapes "^3.0.0"
     cli-cursor "^2.0.0"
     wrap-ansi "^3.0.1"
-
-logdown@3.2.7:
-  version "3.2.7"
-  resolved "https://registry.yarnpkg.com/logdown/-/logdown-3.2.7.tgz#4dd24375bf5b757064f65aeb8c3459ae66cde1b9"
-  integrity sha512-ddzzl63qXd0pRSCE5O1bT4/NTK4Vvm3c353mNOiQtA2b23C3oqUezrlccV9t9cBYRLKO39VD31DEOPBARqyKiw==
-  dependencies:
-    chalk "^2.3.0"
 
 logdown@3.2.8:
   version "3.2.8"
