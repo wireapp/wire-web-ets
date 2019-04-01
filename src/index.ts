@@ -58,6 +58,6 @@ process.on('SIGTERM', () => {
 process.on('uncaughtException', error => {
   logger.error(`[${formatDate()}] Uncaught exception: ${error.message}`, error);
 });
-process.on('unhandledRejection', error => {
-  logger.error(`[${formatDate()}] Uncaught rejection: ${error.message}`, error);
-});
+process.on('unhandledRejection', (reason, promise) =>
+  console.log(`[${formatDate()}] Unhandled Rejection at:`, promise, 'reason:', reason)
+);
