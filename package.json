@@ -6,7 +6,7 @@
     "@types/helmet": "0.0.43",
     "@types/joi": "14.3.2",
     "@types/node": "11.13.2",
-    "@wireapp/core": "9.0.14",
+    "@wireapp/core": "9.0.17",
     "@wireapp/lru-cache": "3.1.6",
     "body-parser": "1.18.3",
     "celebrate": "9.1.0",
