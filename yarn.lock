@@ -459,6 +459,11 @@
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.1.7.tgz#130dc8ad890b3e00b45ee44e96d6dc6f4041b262"
   integrity sha512-oufcM7lUfx2zDap5g7506TPpI6ZOE/xsuQUA2Nseik5ipBz1GMPQighsh0+n6ReqrtphMcUnzjU/nCNKj1dMXw==
 
+"@wireapp/prettier-config@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@wireapp/prettier-config/-/prettier-config-0.1.0.tgz#9013de56087eb865b7fd3559d6d3a81558573719"
+  integrity sha512-/NnQFYE+Hbz46Cfz3NhiOT9JxfaKFON4lHI+qzg19Zb2d8B0pxd/I6HZRSRH6ofV29IP+OT+IynvUFQOO2WUpg==
+
 "@wireapp/priority-queue@0.2.81":
   version "0.2.81"
   resolved "https://registry.yarnpkg.com/@wireapp/priority-queue/-/priority-queue-0.2.81.tgz#70120beca2baeeaa38e04fcb7bcb8eb1f023c311"
