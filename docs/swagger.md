@@ -1,727 +1,706 @@
 # E2E Test Service
-
 End-to-end Test Service (ETS) for Wire's test automation suite.
 
-**Version:** 1.16.1
+## Version: 1.16.1
 
-**Terms of service:**  
+### Terms of service
 https://wire.com/legal/
 
 **Contact information:**  
-opensource@wire.com
+opensource@wire.com  
 
 **License:** [GPL-3.0](https://github.com/wireapp/wire-web-ets/blob/master/LICENSE)
 
 ### /clients
 
----
+#### DELETE
+##### Summary:
 
-##### **_DELETE_**
+Delete all clients
 
-**Summary:** Delete all clients
+##### Description:
 
-**Description:**
 
-**Parameters**
 
-| Name | Located in | Description | Required | Schema                    |
-| ---- | ---------- | ----------- | -------- | ------------------------- |
-| body | body       | Login data  | Yes      | [BasicLogin](#basiclogin) |
+##### Parameters
 
-**Responses**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| body | body | Login data | Yes | [BasicLogin](#basiclogin) |
 
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | object                              |
-| 422  | Validation error | [ValidationError](#validationerror) |
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | object |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance
 
----
+#### PUT
+##### Summary:
 
-##### **_PUT_**
+Create a new instance
 
-**Summary:** Create a new instance
+##### Description:
 
-**Description:**
 
-**Parameters**
 
-| Name | Located in | Description | Required | Schema          |
-| ---- | ---------- | ----------- | -------- | --------------- |
-| body | body       | Login data  | Yes      | [Login](#login) |
+##### Parameters
 
-**Responses**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| body | body | Login data | Yes | [Login](#login) |
 
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 422  | Validation error | [ValidationError](#validationerror) |
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}
 
----
+#### DELETE
+##### Summary:
 
-##### **_DELETE_**
+Delete an instance
 
-**Summary:** Delete an instance
+##### Description:
 
-**Description:**
 
-**Parameters**
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+##### Parameters
 
-**Responses**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
 
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | object                              |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+##### Responses
 
-##### **_GET_**
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | object |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
-**Summary:** Get information about an instance
+#### GET
+##### Summary:
 
-**Parameters**
+Get information about an instance
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+##### Parameters
 
-**Responses**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
 
-| Code | Description | Schema                          |
-| ---- | ----------- | ------------------------------- |
-| 200  |             | [Instance](#instance)           |
-| 404  | Not found   | [NotFoundError](#notfounderror) |
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [Instance](#instance) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
 
 ### /instance/{instanceId}/archive
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Archive a conversation
 
-**Summary:** Archive a conversation
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/availability
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Set a user's availability
 
-**Summary:** Set a user's availability
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body | Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`). | Yes | object |
 
-| Name       | Located in | Description                                                      | Required | Schema        |
-| ---------- | ---------- | ---------------------------------------------------------------- | -------- | ------------- |
-| instanceId | path       | ID of instance to return                                         | Yes      | string (uuid) |
-| body       | body       | Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`). | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/clear
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Clear a conversation
 
-**Summary:** Clear a conversation
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/clients
 
----
+#### GET
+##### Summary:
 
-##### **_GET_**
+Get all clients of an instance
 
-**Summary:** Get all clients of an instance
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+##### Responses
 
-**Responses**
-
-| Code | Description | Schema                          |
-| ---- | ----------- | ------------------------------- |
-| 200  |             | [ [Client](#client) ]           |
-| 404  | Not found   | [NotFoundError](#notfounderror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [ [Client](#client) ] |
+| 404 | Not found | [NotFoundError](#notfounderror) |
 
 ### /instance/{instanceId}/delete
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Delete a message locally
 
-**Summary:** Delete a message locally
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/deleteEverywhere
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Delete a message for everyone
 
-**Summary:** Delete a message for everyone
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/fingerprint
 
----
+#### GET
+##### Summary:
 
-##### **_GET_**
+Get the fingerprint from the instance's client
 
-**Summary:** Get the fingerprint from the instance's client
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
+##### Responses
 
-**Responses**
-
-| Code | Description | Schema                          |
-| ---- | ----------- | ------------------------------- |
-| 200  |             | object                          |
-| 404  | Not found   | [NotFoundError](#notfounderror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | object |
+| 404 | Not found | [NotFoundError](#notfounderror) |
 
 ### /instance/{instanceId}/getMessages
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Get all messages
 
-**Summary:** Get all messages
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [ [Message](#message) ]             |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [ [Message](#message) ] |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/mute
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Mute a conversation
 
-**Summary:** Mute a conversation
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendConfirmationDelivered
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a delivery confirmation for a message
 
-**Summary:** Send a delivery confirmation for a message
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendConfirmationRead
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a read confirmation for a message
 
-**Summary:** Send a read confirmation for a message
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendEphemeralConfirmationDelivered
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a delivery confirmation for an ephemeral message
 
-**Summary:** Send a delivery confirmation for an ephemeral message
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendEphemeralConfirmationRead
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a read confirmation for an ephemeral message
 
-**Summary:** Send a read confirmation for an ephemeral message
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendFile
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a file to a conversation
 
-**Summary:** Send a file to a conversation
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  |                                     |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  |  |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendImage
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send an image to a conversation
 
-**Summary:** Send an image to a conversation
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  |                                     |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  |  |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendLocation
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a location to a conversation
 
-**Summary:** Send a location to a conversation
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  |                                     |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  |  |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendPing
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a ping to a conversation
 
-**Summary:** Send a ping to a conversation
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  |                                     |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  |  |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendReaction
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a reaction to a message
 
-**Summary:** Send a reaction to a message
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  |                                     |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  |  |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendSessionReset
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a session reset message
 
-**Summary:** Send a session reset message
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | object |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      | object        |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  |                                     |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  |  |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendText
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a text message to a conversation
 
-**Summary:** Send a text message to a conversation
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | [TextMessage](#textmessage) |
 
-| Name       | Located in | Description              | Required | Schema                      |
-| ---------- | ---------- | ------------------------ | -------- | --------------------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid)               |
-| body       | body       |                          | Yes      | [TextMessage](#textmessage) |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  |                                     |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  |  |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/sendTyping
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Send a typing indicator to a conversation
 
-**Summary:** Send a typing indicator to a conversation
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes |  |
 
-| Name       | Located in | Description              | Required | Schema        |
-| ---------- | ---------- | ------------------------ | -------- | ------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid) |
-| body       | body       |                          | Yes      |               |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  | [InstanceAndName](#instanceandname) |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [InstanceAndName](#instanceandname) |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance/{instanceId}/updateText
 
----
+#### POST
+##### Summary:
 
-##### **_POST_**
+Update a text message in a conversation
 
-**Summary:** Update a text message in a conversation
+##### Parameters
 
-**Parameters**
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ---- |
+| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| body | body |  | Yes | [TextMessage](#textmessage) |
 
-| Name       | Located in | Description              | Required | Schema                      |
-| ---------- | ---------- | ------------------------ | -------- | --------------------------- |
-| instanceId | path       | ID of instance to return | Yes      | string (uuid)               |
-| body       | body       |                          | Yes      | [TextMessage](#textmessage) |
+##### Responses
 
-**Responses**
-
-| Code | Description      | Schema                              |
-| ---- | ---------------- | ----------------------------------- |
-| 200  |                  |                                     |
-| 404  | Not found        | [NotFoundError](#notfounderror)     |
-| 422  | Validation error | [ValidationError](#validationerror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  |  |
+| 404 | Not found | [NotFoundError](#notfounderror) |
+| 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instances
 
----
+#### GET
+##### Summary:
 
-##### **_GET_**
+Get all instances
 
-**Summary:** Get all instances
+##### Responses
 
-**Responses**
-
-| Code | Description | Schema                          |
-| ---- | ----------- | ------------------------------- |
-| 200  |             | object                          |
-| 404  | Not found   | [NotFoundError](#notfounderror) |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | object |
+| 404 | Not found | [NotFoundError](#notfounderror) |
 
 ### Models
 
----
 
-### BasicLogin
+#### BasicLogin
 
-| Name     | Type           | Description | Required |
-| -------- | -------------- | ----------- | -------- |
-| backend  | string         |             | No       |
-| email    | string (email) |             | No       |
-| password | password       |             | No       |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| backend | string |  | No |
+| email | string (email) |  | No |
+| password | password |  | No |
 
-### Client
+#### Client
 
-| Name     | Type          | Description | Required |
-| -------- | ------------- | ----------- | -------- |
-| class    | string        |             | No       |
-| cookie   | string        |             | No       |
-| id       | string (uuid) |             | No       |
-| location | object        |             | No       |
-| model    | string        |             | No       |
-| time     | dateTime      |             | No       |
-| type     | string        |             | No       |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| class | string |  | No |
+| cookie | string |  | No |
+| id | string (uuid) |  | No |
+| location | object |  | No |
+| model | string |  | No |
+| time | dateTime |  | No |
+| type | string |  | No |
 
-### Confirmation
+#### Confirmation
 
-| Name           | Type              | Description | Required |
-| -------------- | ----------------- | ----------- | -------- |
-| firstMessageId | string (uuid)     |             | Yes      |
-| moreMessageIds | [ string (uuid) ] |             | No       |
-| type           | integer           |             | Yes      |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| firstMessageId | string (uuid) |  | Yes |
+| moreMessageIds | [ string (uuid) ] |  | No |
+| type | integer |  | Yes |
 
-### Instance
+#### Instance
 
-| Name     | Type | Description | Required |
-| -------- | ---- | ----------- | -------- |
-| Instance |      |             |          |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| Instance |  |  |  |
 
-### InstanceAndName
+#### InstanceAndName
 
-| Name       | Type          | Description | Required |
-| ---------- | ------------- | ----------- | -------- |
-| instanceId | string (uuid) |             | No       |
-| name       | string        |             | No       |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| instanceId | string (uuid) |  | No |
+| name | string |  | No |
 
-### LinkPreview
+#### LinkPreview
 
-| Name         | Type            | Description | Required |
-| ------------ | --------------- | ----------- | -------- |
-| image        | object          |             | No       |
-| permanentUrl | string          |             | No       |
-| summary      | string          |             | No       |
-| title        | string          |             | No       |
-| tweet        | object          |             | No       |
-| url          | string (url)    |             | No       |
-| urlOffset    | string (number) |             | No       |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| image | object |  | No |
+| permanentUrl | string |  | No |
+| summary | string |  | No |
+| title | string |  | No |
+| tweet | object |  | No |
+| url | string (url) |  | No |
+| urlOffset | string (number) |  | No |
 
-### Login
+#### Login
 
-| Name  | Type | Description | Required |
-| ----- | ---- | ----------- | -------- |
-| Login |      |             |          |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| Login |  |  |  |
 
-### Mention
+#### Mention
 
-| Name   | Type            | Description | Required |
-| ------ | --------------- | ----------- | -------- |
-| length | string (number) |             | No       |
-| start  | string (number) |             | No       |
-| userId | string (uuid)   |             | No       |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| length | string (number) |  | No |
+| start | string (number) |  | No |
+| userId | string (uuid) |  | No |
 
-### Message
+#### Message
 
-| Name                    | Type               | Description | Required |
-| ----------------------- | ------------------ | ----------- | -------- |
-| content                 | object             |             | No       |
-| confirmations           | [ ]                |             | No       |
-| conversation            | string (uuid)      |             | Yes      |
-| expectsReadConfirmation | boolean            |             | No       |
-| from                    | string (uuid)      |             | Yes      |
-| id                      | string (uuid)      |             | Yes      |
-| messageTimer            | string (number)    |             | Yes      |
-| state                   | undefined (string) |             | Yes      |
-| type                    | undefined (string) |             | Yes      |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| content | object |  | No |
+| confirmations | [  ] |  | No |
+| conversation | string (uuid) |  | Yes |
+| expectsReadConfirmation | boolean |  | No |
+| from | string (uuid) |  | Yes |
+| id | string (uuid) |  | Yes |
+| messageTimer | string (number) |  | Yes |
+| state | undefined (string) |  | Yes |
+| type | undefined (string) |  | Yes |
 
-### NotFoundError
+#### NotFoundError
 
-| Name  | Type   | Description | Required |
-| ----- | ------ | ----------- | -------- |
-| error | string |             | No       |
-| stack | string |             | No       |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| error | string |  | No |
+| stack | string |  | No |
 
-### TextMessage
+#### TextMessage
 
-| Name                    | Type                        | Description | Required |
-| ----------------------- | --------------------------- | ----------- | -------- |
-| conversationId          | string (uuid)               |             | No       |
-| expectsReadConfirmation | boolean                     |             | No       |
-| linkPreview             | [LinkPreview](#linkpreview) |             | No       |
-| mentions                | [ [Mention](#mention) ]     |             | No       |
-| messageTimer            | string (number)             |             | No       |
-| quote                   | object                      |             | No       |
-| text                    | string                      |             | No       |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| conversationId | string (uuid) |  | No |
+| expectsReadConfirmation | boolean |  | No |
+| linkPreview | [LinkPreview](#linkpreview) |  | No |
+| mentions | [ [Mention](#mention) ] |  | No |
+| messageTimer | string (number) |  | No |
+| quote | object |  | No |
+| text | string |  | No |
 
-### ValidationError
+#### ValidationError
 
-| Name  | Type   | Description | Required |
-| ----- | ------ | ----------- | -------- |
-| error | string |             | No       |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| error | string |  | No |
