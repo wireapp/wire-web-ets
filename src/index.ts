@@ -19,8 +19,8 @@
 
 import * as logdown from 'logdown';
 
-import config from './config';
-import Server from './Server';
+import {config} from './config';
+import {Server} from './Server';
 import {formatDate} from './utils';
 
 const logger = logdown('@wireapp/wire-web-ets/index', {
@@ -35,20 +35,20 @@ server
   .then(port => logger.info(`[${formatDate()}] Server is running on port ${port}.`))
   .catch(error => logger.error(`[${formatDate()}]`, error));
 
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   logger.log(`[${formatDate()}] Received "SIGINT" signal. Exiting.`);
   try {
-    server.stop();
+    await server.stop();
   } catch (error) {
     logger.error(`[${formatDate()}]`, error);
   }
   process.exit();
 });
 
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   logger.log(`[${formatDate()}] Received "SIGTERM" signal. Exiting.`);
   try {
-    server.stop();
+    await server.stop();
   } catch (error) {
     logger.error(`[${formatDate()}]`, error);
   }

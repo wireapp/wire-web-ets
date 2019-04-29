@@ -28,7 +28,7 @@ import {InstanceService} from './InstanceService';
 import {healthCheckRoute} from './routes/_health/healthCheckRoute';
 import {commitRoute} from './routes/commit/commitRoute';
 import {celebrateErrorRoute, internalErrorRoute, notFoundRoute} from './routes/error/errorRoutes';
-import {InstanceRoutes} from './routes/instance/';
+import {routes as InstanceRoutes} from './routes/instance/';
 import {logRoute} from './routes/log/logRoute';
 import {mainRoute} from './routes/mainRoute';
 import {initSwaggerRoute} from './routes/swagger-ui/swaggerRoute';
