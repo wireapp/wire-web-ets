@@ -8,7 +8,7 @@
     "@types/node": "11.13.8",
     "@wireapp/core": "10.0.2",
     "@wireapp/lru-cache": "3.1.10",
-    "body-parser": "1.18.3",
+    "body-parser": "1.19.0",
     "celebrate": "9.1.0",
     "compression": "1.7.4",
     "dotenv": "7.0.0",
