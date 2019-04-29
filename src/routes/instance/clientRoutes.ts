@@ -18,9 +18,9 @@
  */
 
 import * as express from 'express';
-import InstanceService from '../../InstanceService';
+import {InstanceService} from '../../InstanceService';
 
-const clientRoutes = (instanceService: InstanceService): express.Router => {
+export const clientRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.get('/api/v1/instance/:instanceId/fingerprint/?', async (req: express.Request, res: express.Response) => {
@@ -43,5 +43,3 @@ const clientRoutes = (instanceService: InstanceService): express.Router => {
 
   return router;
 };
-
-export default clientRoutes;

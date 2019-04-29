@@ -31,11 +31,8 @@
     "@types/swagger-ui-express": "3.0.0",
     "@types/yamljs": "0.2.30",
     "@wireapp/prettier-config": "0.2.0",
+    "@wireapp/tslint-config": "1.0.2",
     "cross-env": "5.2.0",
-    "eslint": "5.16.0",
-    "eslint-config-prettier": "4.2.0",
-    "eslint-plugin-prettier": "3.0.1",
-    "eslint-plugin-react": "7.12.4",
     "husky": "2.1.0",
     "jasmine": "3.4.0",
     "lint-staged": "8.1.5",
@@ -48,7 +45,9 @@
     "ts-node": "8.1.0",
     "tslint": "5.16.0",
     "tslint-config-prettier": "1.18.0",
-    "tslint-plugin-prettier": "2.0.1"
+    "tslint-plugin-prettier": "2.0.1",
+    "tslint-react": "4.0.0",
+    "tslint-react-hooks": "2.1.0"
   },
   "files": [
     "dist",
@@ -56,11 +55,15 @@
   ],
   "license": "GPL-3.0",
   "lint-staged": {
-    "*.ts": [
-      "tslint --config tslint.json --project tsconfig.json --fix",
+    "src/**/!(*.spec).ts": [
+      "tslint --project tsconfig.json --fix",
       "git add"
     ],
-    "*.{json,md}": [
+    "src/**/*.spec.ts": [
+      "tslint --project tsconfig.jasmine.json --fix",
+      "git add"
+    ],
+    "*.{json,md,js,yml}": [
       "prettier --write",
       "git add"
     ]
@@ -76,18 +79,20 @@
     "build:docs": "swagger-markdown -i swagger.yml -o docs/swagger.md",
     "clean": "rimraf dist",
     "dist": "yarn clean && yarn build",
-    "fix": "yarn fix:other && yarn fix:ts",
+    "fix": "yarn fix:other && yarn fix:ts && yarn fix:ts:tests",
     "fix:other": "yarn prettier --write",
     "fix:ts": "yarn lint:ts --fix",
-    "lint": "yarn lint:ts && yarn lint:other",
+    "fix:ts:tests": "yarn lint:ts:tests --fix",
+    "lint": "yarn lint:ts && yarn lint:ts:tests && yarn lint:other",
     "lint:other": "yarn prettier --list-different",
-    "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts\"",
+    "lint:ts": "tslint --project tsconfig.json",
+    "lint:ts:tests": "tslint --project tsconfig.jasmine.json",
     "postversion": "git push && git push --tags",
-    "prettier": "prettier \"**/*.{json,md}\"",
+    "prettier": "prettier \"**/*.{json,md,js,yml}\"",
     "preversion": "yarn && yarn test && yarn dist",
     "start": "pm2 start",
     "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" ts-node src/index.ts",
-    "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json",
+    "test": "ts-node -P tsconfig.jasmine.json node_modules/jasmine/bin/jasmine --config=jasmine.json",
     "version": "yarn dist"
   },
   "version": "1.16.3"

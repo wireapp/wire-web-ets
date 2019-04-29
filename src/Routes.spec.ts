@@ -24,8 +24,8 @@ import {ConversationAPI} from '@wireapp/api-client/dist/commonjs/conversation/';
 import {NotificationAPI} from '@wireapp/api-client/dist/commonjs/notification/';
 import {UserAPI} from '@wireapp/api-client/dist/commonjs/user/';
 import UUID from 'pure-uuid';
-import config from './config';
-import Server from './Server';
+import {config} from './config';
+import {Server} from './Server';
 
 import * as nock from 'nock';
 import * as request from 'request';
@@ -36,9 +36,7 @@ const HTTP_CODE_OK = 200;
 const HTTP_CODE_NOT_FOUND = 404;
 const HTTP_CODE_UNPROCESSABLE_ENTITY = 422;
 
-interface RequestOptions {
-  [key: string]: string | any[];
-}
+type RequestOptions = Record<string, string | any>;
 
 const sendRequest = (method: string, url: string, data?: RequestOptions): Promise<request.Response> => {
   let options: request.CoreOptions = {method};
@@ -80,7 +78,7 @@ describe('Routes', () => {
       .persist();
 
     nock(backendURL)
-      .post(AuthAPI.URL.ACCESS + '/' + AuthAPI.URL.LOGOUT)
+      .post(`${AuthAPI.URL.ACCESS}/${AuthAPI.URL.LOGOUT}`)
       .reply(HTTP_CODE_OK)
       .persist();
 
@@ -95,13 +93,13 @@ describe('Routes', () => {
       .persist();
 
     nock(backendURL)
-      .post(new RegExp(ConversationAPI.URL.CONVERSATIONS + '/.*/otr/messages'))
+      .post(new RegExp(`${ConversationAPI.URL.CONVERSATIONS}/.*/otr/messages`))
       .query({ignore_missing: false})
       .reply(HTTP_CODE_OK)
       .persist();
 
     nock(backendURL)
-      .get(new RegExp(UserAPI.URL.USERS + '/.*/' + UserAPI.URL.PRE_KEYS))
+      .get(new RegExp(`${UserAPI.URL.USERS}/.*/${UserAPI.URL.PRE_KEYS}`))
       .reply(HTTP_CODE_OK, {
         clients: [
           {
@@ -114,7 +112,7 @@ describe('Routes', () => {
       .persist();
 
     nock(backendURL)
-      .get(new RegExp(ConversationAPI.URL.CONVERSATIONS + '/.*'))
+      .get(new RegExp(`${ConversationAPI.URL.CONVERSATIONS}/.*`))
       .reply(HTTP_CODE_OK, {
         creator: new UUID(UUID_VERSION).format(),
         members: {
@@ -133,7 +131,7 @@ describe('Routes', () => {
       .persist();
 
     nock(backendURL)
-      .get(NotificationAPI.URL.NOTIFICATION + '/last')
+      .get(`${NotificationAPI.URL.NOTIFICATION}/last`)
       .query({client: clientId})
       .reply(HTTP_CODE_OK, {})
       .persist();
@@ -154,7 +152,7 @@ describe('Routes', () => {
   });
 
   const createInstance = (data?: RequestOptions) => {
-    const url = baseURL + '/instance';
+    const url = `${baseURL}/instance`;
     data = data || {backend: 'production', email: 'test@example.com', password: 'supersecret'};
     return sendRequest('put', url, data);
   };

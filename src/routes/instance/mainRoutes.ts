@@ -18,9 +18,9 @@
  */
 
 import {ClientType} from '@wireapp/api-client/dist/commonjs/client/';
-import {celebrate, Joi} from 'celebrate';
+import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
-import InstanceService from '../../InstanceService';
+import {InstanceService} from '../../InstanceService';
 
 export interface InstanceRequest {
   backend: string;
@@ -40,7 +40,7 @@ interface ReducedInstances {
   };
 }
 
-const mainRoutes = (instanceService: InstanceService): express.Router => {
+export const mainRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.put(
@@ -195,5 +195,3 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
 
   return router;
 };
-
-export default mainRoutes;

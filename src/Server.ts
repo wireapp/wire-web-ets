@@ -24,16 +24,16 @@ import * as helmet from 'helmet';
 import * as http from 'http';
 
 import {ServerConfig} from './config';
-import InstanceService from './InstanceService';
-import healthCheckRoute from './routes/_health/healthCheckRoute';
-import commitRoute from './routes/commit/commitRoute';
+import {InstanceService} from './InstanceService';
+import {healthCheckRoute} from './routes/_health/healthCheckRoute';
+import {commitRoute} from './routes/commit/commitRoute';
 import {celebrateErrorRoute, internalErrorRoute, notFoundRoute} from './routes/error/errorRoutes';
-import InstanceRoutes from './routes/instance/';
-import logRoute from './routes/log/logRoute';
-import mainRoute from './routes/mainRoute';
+import {routes as InstanceRoutes} from './routes/instance/';
+import {logRoute} from './routes/log/logRoute';
+import {mainRoute} from './routes/mainRoute';
 import {initSwaggerRoute} from './routes/swagger-ui/swaggerRoute';
 
-class Server {
+export class Server {
   private readonly app: express.Express;
   private server?: http.Server;
   private readonly instanceService: InstanceService;
@@ -139,5 +139,3 @@ class Server {
     }
   }
 }
-
-export default Server;

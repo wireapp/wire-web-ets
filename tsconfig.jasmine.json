@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "exclude": ["dist", "node_modules"],
+  "extends": "./tsconfig.json",
+  "include": ["src/**/*.spec.ts"]
+}

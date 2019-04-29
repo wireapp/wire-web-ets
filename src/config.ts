@@ -47,4 +47,4 @@ const config: ServerConfig = {
 
 config.DEVELOPMENT = config.ENVIRONMENT === 'dev';
 
-export default config;
+export {config};
