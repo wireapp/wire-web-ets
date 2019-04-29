@@ -18,7 +18,7 @@
  */
 
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
-import {celebrate, Joi} from 'celebrate';
+import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 
 import InstanceService from '../../InstanceService';

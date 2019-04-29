@@ -18,7 +18,7 @@
  */
 
 import {ClientType} from '@wireapp/api-client/dist/commonjs/client/';
-import {celebrate, Joi} from 'celebrate';
+import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 import InstanceService from '../../InstanceService';
 
