@@ -21,7 +21,7 @@ import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 
-import InstanceService from '../../InstanceService';
+import {InstanceService} from '../../InstanceService';
 import {MessageRequest} from './conversationRoutes';
 
 interface AssetMessageRequest extends MessageRequest {
@@ -40,7 +40,7 @@ export interface ImageMessageRequest extends AssetMessageRequest {
   width: number;
 }
 
-const assetRoutes = (instanceService: InstanceService): express.Router => {
+export const assetRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
@@ -167,5 +167,3 @@ const assetRoutes = (instanceService: InstanceService): express.Router => {
 
   return router;
 };
-
-export default assetRoutes;

@@ -1,9 +1,5 @@
 {
   "extends": ["@wireapp/tslint-config"],
-  "rules": {
-    "no-default-export": false,
-    "no-floating-promises": false
-  },
   "linterOptions": {
     "exclude": ["**/bower_components/**", "**/dist/**", "**/node_modules/**"]
   }

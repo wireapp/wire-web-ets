@@ -20,7 +20,7 @@
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 
-import InstanceService from '../../InstanceService';
+import {InstanceService} from '../../InstanceService';
 import {MessageRequest} from './conversationRoutes';
 
 export interface ConfirmationMessageRequest extends MessageRequest {
@@ -28,7 +28,7 @@ export interface ConfirmationMessageRequest extends MessageRequest {
   moreMessageIds?: string[];
 }
 
-const confirmationRoutes = (instanceService: InstanceService): express.Router => {
+export const confirmationRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
@@ -193,5 +193,3 @@ const confirmationRoutes = (instanceService: InstanceService): express.Router =>
 
   return router;
 };
-
-export default confirmationRoutes;

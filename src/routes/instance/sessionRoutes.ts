@@ -20,10 +20,10 @@
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 
-import InstanceService from '../../InstanceService';
+import {InstanceService} from '../../InstanceService';
 import {MessageRequest} from './conversationRoutes';
 
-const sessionRoutes = (instanceService: InstanceService): express.Router => {
+export const sessionRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
@@ -59,5 +59,3 @@ const sessionRoutes = (instanceService: InstanceService): express.Router => {
 
   return router;
 };
-
-export default sessionRoutes;

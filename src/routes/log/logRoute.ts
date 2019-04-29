@@ -30,7 +30,7 @@ const logger = logdown('@wireapp/wire-web-ets/routes/log/logRoute', {
   markdown: false,
 });
 
-const logRoute = () =>
+export const logRoute = () =>
   router.get('/log/?', async (req, res) => {
     try {
       let logData = '';
@@ -68,5 +68,3 @@ const logRoute = () =>
       return res.status(500).json({error: error.message, stack: error.stack});
     }
   });
-
-export default logRoute;

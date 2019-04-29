@@ -76,7 +76,7 @@ export interface Instance {
   name: string;
 }
 
-class InstanceService {
+export class InstanceService {
   private readonly cachedInstances: LRUCache<Instance>;
 
   constructor(private readonly maximumInstances = 100) {
@@ -808,5 +808,3 @@ class InstanceService {
     }
   }
 }
-
-export default InstanceService;

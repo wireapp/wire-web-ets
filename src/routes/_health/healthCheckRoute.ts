@@ -19,6 +19,4 @@
 
 import {Router} from 'express';
 
-const healthRoute = () => Router().get('/_health/?', (req, res) => res.sendStatus(200));
-
-export default healthRoute;
+export const healthRoute = () => Router().get('/_health/?', (req, res) => res.sendStatus(200));
