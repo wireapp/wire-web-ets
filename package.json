@@ -30,17 +30,9 @@
     "@types/request": "2.48.1",
     "@types/swagger-ui-express": "3.0.0",
     "@types/yamljs": "0.2.30",
-    "@wireapp/eslint-config": "1.0.1",
     "@wireapp/prettier-config": "0.2.0",
     "@wireapp/tslint-config": "1.0.2",
     "cross-env": "5.2.0",
-    "eslint": "5.16.0",
-    "eslint-config-prettier": "4.2.0",
-    "eslint-plugin-import": "2.17.2",
-    "eslint-plugin-jsdoc": "4.8.3",
-    "eslint-plugin-no-unsanitized": "3.0.2",
-    "eslint-plugin-prettier": "3.0.1",
-    "eslint-plugin-react": "7.12.4",
     "husky": "2.1.0",
     "jasmine": "3.4.0",
     "lint-staged": "8.1.5",
@@ -67,7 +59,7 @@
       "tslint --config tslint.json --project tsconfig.json --fix",
       "git add"
     ],
-    "*.{json,md}": [
+    "*.{json,md,js,yml}": [
       "prettier --write",
       "git add"
     ]
@@ -90,7 +82,7 @@
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts\"",
     "postversion": "git push && git push --tags",
-    "prettier": "prettier \"**/*.{json,md}\"",
+    "prettier": "prettier \"**/*.{json,md,js,yml}\"",
     "preversion": "yarn && yarn test && yarn dist",
     "start": "pm2 start",
     "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" ts-node src/index.ts",
