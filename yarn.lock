@@ -431,10 +431,10 @@
   resolved "https://registry.yarnpkg.com/@types/yamljs/-/yamljs-0.2.30.tgz#d034e1d329e46e8d0f737c9a8db97f68f81b5382"
   integrity sha1-0DTh0ynkbo0Pc3yajbl/aPgbU4I=
 
-"@wireapp/api-client@4.0.2":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-4.0.2.tgz#3581dcb9a3940422e9f74f9583d775b9fd8e0cb2"
-  integrity sha512-jx+Fq5gjwCxycvgBZH9ADUPCdxb2omBpcGM0fzFaZ4rBCATNJ8poyfIDsYAHh2CdAWozow7R67gNX0kOozUNlg==
+"@wireapp/api-client@4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-4.0.3.tgz#aae6e13f9547870ba16129ae1e8b86b4c3258ae0"
+  integrity sha512-+v6EPXN0d1OnumrPMuqCeqRc+qOh6ljnkRATaG0GpVZbpYvxkqOV+3HlmkF8FWPsJU2g2mVVy+ds+ittkOKD8g==
   dependencies:
     "@types/node" "11.13.7"
     "@types/spark-md5" "3.0.1"
@@ -453,14 +453,14 @@
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-4.0.0.tgz#ab82848b6bf2903dc7a4153c3ba392aa3acd068d"
   integrity sha512-db8qprRBDqbUvtjlxNq+H/fKEWQHb7wPQlO396BFx3o+ORSkY6QQOvtsENDyMnNK+TfD+yQIL/YI16ZQsQVkQw==
 
-"@wireapp/core@10.0.2":
-  version "10.0.2"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-10.0.2.tgz#03213f76254ce0f3653c9cde8cfbe1f3744b5037"
-  integrity sha512-OA8idoupvOiWHlifKtp+vQQaai5WnMXHlWFnChEE0Ur+mEufc3Tt0RGAWdhNTHOKzrrscxa7XL1oKM7p2v9fTg==
+"@wireapp/core@10.0.3":
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-10.0.3.tgz#cbcaa274f0b899b3a6ebd8538b1ed14a8fe7ffc0"
+  integrity sha512-iuMnFlRXWmTMzXe414uchnuN0KSUTojckb6508N5Iibjv8cQyGI5JcO/BzNvlk3jLUsNVL99bwrQJ9M8NN07Mw==
   dependencies:
     "@types/node" "11.13.7"
-    "@wireapp/api-client" "4.0.2"
-    "@wireapp/cryptobox" "10.0.1"
+    "@wireapp/api-client" "4.0.3"
+    "@wireapp/cryptobox" "10.0.2"
     "@wireapp/protocol-messaging" "1.23.0"
     "@wireapp/store-engine" "2.0.0"
     bazinga64 "5.3.60"
@@ -469,10 +469,10 @@
     protobufjs "6.8.8"
     pure-uuid "1.5.7"
 
-"@wireapp/cryptobox@10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-10.0.1.tgz#38ae8c9dd3561ac87e4d2b28b18877b981af46f2"
-  integrity sha512-HZhCw/Put03I0ztEnosfgFJvOrUqU4FLiyHBNnT1ZlLPmVJyCMPkJ07CnW1WGcu7kG/zXUctLzJT1HCXSQyL2A==
+"@wireapp/cryptobox@10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-10.0.2.tgz#a60e5adfd3c6b2fbc66e73ff36dc7b5e522a2447"
+  integrity sha512-Py37ANrZhBvC/xLmPFalYxI0ibwAnmxEnqb3rC4kA1Gytp45qZLBn09P3Nt6mk2TKC2ZXyva8FFhe89y2z2vHA==
   dependencies:
     "@types/fs-extra" "5.0.5"
     "@types/node" "11.13.7"
