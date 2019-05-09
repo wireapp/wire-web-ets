@@ -1,10 +1,8 @@
 #!/usr/bin/env sh
 
-# All arguments are used as pattern for grep.
-
 set -e
 
-PATTERN="$*"
+PATTERN='!/\[ci skip|skip ci\]/'
 LAST_COMMIT="$(git log -1 --pretty=%B | head -n 1)"
 
 if echo "$LAST_COMMIT" | awk "$PATTERN{f=1} END {exit !f}"; then

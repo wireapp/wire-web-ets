@@ -7,33 +7,32 @@ workflow "Lint, build and test" {
   ]
 }
 
-action "Don't skip CI" {
-  uses = "./.github/actions/last_commit"
-  args = "!/\\[ci skip|skip ci\\]/"
+action "Check for CI skip" {
+  uses = "./.github/actions/skip_ci_check"
 }
 
 action "Install dependencies" {
-  uses = "docker://node:10-alpine"
-  needs = "Don't skip CI"
+  uses = "./.github/actions/node"
+  needs = "Check for CI skip"
   runs = "yarn"
 }
 
 action "Lint project" {
-  uses = "docker://node:10-alpine"
+  uses = "./.github/actions/node"
   needs = "Install dependencies"
   runs = "yarn"
   args = "lint"
 }
 
 action "Build project" {
-  uses = "docker://node:10-alpine"
+  uses = "./.github/actions/node"
   needs = "Install dependencies"
   runs = "yarn"
   args = "dist"
 }
 
 action "Test project" {
-  uses = "docker://node:10-alpine"
+  uses = "./.github/actions/node"
   needs = "Install dependencies"
   runs = "yarn"
   args = "test"
