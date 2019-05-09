@@ -1,6 +1,6 @@
 workflow "Lint, build and test" {
   on = "push"
-  resolves = ["Build project", "Lint project", "Test project"]
+  resolves = ["Lint project", "Build project", "Test project"]
 }
 
 action "Check for CI skip" {
