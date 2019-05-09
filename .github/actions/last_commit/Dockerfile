@@ -12,6 +12,6 @@ LABEL com.github.actions.color="yellow"
 
 RUN apk add --no-cache git dumb-init
 
-COPY entrypoint.sh .
+COPY entrypoint.sh /
 
 ENTRYPOINT ["dumb-init", "--", "/bin/sh", "/entrypoint.sh"]
