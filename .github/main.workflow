@@ -9,7 +9,7 @@ workflow "Lint, build and test" {
 
 action "Don't skip CI" {
   uses = "./.github/actions/last_commit"
-  args = "^(?:(?!\\[(ci skip|skip ci)\\]).)*$"
+  args = "!/[skip ci]/ && !/[ci skip]/"
 }
 
 action "Install dependencies" {
