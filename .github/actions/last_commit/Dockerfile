@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM alpine/git:latest
 
 LABEL version="1.0.0"
 LABEL repository="https://github.com/wireapp/wire-web-ets/tree/master/.github/actions/last_commit"
@@ -10,12 +10,8 @@ LABEL com.github.actions.description="Checks if the last commit message matches 
 LABEL com.github.actions.icon="package"
 LABEL com.github.actions.color="yellow"
 
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y \
-        git && \
-    apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache git dumb-init
 
-COPY "entrypoint.sh" "/entrypoint.sh"
+COPY entrypoint.sh .
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["dumb-init", "--", "/bin/sh", "/entrypoint.sh"]
