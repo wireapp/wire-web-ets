@@ -798,7 +798,7 @@ export class InstanceService {
     }
   }
 
-  async setAvailability(instanceId: string, teamId: string, type: AvailabilityType) {
+  async setAvailability(instanceId: string, teamId: string, type: AvailabilityType): Promise<void> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {

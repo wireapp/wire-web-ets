@@ -44,7 +44,7 @@ export class Server {
     this.init();
   }
 
-  init() {
+  init(): void {
     // The order is important here, please don't sort!
     this.app.use((req, res, next) => {
       bodyParser.json({limit: '200mb'})(req, res, error => {
@@ -72,11 +72,11 @@ export class Server {
     this.app.use(internalErrorRoute());
   }
 
-  initAPIRoutes() {
+  initAPIRoutes(): void {
     this.app.use(InstanceRoutes(this.instanceService));
   }
 
-  initCaching() {
+  initCaching(): void {
     if (this.config.DEVELOPMENT) {
       this.app.use(helmet.noCache());
     } else {
@@ -89,7 +89,7 @@ export class Server {
     }
   }
 
-  initForceSSL() {
+  initForceSSL(): void {
     const STATUS_CODE_MOVED = 301;
 
     const SSLMiddleware: express.RequestHandler = (req, res, next) => {
@@ -107,7 +107,7 @@ export class Server {
     this.app.use(SSLMiddleware);
   }
 
-  initSecurityHeaders() {
+  initSecurityHeaders(): void {
     this.app.disable('x-powered-by');
     this.app.use(
       helmet({
