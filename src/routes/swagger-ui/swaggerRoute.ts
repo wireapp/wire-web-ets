@@ -26,7 +26,7 @@ import {ServerConfig} from '../../config';
 const yamlFile = path.join(__dirname, '..', '..', '..', 'swagger.yml');
 const swaggerDocument = yaml.load(yamlFile);
 
-export function initSwaggerRoute(app: express.Express, config: ServerConfig) {
+export function initSwaggerRoute(app: express.Express, config: ServerConfig): void {
   const swaggerUiOptions = {
     host: `localhost:${config.PORT_HTTP}`,
   };
