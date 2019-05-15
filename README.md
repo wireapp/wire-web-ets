@@ -183,6 +183,7 @@ yarn start
 ```json
 {
   "backend": "<'prod'|'production'|'staging'>",
+  "deviceClass?": "<'desktop'|'phone'|'tablet'>",
   "deviceLabel?": "<string>",
   "deviceName?": "<string>",
   "email": "<string in email format>",
