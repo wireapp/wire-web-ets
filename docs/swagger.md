@@ -593,19 +593,28 @@ Get all instances
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | object |
+| 200 |  | [Instance](#instance) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 
 ### Models
 
+
+#### BackendData
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| name | string |  | Yes |
+| rest | string |  | Yes |
+| ws | string |  | Yes |
 
 #### BasicLogin
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | backend | string |  | No |
-| email | string (email) |  | No |
-| password | password |  | No |
+| customBackend | [BackendData](#backenddata) |  | No |
+| email | string (email) |  | Yes |
+| password | password |  | Yes |
 
 #### Client
 
@@ -677,7 +686,8 @@ Get all instances
 | from | string (uuid) |  | Yes |
 | id | string (uuid) |  | Yes |
 | messageTimer | string (number) |  | Yes |
-| state | undefined (string) |  | Yes |
+| state | string |  | Yes |
+| timestamp | string |  | Yes |
 | type | undefined (string) |  | Yes |
 
 #### NotFoundError
