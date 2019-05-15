@@ -32,7 +32,8 @@ const logger = logdown('@wireapp/wire-web-ets/routes/error/errorRoutes', {
 
 const celebrateErrorRoute = (): express.ErrorRequestHandler => (err, req, res, next) => {
   if (isCelebrate(err)) {
-    return res.status(422).json({error: `Validation error: ${err.message}`});
+    const message = err.joi ? err.joi.message : err.message;
+    return res.status(422).json({error: `Validation error: ${message}`});
   }
   return next();
 };
