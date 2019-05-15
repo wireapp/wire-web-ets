@@ -677,7 +677,8 @@ Get all instances
 | from | string (uuid) |  | Yes |
 | id | string (uuid) |  | Yes |
 | messageTimer | string (number) |  | Yes |
-| state | undefined (string) |  | Yes |
+| state | string |  | Yes |
+| timestamp | string |  | Yes |
 | type | undefined (string) |  | Yes |
 
 #### NotFoundError
