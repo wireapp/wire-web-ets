@@ -17,13 +17,14 @@
  *
  */
 
-import {ClientType} from '@wireapp/api-client/dist/commonjs/client/';
+import {ClientClassification, ClientType} from '@wireapp/api-client/dist/commonjs/client/';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 import {InstanceService} from '../../InstanceService';
 
 export interface InstanceRequest {
   backend: string;
+  deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
   deviceLabel?: string;
   deviceName: string;
   email: string;
@@ -50,6 +51,9 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
         backend: Joi.string()
           .valid(['prod', 'production', 'staging'])
           .required(),
+        deviceClass: Joi.string()
+          .allow([ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET, ''])
+          .optional(),
         deviceLabel: Joi.string()
           .allow('')
           .optional(),
@@ -66,7 +70,15 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {backend, deviceLabel, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
+      const {
+        backend,
+        deviceClass,
+        deviceLabel,
+        deviceName,
+        email,
+        name: instanceName,
+        password,
+      }: InstanceRequest = req.body;
 
       const loginData = {
         clientType: ClientType.PERMANENT,
@@ -75,13 +87,14 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
       };
 
       try {
-        const instanceId = await instanceService.createInstance(
+        const instanceId = await instanceService.createInstance({
           backend,
-          loginData,
-          deviceName,
+          deviceClass,
           deviceLabel,
-          instanceName
-        );
+          deviceName,
+          instanceName,
+          loginData,
+        });
         return res.json({
           instanceId,
           name: instanceName,

@@ -76,6 +76,15 @@ export interface Instance {
   name: string;
 }
 
+export interface InstanceCreationOptions {
+  backend: string;
+  deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
+  deviceLabel?: string;
+  deviceName?: string;
+  instanceName?: string;
+  loginData: LoginData;
+}
+
 export class InstanceService {
   private readonly cachedInstances: LRUCache<Instance>;
 
@@ -210,15 +219,9 @@ export class InstanceService {
     }
   }
 
-  async createInstance(
-    backend: string,
-    loginData: LoginData,
-    deviceName?: string,
-    deviceLabel?: string,
-    instanceName?: string
-  ): Promise<string> {
+  async createInstance(options: InstanceCreationOptions): Promise<string> {
     const instanceId = new UUID(4).format();
-    const backendType = backend === 'staging' ? APIClient.BACKEND.STAGING : APIClient.BACKEND.PRODUCTION;
+    const backendType = options.backend === 'staging' ? APIClient.BACKEND.STAGING : APIClient.BACKEND.PRODUCTION;
 
     const engine = new MemoryEngine();
 
@@ -232,16 +235,16 @@ export class InstanceService {
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
-      classification: ClientClassification.DESKTOP,
+      classification: options.deviceClass || ClientClassification.DESKTOP,
       cookieLabel: 'default',
-      label: deviceLabel,
-      model: deviceName || `E2E Test Server v${version}`,
+      label: options.deviceLabel,
+      model: options.deviceName || `E2E Test Server v${version}`,
     };
 
     logger.log(`[${formatDate()}] Logging in ...`);
 
     try {
-      await account.login(loginData, true, ClientInfo);
+      await account.login(options.loginData, true, ClientInfo);
       await account.listen();
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -259,7 +262,7 @@ export class InstanceService {
       engine,
       id: instanceId,
       messages: new LRUCache(),
-      name: instanceName || '',
+      name: options.instanceName || '',
     };
 
     this.cachedInstances.set(instanceId, instance);
