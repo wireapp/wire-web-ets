@@ -256,8 +256,6 @@ export class InstanceService {
       model: options.deviceName || `E2E Test Server v${version}`,
     };
 
-    console.log('ClientInfo', ClientInfo);
-
     logger.log(`[${formatDate()}] Logging in ...`);
 
     try {
