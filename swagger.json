@@ -170,7 +170,7 @@
           "properties": {
             "deviceClass": {
               "enum": ["desktop", "phone", "tablet"],
-              "format": "string"
+              "type": "string"
             },
             "deviceLabel": {
               "type": "string"
@@ -253,7 +253,7 @@
         },
         "state": {
           "enum": ["PayloadBundleState.INCOMING", "PayloadBundleState.OUTGOING_SENT"],
-          "format": "string"
+          "type": "string"
         },
         "timestamp": {
           "type": "string"
