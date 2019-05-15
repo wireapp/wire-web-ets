@@ -20,8 +20,7 @@
     "pm2-logrotate": "2.6.0",
     "pure-uuid": "1.5.7",
     "swagger-ui-express": "4.0.3",
-    "typescript": "3.4.5",
-    "yamljs": "0.3.0"
+    "typescript": "3.4.5"
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
@@ -29,7 +28,6 @@
     "@types/nock": "10.0.3",
     "@types/request": "2.48.1",
     "@types/swagger-ui-express": "3.0.0",
-    "@types/yamljs": "0.2.30",
     "@wireapp/prettier-config": "0.2.0",
     "@wireapp/tslint-config": "1.1.0",
     "cross-env": "5.2.0",
@@ -51,7 +49,7 @@
   },
   "files": [
     "dist",
-    "swagger.yml"
+    "swagger.json"
   ],
   "license": "GPL-3.0",
   "lint-staged": {
@@ -76,7 +74,7 @@
   "scripts": {
     "build": "yarn build:node && yarn build:docs",
     "build:node": "tsc",
-    "build:docs": "swagger-markdown -i swagger.yml -o docs/swagger.md",
+    "build:docs": "swagger-markdown -i swagger.json -o docs/swagger.md",
     "clean": "rimraf dist",
     "dist": "yarn clean && yarn build",
     "fix": "yarn fix:other && yarn fix:ts && yarn fix:ts:tests",
