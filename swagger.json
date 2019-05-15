@@ -1,11 +1,29 @@
 {
   "basePath": "/api/v1",
   "definitions": {
+    "BackendData": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "rest": {
+          "type": "string"
+        },
+        "ws": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "rest", "ws"],
+      "type": "object"
+    },
     "BasicLogin": {
       "properties": {
         "backend": {
           "enum": ["staging", "prod", "production"],
           "type": "string"
+        },
+        "customBackend": {
+          "$ref": "#/definitions/BackendData"
         },
         "email": {
           "format": "email",
@@ -16,6 +34,7 @@
           "type": "string"
         }
       },
+      "required": ["email", "password"],
       "type": "object"
     },
     "Client": {
@@ -185,7 +204,7 @@
           "type": "object"
         }
       ],
-      "required": ["backend", "email", "password"]
+      "required": ["email", "password"]
     },
     "Mention": {
       "properties": {
@@ -1839,10 +1858,7 @@
           "200": {
             "description": "",
             "schema": {
-              "additionalProperties": {
-                "$ref": "#/definitions/Instance"
-              },
-              "type": "object"
+              "$ref": "#/definitions/Instance"
             }
           },
           "404": {

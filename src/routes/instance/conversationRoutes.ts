@@ -54,7 +54,7 @@ export interface LinkPreviewRequest {
     type: string;
     width: number;
   };
-  permanentUrl: string;
+  permanentUrl?: string;
   summary?: string;
   title?: string;
   tweet?: {
@@ -104,14 +104,27 @@ const validateLinkPreview = {
     type: Joi.string().required(),
     width: Joi.number().required(),
   }).optional(),
-  permanentUrl: Joi.string().required(),
-  summary: Joi.string().optional(),
-  title: Joi.string().optional(),
+  permanentUrl: Joi.string()
+    .uri()
+    .allow('')
+    .optional(),
+  summary: Joi.string()
+    .allow('')
+    .optional(),
+  title: Joi.string()
+    .allow('')
+    .optional(),
   tweet: Joi.object({
-    author: Joi.string().optional(),
-    username: Joi.string().optional(),
+    author: Joi.string()
+      .allow('')
+      .optional(),
+    username: Joi.string()
+      .allow('')
+      .optional(),
   }).optional(),
-  url: Joi.string().required(),
+  url: Joi.string()
+    .uri()
+    .required(),
   urlOffset: Joi.number().required(),
 };
 
@@ -323,7 +336,9 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .required(),
         expectsReadConfirmation: Joi.boolean().default(false),
         latitude: Joi.number().required(),
-        locationName: Joi.string().optional(),
+        locationName: Joi.string()
+          .allow('')
+          .optional(),
         longitude: Joi.number().required(),
         messageTimer: Joi.number()
           .default(0)

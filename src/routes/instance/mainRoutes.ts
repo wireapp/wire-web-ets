@@ -18,12 +18,15 @@
  */
 
 import {ClientClassification, ClientType} from '@wireapp/api-client/dist/commonjs/client/';
+import {BackendData} from '@wireapp/api-client/dist/commonjs/env';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
+
 import {InstanceService} from '../../InstanceService';
 
 export interface InstanceRequest {
-  backend: string;
+  backend?: string;
+  customBackend?: BackendData;
   deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
   deviceLabel?: string;
   deviceName: string;
@@ -41,6 +44,16 @@ interface ReducedInstances {
   };
 }
 
+const validateCustomBackend = Joi.object({
+  name: Joi.string().required(),
+  rest: Joi.string()
+    .uri()
+    .required(),
+  ws: Joi.string()
+    .uri()
+    .required(),
+}).optional();
+
 export const mainRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
@@ -49,8 +62,9 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
     celebrate({
       body: {
         backend: Joi.string()
-          .valid(['prod', 'production', 'staging'])
-          .required(),
+          .valid(['prod', 'production', 'staging', ''])
+          .optional(),
+        customBackend: validateCustomBackend,
         deviceClass: Joi.string()
           .allow([ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET, ''])
           .optional(),
@@ -72,6 +86,7 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
     async (req: express.Request, res: express.Response) => {
       const {
         backend,
+        customBackend,
         deviceClass,
         deviceLabel,
         deviceName,
@@ -89,6 +104,7 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
       try {
         const instanceId = await instanceService.createInstance({
           backend,
+          customBackend,
           deviceClass,
           deviceLabel,
           deviceName,
@@ -171,8 +187,9 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
     celebrate({
       body: {
         backend: Joi.string()
-          .valid(['prod', 'production', 'staging'])
-          .required(),
+          .valid(['prod', 'production', 'staging', ''])
+          .optional(),
+        customBackend: validateCustomBackend,
         email: Joi.string()
           .email()
           .required(),
@@ -180,10 +197,10 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {backend, email, password}: InstanceRequest = req.body;
+      const {backend, customBackend, email, password}: InstanceRequest = req.body;
 
       try {
-        await instanceService.removeAllClients(backend, email, password);
+        await instanceService.removeAllClients(email, password, backend || customBackend);
         return res.json({});
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
