@@ -168,6 +168,10 @@
         },
         {
           "properties": {
+            "deviceClass": {
+              "enum": ["desktop", "phone", "tablet"],
+              "format": "string"
+            },
             "deviceLabel": {
               "type": "string"
             },
