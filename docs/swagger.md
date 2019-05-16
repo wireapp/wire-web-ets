@@ -6,8 +6,8 @@ End-to-end Test Service (ETS) for Wire's test automation suite.
 ### Terms of service
 https://wire.com/legal/
 
-**Contact information:**  
-opensource@wire.com  
+**Contact information:**
+opensource@wire.com
 
 **License:** [GPL-3.0](https://github.com/wireapp/wire-web-ets/blob/master/LICENSE)
 
@@ -21,6 +21,7 @@ Delete all clients
 ##### Description:
 
 **Notes**:
+
 You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
 
 ##### Parameters
@@ -664,9 +665,15 @@ Get all instances
 
 #### Login
 
+**Notes**:
+
+You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
+
+`deviceClass` can be set to any string if `backend` is unset and `customBackend` is set.
+
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| Login |  |  |  |
+| Login |  | **Notes**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence. `deviceClass` can be set to any string if `backend` is unset and `customBackend` is set. |  |
 
 #### Mention
 
