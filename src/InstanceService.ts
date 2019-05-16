@@ -76,7 +76,7 @@ export interface Instance {
 export interface InstanceCreationOptions {
   backend?: string;
   customBackend?: BackendData;
-  deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
+  deviceClass?: string;
   deviceLabel?: string;
   deviceName?: string;
   instanceName?: string;
@@ -187,15 +187,16 @@ export class InstanceService {
   private parseBackend(backend?: string | BackendData): BackendData {
     if (typeof backend === 'string') {
       switch (backend) {
-        case 'staging': {
-          return APIClient.BACKEND.STAGING;
+        case 'production':
+        case 'prod': {
+          return APIClient.BACKEND.PRODUCTION;
         }
         default: {
-          return APIClient.BACKEND.PRODUCTION;
+          return APIClient.BACKEND.STAGING;
         }
       }
     } else if (typeof backend === 'undefined') {
-      return APIClient.BACKEND.PRODUCTION;
+      return APIClient.BACKEND.STAGING;
     } else {
       return backend;
     }
@@ -250,7 +251,7 @@ export class InstanceService {
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
-      classification: options.deviceClass || ClientClassification.DESKTOP,
+      classification: (options.deviceClass as any) || ClientClassification.DESKTOP,
       cookieLabel: 'default',
       label: options.deviceLabel,
       model: options.deviceName || `E2E Test Server v${version}`,

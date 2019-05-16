@@ -27,7 +27,7 @@ import {InstanceService} from '../../InstanceService';
 export interface InstanceRequest {
   backend?: string;
   customBackend?: BackendData;
-  deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
+  deviceClass?: string;
   deviceLabel?: string;
   deviceName: string;
   email: string;
@@ -52,7 +52,9 @@ const validateCustomBackend = Joi.object({
   ws: Joi.string()
     .uri()
     .required(),
-}).optional();
+});
+
+const validateBackend = Joi.string().valid(['prod', 'production', 'staging']);
 
 export const mainRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
@@ -61,13 +63,17 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
     '/api/v1/instance/?',
     celebrate({
       body: {
-        backend: Joi.string()
-          .valid(['prod', 'production', 'staging', ''])
-          .optional(),
-        customBackend: validateCustomBackend,
-        deviceClass: Joi.string()
-          .allow([ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET, ''])
-          .optional(),
+        backend: validateBackend.allow('').optional(),
+        customBackend: validateCustomBackend.optional(),
+        deviceClass: Joi.when('customBackend', {
+          is: validateCustomBackend.required(),
+          otherwise: Joi.string().valid([
+            ClientClassification.DESKTOP,
+            ClientClassification.PHONE,
+            ClientClassification.TABLET,
+          ]),
+          then: Joi.string().allow(''),
+        }).optional(),
         deviceLabel: Joi.string()
           .allow('')
           .optional(),

@@ -20,7 +20,8 @@ Delete all clients
 
 ##### Description:
 
-
+**Notes**:
+You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
 
 ##### Parameters
 
