@@ -46,12 +46,8 @@ interface ReducedInstances {
 
 const validateCustomBackend = Joi.object({
   name: Joi.string().required(),
-  rest: Joi.string()
-    .uri()
-    .required(),
-  ws: Joi.string()
-    .uri()
-    .required(),
+  rest: Joi.string().required(),
+  ws: Joi.string().required(),
 });
 
 const validateBackend = Joi.string().valid(['prod', 'production', 'staging']);

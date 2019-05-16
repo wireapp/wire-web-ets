@@ -183,8 +183,8 @@ yarn start
 ```json
 {
   "name": "<string>",
-  "rest": "<string in URI format>",
-  "ws": "<string in URI format>"
+  "rest": "<string>",
+  "ws": "<string>"
 }
 ```
 
@@ -232,8 +232,8 @@ yarn start
 ```json
 {
   "name": "<string>",
-  "rest": "<string in URI format>",
-  "ws": "<string in URI format>"
+  "rest": "<string>",
+  "ws": "<string>"
 }
 ```
 
@@ -662,14 +662,14 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
       "type": "<string>",
       "width": "<number>"
     },
-    "permanentUrl?": "<string in URI format>",
+    "permanentUrl?": "<string>",
     "summary?": "<string>",
     "title?": "<string>",
     "tweet?": {
       "author?": "<string>",
       "username?": "<string>"
     },
-    "url": "<string in URI format>",
+    "url": "<string>",
     "urlOffset": "<number>"
   },
   "mentions?": [
@@ -734,14 +734,14 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
       "type": "<string>",
       "width": "<number>"
     },
-    "permanentUrl?": "<string in URI format>",
+    "permanentUrl?": "<string>",
     "summary?": "<string>",
     "title?": "<string>",
     "tweet?": {
       "author?": "<string>",
       "username?": "<string>"
     },
-    "url": "<string in URI format>",
+    "url": "<string>",
     "urlOffset": "<number>"
   },
   "mentions?": [

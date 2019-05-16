@@ -105,7 +105,6 @@ const validateLinkPreview = {
     width: Joi.number().required(),
   }).optional(),
   permanentUrl: Joi.string()
-    .uri()
     .allow('')
     .optional(),
   summary: Joi.string()
@@ -122,9 +121,7 @@ const validateLinkPreview = {
       .allow('')
       .optional(),
   }).optional(),
-  url: Joi.string()
-    .uri()
-    .required(),
+  url: Joi.string().required(),
   urlOffset: Joi.number().required(),
 };
 
