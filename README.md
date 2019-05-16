@@ -178,11 +178,27 @@ yarn start
 
 ### `PUT /api/v1/instance`
 
-#### Request
+#### `BackendData`
 
 ```json
 {
-  "backend": "<'prod'|'production'|'staging'>",
+  "name": "<string>",
+  "rest": "<string in URI format>",
+  "ws": "<string in URI format>"
+}
+```
+
+#### Request
+
+**Notes**:
+
+- You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
+- `deviceClass` can be set to any string if `backend` is unset and `customBackend` is set.
+
+```json
+{
+  "backend?": "<'prod'|'production'|'staging'>",
+  "customBackend?": "<BackendData>",
   "deviceClass?": "<'desktop'|'phone'|'tablet'>",
   "deviceLabel?": "<string>",
   "deviceName?": "<string>",
@@ -211,11 +227,28 @@ yarn start
 
 ### `DELETE /api/v1/clients`
 
-#### Request
+#### `BackendData`
 
 ```json
 {
-  "backend": "<'prod'|'production'|'staging'>",
+  "name": "<string>",
+  "rest": "<string in URI format>",
+  "ws": "<string in URI format>"
+}
+```
+
+#### Request
+
+**Notes**:
+
+- You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
+
+- The device class can be set to any string if `backend` is unset and `customBackend` is set.
+
+```json
+{
+  "backend?": "<'prod'|'production'|'staging'>",
+  "customBackend?": "<BackendData>",
   "email": "<string in email format>",
   "password": "<string>"
 }
@@ -629,14 +662,14 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
       "type": "<string>",
       "width": "<number>"
     },
-    "permanentUrl?": "<string>",
+    "permanentUrl?": "<string in URI format>",
     "summary?": "<string>",
     "title?": "<string>",
     "tweet?": {
       "author?": "<string>",
       "username?": "<string>"
     },
-    "url": "<string>",
+    "url": "<string in URI format>",
     "urlOffset": "<number>"
   },
   "mentions?": [
@@ -701,14 +734,14 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
       "type": "<string>",
       "width": "<number>"
     },
-    "permanentUrl?": "<string>",
+    "permanentUrl?": "<string in URI format>",
     "summary?": "<string>",
     "title?": "<string>",
     "tweet?": {
       "author?": "<string>",
       "username?": "<string>"
     },
-    "url": "<string>",
+    "url": "<string in URI format>",
     "urlOffset": "<number>"
   },
   "mentions?": [

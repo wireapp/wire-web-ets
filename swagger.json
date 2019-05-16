@@ -1,11 +1,29 @@
 {
   "basePath": "/api/v1",
   "definitions": {
+    "BackendData": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "rest": {
+          "type": "string"
+        },
+        "ws": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "rest", "ws"],
+      "type": "object"
+    },
     "BasicLogin": {
       "properties": {
         "backend": {
           "enum": ["staging", "prod", "production"],
           "type": "string"
+        },
+        "customBackend": {
+          "$ref": "#/definitions/BackendData"
         },
         "email": {
           "format": "email",
@@ -16,6 +34,7 @@
           "type": "string"
         }
       },
+      "required": ["email", "password"],
       "type": "object"
     },
     "Client": {
@@ -185,7 +204,8 @@
           "type": "object"
         }
       ],
-      "required": ["backend", "email", "password"]
+      "description": "**Notes**:\n\nYou can either set `backend` or `customBackend`. If you set neither, the \"staging\" backend will be used. If you set both, `backend` takes the precedence.\n`deviceClass` can be set to any string if `backend` is unset and `customBackend` is set.",
+      "required": ["email", "password"]
     },
     "Mention": {
       "properties": {
@@ -343,7 +363,7 @@
     "/clients": {
       "delete": {
         "consumes": ["application/json"],
-        "description": "",
+        "description": "**Notes**:\n\nYou can either set `backend` or `customBackend`. If you set neither, the \"staging\" backend will be used. If you set both, `backend` takes the precedence.",
         "operationId": "deleteAllClients",
         "parameters": [
           {
@@ -1839,10 +1859,7 @@
           "200": {
             "description": "",
             "schema": {
-              "additionalProperties": {
-                "$ref": "#/definitions/Instance"
-              },
-              "type": "object"
+              "$ref": "#/definitions/Instance"
             }
           },
           "404": {

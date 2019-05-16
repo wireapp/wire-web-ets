@@ -47,6 +47,7 @@ import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 
+import {BackendData} from '@wireapp/api-client/dist/commonjs/env/';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from './utils';
 
 const {version}: {version: string} = require('../package.json');
@@ -64,11 +65,7 @@ type MessagePayload = PayloadBundle & {
 
 export interface Instance {
   account: Account;
-  backendType: {
-    name: string;
-    rest: string;
-    ws: string;
-  };
+  backendType: BackendData;
   client: APIClient;
   engine: CRUDEngine;
   id: string;
@@ -77,8 +74,9 @@ export interface Instance {
 }
 
 export interface InstanceCreationOptions {
-  backend: string;
-  deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
+  backend?: string;
+  customBackend?: BackendData;
+  deviceClass?: string;
   deviceLabel?: string;
   deviceName?: string;
   instanceName?: string;
@@ -186,6 +184,24 @@ export class InstanceService {
     });
   }
 
+  private parseBackend(backend?: string | BackendData): BackendData {
+    if (typeof backend === 'string') {
+      switch (backend) {
+        case 'production':
+        case 'prod': {
+          return APIClient.BACKEND.PRODUCTION;
+        }
+        default: {
+          return APIClient.BACKEND.STAGING;
+        }
+      }
+    } else if (typeof backend === 'undefined') {
+      return APIClient.BACKEND.STAGING;
+    } else {
+      return backend;
+    }
+  }
+
   async toggleArchiveConversation(instanceId: string, conversationId: string, archived: boolean): Promise<string> {
     const instance = this.getInstance(instanceId);
 
@@ -221,7 +237,7 @@ export class InstanceService {
 
   async createInstance(options: InstanceCreationOptions): Promise<string> {
     const instanceId = new UUID(4).format();
-    const backendType = options.backend === 'staging' ? APIClient.BACKEND.STAGING : APIClient.BACKEND.PRODUCTION;
+    const backendType = this.parseBackend(options.backend || options.customBackend);
 
     const engine = new MemoryEngine();
 
@@ -235,7 +251,7 @@ export class InstanceService {
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
-      classification: options.deviceClass || ClientClassification.DESKTOP,
+      classification: (options.deviceClass as any) || ClientClassification.DESKTOP,
       cookieLabel: 'default',
       label: options.deviceLabel,
       model: options.deviceName || `E2E Test Server v${version}`,
@@ -362,8 +378,9 @@ export class InstanceService {
     }
   }
 
-  async removeAllClients(backend: string, email: string, password: string): Promise<void> {
-    const backendType = backend === 'staging' ? APIClient.BACKEND.STAGING : APIClient.BACKEND.PRODUCTION;
+  async removeAllClients(email: string, password: string, backend?: string | BackendData): Promise<void> {
+    const backendType = this.parseBackend(backend);
+
     const engine = new MemoryEngine();
     await engine.init('temporary');
     const apiClient = new APIClient({store: engine, urls: backendType});
