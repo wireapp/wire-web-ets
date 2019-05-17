@@ -25,10 +25,10 @@ import {
   MentionContent,
   QuoteContent,
 } from '@wireapp/core/dist/conversation/content/';
-import {celebrate, Joi} from 'celebrate';
+import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 
-import InstanceService from '../../InstanceService';
+import {InstanceService} from '../../InstanceService';
 import {hexToUint8Array} from '../../utils';
 
 export interface MessageRequest {
@@ -54,7 +54,7 @@ export interface LinkPreviewRequest {
     type: string;
     width: number;
   };
-  permanentUrl: string;
+  permanentUrl?: string;
   summary?: string;
   title?: string;
   tweet?: {
@@ -104,12 +104,22 @@ const validateLinkPreview = {
     type: Joi.string().required(),
     width: Joi.number().required(),
   }).optional(),
-  permanentUrl: Joi.string().required(),
-  summary: Joi.string().optional(),
-  title: Joi.string().optional(),
+  permanentUrl: Joi.string()
+    .allow('')
+    .optional(),
+  summary: Joi.string()
+    .allow('')
+    .optional(),
+  title: Joi.string()
+    .allow('')
+    .optional(),
   tweet: Joi.object({
-    author: Joi.string().optional(),
-    username: Joi.string().optional(),
+    author: Joi.string()
+      .allow('')
+      .optional(),
+    username: Joi.string()
+      .allow('')
+      .optional(),
   }).optional(),
   url: Joi.string().required(),
   urlOffset: Joi.number().required(),
@@ -132,7 +142,7 @@ const validateQuote = {
     .required(),
 };
 
-const conversationRoutes = (instanceService: InstanceService): express.Router => {
+export const conversationRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
@@ -323,7 +333,9 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
           .required(),
         expectsReadConfirmation: Joi.boolean().default(false),
         latitude: Joi.number().required(),
-        locationName: Joi.string().optional(),
+        locationName: Joi.string()
+          .allow('')
+          .optional(),
         longitude: Joi.number().required(),
         messageTimer: Joi.number()
           .default(0)
@@ -629,5 +641,3 @@ const conversationRoutes = (instanceService: InstanceService): express.Router =>
 
   return router;
 };
-
-export default conversationRoutes;

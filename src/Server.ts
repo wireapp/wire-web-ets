@@ -24,27 +24,27 @@ import * as helmet from 'helmet';
 import * as http from 'http';
 
 import {ServerConfig} from './config';
-import InstanceService from './InstanceService';
-import healthCheckRoute from './routes/_health/healthCheckRoute';
-import commitRoute from './routes/commit/commitRoute';
+import {InstanceService} from './InstanceService';
+import {healthCheckRoute} from './routes/_health/healthCheckRoute';
+import {commitRoute} from './routes/commit/commitRoute';
 import {celebrateErrorRoute, internalErrorRoute, notFoundRoute} from './routes/error/errorRoutes';
-import InstanceRoutes from './routes/instance/';
-import logRoute from './routes/log/logRoute';
-import mainRoute from './routes/mainRoute';
+import {routes as InstanceRoutes} from './routes/instance/';
+import {logRoute} from './routes/log/logRoute';
+import {mainRoute} from './routes/mainRoute';
 import {initSwaggerRoute} from './routes/swagger-ui/swaggerRoute';
 
-class Server {
-  private app: express.Express;
+export class Server {
+  private readonly app: express.Express;
   private server?: http.Server;
-  private instanceService: InstanceService;
+  private readonly instanceService: InstanceService;
 
-  constructor(private config: ServerConfig) {
+  constructor(private readonly config: ServerConfig) {
     this.app = express();
     this.instanceService = new InstanceService();
     this.init();
   }
 
-  init() {
+  init(): void {
     // The order is important here, please don't sort!
     this.app.use((req, res, next) => {
       bodyParser.json({limit: '200mb'})(req, res, error => {
@@ -72,11 +72,11 @@ class Server {
     this.app.use(internalErrorRoute());
   }
 
-  initAPIRoutes() {
+  initAPIRoutes(): void {
     this.app.use(InstanceRoutes(this.instanceService));
   }
 
-  initCaching() {
+  initCaching(): void {
     if (this.config.DEVELOPMENT) {
       this.app.use(helmet.noCache());
     } else {
@@ -89,7 +89,7 @@ class Server {
     }
   }
 
-  initForceSSL() {
+  initForceSSL(): void {
     const STATUS_CODE_MOVED = 301;
 
     const SSLMiddleware: express.RequestHandler = (req, res, next) => {
@@ -107,7 +107,7 @@ class Server {
     this.app.use(SSLMiddleware);
   }
 
-  initSecurityHeaders() {
+  initSecurityHeaders(): void {
     this.app.disable('x-powered-by');
     this.app.use(
       helmet({
@@ -139,5 +139,3 @@ class Server {
     }
   }
 }
-
-export default Server;

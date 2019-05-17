@@ -25,12 +25,7 @@ import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/commonjs/h
 import {Account} from '@wireapp/core';
 import {AvailabilityType} from '@wireapp/core/dist/broadcast/';
 import {ClientInfo} from '@wireapp/core/dist/client/';
-import {
-  PayloadBundleIncoming,
-  PayloadBundleOutgoing,
-  PayloadBundleType,
-  ReactionType,
-} from '@wireapp/core/dist/conversation/';
+import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation/';
 import {
   ClearedContent,
   ConfirmationContent,
@@ -52,6 +47,7 @@ import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 
+import {BackendData} from '@wireapp/api-client/dist/commonjs/env/';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from './utils';
 
 const {version}: {version: string} = require('../package.json');
@@ -63,17 +59,13 @@ const logger = logdown('@wireapp/wire-web-ets/instanceService', {
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 
-type MessagePayload = (PayloadBundleIncoming | PayloadBundleOutgoing) & {
+type MessagePayload = PayloadBundle & {
   confirmations?: ConfirmationWithSender[];
 };
 
 export interface Instance {
   account: Account;
-  backendType: {
-    name: string;
-    rest: string;
-    ws: string;
-  };
+  backendType: BackendData;
   client: APIClient;
   engine: CRUDEngine;
   id: string;
@@ -81,17 +73,27 @@ export interface Instance {
   name: string;
 }
 
-class InstanceService {
-  private cachedInstances: LRUCache<Instance>;
+export interface InstanceCreationOptions {
+  backend?: string;
+  customBackend?: BackendData;
+  deviceClass?: string;
+  deviceLabel?: string;
+  deviceName?: string;
+  instanceName?: string;
+  loginData: LoginData;
+}
 
-  constructor(private maximumInstances = 100) {
+export class InstanceService {
+  private readonly cachedInstances: LRUCache<Instance>;
+
+  constructor(private readonly maximumInstances = 100) {
     this.cachedInstances = new LRUCache(this.maximumInstances);
   }
 
   private attachListeners(account: Account, instance: Instance): void {
     account.on('error', error => logger.error(`[${formatDate()}]`, error));
 
-    account.on(PayloadBundleType.TEXT, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.TEXT, (payload: PayloadBundle) => {
       const linkPreviewContent = payload.content as TextContent;
       if (linkPreviewContent.linkPreviews) {
         linkPreviewContent.linkPreviews.forEach(preview => {
@@ -101,7 +103,7 @@ class InstanceService {
       instance.messages.set(payload.id, payload);
     });
 
-    account.on(PayloadBundleType.ASSET, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.ASSET, (payload: PayloadBundle) => {
       const metaPayload = instance.messages.get(payload.id);
       if (metaPayload && isAssetContent(payload.content) && isAssetContent(metaPayload.content)) {
         payload.content.original = metaPayload.content.original;
@@ -110,21 +112,21 @@ class InstanceService {
       instance.messages.set(payload.id, payload);
     });
 
-    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundle) => {
       instance.messages.set(payload.id, payload);
     });
 
-    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundle) => {
       instance.messages.set(payload.id, payload);
     });
 
-    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundle) => {
       const editedContent = payload.content as EditedTextContent;
       instance.messages.set(payload.id, payload);
       instance.messages.delete(editedContent.originalMessageId);
     });
 
-    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundle) => {
       const clearedContent = payload.content as ClearedContent;
 
       for (const message of instance.messages) {
@@ -134,25 +136,25 @@ class InstanceService {
       }
     });
 
-    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundle) => {
       instance.messages.set(payload.id, payload);
     });
 
-    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundle) => {
       const deleteContent = payload.content as DeletedContent;
-      instance.messages.delete(deleteContent.originalMessageId);
+      instance.messages.delete(deleteContent.messageId);
     });
 
-    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundle) => {
       const hideContent = payload.content as HiddenContent;
-      instance.messages.delete(hideContent.originalMessageId);
+      instance.messages.delete(hideContent.messageId);
     });
 
-    account.on(PayloadBundleType.PING, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.PING, (payload: PayloadBundle) => {
       instance.messages.set(payload.id, payload);
     });
 
-    account.on(PayloadBundleType.CONFIRMATION, (payload: PayloadBundleIncoming) => {
+    account.on(PayloadBundleType.CONFIRMATION, (payload: PayloadBundle) => {
       const confirmationContent = payload.content as ConfirmationContent;
       const confirmationWithSender = {...confirmationContent, from: payload.from};
 
@@ -182,6 +184,24 @@ class InstanceService {
     });
   }
 
+  private parseBackend(backend?: string | BackendData): BackendData {
+    if (typeof backend === 'string') {
+      switch (backend) {
+        case 'production':
+        case 'prod': {
+          return APIClient.BACKEND.PRODUCTION;
+        }
+        default: {
+          return APIClient.BACKEND.STAGING;
+        }
+      }
+    } else if (typeof backend === 'undefined') {
+      return APIClient.BACKEND.STAGING;
+    } else {
+      return backend;
+    }
+  }
+
   async toggleArchiveConversation(instanceId: string, conversationId: string, archived: boolean): Promise<string> {
     const instance = this.getInstance(instanceId);
 
@@ -197,7 +217,7 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.toggleMuteConversation(conversationId, muted, new Date());
+      await instance.account.service.conversation.setConversationMutedStatus(conversationId, muted ? 3 : 0, new Date());
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -215,15 +235,9 @@ class InstanceService {
     }
   }
 
-  async createInstance(
-    backend: string,
-    loginData: LoginData,
-    deviceName?: string,
-    deviceLabel?: string,
-    instanceName?: string
-  ): Promise<string> {
+  async createInstance(options: InstanceCreationOptions): Promise<string> {
     const instanceId = new UUID(4).format();
-    const backendType = backend === 'staging' ? APIClient.BACKEND.STAGING : APIClient.BACKEND.PRODUCTION;
+    const backendType = this.parseBackend(options.backend || options.customBackend);
 
     const engine = new MemoryEngine();
 
@@ -237,16 +251,16 @@ class InstanceService {
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
-      classification: ClientClassification.DESKTOP,
+      classification: (options.deviceClass as any) || ClientClassification.DESKTOP,
       cookieLabel: 'default',
-      label: deviceLabel,
-      model: deviceName || `E2E Test Server v${version}`,
+      label: options.deviceLabel,
+      model: options.deviceName || `E2E Test Server v${version}`,
     };
 
     logger.log(`[${formatDate()}] Logging in ...`);
 
     try {
-      await account.login(loginData, true, ClientInfo);
+      await account.login(options.loginData, true, ClientInfo);
       await account.listen();
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -264,7 +278,7 @@ class InstanceService {
       engine,
       id: instanceId,
       messages: new LRUCache(),
-      name: instanceName || '',
+      name: options.instanceName || '',
     };
 
     this.cachedInstances.set(instanceId, instance);
@@ -364,8 +378,9 @@ class InstanceService {
     }
   }
 
-  async removeAllClients(backend: string, email: string, password: string): Promise<void> {
-    const backendType = backend === 'staging' ? APIClient.BACKEND.STAGING : APIClient.BACKEND.PRODUCTION;
+  async removeAllClients(email: string, password: string, backend?: string | BackendData): Promise<void> {
+    const backendType = this.parseBackend(backend);
+
     const engine = new MemoryEngine();
     await engine.init('temporary');
     const apiClient = new APIClient({store: engine, urls: backendType});
@@ -413,8 +428,10 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const sessionResetPayload = instance.account.service.conversation.createSessionReset();
-      const {id: messageId} = await instance.account.service.conversation.send(conversationId, sessionResetPayload);
+      const sessionResetPayload = instance.account.service.conversation.messageBuilder.createSessionReset(
+        conversationId
+      );
+      const {id: messageId} = await instance.account.service.conversation.send(sessionResetPayload);
       return messageId;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -435,26 +452,28 @@ class InstanceService {
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation
-        .createText(message)
+      const payload = await instance.account.service.conversation.messageBuilder
+        .createText(conversationId, message)
         .withMentions(mentions)
         .withQuote(quote)
         .withReadConfirmation(expectsReadConfirmation)
         .build();
 
-      let sentMessage = await instance.account.service.conversation.send(conversationId, payload);
+      let sentMessage = await instance.account.service.conversation.send(payload);
 
       if (linkPreview) {
-        const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(linkPreview);
-        const editedWithPreviewPayload = instance.account.service.conversation
-          .createText(message, sentMessage.id)
+        const linkPreviewPayload = await instance.account.service.conversation.messageBuilder.createLinkPreview(
+          linkPreview
+        );
+        const editedWithPreviewPayload = instance.account.service.conversation.messageBuilder
+          .createText(conversationId, message, sentMessage.id)
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(mentions)
           .withQuote(quote)
           .withReadConfirmation(expectsReadConfirmation)
           .build();
 
-        sentMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
+        sentMessage = await instance.account.service.conversation.send(editedWithPreviewPayload);
 
         const messageContent = sentMessage.content as TextContent;
 
@@ -481,8 +500,14 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const payload = instance.account.service.conversation.createConfirmationDelivered(firstMessageId, moreMessageIds);
-      await instance.account.service.conversation.send(conversationId, payload);
+      const payload = instance.account.service.conversation.messageBuilder.createConfirmation(
+        conversationId,
+        firstMessageId,
+        // TODO use future ConfirmationType
+        0,
+        moreMessageIds
+      );
+      await instance.account.service.conversation.send(payload);
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -498,8 +523,14 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const payload = instance.account.service.conversation.createConfirmationRead(firstMessageId, moreMessageIds);
-      await instance.account.service.conversation.send(conversationId, payload);
+      const payload = instance.account.service.conversation.messageBuilder.createConfirmation(
+        conversationId,
+        firstMessageId,
+        // TODO use future ConfirmationType
+        1,
+        moreMessageIds
+      );
+      await instance.account.service.conversation.send(payload);
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -520,11 +551,14 @@ class InstanceService {
     }
 
     if (instance.account.service) {
-      const confirmationPayload = instance.account.service.conversation.createConfirmationDelivered(
+      const confirmationPayload = instance.account.service.conversation.messageBuilder.createConfirmation(
+        conversationId,
         firstMessageId,
+        // TODO use future ConfirmationType
+        0,
         moreMessageIds
       );
-      await instance.account.service.conversation.send(conversationId, confirmationPayload);
+      await instance.account.service.conversation.send(confirmationPayload);
       await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
 
       if (moreMessageIds && moreMessageIds.length) {
@@ -560,11 +594,14 @@ class InstanceService {
     }
 
     if (instance.account.service) {
-      const confirmationPayload = instance.account.service.conversation.createConfirmationRead(
+      const confirmationPayload = instance.account.service.conversation.messageBuilder.createConfirmation(
+        conversationId,
         firstMessageId,
+        // TODO use future ConfirmationType
+        1,
         moreMessageIds
       );
-      await instance.account.service.conversation.send(conversationId, confirmationPayload);
+      await instance.account.service.conversation.send(confirmationPayload);
       await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
       if (moreMessageIds && moreMessageIds.length) {
         for (const messageId of moreMessageIds) {
@@ -596,8 +633,12 @@ class InstanceService {
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.createImage(image, expectsReadConfirmation);
-      const sentImage = await instance.account.service.conversation.send(conversationId, payload);
+      const payload = await instance.account.service.conversation.messageBuilder.createImage(
+        conversationId,
+        image,
+        expectsReadConfirmation
+      );
+      const sentImage = await instance.account.service.conversation.send(payload);
 
       stripAsset(sentImage.content);
 
@@ -620,18 +661,20 @@ class InstanceService {
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
-      const metadataPayload = await instance.account.service.conversation.createFileMetadata(
+      const metadataPayload = await instance.account.service.conversation.messageBuilder.createFileMetadata(
+        conversationId,
         metadata,
         expectsReadConfirmation
       );
-      await instance.account.service.conversation.send(conversationId, metadataPayload);
+      await instance.account.service.conversation.send(metadataPayload);
 
-      const filePayload = await instance.account.service.conversation.createFileData(
+      const filePayload = await instance.account.service.conversation.messageBuilder.createFileData(
+        conversationId,
         file,
         metadataPayload.id,
         expectsReadConfirmation
       );
-      const sentFile = await instance.account.service.conversation.send(conversationId, filePayload);
+      const sentFile = await instance.account.service.conversation.send(filePayload);
 
       stripAsset(sentFile.content);
 
@@ -652,8 +695,11 @@ class InstanceService {
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.createLocation(location);
-      const sentLocation = await instance.account.service.conversation.send(conversationId, payload);
+      const payload = await instance.account.service.conversation.messageBuilder.createLocation(
+        conversationId,
+        location
+      );
+      const sentLocation = await instance.account.service.conversation.send(payload);
 
       instance.messages.set(sentLocation.id, sentLocation);
       return sentLocation.id;
@@ -672,8 +718,10 @@ class InstanceService {
 
     if (instance.account.service) {
       instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = instance.account.service.conversation.createPing({expectsReadConfirmation});
-      const sentPing = await instance.account.service.conversation.send(conversationId, payload);
+      const payload = instance.account.service.conversation.messageBuilder.createPing(conversationId, {
+        expectsReadConfirmation,
+      });
+      const sentPing = await instance.account.service.conversation.send(payload);
 
       instance.messages.set(sentPing.id, sentPing);
       return sentPing.id;
@@ -706,8 +754,12 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const payload = instance.account.service.conversation.createReaction(originalMessageId, type);
-      const {id: messageId} = await instance.account.service.conversation.send(conversationId, payload);
+      const payload = instance.account.service.conversation.messageBuilder.createReaction(
+        conversationId,
+        originalMessageId,
+        type
+      );
+      const {id: messageId} = await instance.account.service.conversation.send(payload);
       return messageId;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -727,26 +779,28 @@ class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const editedPayload = instance.account.service.conversation
-        .createEditedText(newMessageText, originalMessageId)
+      const editedPayload = instance.account.service.conversation.messageBuilder
+        .createEditedText(conversationId, newMessageText, originalMessageId)
         .withMentions(newMentions)
         .withQuote(newQuote)
         .withReadConfirmation(expectsReadConfirmation)
         .build();
 
-      let editedMessage = await instance.account.service.conversation.send(conversationId, editedPayload);
+      let editedMessage = await instance.account.service.conversation.send(editedPayload);
 
       if (newLinkPreview) {
-        const linkPreviewPayload = await instance.account.service.conversation.createLinkPreview(newLinkPreview);
-        const editedWithPreviewPayload = instance.account.service.conversation
-          .createEditedText(newMessageText, originalMessageId, editedMessage.id)
+        const linkPreviewPayload = await instance.account.service.conversation.messageBuilder.createLinkPreview(
+          newLinkPreview
+        );
+        const editedWithPreviewPayload = instance.account.service.conversation.messageBuilder
+          .createEditedText(conversationId, newMessageText, originalMessageId, editedMessage.id)
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(newMentions)
           .withQuote(newQuote)
           .withReadConfirmation(expectsReadConfirmation)
           .build();
 
-        editedMessage = await instance.account.service.conversation.send(conversationId, editedWithPreviewPayload);
+        editedMessage = await instance.account.service.conversation.send(editedWithPreviewPayload);
 
         const editedMessageContent = editedMessage.content as EditedTextContent;
 
@@ -764,7 +818,7 @@ class InstanceService {
     }
   }
 
-  async setAvailability(instanceId: string, teamId: string, type: AvailabilityType) {
+  async setAvailability(instanceId: string, teamId: string, type: AvailabilityType): Promise<void> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
@@ -774,5 +828,3 @@ class InstanceService {
     }
   }
 }
-
-export default InstanceService;

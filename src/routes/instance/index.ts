@@ -19,18 +19,18 @@
 
 import * as express from 'express';
 
-import InstanceService from '../../InstanceService';
+import {InstanceService} from '../../InstanceService';
 
-import assetRoutes from './assetRoutes';
-import clientRoutes from './clientRoutes';
-import confirmationRoutes from './confirmationRoutes';
-import conversationRoutes from './conversationRoutes';
-import mainRoutes from './mainRoutes';
-import sessionRoutes from './sessionRoutes';
-import typingRoutes from './typingRoutes';
-import userRoutes from './userRoutes';
+import {assetRoutes} from './assetRoutes';
+import {clientRoutes} from './clientRoutes';
+import {confirmationRoutes} from './confirmationRoutes';
+import {conversationRoutes} from './conversationRoutes';
+import {mainRoutes} from './mainRoutes';
+import {sessionRoutes} from './sessionRoutes';
+import {typingRoutes} from './typingRoutes';
+import {userRoutes} from './userRoutes';
 
-const routes = (instanceService: InstanceService): express.Router => {
+export const routes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.use(assetRoutes(instanceService));
@@ -44,5 +44,3 @@ const routes = (instanceService: InstanceService): express.Router => {
 
   return router;
 };
-
-export default routes;

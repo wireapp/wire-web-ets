@@ -18,16 +18,16 @@
  */
 
 import {AvailabilityType} from '@wireapp/core/dist/broadcast/';
-import {celebrate, Joi} from 'celebrate';
+import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
-import InstanceService from '../../InstanceService';
+import {InstanceService} from '../../InstanceService';
 
 export interface AvailabilityRequest {
   teamId: string;
   type: AvailabilityType;
 }
 
-const userRoutes = (instanceService: InstanceService): express.Router => {
+export const userRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.post(
@@ -64,5 +64,3 @@ const userRoutes = (instanceService: InstanceService): express.Router => {
 
   return router;
 };
-
-export default userRoutes;

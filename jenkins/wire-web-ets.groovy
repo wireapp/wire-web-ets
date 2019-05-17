@@ -22,7 +22,7 @@ node("$NODE") {
   stage('Build') {
     commit_msg = sh returnStdout: true, script: 'git log -n 1 --pretty=format:"%ar - %an: %s"'
     try {
-      def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
+      def NODE = tool name: 'node-v10.15.0', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
         sh 'npm install -g yarn pm2'
         sh 'yarn install --no-progress'
@@ -37,14 +37,14 @@ node("$NODE") {
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} build failed**\n${commit_msg}\nSee: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "❌ 🐛 **${JOB_NAME} ${BRANCH} on ${NODE} build failed**\n${commit_msg}\nSee: ${JOB_URL}"
       throw e
     }
   }
 
   stage('Install') {
     try {
-      def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
+      def NODE = tool name: 'node-v10.15.0', type: 'nodejs'
       sh "mkdir -p ${HOME}/.config/systemd/user/"
 
       sh """printf \\
@@ -69,7 +69,7 @@ WantedBy=default.target
       sh 'systemctl --user enable wire-web-ets'
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **${JOB_NAME} ${BRANCH} on ${NODE} install failed**\n${commit_msg}\nSee: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "❌ 🐛 **${JOB_NAME} ${BRANCH} on ${NODE} install failed**\n${commit_msg}\nSee: ${JOB_URL}"
       throw e
     }
   }
@@ -81,7 +81,7 @@ WantedBy=default.target
       if (runningStatus == 0) {
         sh 'systemctl --user restart wire-web-ets'
       } else {
-        def NODE = tool name: 'node-v10.8.0', type: 'nodejs'
+        def NODE = tool name: 'node-v10.15.0', type: 'nodejs'
         withEnv(["PATH+NODE=${NODE}/bin"]) {
           sh 'cd ${WORKSPACE}'
           sh 'yarn start'
@@ -91,7 +91,7 @@ WantedBy=default.target
       }
     } catch(e) {
       currentBuild.result = 'FAILED'
-      wireSend secret: "${jenkinsbot_secret}", message: "🐛 **Restarting ETS ${BRANCH} on ${NODE} failed**\n${commit_msg}\nSee: ${JOB_URL}"
+      wireSend secret: "${jenkinsbot_secret}", message: "❌ 🐛 **Restarting ETS ${BRANCH} on ${NODE} failed**\n${commit_msg}\nSee: ${JOB_URL}"
       throw e
     }
   }

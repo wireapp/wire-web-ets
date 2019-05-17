@@ -48,7 +48,7 @@ interface InfoData {
   message: string;
 }
 
-const mainRoute = (config: ServerConfig) => {
+export const mainRoute = (config: ServerConfig) => {
   const commitHashFile = path.join(config.DIST_DIR, 'commit');
 
   return router.get(['/', '/api/v1/?'], async (req, res) => {
@@ -75,5 +75,3 @@ const mainRoute = (config: ServerConfig) => {
     res.json(infoData);
   });
 };
-
-export default mainRoute;

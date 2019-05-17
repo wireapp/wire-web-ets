@@ -18,15 +18,15 @@
  */
 
 import * as express from 'express';
+import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as swaggerUi from 'swagger-ui-express';
-import * as yaml from 'yamljs';
 import {ServerConfig} from '../../config';
 
-const yamlFile = path.join(__dirname, '..', '..', '..', 'swagger.yml');
-const swaggerDocument = yaml.load(yamlFile);
+const jsonFile = path.join(__dirname, '../../../swagger.json');
+const swaggerDocument = fs.readJSONSync(jsonFile);
 
-export function initSwaggerRoute(app: express.Express, config: ServerConfig) {
+export function initSwaggerRoute(app: express.Express, config: ServerConfig): void {
   const swaggerUiOptions = {
     host: `localhost:${config.PORT_HTTP}`,
   };

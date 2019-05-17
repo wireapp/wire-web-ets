@@ -17,13 +17,17 @@
  *
  */
 
-import {ClientType} from '@wireapp/api-client/dist/commonjs/client/';
-import {celebrate, Joi} from 'celebrate';
+import {ClientClassification, ClientType} from '@wireapp/api-client/dist/commonjs/client/';
+import {BackendData} from '@wireapp/api-client/dist/commonjs/env';
+import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
-import InstanceService from '../../InstanceService';
+
+import {InstanceService} from '../../InstanceService';
 
 export interface InstanceRequest {
-  backend: string;
+  backend?: string;
+  customBackend?: BackendData;
+  deviceClass?: string;
   deviceLabel?: string;
   deviceName: string;
   email: string;
@@ -40,16 +44,32 @@ interface ReducedInstances {
   };
 }
 
-const mainRoutes = (instanceService: InstanceService): express.Router => {
+const validateCustomBackend = Joi.object({
+  name: Joi.string().required(),
+  rest: Joi.string().required(),
+  ws: Joi.string().required(),
+});
+
+const validateBackend = Joi.string().valid(['prod', 'production', 'staging']);
+
+export const mainRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
   router.put(
     '/api/v1/instance/?',
     celebrate({
       body: {
-        backend: Joi.string()
-          .valid(['prod', 'production', 'staging'])
-          .required(),
+        backend: validateBackend.allow('').optional(),
+        customBackend: validateCustomBackend.optional(),
+        deviceClass: Joi.when('customBackend', {
+          is: validateCustomBackend.required(),
+          otherwise: Joi.string().valid([
+            ClientClassification.DESKTOP,
+            ClientClassification.PHONE,
+            ClientClassification.TABLET,
+          ]),
+          then: Joi.string().allow(''),
+        }).optional(),
         deviceLabel: Joi.string()
           .allow('')
           .optional(),
@@ -66,7 +86,16 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {backend, deviceLabel, deviceName, email, name: instanceName, password}: InstanceRequest = req.body;
+      const {
+        backend,
+        customBackend,
+        deviceClass,
+        deviceLabel,
+        deviceName,
+        email,
+        name: instanceName,
+        password,
+      }: InstanceRequest = req.body;
 
       const loginData = {
         clientType: ClientType.PERMANENT,
@@ -75,13 +104,15 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       };
 
       try {
-        const instanceId = await instanceService.createInstance(
+        const instanceId = await instanceService.createInstance({
           backend,
-          loginData,
-          deviceName,
+          customBackend,
+          deviceClass,
           deviceLabel,
-          instanceName
-        );
+          deviceName,
+          instanceName,
+          loginData,
+        });
         return res.json({
           instanceId,
           name: instanceName,
@@ -158,8 +189,9 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
     celebrate({
       body: {
         backend: Joi.string()
-          .valid(['prod', 'production', 'staging'])
-          .required(),
+          .valid(['prod', 'production', 'staging', ''])
+          .optional(),
+        customBackend: validateCustomBackend,
         email: Joi.string()
           .email()
           .required(),
@@ -167,10 +199,10 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {backend, email, password}: InstanceRequest = req.body;
+      const {backend, customBackend, email, password}: InstanceRequest = req.body;
 
       try {
-        await instanceService.removeAllClients(backend, email, password);
+        await instanceService.removeAllClients(email, password, backend || customBackend);
         return res.json({});
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
@@ -195,5 +227,3 @@ const mainRoutes = (instanceService: InstanceService): express.Router => {
 
   return router;
 };
-
-export default mainRoutes;
