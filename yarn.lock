@@ -4364,10 +4364,10 @@ swagger-ui-dist@^3.18.1:
   resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.20.0.tgz#b8d2d914d4739d02f8b169b9b47d7885f1e954ff"
   integrity sha512-OOQep/BozOzF5H6Pa1T3SZW/kJ4M1kRyaq0TKtXRAwiZVgTWDbE8We/bx4Yq+FT1Em748U9UZco7Lum0PrKjRw==
 
-swagger-ui-express@4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/swagger-ui-express/-/swagger-ui-express-4.0.3.tgz#e4e0642c43c6a204124c6b8e86649dd75361b76e"
-  integrity sha512-G0anPbcUHCnf84fum1BPZ2s1LG4DP1bYBFgF05YB0ibXx4VMAkGIMSq7Y9yT8hMtTaKkmK+ikJFOCCeA9FcRfA==
+swagger-ui-express@4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/swagger-ui-express/-/swagger-ui-express-4.0.4.tgz#dd2fcbc841718a9eed07c6d8990fefa25e7a4a3d"
+  integrity sha512-3wRDxbk2wvJi9c4jfBeLz4+JHMYlS4JaDDwZmGqDQmiVq4hgHLpEATgeuyFvX1L5+G9k0lwOLuMOJiC8Rg4Edw==
   dependencies:
     swagger-ui-dist "^3.18.1"
 
