@@ -279,7 +279,7 @@
           "type": "string"
         },
         "type": {
-          "format": "string"
+          "type": "string"
         }
       },
       "required": ["conversation", "from", "id", "messageTimer", "state", "timestamp", "type"],

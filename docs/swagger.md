@@ -698,7 +698,7 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | messageTimer | string (number) |  | Yes |
 | state | string |  | Yes |
 | timestamp | string |  | Yes |
-| type | undefined (string) |  | Yes |
+| type | string |  | Yes |
 
 #### NotFoundError
 
