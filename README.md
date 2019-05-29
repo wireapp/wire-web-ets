@@ -394,8 +394,8 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
     "conversation": "<string in UUID format>",
     "from": "<string in UUID format>",
     "id": "<string in UUID format>",
-    "messageTimer": "<number>",
     "legalHoldStatus?": "<0|1>",
+    "messageTimer": "<number>",
     "state": "<'PayloadBundleState.INCOMING'|'PayloadBundleState.OUTGOING_SENT'>",
     "timestamp": "<number in Unix time stamp format>",
     "type": "<string>"
@@ -517,8 +517,8 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
   "data": "<string in base64 format>",
   "expectsReadConfirmation?": "<boolean>",
   "fileName": "<string>",
-  "messageTimer?": "<number>",
   "legalHoldStatus?": "<0|1>",
+  "messageTimer?": "<number>",
   "type": "<string>"
 }
 ```
@@ -543,8 +543,8 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
   "data": "<string in base64 format>",
   "expectsReadConfirmation?": "<boolean>",
   "height": "<number>",
-  "messageTimer?": "<number>",
   "legalHoldStatus?": "<0|1>",
+  "messageTimer?": "<number>",
   "type": "<string>",
   "width": "<number>"
 }
@@ -569,10 +569,10 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
   "conversationId": "<string>",
   "expectsReadConfirmation?": "<boolean>",
   "latitude": "<number>",
+  "legalHoldStatus?": "<0|1>",
   "locationName": "<string>",
   "longitude": "<number>",
   "messageTimer?": "<number>",
-  "legalHoldStatus?": "<0|1>",
   "zoom": "<number>"
 }
 ```
@@ -595,8 +595,8 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 {
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
-  "messageTimer?": "<number>",
-  "legalHoldStatus?": "<0|1>"
+  "legalHoldStatus?": "<0|1>",
+  "messageTimer?": "<number>"
 }
 ```
 
@@ -660,6 +660,7 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 {
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
+  "legalHoldStatus?": "<0|1>",
   "linkPreview?": {
     "image?": {
       "data": "<string in base64 format>",
@@ -689,7 +690,6 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
     "quotedMessageId": "<string in UUID format>",
     "quotedMessageSha256": "<string in SHA256 format>"
   },
-  "legalHoldStatus?": "<0|1>",
   "text": "<string>"
 }
 ```
@@ -733,6 +733,7 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
   "firstMessageId": "<string in UUID format>",
+  "legalHoldStatus?": "<0|1>",
   "linkPreview?": {
     "image?": {
       "data": "<string in base64 format>",
@@ -761,7 +762,6 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
     "quotedMessageId": "<string in UUID format>",
     "quotedMessageSha256": "<string in SHA256 format>"
   },
-  "legalHoldStatus?": "<0|1>",
   "text": "<string>"
 }
 ```
