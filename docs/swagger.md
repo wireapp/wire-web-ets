@@ -651,6 +651,12 @@ Get all instances
 | instanceId | string (uuid) |  | No |
 | name | string |  | No |
 
+#### LegalHoldStatus
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| LegalHoldStatus | integer |  |  |
+
 #### LinkPreview
 
 | Name | Type | Description | Required |
@@ -661,7 +667,7 @@ Get all instances
 | title | string |  | No |
 | tweet | object |  | No |
 | url | string (url) |  | No |
-| urlOffset | string (number) |  | No |
+| urlOffset | number |  | No |
 
 #### Login
 
@@ -681,8 +687,8 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| length | string (number) |  | No |
-| start | string (number) |  | No |
+| length | number |  | No |
+| start | number |  | No |
 | userId | string (uuid) |  | No |
 
 #### Message
@@ -695,7 +701,8 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | expectsReadConfirmation | boolean |  | No |
 | from | string (uuid) |  | Yes |
 | id | string (uuid) |  | Yes |
-| messageTimer | string (number) |  | Yes |
+| legalHoldStatus | [LegalHold](#legalhold) |  | No |
+| messageTimer | number |  | Yes |
 | state | string |  | Yes |
 | timestamp | string |  | Yes |
 | type | string |  | Yes |
@@ -713,9 +720,10 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | ---- | ---- | ----------- | -------- |
 | conversationId | string (uuid) |  | No |
 | expectsReadConfirmation | boolean |  | No |
+| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | linkPreview | [LinkPreview](#linkpreview) |  | No |
 | mentions | [ [Mention](#mention) ] |  | No |
-| messageTimer | string (number) |  | No |
+| messageTimer | number |  | No |
 | quote | object |  | No |
 | text | string |  | No |
 

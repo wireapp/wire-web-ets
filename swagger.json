@@ -127,6 +127,10 @@
       },
       "type": "object"
     },
+    "LegalHoldStatus": {
+      "enum": [0, 1],
+      "type": "integer"
+    },
     "LinkPreview": {
       "properties": {
         "image": {
@@ -136,15 +140,13 @@
               "type": "string"
             },
             "height": {
-              "format": "number",
-              "type": "string"
+              "type": "number"
             },
             "type": {
               "type": "string"
             },
             "width": {
-              "format": "number",
-              "type": "string"
+              "type": "number"
             }
           },
           "type": "object"
@@ -174,8 +176,7 @@
           "type": "string"
         },
         "urlOffset": {
-          "format": "number",
-          "type": "string"
+          "type": "number"
         }
       },
       "type": "object"
@@ -210,12 +211,10 @@
     "Mention": {
       "properties": {
         "length": {
-          "format": "number",
-          "type": "string"
+          "type": "number"
         },
         "start": {
-          "format": "number",
-          "type": "string"
+          "type": "number"
         },
         "userId": {
           "format": "uuid",
@@ -267,9 +266,11 @@
           "format": "uuid",
           "type": "string"
         },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHold"
+        },
         "messageTimer": {
-          "format": "number",
-          "type": "string"
+          "type": "number"
         },
         "state": {
           "enum": ["PayloadBundleState.INCOMING", "PayloadBundleState.OUTGOING_SENT"],
@@ -305,6 +306,9 @@
         "expectsReadConfirmation": {
           "type": "boolean"
         },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
+        },
         "linkPreview": {
           "$ref": "#/definitions/LinkPreview"
         },
@@ -315,8 +319,7 @@
           "type": "array"
         },
         "messageTimer": {
-          "format": "number",
-          "type": "string"
+          "type": "number"
         },
         "quote": {
           "properties": {
@@ -580,7 +583,7 @@
                 },
                 "type": {
                   "enum": [0, 1, 2, 3],
-                  "type": "string"
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -1244,9 +1247,11 @@
                 "fileName": {
                   "type": "string"
                 },
+                "legalHoldStatus": {
+                  "$ref": "#/definitions/LegalHoldStatus"
+                },
                 "messageTimer": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "number"
                 },
                 "type": {
                   "type": "string"
@@ -1324,19 +1329,19 @@
                   "type": "boolean"
                 },
                 "height": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "number"
+                },
+                "legalHoldStatus": {
+                  "$ref": "#/definitions/LegalHoldStatus"
                 },
                 "messageTimer": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "number"
                 },
                 "type": {
                   "type": "string"
                 },
                 "width": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -1407,23 +1412,22 @@
                   "type": "boolean"
                 },
                 "latitude": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "number"
+                },
+                "legalHoldStatus": {
+                  "$ref": "#/definitions/LegalHoldStatus"
                 },
                 "locationName": {
                   "type": "string"
                 },
                 "longitude": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "number"
                 },
                 "messageTimer": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "number"
                 },
                 "zoom": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -1493,9 +1497,11 @@
                 "expectsReadConfirmation": {
                   "type": "boolean"
                 },
+                "legalHoldStatus": {
+                  "$ref": "#/definitions/LegalHoldStatus"
+                },
                 "messageTimer": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "number"
                 }
               },
               "type": "object"

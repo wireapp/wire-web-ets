@@ -17,7 +17,12 @@
  *
  */
 
-import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
+import {
+  FileContent,
+  FileMetaDataContent,
+  ImageContent,
+  LegalHoldStatus,
+} from '@wireapp/core/dist/conversation/content/';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 
@@ -27,6 +32,7 @@ import {MessageRequest} from './conversationRoutes';
 interface AssetMessageRequest extends MessageRequest {
   data: string;
   expectsReadConfirmation?: boolean;
+  legalHoldStatus?: LegalHoldStatus;
   messageTimer?: number;
   type: string;
 }
@@ -117,6 +123,9 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
         height: Joi.number()
           .min(1)
           .required(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         messageTimer: Joi.number()
           .default(0)
           .optional(),
@@ -135,6 +144,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
         height,
         messageTimer,
         type,
+        legalHoldStatus,
         width,
       }: ImageMessageRequest = req.body;
 
@@ -150,7 +160,8 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           conversationId,
           image,
           expectsReadConfirmation,
-          messageTimer
+          messageTimer,
+          legalHoldStatus
         );
         const instanceName = instanceService.getInstance(instanceId).name;
 

@@ -35,6 +35,7 @@ import {
   FileMetaDataContent,
   HiddenContent,
   ImageContent,
+  LegalHoldStatus,
   LinkPreviewContent,
   LocationContent,
   MentionContent,
@@ -426,12 +427,11 @@ export class InstanceService {
 
   async resetSession(instanceId: string, conversationId: string): Promise<string> {
     const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
 
-    if (instance.account.service) {
-      const sessionResetPayload = instance.account.service.conversation.messageBuilder.createSessionReset(
-        conversationId
-      );
-      const {id: messageId} = await instance.account.service.conversation.send(sessionResetPayload);
+    if (service) {
+      const sessionResetPayload = service.conversation.messageBuilder.createSessionReset(conversationId);
+      const {id: messageId} = await service.conversation.send(sessionResetPayload);
       return messageId;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -446,34 +446,36 @@ export class InstanceService {
     mentions?: MentionContent[],
     quote?: QuoteContent,
     expectsReadConfirmation?: boolean,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
+    legalHoldStatus?: LegalHoldStatus
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
 
-    if (instance.account.service) {
-      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.messageBuilder
+    if (service) {
+      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = await service.conversation.messageBuilder
         .createText(conversationId, message)
         .withMentions(mentions)
         .withQuote(quote)
         .withReadConfirmation(expectsReadConfirmation)
+        .withLegalHoldStatus(legalHoldStatus)
         .build();
 
-      let sentMessage = await instance.account.service.conversation.send(payload);
+      let sentMessage = await service.conversation.send(payload);
 
       if (linkPreview) {
-        const linkPreviewPayload = await instance.account.service.conversation.messageBuilder.createLinkPreview(
-          linkPreview
-        );
-        const editedWithPreviewPayload = instance.account.service.conversation.messageBuilder
+        const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(linkPreview);
+        const editedWithPreviewPayload = service.conversation.messageBuilder
           .createText(conversationId, message, sentMessage.id)
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(mentions)
           .withQuote(quote)
           .withReadConfirmation(expectsReadConfirmation)
+          .withLegalHoldStatus(legalHoldStatus)
           .build();
 
-        sentMessage = await instance.account.service.conversation.send(editedWithPreviewPayload);
+        sentMessage = await service.conversation.send(editedWithPreviewPayload);
 
         const messageContent = sentMessage.content as TextContent;
 
@@ -498,16 +500,18 @@ export class InstanceService {
     moreMessageIds?: string[]
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
 
-    if (instance.account.service) {
-      const payload = instance.account.service.conversation.messageBuilder.createConfirmation(
+    if (service) {
+      const payload = service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
         // TODO use future ConfirmationType
         0,
+        undefined,
         moreMessageIds
       );
-      await instance.account.service.conversation.send(payload);
+      await service.conversation.send(payload);
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -521,16 +525,18 @@ export class InstanceService {
     moreMessageIds?: string[]
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
 
-    if (instance.account.service) {
-      const payload = instance.account.service.conversation.messageBuilder.createConfirmation(
+    if (service) {
+      const payload = service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
         // TODO use future ConfirmationType
         1,
+        undefined,
         moreMessageIds
       );
-      await instance.account.service.conversation.send(payload);
+      await service.conversation.send(payload);
       return instance.name;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -545,21 +551,23 @@ export class InstanceService {
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const message = instance.messages.get(firstMessageId);
+    const service = instance.account.service;
 
     if (!message) {
       throw new Error(`Message with ID "${firstMessageId}" not found.`);
     }
 
-    if (instance.account.service) {
-      const confirmationPayload = instance.account.service.conversation.messageBuilder.createConfirmation(
+    if (service) {
+      const confirmationPayload = service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
         // TODO use future ConfirmationType
         0,
+        undefined,
         moreMessageIds
       );
-      await instance.account.service.conversation.send(confirmationPayload);
-      await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
+      await service.conversation.send(confirmationPayload);
+      await service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
 
       if (moreMessageIds && moreMessageIds.length) {
         for (const messageId of moreMessageIds) {
@@ -569,9 +577,7 @@ export class InstanceService {
             throw new Error(`Message with ID "${firstMessageId}" not found.`);
           }
 
-          await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [
-            furtherMessage.from,
-          ]);
+          await service.conversation.deleteMessageEveryone(conversationId, messageId, [furtherMessage.from]);
         }
       }
       return instance.name;
@@ -588,21 +594,23 @@ export class InstanceService {
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const message = instance.messages.get(firstMessageId);
+    const service = instance.account.service;
 
     if (!message) {
       throw new Error(`Message with ID "${firstMessageId}" not found.`);
     }
 
-    if (instance.account.service) {
-      const confirmationPayload = instance.account.service.conversation.messageBuilder.createConfirmation(
+    if (service) {
+      const confirmationPayload = service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
         // TODO use future ConfirmationType
         1,
+        undefined,
         moreMessageIds
       );
-      await instance.account.service.conversation.send(confirmationPayload);
-      await instance.account.service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
+      await service.conversation.send(confirmationPayload);
+      await service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
       if (moreMessageIds && moreMessageIds.length) {
         for (const messageId of moreMessageIds) {
           const furtherMessage = instance.messages.get(messageId);
@@ -611,9 +619,7 @@ export class InstanceService {
             throw new Error(`Message with ID "${firstMessageId}" not found.`);
           }
 
-          await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId, [
-            furtherMessage.from,
-          ]);
+          await service.conversation.deleteMessageEveryone(conversationId, messageId, [furtherMessage.from]);
         }
       }
       return instance.name;
@@ -627,18 +633,22 @@ export class InstanceService {
     conversationId: string,
     image: ImageContent,
     expectsReadConfirmation?: boolean,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
+    legalHoldStatus?: LegalHoldStatus
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
 
-    if (instance.account.service) {
-      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.messageBuilder.createImage(
+    if (service) {
+      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = await service.conversation.messageBuilder.createImage(
         conversationId,
         image,
-        expectsReadConfirmation
+        undefined,
+        expectsReadConfirmation,
+        legalHoldStatus
       );
-      const sentImage = await instance.account.service.conversation.send(payload);
+      const sentImage = await service.conversation.send(payload);
 
       stripAsset(sentImage.content);
 
@@ -658,23 +668,26 @@ export class InstanceService {
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
-    if (instance.account.service) {
-      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+    const service = instance.account.service;
 
-      const metadataPayload = await instance.account.service.conversation.messageBuilder.createFileMetadata(
+    if (service) {
+      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+
+      const metadataPayload = await service.conversation.messageBuilder.createFileMetadata(
         conversationId,
         metadata,
+        undefined,
         expectsReadConfirmation
       );
-      await instance.account.service.conversation.send(metadataPayload);
+      await service.conversation.send(metadataPayload);
 
-      const filePayload = await instance.account.service.conversation.messageBuilder.createFileData(
+      const filePayload = await service.conversation.messageBuilder.createFileData(
         conversationId,
         file,
         metadataPayload.id,
         expectsReadConfirmation
       );
-      const sentFile = await instance.account.service.conversation.send(filePayload);
+      const sentFile = await service.conversation.send(filePayload);
 
       stripAsset(sentFile.content);
 
@@ -692,14 +705,12 @@ export class InstanceService {
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
 
-    if (instance.account.service) {
-      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await instance.account.service.conversation.messageBuilder.createLocation(
-        conversationId,
-        location
-      );
-      const sentLocation = await instance.account.service.conversation.send(payload);
+    if (service) {
+      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = await service.conversation.messageBuilder.createLocation(conversationId, location);
+      const sentLocation = await service.conversation.send(payload);
 
       instance.messages.set(sentLocation.id, sentLocation);
       return sentLocation.id;
@@ -715,13 +726,14 @@ export class InstanceService {
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
 
-    if (instance.account.service) {
-      instance.account.service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = instance.account.service.conversation.messageBuilder.createPing(conversationId, {
+    if (service) {
+      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = service.conversation.messageBuilder.createPing(conversationId, {
         expectsReadConfirmation,
       });
-      const sentPing = await instance.account.service.conversation.send(payload);
+      const sentPing = await service.conversation.send(payload);
 
       instance.messages.set(sentPing.id, sentPing);
       return sentPing.id;
@@ -732,12 +744,13 @@ export class InstanceService {
 
   async sendTyping(instanceId: string, conversationId: string, status: CONVERSATION_TYPING): Promise<string> {
     const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
 
-    if (instance.account.service) {
+    if (service) {
       if (status === CONVERSATION_TYPING.STARTED) {
-        await instance.account.service.conversation.sendTypingStart(conversationId);
+        await service.conversation.sendTypingStart(conversationId);
       } else {
-        await instance.account.service.conversation.sendTypingStop(conversationId);
+        await service.conversation.sendTypingStop(conversationId);
       }
       return instance.name;
     } else {
@@ -752,14 +765,11 @@ export class InstanceService {
     type: ReactionType
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
 
-    if (instance.account.service) {
-      const payload = instance.account.service.conversation.messageBuilder.createReaction(
-        conversationId,
-        originalMessageId,
-        type
-      );
-      const {id: messageId} = await instance.account.service.conversation.send(payload);
+    if (service) {
+      const payload = service.conversation.messageBuilder.createReaction(conversationId, originalMessageId, type);
+      const {id: messageId} = await service.conversation.send(payload);
       return messageId;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -774,40 +784,40 @@ export class InstanceService {
     newLinkPreview?: LinkPreviewContent,
     newMentions?: MentionContent[],
     newQuote?: QuoteContent,
-    expectsReadConfirmation?: boolean
+    expectsReadConfirmation?: boolean,
+    legalHoldStatus?: LegalHoldStatus
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
 
-    if (instance.account.service) {
-      const editedPayload = instance.account.service.conversation.messageBuilder
+    if (service) {
+      const editedPayload = service.conversation.messageBuilder
         .createEditedText(conversationId, newMessageText, originalMessageId)
         .withMentions(newMentions)
         .withQuote(newQuote)
         .withReadConfirmation(expectsReadConfirmation)
+        .withLegalHoldStatus(legalHoldStatus)
         .build();
 
-      let editedMessage = await instance.account.service.conversation.send(editedPayload);
+      let editedMessage = await service.conversation.send(editedPayload);
 
       if (newLinkPreview) {
-        const linkPreviewPayload = await instance.account.service.conversation.messageBuilder.createLinkPreview(
-          newLinkPreview
-        );
-        const editedWithPreviewPayload = instance.account.service.conversation.messageBuilder
+        const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(newLinkPreview);
+        const editedWithPreviewPayload = service.conversation.messageBuilder
           .createEditedText(conversationId, newMessageText, originalMessageId, editedMessage.id)
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(newMentions)
           .withQuote(newQuote)
           .withReadConfirmation(expectsReadConfirmation)
+          .withLegalHoldStatus(legalHoldStatus)
           .build();
 
-        editedMessage = await instance.account.service.conversation.send(editedWithPreviewPayload);
+        editedMessage = await service.conversation.send(editedWithPreviewPayload);
 
         const editedMessageContent = editedMessage.content as EditedTextContent;
 
         if (editedMessageContent.linkPreviews) {
-          editedMessageContent.linkPreviews.forEach(preview => {
-            stripLinkPreview(preview);
-          });
+          editedMessageContent.linkPreviews.forEach(preview => stripLinkPreview(preview));
         }
       }
 

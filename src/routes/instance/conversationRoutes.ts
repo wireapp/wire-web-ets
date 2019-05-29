@@ -20,6 +20,7 @@
 import {ReactionType} from '@wireapp/core/dist/conversation/';
 import {
   ImageContent,
+  LegalHoldStatus,
   LinkPreviewContent,
   LocationContent,
   MentionContent,
@@ -71,6 +72,7 @@ export interface TextRequest extends MessageRequest {
   mentions?: MentionContent[];
   messageTimer?: number;
   quote?: QuoteStringContent;
+  legalHoldStatus?: LegalHoldStatus;
   text: string;
 }
 
@@ -412,6 +414,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         mentions,
         messageTimer,
         quote,
+        legalHoldStatus,
         text,
       }: TextRequest = req.body;
 
@@ -457,7 +460,8 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           mentions,
           quoteContent,
           expectsReadConfirmation,
-          messageTimer
+          messageTimer,
+          legalHoldStatus
         );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
@@ -575,6 +579,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         conversationId,
         expectsReadConfirmation,
         firstMessageId,
+        legalHoldStatus,
         linkPreview,
         mentions,
         quote,
@@ -623,7 +628,8 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           linkPreviewContent,
           mentions,
           quoteContent,
-          expectsReadConfirmation
+          expectsReadConfirmation,
+          legalHoldStatus
         );
 
         const instanceName = instanceService.getInstance(instanceId).name;
