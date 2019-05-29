@@ -225,14 +225,6 @@
     },
     "Message": {
       "properties": {
-        "content": {
-          "properties": {
-            "text": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
         "confirmations": {
           "items": {
             "allOf": [
@@ -250,6 +242,14 @@
             ]
           },
           "type": "array"
+        },
+        "content": {
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "type": "object"
         },
         "conversation": {
           "format": "uuid",
