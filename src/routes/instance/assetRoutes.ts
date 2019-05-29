@@ -61,6 +61,9 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           .default(false)
           .optional(),
         fileName: Joi.string().required(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         messageTimer: Joi.number()
           .default(0)
           .optional(),
