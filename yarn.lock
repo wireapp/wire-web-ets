@@ -421,16 +421,16 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
-"@wireapp/api-client@4.6.0":
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-4.6.0.tgz#8b0243d8e9a653a6f5dd62de3f9620e1ea861459"
-  integrity sha512-rJNCOdfQRV2ZnTxA8PPEUleIx8Tom0gy6z4N5AmFtz6Kzhj16SU2vVTwird80/BdnQUHKkGSdKTfc6YfW/l5cA==
+"@wireapp/api-client@5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-5.0.1.tgz#f13b7f38b10fc8f987d0456354bafd0d29237e22"
+  integrity sha512-64xpk16JsBrjAcpuO3TfhPUZususRDZMsRJcNPKQN8Sibc89X92rtoefuW//yL/jqcTaJYsJQMPCGAv4GZ/v0A==
   dependencies:
     "@types/node" "~10"
     "@types/spark-md5" "3.0.1"
     "@types/tough-cookie" "2.3.5"
     "@wireapp/priority-queue" "1.0.4"
-    "@wireapp/store-engine" "2.1.4"
+    "@wireapp/store-engine" "3.0.0"
     axios "0.18.0"
     html5-websocket "2.0.4"
     logdown "3.2.8"
@@ -443,33 +443,33 @@
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-4.0.4.tgz#7e5693e1d81ed8529153ade85d046d055a5d0e7f"
   integrity sha512-vfvhz9/9GbxEkoFc1mTpaTGN64SBFKfhntNwXYxyWm+YEOnDTcW4NVNj0h0nue18MItBYPF8aZAwIXFuErnU3Q==
 
-"@wireapp/core@10.2.7":
-  version "10.2.7"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-10.2.7.tgz#3816eebfbc4718a5912acdcde273e7092768d1b6"
-  integrity sha512-Fxj4w/0Q/MDI02GIBAlHJb5q4nH7Gybizi+ByGBf36UXbjj9kB2qvGzYeEHJc4sIzUCt1HJFhp0MNkRO/J3nFA==
+"@wireapp/core@11.0.1":
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-11.0.1.tgz#64578464165bc77d3c82a17e2898a20afdd7671e"
+  integrity sha512-VMxewM+zYJrJXMAYC/ewHmAowieuQ/Xcajcxbh3mUsi/dN4OXkBtfc2Wem1ik/iNBDpU86UALkMb/ogxSNIgTA==
   dependencies:
     "@types/node" "~10"
-    "@wireapp/api-client" "4.6.0"
-    "@wireapp/cryptobox" "10.1.4"
+    "@wireapp/api-client" "5.0.1"
+    "@wireapp/cryptobox" "11.0.0"
     "@wireapp/protocol-messaging" "1.23.0"
-    "@wireapp/store-engine" "2.1.4"
+    "@wireapp/store-engine" "3.0.0"
     bazinga64 "5.4.3"
     hash.js "1.1.7"
     logdown "3.2.8"
     protobufjs "6.8.8"
     pure-uuid "1.5.7"
 
-"@wireapp/cryptobox@10.1.4":
-  version "10.1.4"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-10.1.4.tgz#474888cfaa8b542dbd1883167ca0423292e5f9db"
-  integrity sha512-LmlfZ98tMUY5lmZMnDnX/G0bTd9W1A3S02LwL+P1ILJEWiP5ZU5Jj1pOHkSzEHV98gDuB/Qp5qxXfPDrPGQnzg==
+"@wireapp/cryptobox@11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-11.0.0.tgz#9180a7b863d50e1694b120d8f6fa1e5575a7431c"
+  integrity sha512-IRmiFhWHBvOwoDrIWEcJnKTbE1YBnNSPhj1e6JV37WG9EAKXYWX5TOLbqqgC1fiH9iO3cmPHgkLyrKZJHGTV/Q==
   dependencies:
     "@types/fs-extra" "7.0.0"
     "@types/node" "~10"
     "@wireapp/lru-cache" "3.1.14"
     "@wireapp/priority-queue" "1.0.4"
     "@wireapp/proteus" "9.1.3"
-    "@wireapp/store-engine" "2.1.4"
+    "@wireapp/store-engine" "3.0.0"
     bazinga64 "5.4.3"
     dexie "2.0.4"
     fs-extra "8.0.1"
@@ -512,18 +512,16 @@
   dependencies:
     protobufjs "6.8.8"
 
-"@wireapp/store-engine@2.1.4":
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/@wireapp/store-engine/-/store-engine-2.1.4.tgz#648a4ecd19d8045dd06ac8a64d30216124ffed0d"
-  integrity sha512-Hy1650GHJisHksOASq5IfwyQ2/+j42XMCZvRGbksgJQeaWIqsTMt0Yq+SFEy36+wYTYwvrd2DJciQW3ah/TLQw==
+"@wireapp/store-engine@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@wireapp/store-engine/-/store-engine-3.0.0.tgz#c065843fb5796134b15c9d8c5aa27b4835512040"
+  integrity sha512-Y+ihV0+xQH1vDRIKcENdCBC77ejam4VXOGhWDtiODK12djh7Y60ecCSbQM6bzbrsJi720EKs1ZkNOA/z/IDGFg==
   dependencies:
     "@types/bro-fs" "0.4.2"
     "@types/filesystem" "0.0.29"
-    "@types/fs-extra" "7.0.0"
     "@types/node" "~10"
     bro-fs "0.5.0"
     dexie "2.0.4"
-    fs-extra "8.0.1"
 
 "@wireapp/tslint-config@1.1.0":
   version "1.1.0"
