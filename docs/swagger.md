@@ -695,8 +695,8 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| content | object |  | No |
 | confirmations | [  ] |  | No |
+| content | object |  | No |
 | conversation | string (uuid) |  | Yes |
 | expectsReadConfirmation | boolean |  | No |
 | from | string (uuid) |  | Yes |
