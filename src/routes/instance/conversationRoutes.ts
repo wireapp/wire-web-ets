@@ -335,6 +335,9 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .required(),
         expectsReadConfirmation: Joi.boolean().default(false),
         latitude: Joi.number().required(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         locationName: Joi.string()
           .allow('')
           .optional(),
@@ -393,6 +396,9 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .required(),
         expectsReadConfirmation: Joi.boolean()
           .default(false)
+          .optional(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
           .optional(),
         linkPreview: Joi.object(validateLinkPreview).optional(),
         mentions: Joi.array()
@@ -482,7 +488,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         conversationId: Joi.string()
           .uuid()
           .required(),
-        expectsReadConfirmation: Joi.boolean().default(false),
+        expectsReadConfirmation: Joi.boolean()
+          .default(false)
+          .optional(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         messageTimer: Joi.number()
           .default(0)
           .optional(),
@@ -565,6 +576,9 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         firstMessageId: Joi.string()
           .uuid()
           .required(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         linkPreview: Joi.object(validateLinkPreview).optional(),
         mentions: Joi.array()
           .items(validateMention)
