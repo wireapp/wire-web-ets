@@ -636,7 +636,7 @@ Get all instances
 | ---- | ---- | ----------- | -------- |
 | firstMessageId | string (uuid) |  | Yes |
 | moreMessageIds | [ string (uuid) ] |  | No |
-| type | integer |  | Yes |
+| type | integer | Type can be `0` (Delivered) or `1` (Read). | Yes |
 
 #### Instance
 
@@ -653,9 +653,11 @@ Get all instances
 
 #### LegalHoldStatus
 
+Type can be `0` (Disabled) or `1` (Enabled).
+
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| LegalHoldStatus | integer |  |  |
+| LegalHoldStatus | integer | Type can be `0` (Disabled) or `1` (Enabled). |  |
 
 #### LinkPreview
 

@@ -90,6 +90,7 @@
           "type": "array"
         },
         "type": {
+          "description": "Type can be `0` (Delivered) or `1` (Read).",
           "enum": [0, 1],
           "type": "integer"
         }
@@ -128,6 +129,7 @@
       "type": "object"
     },
     "LegalHoldStatus": {
+      "description": "Type can be `0` (Disabled) or `1` (Enabled).",
       "enum": [0, 1],
       "type": "integer"
     },

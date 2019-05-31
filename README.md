@@ -374,7 +374,7 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 
 #### Response
 
-Confirmation type can be `0` (Delivered) or `1` (Read).
+Confirmation type can be `0` (Delivered) or `1` (Read). Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 ```json
 [
@@ -511,6 +511,8 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 
 #### Request
 
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+
 ```json
 {
   "conversationId": "<string in UUID format>",
@@ -536,6 +538,8 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 ### `POST /api/v1/instance/<instanceId>/sendImage`
 
 #### Request
+
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 ```json
 {
@@ -564,6 +568,8 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 
 #### Request
 
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+
 ```json
 {
   "conversationId": "<string>",
@@ -590,6 +596,8 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 ### `POST /api/v1/instance/<instanceId>/sendPing`
 
 #### Request
+
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 ```json
 {
@@ -655,6 +663,8 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 ### `POST /api/v1/instance/<instanceId>/sendText`
 
 #### Request
+
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 ```json
 {
@@ -727,6 +737,8 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 ### `POST /api/v1/instance/<instanceId>/updateText`
 
 #### Request
+
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 ```json
 {
