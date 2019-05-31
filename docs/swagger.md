@@ -442,7 +442,7 @@ Send a location to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | object |
+| body | body |  | Yes | [Location](#location) |
 
 ##### Responses
 
@@ -574,7 +574,7 @@ Update a text message in a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | [TextMessage](#textmessage) |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -670,6 +670,19 @@ Type can be `0` (Disabled) or `1` (Enabled).
 | tweet | object |  | No |
 | url | string (url) |  | No |
 | urlOffset | number |  | No |
+
+#### Location
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| conversationId | string (uuid) |  | No |
+| expectsReadConfirmation | boolean |  | No |
+| latitude | number |  | No |
+| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
+| locationName | string |  | No |
+| longitude | number |  | No |
+| messageTimer | number |  | No |
+| zoom | number |  | No |
 
 #### Login
 

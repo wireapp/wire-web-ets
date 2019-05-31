@@ -49,6 +49,7 @@ import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 
 import {BackendData} from '@wireapp/api-client/dist/commonjs/env/';
+import {Confirmation} from '@wireapp/protocol-messaging';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from './utils';
 
 const {version}: {version: string} = require('../package.json');
@@ -446,8 +447,8 @@ export class InstanceService {
     mentions?: MentionContent[],
     quote?: QuoteContent,
     expectsReadConfirmation?: boolean,
-    expireAfterMillis = 0,
-    legalHoldStatus?: LegalHoldStatus
+    legalHoldStatus?: LegalHoldStatus,
+    expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -506,8 +507,7 @@ export class InstanceService {
       const payload = service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
-        // TODO use future ConfirmationType
-        0,
+        Confirmation.Type.DELIVERED,
         undefined,
         moreMessageIds
       );
@@ -531,8 +531,7 @@ export class InstanceService {
       const payload = service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
-        // TODO use future ConfirmationType
-        1,
+        Confirmation.Type.READ,
         undefined,
         moreMessageIds
       );
@@ -561,8 +560,7 @@ export class InstanceService {
       const confirmationPayload = service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
-        // TODO use future ConfirmationType
-        0,
+        Confirmation.Type.DELIVERED,
         undefined,
         moreMessageIds
       );
@@ -604,8 +602,7 @@ export class InstanceService {
       const confirmationPayload = service.conversation.messageBuilder.createConfirmation(
         conversationId,
         firstMessageId,
-        // TODO use future ConfirmationType
-        1,
+        Confirmation.Type.READ,
         undefined,
         moreMessageIds
       );
@@ -633,8 +630,8 @@ export class InstanceService {
     conversationId: string,
     image: ImageContent,
     expectsReadConfirmation?: boolean,
-    expireAfterMillis = 0,
-    legalHoldStatus?: LegalHoldStatus
+    legalHoldStatus?: LegalHoldStatus,
+    expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -665,6 +662,7 @@ export class InstanceService {
     file: FileContent,
     metadata: FileMetaDataContent,
     expectsReadConfirmation?: boolean,
+    legalHoldStatus?: LegalHoldStatus,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
@@ -677,7 +675,8 @@ export class InstanceService {
         conversationId,
         metadata,
         undefined,
-        expectsReadConfirmation
+        expectsReadConfirmation,
+        legalHoldStatus
       );
       await service.conversation.send(metadataPayload);
 
@@ -685,7 +684,8 @@ export class InstanceService {
         conversationId,
         file,
         metadataPayload.id,
-        expectsReadConfirmation
+        expectsReadConfirmation,
+        legalHoldStatus
       );
       const sentFile = await service.conversation.send(filePayload);
 
@@ -723,6 +723,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     expectsReadConfirmation?: boolean,
+    legalHoldStatus?: LegalHoldStatus,
     expireAfterMillis = 0
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
@@ -732,6 +733,7 @@ export class InstanceService {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = service.conversation.messageBuilder.createPing(conversationId, {
         expectsReadConfirmation,
+        legalHoldStatus,
       });
       const sentPing = await service.conversation.send(payload);
 

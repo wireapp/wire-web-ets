@@ -77,6 +77,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
         data: base64Data,
         expectsReadConfirmation,
         fileName,
+        legalHoldStatus,
         messageTimer,
         type,
       }: FileMessageRequest = req.body;
@@ -95,6 +96,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           fileContent,
           metadata,
           expectsReadConfirmation,
+          legalHoldStatus,
           messageTimer
         );
         const instanceName = instanceService.getInstance(instanceId).name;
@@ -145,9 +147,9 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
         data: base64Data,
         expectsReadConfirmation,
         height,
+        legalHoldStatus,
         messageTimer,
         type,
-        legalHoldStatus,
         width,
       }: ImageMessageRequest = req.body;
 
@@ -163,8 +165,8 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           conversationId,
           image,
           expectsReadConfirmation,
-          messageTimer,
-          legalHoldStatus
+          legalHoldStatus,
+          messageTimer
         );
         const instanceName = instanceService.getInstance(instanceId).name;
 

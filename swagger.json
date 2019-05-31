@@ -183,6 +183,36 @@
       },
       "type": "object"
     },
+    "Location": {
+      "properties": {
+        "conversationId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "expectsReadConfirmation": {
+          "type": "boolean"
+        },
+        "latitude": {
+          "type": "number"
+        },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
+        },
+        "locationName": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "number"
+        },
+        "messageTimer": {
+          "type": "number"
+        },
+        "zoom": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "Login": {
       "allOf": [
         {
@@ -1405,34 +1435,7 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "conversationId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "expectsReadConfirmation": {
-                  "type": "boolean"
-                },
-                "latitude": {
-                  "type": "number"
-                },
-                "legalHoldStatus": {
-                  "$ref": "#/definitions/LegalHoldStatus"
-                },
-                "locationName": {
-                  "type": "string"
-                },
-                "longitude": {
-                  "type": "number"
-                },
-                "messageTimer": {
-                  "type": "number"
-                },
-                "zoom": {
-                  "type": "number"
-                }
-              },
-              "type": "object"
+              "$ref": "#/definitions/Location"
             }
           }
         ],
@@ -1818,7 +1821,20 @@
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/TextMessage"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/TextMessage"
+                },
+                {
+                  "properties": {
+                    "firstMessageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              ]
             }
           }
         ],

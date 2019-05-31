@@ -84,6 +84,7 @@ export interface ReactionRequest extends MessageRequest {
 export interface LocationRequest extends MessageRequest {
   expectsReadConfirmation?: boolean;
   latitude: number;
+  legalHoldStatus?: LegalHoldStatus;
   locationName?: string;
   longitude: number;
   messageTimer?: number;
@@ -354,6 +355,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         conversationId,
         expectsReadConfirmation,
         latitude,
+        legalHoldStatus,
         longitude,
         locationName,
         messageTimer,
@@ -367,6 +369,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       const location: LocationContent = {
         expectsReadConfirmation,
         latitude,
+        legalHoldStatus,
         longitude,
         name: locationName,
         zoom,
@@ -466,8 +469,8 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           mentions,
           quoteContent,
           expectsReadConfirmation,
-          messageTimer,
-          legalHoldStatus
+          legalHoldStatus,
+          messageTimer
         );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
@@ -501,7 +504,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, expectsReadConfirmation, messageTimer}: TextRequest = req.body;
+      const {conversationId, expectsReadConfirmation, legalHoldStatus, messageTimer}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -512,6 +515,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           instanceId,
           conversationId,
           expectsReadConfirmation,
+          legalHoldStatus,
           messageTimer
         );
         const instanceName = instanceService.getInstance(instanceId).name;
