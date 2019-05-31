@@ -31,7 +31,7 @@ const logger = logdown('@wireapp/wire-web-ets/routes/log/logRoute', {
 });
 
 export const logRoute = () =>
-  router.get('/log/?', async (req, res) => {
+  router.get(['/log/?', '/api/v1/log/?'], async (req, res) => {
     try {
       let logData = '';
 

@@ -11,6 +11,19 @@ opensource@wire.com
 
 **License:** [GPL-3.0](https://github.com/wireapp/wire-web-ets/blob/master/LICENSE)
 
+### /
+
+#### GET
+##### Summary:
+
+Get information about the server
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [ServerInfo](#serverinfo) |
+
 ### /clients
 
 #### DELETE
@@ -34,7 +47,7 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | object |
+| 200 |  | [ [Client](#client) ] |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
 ### /instance
@@ -598,6 +611,33 @@ Get all instances
 | 200 |  | [Instance](#instance) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 
+### /commit
+
+#### GET
+##### Summary:
+
+Get the latest commit hash as plain text
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | undefined (string) |
+| 500 | Internal server error | [ServerError](#servererror) |
+
+### /log
+
+#### GET
+##### Summary:
+
+Get the complete log as plain text
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | undefined (string) |
+
 ### Models
 
 
@@ -669,7 +709,7 @@ Type can be `0` (Disabled) or `1` (Enabled).
 | title | string |  | No |
 | tweet | object |  | No |
 | url | string (url) |  | No |
-| urlOffset | number |  | No |
+| urlOffset | integer |  | No |
 
 #### Location
 
@@ -677,12 +717,12 @@ Type can be `0` (Disabled) or `1` (Enabled).
 | ---- | ---- | ----------- | -------- |
 | conversationId | string (uuid) |  | Yes |
 | expectsReadConfirmation | boolean |  | No |
-| latitude | number |  | Yes |
+| latitude | integer |  | Yes |
 | legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | locationName | string |  | No |
-| longitude | number |  | Yes |
-| messageTimer | number |  | No |
-| zoom | number |  | No |
+| longitude | integer |  | Yes |
+| messageTimer | integer |  | No |
+| zoom | integer |  | No |
 
 #### Login
 
@@ -702,8 +742,8 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| length | number |  | No |
-| start | number |  | No |
+| length | integer |  | No |
+| start | integer |  | No |
 | userId | string (uuid) |  | No |
 
 #### Message
@@ -717,7 +757,7 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | from | string (uuid) |  | Yes |
 | id | string (uuid) |  | Yes |
 | legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
-| messageTimer | number |  | Yes |
+| messageTimer | integer |  | Yes |
 | state | string |  | Yes |
 | timestamp | string |  | Yes |
 | type | string |  | Yes |
@@ -729,6 +769,22 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | error | string |  | No |
 | stack | string |  | No |
 
+#### ServerError
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| error | string |  | No |
+| stack | string |  | No |
+
+#### ServerInfo
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| code | integer |  | Yes |
+| commit | string |  | No |
+| instance | object |  | Yes |
+| message | string |  | Yes |
+
 #### TextMessage
 
 | Name | Type | Description | Required |
@@ -738,7 +794,7 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | linkPreview | [LinkPreview](#linkpreview) |  | No |
 | mentions | [ [Mention](#mention) ] |  | No |
-| messageTimer | number |  | No |
+| messageTimer | integer |  | No |
 | quote | object |  | No |
 | text | string |  | No |
 

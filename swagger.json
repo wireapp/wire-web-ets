@@ -142,13 +142,13 @@
               "type": "string"
             },
             "height": {
-              "type": "number"
+              "type": "integer"
             },
             "type": {
               "type": "string"
             },
             "width": {
-              "type": "number"
+              "type": "integer"
             }
           },
           "type": "object"
@@ -178,7 +178,7 @@
           "type": "string"
         },
         "urlOffset": {
-          "type": "number"
+          "type": "integer"
         }
       },
       "type": "object"
@@ -193,7 +193,7 @@
           "type": "boolean"
         },
         "latitude": {
-          "type": "number"
+          "type": "integer"
         },
         "legalHoldStatus": {
           "$ref": "#/definitions/LegalHoldStatus"
@@ -202,13 +202,13 @@
           "type": "string"
         },
         "longitude": {
-          "type": "number"
+          "type": "integer"
         },
         "messageTimer": {
-          "type": "number"
+          "type": "integer"
         },
         "zoom": {
-          "type": "number"
+          "type": "integer"
         }
       },
       "required": ["conversationId", "latitude", "longitude"],
@@ -244,10 +244,10 @@
     "Mention": {
       "properties": {
         "length": {
-          "type": "number"
+          "type": "integer"
         },
         "start": {
-          "type": "number"
+          "type": "integer"
         },
         "userId": {
           "format": "uuid",
@@ -303,7 +303,7 @@
           "$ref": "#/definitions/LegalHoldStatus"
         },
         "messageTimer": {
-          "type": "number"
+          "type": "integer"
         },
         "state": {
           "enum": ["PayloadBundleState.INCOMING", "PayloadBundleState.OUTGOING_SENT"],
@@ -330,6 +330,52 @@
       },
       "type": "object"
     },
+    "ServerError": {
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "stack": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ServerInfo": {
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "instance": {
+          "properties": {
+            "env": {
+              "properties": {
+                "LOG_ERROR": {
+                  "type": "string"
+                },
+                "LOG_OUTPUT": {
+                  "type": "string"
+                },
+                "NODE_DEBUG": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "required": ["env", "uptime"],
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": ["code", "instance", "message"],
+      "type": "object"
+    },
     "TextMessage": {
       "properties": {
         "conversationId": {
@@ -352,7 +398,7 @@
           "type": "array"
         },
         "messageTimer": {
-          "type": "number"
+          "type": "integer"
         },
         "quote": {
           "properties": {
@@ -396,6 +442,22 @@
     "version": "1.16.1"
   },
   "paths": {
+    "/": {
+      "get": {
+        "operationId": "getServerInfo",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ServerInfo"
+            }
+          }
+        },
+        "summary": "Get information about the server",
+        "tags": ["Server"]
+      }
+    },
     "/clients": {
       "delete": {
         "consumes": ["application/json"],
@@ -417,7 +479,10 @@
           "200": {
             "description": "",
             "schema": {
-              "type": "object"
+              "items": {
+                "$ref": "#/definitions/Client"
+              },
+              "type": "array"
             }
           },
           "422": {
@@ -1284,7 +1349,7 @@
                   "$ref": "#/definitions/LegalHoldStatus"
                 },
                 "messageTimer": {
-                  "type": "number"
+                  "type": "integer"
                 },
                 "type": {
                   "type": "string"
@@ -1362,19 +1427,19 @@
                   "type": "boolean"
                 },
                 "height": {
-                  "type": "number"
+                  "type": "integer"
                 },
                 "legalHoldStatus": {
                   "$ref": "#/definitions/LegalHoldStatus"
                 },
                 "messageTimer": {
-                  "type": "number"
+                  "type": "integer"
                 },
                 "type": {
                   "type": "string"
                 },
                 "width": {
-                  "type": "number"
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -1507,7 +1572,7 @@
                   "$ref": "#/definitions/LegalHoldStatus"
                 },
                 "messageTimer": {
-                  "type": "number"
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -1897,6 +1962,44 @@
         "summary": "Get all instances",
         "tags": ["Instances"]
       }
+    },
+    "/commit": {
+      "get": {
+        "operationId": "getLatestCommit",
+        "produces": ["text/plain"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerError"
+            }
+          }
+        },
+        "summary": "Get the latest commit hash as plain text",
+        "tags": ["Server"]
+      }
+    },
+    "/log": {
+      "get": {
+        "operationId": "getLog",
+        "produces": ["text/plain"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "summary": "Get the complete log as plain text",
+        "tags": ["Server"]
+      }
     }
   },
   "schemes": ["http"],
@@ -1913,6 +2016,10 @@
     {
       "description": "Wire User Clients",
       "name": "Clients"
+    },
+    {
+      "description": "Server information",
+      "name": "Server"
     }
   ]
 }

@@ -56,7 +56,9 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
         conversationId: Joi.string()
           .uuid()
           .required(),
-        data: Joi.string().required(),
+        data: Joi.string()
+          .base64()
+          .required(),
         expectsReadConfirmation: Joi.boolean()
           .default(false)
           .optional(),

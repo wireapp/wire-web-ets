@@ -102,7 +102,9 @@ export interface QuoteStringContent {
 
 const validateLinkPreview = {
   image: Joi.object({
-    data: Joi.string().required(),
+    data: Joi.string()
+      .base64()
+      .required(),
     height: Joi.number().required(),
     type: Joi.string().required(),
     width: Joi.number().required(),

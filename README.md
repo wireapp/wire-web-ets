@@ -147,7 +147,7 @@ yarn start
 ```json
 [
   {
-    "class": "<desktop>",
+    "class": "<'desktop'|'phone'|'tablet'>",
     "cookie": "<string>",
     "id": "<string>",
     "location": {
