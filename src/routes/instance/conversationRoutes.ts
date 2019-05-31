@@ -334,7 +334,9 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         conversationId: Joi.string()
           .uuid()
           .required(),
-        expectsReadConfirmation: Joi.boolean().default(false),
+        expectsReadConfirmation: Joi.boolean()
+          .default(false)
+          .optional(),
         latitude: Joi.number().required(),
         legalHoldStatus: Joi.number()
           .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])

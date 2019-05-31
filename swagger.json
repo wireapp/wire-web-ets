@@ -211,6 +211,7 @@
           "type": "number"
         }
       },
+      "required": ["conversationId", "latitude", "longitude"],
       "type": "object"
     },
     "Login": {

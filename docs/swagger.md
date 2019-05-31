@@ -675,12 +675,12 @@ Type can be `0` (Disabled) or `1` (Enabled).
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| conversationId | string (uuid) |  | No |
+| conversationId | string (uuid) |  | Yes |
 | expectsReadConfirmation | boolean |  | No |
-| latitude | number |  | No |
+| latitude | number |  | Yes |
 | legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | locationName | string |  | No |
-| longitude | number |  | No |
+| longitude | number |  | Yes |
 | messageTimer | number |  | No |
 | zoom | number |  | No |
 

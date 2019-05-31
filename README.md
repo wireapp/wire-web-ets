@@ -578,10 +578,10 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
   "expectsReadConfirmation?": "<boolean>",
   "latitude": "<number>",
   "legalHoldStatus?": "<0|1>",
-  "locationName": "<string>",
+  "locationName?": "<string>",
   "longitude": "<number>",
   "messageTimer?": "<number>",
-  "zoom": "<number>"
+  "zoom?": "<number>"
 }
 ```
 
