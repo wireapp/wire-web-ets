@@ -6,7 +6,7 @@
     "@types/helmet": "0.0.43",
     "@types/joi": "14.3.3",
     "@types/node": "~10",
-    "@wireapp/core": "10.2.7",
+    "@wireapp/core": "11.0.3",
     "@wireapp/lru-cache": "3.1.14",
     "body-parser": "1.19.0",
     "celebrate": "10.0.0",
@@ -20,11 +20,11 @@
     "pm2-logrotate": "2.6.0",
     "pure-uuid": "1.5.7",
     "swagger-ui-express": "4.0.5",
-    "typescript": "3.4.5"
+    "typescript": "3.5.1"
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
-    "@types/jasmine": "3.3.12",
+    "@types/jasmine": "3.3.13",
     "@types/nock": "10.0.3",
     "@types/request": "2.48.1",
     "@types/swagger-ui-express": "3.0.0",
