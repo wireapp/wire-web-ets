@@ -39,7 +39,7 @@ export const logRoute = () =>
         logData += `=== ${errorLogFile} ===\n`;
         try {
           const errorLogData = await fs.readFile(errorLogFile, {encoding: 'utf8'});
-          logData += `${errorLogData}`;
+          logData += errorLogData;
         } catch (error) {
           logger.error(error);
           logData += `Error: Could not find error log file "${errorLogFile}" or it is not readable.`;
