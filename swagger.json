@@ -300,7 +300,7 @@
           "type": "string"
         },
         "legalHoldStatus": {
-          "$ref": "#/definitions/LegalHold"
+          "$ref": "#/definitions/LegalHoldStatus"
         },
         "messageTimer": {
           "type": "number"

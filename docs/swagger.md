@@ -716,7 +716,7 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | expectsReadConfirmation | boolean |  | No |
 | from | string (uuid) |  | Yes |
 | id | string (uuid) |  | Yes |
-| legalHoldStatus | [LegalHold](#legalhold) |  | No |
+| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | messageTimer | number |  | Yes |
 | state | string |  | Yes |
 | timestamp | string |  | Yes |
