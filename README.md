@@ -624,9 +624,12 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 #### Request
 
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+
 ```json
 {
   "conversationId": "<string in UUID format>",
+  "legalHoldStatus?": "<0|1>",
   "originalMessageId": "<string in UUID format>",
   "type": "<'❤️'|''>"
 }
