@@ -496,6 +496,28 @@
         "tags": ["Clients"]
       }
     },
+    "/commit": {
+      "get": {
+        "operationId": "getLatestCommit",
+        "produces": ["text/plain"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerError"
+            }
+          }
+        },
+        "summary": "Get the latest commit hash as plain text",
+        "tags": ["Server"]
+      }
+    },
     "/instance": {
       "put": {
         "consumes": ["application/json"],
@@ -1961,28 +1983,6 @@
         },
         "summary": "Get all instances",
         "tags": ["Instances"]
-      }
-    },
-    "/commit": {
-      "get": {
-        "operationId": "getLatestCommit",
-        "produces": ["text/plain"],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "format": "string"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "schema": {
-              "$ref": "#/definitions/ServerError"
-            }
-          }
-        },
-        "summary": "Get the latest commit hash as plain text",
-        "tags": ["Server"]
       }
     },
     "/log": {

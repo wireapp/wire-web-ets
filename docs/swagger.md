@@ -50,6 +50,20 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | 200 |  | [ [Client](#client) ] |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
+### /commit
+
+#### GET
+##### Summary:
+
+Get the latest commit hash as plain text
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | undefined (string) |
+| 500 | Internal server error | [ServerError](#servererror) |
+
 ### /instance
 
 #### PUT
@@ -611,20 +625,6 @@ Get all instances
 | 200 |  | [Instance](#instance) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 
-### /commit
-
-#### GET
-##### Summary:
-
-Get the latest commit hash as plain text
-
-##### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 |  | undefined (string) |
-| 500 | Internal server error | [ServerError](#servererror) |
-
 ### /log
 
 #### GET
@@ -733,10 +733,7 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| Login |  | **Notes**:
-
-You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
-`deviceClass` can be set to any string if `backend` is unset and `customBackend` is set. |  |
+| Login |  | **Notes**:  You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence. `deviceClass` can be set to any string if `backend` is unset and `customBackend` is set. |  |
 
 #### Mention
 
