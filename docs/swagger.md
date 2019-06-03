@@ -61,7 +61,7 @@ Get the latest commit hash as plain text
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | undefined (string) |
+| 200 |  | string |
 | 500 | Internal server error | [ServerError](#servererror) |
 
 ### /instance
@@ -165,7 +165,7 @@ Set a user's availability
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body | Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`). | Yes | object |
+| body | body | Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`). | Yes | [Availability](#availability) |
 
 ##### Responses
 
@@ -337,7 +337,7 @@ Send a delivery confirmation for a message
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | object |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -469,7 +469,7 @@ Send a location to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | [Location](#location) |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -513,7 +513,7 @@ Send a reaction to a message
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | [Reaction](#reaction) |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -557,7 +557,7 @@ Send a text message to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | [TextMessage](#textmessage) |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -579,7 +579,7 @@ Send a typing indicator to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes |  |
+| body | body |  | Yes | [Typing](#typing) |
 
 ##### Responses
 
@@ -636,10 +636,17 @@ Get the complete log as plain text
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | undefined (string) |
+| 200 |  | string |
 
 ### Models
 
+
+#### Availability
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| teamId | string (uuid) |  | No |
+| type | integer |  | No |
 
 #### BackendData
 
@@ -715,7 +722,6 @@ Type can be `0` (Disabled) or `1` (Enabled).
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| conversationId | string (uuid) |  | Yes |
 | expectsReadConfirmation | boolean |  | No |
 | latitude | integer |  | Yes |
 | legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
@@ -770,7 +776,6 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| conversationId | string (uuid) |  | Yes |
 | legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | originalMessageId | string (uuid) |  | Yes |
 | type | string |  | Yes |
@@ -795,7 +800,6 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| conversationId | string (uuid) |  | No |
 | expectsReadConfirmation | boolean |  | No |
 | legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | linkPreview | [LinkPreview](#linkpreview) |  | No |
@@ -803,6 +807,13 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | messageTimer | integer |  | No |
 | quote | object |  | No |
 | text | string |  | No |
+
+#### Typing
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| conversationId | string (uuid) |  | No |
+| status | string |  | No |
 
 #### ValidationError
 

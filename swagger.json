@@ -1,6 +1,19 @@
 {
   "basePath": "/api/v1",
   "definitions": {
+    "Availability": {
+      "properties": {
+        "teamId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "type": {
+          "enum": [0, 1, 2, 3],
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "BackendData": {
       "properties": {
         "name": {
@@ -185,10 +198,6 @@
     },
     "Location": {
       "properties": {
-        "conversationId": {
-          "format": "uuid",
-          "type": "string"
-        },
         "expectsReadConfirmation": {
           "type": "boolean"
         },
@@ -211,7 +220,7 @@
           "type": "integer"
         }
       },
-      "required": ["conversationId", "latitude", "longitude"],
+      "required": ["latitude", "longitude"],
       "type": "object"
     },
     "Login": {
@@ -332,10 +341,6 @@
     },
     "Reaction": {
       "properties": {
-        "conversationId": {
-          "format": "uuid",
-          "type": "string"
-        },
         "legalHoldStatus": {
           "$ref": "#/definitions/LegalHoldStatus"
         },
@@ -348,7 +353,7 @@
           "type": "string"
         }
       },
-      "required": ["conversationId", "originalMessageId", "type"],
+      "required": ["originalMessageId", "type"],
       "type": "object"
     },
     "ServerError": {
@@ -399,10 +404,6 @@
     },
     "TextMessage": {
       "properties": {
-        "conversationId": {
-          "format": "uuid",
-          "type": "string"
-        },
         "expectsReadConfirmation": {
           "type": "boolean"
         },
@@ -435,6 +436,19 @@
           "type": "object"
         },
         "text": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Typing": {
+      "properties": {
+        "conversationId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "status": {
+          "enum": ["started", "stopped"],
           "type": "string"
         }
       },
@@ -525,7 +539,7 @@
           "200": {
             "description": "",
             "schema": {
-              "format": "string"
+              "type": "string"
             }
           },
           "500": {
@@ -717,17 +731,7 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "teamId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "type": {
-                  "enum": [0, 1, 2, 3],
-                  "type": "integer"
-                }
-              },
-              "type": "object"
+              "$ref": "#/definitions/Availability"
             }
           }
         ],
@@ -1129,25 +1133,21 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "conversationId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "firstMessageId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "moreMessageIds": {
-                  "items": {
-                    "format": "uuid",
-                    "type": "string"
+              "allOf": [
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
                   },
-                  "type": "array"
+                  "required": ["conversationId"],
+                  "type": "object"
+                },
+                {
+                  "$ref": "#/definitions/Confirmation"
                 }
-              },
-              "required": ["conversationId", "firstMessageId"],
-              "type": "object"
+              ]
             }
           }
         ],
@@ -1544,7 +1544,21 @@
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Location"
+              "allOf": [
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": ["conversationId"],
+                  "type": "object"
+                },
+                {
+                  "$ref": "#/definitions/Location"
+                }
+              ]
             }
           }
         ],
@@ -1677,7 +1691,21 @@
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Reaction"
+              "allOf": [
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": ["conversationId"],
+                  "type": "object"
+                },
+                {
+                  "$ref": "#/definitions/Reaction"
+                }
+              ]
             }
           }
         ],
@@ -1801,7 +1829,21 @@
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/TextMessage"
+              "allOf": [
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": ["conversationId"],
+                  "type": "object"
+                },
+                {
+                  "$ref": "#/definitions/TextMessage"
+                }
+              ]
             }
           }
         ],
@@ -1820,7 +1862,9 @@
                       "format": "uuid",
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": ["messageId"],
+                  "type": "object"
                 }
               ]
             }
@@ -1860,16 +1904,7 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "conversationId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "status": {
-                  "enum": ["started", "stopped"],
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/Typing"
             }
           }
         ],
@@ -1922,6 +1957,10 @@
                 },
                 {
                   "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
                     "firstMessageId": {
                       "format": "uuid",
                       "type": "string"
@@ -2000,7 +2039,7 @@
           "200": {
             "description": "",
             "schema": {
-              "format": "string"
+              "type": "string"
             }
           }
         },
