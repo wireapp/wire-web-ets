@@ -147,7 +147,7 @@ yarn start
 ```json
 [
   {
-    "class": "<desktop>",
+    "class": "<'desktop'|'phone'|'tablet'>",
     "cookie": "<string>",
     "id": "<string>",
     "location": {
@@ -376,6 +376,8 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 
 Confirmation type can be `0` (Delivered) or `1` (Read).
 
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+
 ```json
 [
   {
@@ -394,6 +396,7 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
     "conversation": "<string in UUID format>",
     "from": "<string in UUID format>",
     "id": "<string in UUID format>",
+    "legalHoldStatus?": "<0|1>",
     "messageTimer": "<number>",
     "state": "<'PayloadBundleState.INCOMING'|'PayloadBundleState.OUTGOING_SENT'>",
     "timestamp": "<number in Unix time stamp format>",
@@ -510,12 +513,15 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 
 #### Request
 
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+
 ```json
 {
   "conversationId": "<string in UUID format>",
   "data": "<string in base64 format>",
   "expectsReadConfirmation?": "<boolean>",
   "fileName": "<string>",
+  "legalHoldStatus?": "<0|1>",
   "messageTimer?": "<number>",
   "type": "<string>"
 }
@@ -535,12 +541,15 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 
 #### Request
 
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+
 ```json
 {
   "conversationId": "<string in UUID format>",
   "data": "<string in base64 format>",
   "expectsReadConfirmation?": "<boolean>",
   "height": "<number>",
+  "legalHoldStatus?": "<0|1>",
   "messageTimer?": "<number>",
   "type": "<string>",
   "width": "<number>"
@@ -561,15 +570,18 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 
 #### Request
 
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+
 ```json
 {
   "conversationId": "<string>",
   "expectsReadConfirmation?": "<boolean>",
   "latitude": "<number>",
-  "locationName": "<string>",
+  "legalHoldStatus?": "<0|1>",
+  "locationName?": "<string>",
   "longitude": "<number>",
   "messageTimer?": "<number>",
-  "zoom": "<number>"
+  "zoom?": "<number>"
 }
 ```
 
@@ -587,10 +599,13 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 
 #### Request
 
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+
 ```json
 {
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
+  "legalHoldStatus?": "<0|1>",
   "messageTimer?": "<number>"
 }
 ```
@@ -651,10 +666,13 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 
 #### Request
 
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+
 ```json
 {
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
+  "legalHoldStatus?": "<0|1>",
   "linkPreview?": {
     "image?": {
       "data": "<string in base64 format>",
@@ -722,11 +740,14 @@ Confirmation type can be `0` (Delivered) or `1` (Read).
 
 #### Request
 
+Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+
 ```json
 {
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
   "firstMessageId": "<string in UUID format>",
+  "legalHoldStatus?": "<0|1>",
   "linkPreview?": {
     "image?": {
       "data": "<string in base64 format>",

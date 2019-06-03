@@ -90,6 +90,7 @@
           "type": "array"
         },
         "type": {
+          "description": "Type can be `0` (Delivered) or `1` (Read).",
           "enum": [0, 1],
           "type": "integer"
         }
@@ -127,6 +128,11 @@
       },
       "type": "object"
     },
+    "LegalHoldStatus": {
+      "description": "Type can be `0` (Disabled) or `1` (Enabled).",
+      "enum": [0, 1],
+      "type": "integer"
+    },
     "LinkPreview": {
       "properties": {
         "image": {
@@ -136,15 +142,13 @@
               "type": "string"
             },
             "height": {
-              "format": "number",
-              "type": "string"
+              "type": "integer"
             },
             "type": {
               "type": "string"
             },
             "width": {
-              "format": "number",
-              "type": "string"
+              "type": "integer"
             }
           },
           "type": "object"
@@ -174,10 +178,40 @@
           "type": "string"
         },
         "urlOffset": {
-          "format": "number",
-          "type": "string"
+          "type": "integer"
         }
       },
+      "type": "object"
+    },
+    "Location": {
+      "properties": {
+        "conversationId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "expectsReadConfirmation": {
+          "type": "boolean"
+        },
+        "latitude": {
+          "type": "integer"
+        },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
+        },
+        "locationName": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "integer"
+        },
+        "messageTimer": {
+          "type": "integer"
+        },
+        "zoom": {
+          "type": "integer"
+        }
+      },
+      "required": ["conversationId", "latitude", "longitude"],
       "type": "object"
     },
     "Login": {
@@ -210,12 +244,10 @@
     "Mention": {
       "properties": {
         "length": {
-          "format": "number",
-          "type": "string"
+          "type": "integer"
         },
         "start": {
-          "format": "number",
-          "type": "string"
+          "type": "integer"
         },
         "userId": {
           "format": "uuid",
@@ -226,14 +258,6 @@
     },
     "Message": {
       "properties": {
-        "content": {
-          "properties": {
-            "text": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
         "confirmations": {
           "items": {
             "allOf": [
@@ -252,6 +276,14 @@
           },
           "type": "array"
         },
+        "content": {
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
         "conversation": {
           "format": "uuid",
           "type": "string"
@@ -267,9 +299,11 @@
           "format": "uuid",
           "type": "string"
         },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
+        },
         "messageTimer": {
-          "format": "number",
-          "type": "string"
+          "type": "integer"
         },
         "state": {
           "enum": ["PayloadBundleState.INCOMING", "PayloadBundleState.OUTGOING_SENT"],
@@ -296,6 +330,52 @@
       },
       "type": "object"
     },
+    "ServerError": {
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "stack": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ServerInfo": {
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "instance": {
+          "properties": {
+            "env": {
+              "properties": {
+                "LOG_ERROR": {
+                  "type": "string"
+                },
+                "LOG_OUTPUT": {
+                  "type": "string"
+                },
+                "NODE_DEBUG": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "required": ["env", "uptime"],
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": ["code", "instance", "message"],
+      "type": "object"
+    },
     "TextMessage": {
       "properties": {
         "conversationId": {
@@ -304,6 +384,9 @@
         },
         "expectsReadConfirmation": {
           "type": "boolean"
+        },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
         },
         "linkPreview": {
           "$ref": "#/definitions/LinkPreview"
@@ -315,8 +398,7 @@
           "type": "array"
         },
         "messageTimer": {
-          "format": "number",
-          "type": "string"
+          "type": "integer"
         },
         "quote": {
           "properties": {
@@ -360,6 +442,22 @@
     "version": "1.16.1"
   },
   "paths": {
+    "/": {
+      "get": {
+        "operationId": "getServerInfo",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ServerInfo"
+            }
+          }
+        },
+        "summary": "Get information about the server",
+        "tags": ["Server"]
+      }
+    },
     "/clients": {
       "delete": {
         "consumes": ["application/json"],
@@ -381,7 +479,10 @@
           "200": {
             "description": "",
             "schema": {
-              "type": "object"
+              "items": {
+                "$ref": "#/definitions/Client"
+              },
+              "type": "array"
             }
           },
           "422": {
@@ -580,7 +681,7 @@
                 },
                 "type": {
                   "enum": [0, 1, 2, 3],
-                  "type": "string"
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -1244,9 +1345,11 @@
                 "fileName": {
                   "type": "string"
                 },
+                "legalHoldStatus": {
+                  "$ref": "#/definitions/LegalHoldStatus"
+                },
                 "messageTimer": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "integer"
                 },
                 "type": {
                   "type": "string"
@@ -1324,19 +1427,19 @@
                   "type": "boolean"
                 },
                 "height": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "integer"
+                },
+                "legalHoldStatus": {
+                  "$ref": "#/definitions/LegalHoldStatus"
                 },
                 "messageTimer": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "integer"
                 },
                 "type": {
                   "type": "string"
                 },
                 "width": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -1398,35 +1501,7 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "conversationId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "expectsReadConfirmation": {
-                  "type": "boolean"
-                },
-                "latitude": {
-                  "format": "number",
-                  "type": "string"
-                },
-                "locationName": {
-                  "type": "string"
-                },
-                "longitude": {
-                  "format": "number",
-                  "type": "string"
-                },
-                "messageTimer": {
-                  "format": "number",
-                  "type": "string"
-                },
-                "zoom": {
-                  "format": "number",
-                  "type": "string"
-                }
-              },
-              "type": "object"
+              "$ref": "#/definitions/Location"
             }
           }
         ],
@@ -1493,9 +1568,11 @@
                 "expectsReadConfirmation": {
                   "type": "boolean"
                 },
+                "legalHoldStatus": {
+                  "$ref": "#/definitions/LegalHoldStatus"
+                },
                 "messageTimer": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -1810,7 +1887,20 @@
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/TextMessage"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/TextMessage"
+                },
+                {
+                  "properties": {
+                    "firstMessageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              ]
             }
           }
         ],
@@ -1872,6 +1962,44 @@
         "summary": "Get all instances",
         "tags": ["Instances"]
       }
+    },
+    "/commit": {
+      "get": {
+        "operationId": "getLatestCommit",
+        "produces": ["text/plain"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerError"
+            }
+          }
+        },
+        "summary": "Get the latest commit hash as plain text",
+        "tags": ["Server"]
+      }
+    },
+    "/log": {
+      "get": {
+        "operationId": "getLog",
+        "produces": ["text/plain"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "summary": "Get the complete log as plain text",
+        "tags": ["Server"]
+      }
     }
   },
   "schemes": ["http"],
@@ -1888,6 +2016,10 @@
     {
       "description": "Wire User Clients",
       "name": "Clients"
+    },
+    {
+      "description": "Server information",
+      "name": "Server"
     }
   ]
 }

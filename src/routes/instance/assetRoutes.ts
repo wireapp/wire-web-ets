@@ -17,7 +17,12 @@
  *
  */
 
-import {FileContent, FileMetaDataContent, ImageContent} from '@wireapp/core/dist/conversation/content/';
+import {
+  FileContent,
+  FileMetaDataContent,
+  ImageContent,
+  LegalHoldStatus,
+} from '@wireapp/core/dist/conversation/content/';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 
@@ -27,6 +32,7 @@ import {MessageRequest} from './conversationRoutes';
 interface AssetMessageRequest extends MessageRequest {
   data: string;
   expectsReadConfirmation?: boolean;
+  legalHoldStatus?: LegalHoldStatus;
   messageTimer?: number;
   type: string;
 }
@@ -50,11 +56,16 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
         conversationId: Joi.string()
           .uuid()
           .required(),
-        data: Joi.string().required(),
+        data: Joi.string()
+          .base64()
+          .required(),
         expectsReadConfirmation: Joi.boolean()
           .default(false)
           .optional(),
         fileName: Joi.string().required(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         messageTimer: Joi.number()
           .default(0)
           .optional(),
@@ -68,6 +79,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
         data: base64Data,
         expectsReadConfirmation,
         fileName,
+        legalHoldStatus,
         messageTimer,
         type,
       }: FileMessageRequest = req.body;
@@ -86,6 +98,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           fileContent,
           metadata,
           expectsReadConfirmation,
+          legalHoldStatus,
           messageTimer
         );
         const instanceName = instanceService.getInstance(instanceId).name;
@@ -117,6 +130,9 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
         height: Joi.number()
           .min(1)
           .required(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         messageTimer: Joi.number()
           .default(0)
           .optional(),
@@ -133,6 +149,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
         data: base64Data,
         expectsReadConfirmation,
         height,
+        legalHoldStatus,
         messageTimer,
         type,
         width,
@@ -150,6 +167,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           conversationId,
           image,
           expectsReadConfirmation,
+          legalHoldStatus,
           messageTimer
         );
         const instanceName = instanceService.getInstance(instanceId).name;

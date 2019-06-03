@@ -20,6 +20,7 @@
 import {ReactionType} from '@wireapp/core/dist/conversation/';
 import {
   ImageContent,
+  LegalHoldStatus,
   LinkPreviewContent,
   LocationContent,
   MentionContent,
@@ -71,6 +72,7 @@ export interface TextRequest extends MessageRequest {
   mentions?: MentionContent[];
   messageTimer?: number;
   quote?: QuoteStringContent;
+  legalHoldStatus?: LegalHoldStatus;
   text: string;
 }
 
@@ -82,6 +84,7 @@ export interface ReactionRequest extends MessageRequest {
 export interface LocationRequest extends MessageRequest {
   expectsReadConfirmation?: boolean;
   latitude: number;
+  legalHoldStatus?: LegalHoldStatus;
   locationName?: string;
   longitude: number;
   messageTimer?: number;
@@ -99,7 +102,9 @@ export interface QuoteStringContent {
 
 const validateLinkPreview = {
   image: Joi.object({
-    data: Joi.string().required(),
+    data: Joi.string()
+      .base64()
+      .required(),
     height: Joi.number().required(),
     type: Joi.string().required(),
     width: Joi.number().required(),
@@ -331,8 +336,13 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         conversationId: Joi.string()
           .uuid()
           .required(),
-        expectsReadConfirmation: Joi.boolean().default(false),
+        expectsReadConfirmation: Joi.boolean()
+          .default(false)
+          .optional(),
         latitude: Joi.number().required(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         locationName: Joi.string()
           .allow('')
           .optional(),
@@ -349,6 +359,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         conversationId,
         expectsReadConfirmation,
         latitude,
+        legalHoldStatus,
         longitude,
         locationName,
         messageTimer,
@@ -362,6 +373,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       const location: LocationContent = {
         expectsReadConfirmation,
         latitude,
+        legalHoldStatus,
         longitude,
         name: locationName,
         zoom,
@@ -392,6 +404,9 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         expectsReadConfirmation: Joi.boolean()
           .default(false)
           .optional(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         linkPreview: Joi.object(validateLinkPreview).optional(),
         mentions: Joi.array()
           .items(validateMention)
@@ -412,6 +427,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         mentions,
         messageTimer,
         quote,
+        legalHoldStatus,
         text,
       }: TextRequest = req.body;
 
@@ -457,6 +473,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           mentions,
           quoteContent,
           expectsReadConfirmation,
+          legalHoldStatus,
           messageTimer
         );
         const instanceName = instanceService.getInstance(instanceId).name;
@@ -478,7 +495,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         conversationId: Joi.string()
           .uuid()
           .required(),
-        expectsReadConfirmation: Joi.boolean().default(false),
+        expectsReadConfirmation: Joi.boolean()
+          .default(false)
+          .optional(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         messageTimer: Joi.number()
           .default(0)
           .optional(),
@@ -486,7 +508,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, expectsReadConfirmation, messageTimer}: TextRequest = req.body;
+      const {conversationId, expectsReadConfirmation, legalHoldStatus, messageTimer}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -497,6 +519,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           instanceId,
           conversationId,
           expectsReadConfirmation,
+          legalHoldStatus,
           messageTimer
         );
         const instanceName = instanceService.getInstance(instanceId).name;
@@ -561,6 +584,9 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         firstMessageId: Joi.string()
           .uuid()
           .required(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         linkPreview: Joi.object(validateLinkPreview).optional(),
         mentions: Joi.array()
           .items(validateMention)
@@ -575,6 +601,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         conversationId,
         expectsReadConfirmation,
         firstMessageId,
+        legalHoldStatus,
         linkPreview,
         mentions,
         quote,
@@ -623,7 +650,8 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           linkPreviewContent,
           mentions,
           quoteContent,
-          expectsReadConfirmation
+          expectsReadConfirmation,
+          legalHoldStatus
         );
 
         const instanceName = instanceService.getInstance(instanceId).name;
