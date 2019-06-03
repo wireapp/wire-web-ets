@@ -77,6 +77,7 @@ export interface TextRequest extends MessageRequest {
 }
 
 export interface ReactionRequest extends MessageRequest {
+  legalHoldStatus?: LegalHoldStatus;
   originalMessageId: string;
   type: ReactionType;
 }
@@ -541,6 +542,9 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
         conversationId: Joi.string()
           .uuid()
           .required(),
+        legalHoldStatus: Joi.number()
+          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .optional(),
         originalMessageId: Joi.string()
           .uuid()
           .required(),
@@ -551,14 +555,20 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''}: {instanceId: string} = req.params;
-      const {conversationId, originalMessageId, type}: ReactionRequest = req.body;
+      const {conversationId, legalHoldStatus, originalMessageId, type}: ReactionRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         return res.status(400).json({error: `Instance "${instanceId}" not found.`});
       }
 
       try {
-        const messageId = await instanceService.sendReaction(instanceId, conversationId, originalMessageId, type);
+        const messageId = await instanceService.sendReaction(
+          instanceId,
+          conversationId,
+          originalMessageId,
+          type,
+          legalHoldStatus
+        );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
           instanceId,

@@ -764,13 +764,18 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     originalMessageId: string,
-    type: ReactionType
+    type: ReactionType,
+    legalHoldStatus?: LegalHoldStatus
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
     if (service) {
-      const payload = service.conversation.messageBuilder.createReaction(conversationId, originalMessageId, type);
+      const payload = service.conversation.messageBuilder.createReaction(conversationId, {
+        legalHoldStatus,
+        originalMessageId,
+        type,
+      });
       const {id: messageId} = await service.conversation.send(payload);
       return messageId;
     } else {

@@ -330,6 +330,27 @@
       },
       "type": "object"
     },
+    "Reaction": {
+      "properties": {
+        "conversationId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
+        },
+        "originalMessageId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "type": {
+          "enum": ["❤️", ""],
+          "type": "string"
+        }
+      },
+      "required": ["conversationId", "originalMessageId", "type"],
+      "type": "object"
+    },
     "ServerError": {
       "properties": {
         "error": {
@@ -1656,21 +1677,7 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "conversationId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "originalMessageId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "type": {
-                  "enum": ["❤️", ""],
-                  "type": "string"
-                }
-              },
-              "type": "object"
+              "$ref": "#/definitions/Reaction"
             }
           }
         ],

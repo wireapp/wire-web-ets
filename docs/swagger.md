@@ -513,7 +513,7 @@ Send a reaction to a message
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | object |
+| body | body |  | Yes | [Reaction](#reaction) |
 
 ##### Responses
 
@@ -765,6 +765,15 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | ---- | ---- | ----------- | -------- |
 | error | string |  | No |
 | stack | string |  | No |
+
+#### Reaction
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| conversationId | string (uuid) |  | Yes |
+| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
+| originalMessageId | string (uuid) |  | Yes |
+| type | string |  | Yes |
 
 #### ServerError
 
