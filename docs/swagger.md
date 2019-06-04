@@ -754,16 +754,22 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | confirmations | [  ] |  | No |
-| content | object |  | No |
+| content | [MessageContent](#messagecontent) |  | No |
 | conversation | string (uuid) |  | Yes |
-| expectsReadConfirmation | boolean |  | No |
 | from | string (uuid) |  | Yes |
 | id | string (uuid) |  | Yes |
-| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | messageTimer | integer |  | Yes |
 | state | string |  | Yes |
 | timestamp | string |  | Yes |
 | type | string |  | Yes |
+
+#### MessageContent
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| expectsReadConfirmation | boolean |  | No |
+| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
+| text | string |  | Yes |
 
 #### NotFoundError
 

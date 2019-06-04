@@ -383,6 +383,7 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
   {
     "content?": {
       "expectsReadConfirmation?": "<boolean>",
+      "legalHoldStatus?": "<0|1>",
       "text": "<string>"
     },
     "confirmations?": [
@@ -396,7 +397,6 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
     "conversation": "<string in UUID format>",
     "from": "<string in UUID format>",
     "id": "<string in UUID format>",
-    "legalHoldStatus?": "<0|1>",
     "messageTimer": "<number>",
     "state": "<'PayloadBundleState.INCOMING'|'PayloadBundleState.OUTGOING_SENT'>",
     "timestamp": "<number in Unix time stamp format>",

@@ -279,26 +279,19 @@
                     "format": "uuid",
                     "type": "string"
                   }
-                }
+                },
+                "required": ["from"]
               }
             ]
           },
           "type": "array"
         },
         "content": {
-          "properties": {
-            "text": {
-              "type": "string"
-            }
-          },
-          "type": "object"
+          "$ref": "#/definitions/MessageContent"
         },
         "conversation": {
           "format": "uuid",
           "type": "string"
-        },
-        "expectsReadConfirmation": {
-          "type": "boolean"
         },
         "from": {
           "format": "uuid",
@@ -307,9 +300,6 @@
         "id": {
           "format": "uuid",
           "type": "string"
-        },
-        "legalHoldStatus": {
-          "$ref": "#/definitions/LegalHoldStatus"
         },
         "messageTimer": {
           "type": "integer"
@@ -326,6 +316,21 @@
         }
       },
       "required": ["conversation", "from", "id", "messageTimer", "state", "timestamp", "type"],
+      "type": "object"
+    },
+    "MessageContent": {
+      "properties": {
+        "expectsReadConfirmation": {
+          "type": "boolean"
+        },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": ["text"],
       "type": "object"
     },
     "NotFoundError": {
