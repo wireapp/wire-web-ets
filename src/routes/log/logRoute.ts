@@ -31,7 +31,7 @@ const logger = logdown('@wireapp/wire-web-ets/routes/log/logRoute', {
 });
 
 export const logRoute = () =>
-  router.get('/log/?', async (req, res) => {
+  router.get(['/log/?', '/api/v1/log/?'], async (req, res) => {
     try {
       let logData = '';
 
@@ -39,7 +39,7 @@ export const logRoute = () =>
         logData += `=== ${errorLogFile} ===\n`;
         try {
           const errorLogData = await fs.readFile(errorLogFile, {encoding: 'utf8'});
-          logData += `${errorLogData}`;
+          logData += errorLogData;
         } catch (error) {
           logger.error(error);
           logData += `Error: Could not find error log file "${errorLogFile}" or it is not readable.`;

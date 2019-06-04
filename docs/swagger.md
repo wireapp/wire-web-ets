@@ -11,6 +11,19 @@ opensource@wire.com
 
 **License:** [GPL-3.0](https://github.com/wireapp/wire-web-ets/blob/master/LICENSE)
 
+### /
+
+#### GET
+##### Summary:
+
+Get information about the server
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | [ServerInfo](#serverinfo) |
+
 ### /clients
 
 #### DELETE
@@ -34,8 +47,22 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | object |
+| 200 |  | [ [Client](#client) ] |
 | 422 | Validation error | [ValidationError](#validationerror) |
+
+### /commit
+
+#### GET
+##### Summary:
+
+Get the latest commit hash as plain text
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | string |
+| 500 | Internal server error | [ServerError](#servererror) |
 
 ### /instance
 
@@ -138,7 +165,7 @@ Set a user's availability
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body | Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`). | Yes | object |
+| body | body | Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`). | Yes | [Availability](#availability) |
 
 ##### Responses
 
@@ -310,7 +337,7 @@ Send a delivery confirmation for a message
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | object |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -442,7 +469,7 @@ Send a location to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | object |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -486,7 +513,7 @@ Send a reaction to a message
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | object |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -530,7 +557,7 @@ Send a text message to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | [TextMessage](#textmessage) |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -552,7 +579,7 @@ Send a typing indicator to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes |  |
+| body | body |  | Yes | [Typing](#typing) |
 
 ##### Responses
 
@@ -574,7 +601,7 @@ Update a text message in a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | [TextMessage](#textmessage) |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -598,8 +625,28 @@ Get all instances
 | 200 |  | [Instance](#instance) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 
+### /log
+
+#### GET
+##### Summary:
+
+Get the complete log as plain text
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 |  | string |
+
 ### Models
 
+
+#### Availability
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| teamId | string (uuid) |  | No |
+| type | integer |  | No |
 
 #### BackendData
 
@@ -636,7 +683,7 @@ Get all instances
 | ---- | ---- | ----------- | -------- |
 | firstMessageId | string (uuid) |  | Yes |
 | moreMessageIds | [ string (uuid) ] |  | No |
-| type | integer |  | Yes |
+| type | integer | Type can be `0` (Delivered) or `1` (Read). | Yes |
 
 #### Instance
 
@@ -651,6 +698,14 @@ Get all instances
 | instanceId | string (uuid) |  | No |
 | name | string |  | No |
 
+#### LegalHoldStatus
+
+Type can be `0` (Disabled) or `1` (Enabled).
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| LegalHoldStatus | integer | Type can be `0` (Disabled) or `1` (Enabled). |  |
+
 #### LinkPreview
 
 | Name | Type | Description | Required |
@@ -661,7 +716,19 @@ Get all instances
 | title | string |  | No |
 | tweet | object |  | No |
 | url | string (url) |  | No |
-| urlOffset | string (number) |  | No |
+| urlOffset | integer |  | No |
+
+#### Location
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| expectsReadConfirmation | boolean |  | No |
+| latitude | integer |  | Yes |
+| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
+| locationName | string |  | No |
+| longitude | integer |  | Yes |
+| messageTimer | integer |  | No |
+| zoom | integer |  | No |
 
 #### Login
 
@@ -672,33 +739,37 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| Login |  | **Notes**:
-
-You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
-`deviceClass` can be set to any string if `backend` is unset and `customBackend` is set. |  |
+| Login |  | **Notes**:  You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence. `deviceClass` can be set to any string if `backend` is unset and `customBackend` is set. |  |
 
 #### Mention
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| length | string (number) |  | No |
-| start | string (number) |  | No |
+| length | integer |  | No |
+| start | integer |  | No |
 | userId | string (uuid) |  | No |
 
 #### Message
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| content | object |  | No |
 | confirmations | [  ] |  | No |
+| content | [MessageContent](#messagecontent) |  | No |
 | conversation | string (uuid) |  | Yes |
-| expectsReadConfirmation | boolean |  | No |
 | from | string (uuid) |  | Yes |
 | id | string (uuid) |  | Yes |
-| messageTimer | string (number) |  | Yes |
+| messageTimer | integer |  | Yes |
 | state | string |  | Yes |
 | timestamp | string |  | Yes |
-| type | undefined (string) |  | Yes |
+| type | string |  | Yes |
+
+#### MessageContent
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| expectsReadConfirmation | boolean |  | No |
+| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
+| text | string |  | Yes |
 
 #### NotFoundError
 
@@ -707,17 +778,48 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | error | string |  | No |
 | stack | string |  | No |
 
+#### Reaction
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
+| originalMessageId | string (uuid) |  | Yes |
+| type | string |  | Yes |
+
+#### ServerError
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| error | string |  | No |
+| stack | string |  | No |
+
+#### ServerInfo
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| code | integer |  | Yes |
+| commit | string |  | No |
+| instance | object |  | Yes |
+| message | string |  | Yes |
+
 #### TextMessage
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| conversationId | string (uuid) |  | No |
 | expectsReadConfirmation | boolean |  | No |
+| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | linkPreview | [LinkPreview](#linkpreview) |  | No |
 | mentions | [ [Mention](#mention) ] |  | No |
-| messageTimer | string (number) |  | No |
+| messageTimer | integer |  | No |
 | quote | object |  | No |
 | text | string |  | No |
+
+#### Typing
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| conversationId | string (uuid) |  | No |
+| status | string |  | No |
 
 #### ValidationError
 

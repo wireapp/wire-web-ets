@@ -28,7 +28,7 @@ const router = express.Router();
 export const commitRoute = (config: ServerConfig) => {
   const commitHashFile = path.join(config.DIST_DIR, 'commit');
 
-  return router.get('/commit/?', async (req, res) => {
+  return router.get(['/commit/?', '/api/v1/commit/?'], async (req, res) => {
     try {
       const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
       return res.contentType('text/plain; charset=UTF-8').send(commitHash.trim());
