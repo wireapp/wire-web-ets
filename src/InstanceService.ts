@@ -420,7 +420,7 @@ export class InstanceService {
         }
       }
       if (client.class === ClientClassification.LEGAL_HOLD) {
-        logger.info(`Can't delete client with ID "${client.id} since it's a Legal Hold device`);
+        logger.info(`Can't delete client with ID "${client.id} since it's a Legal Hold client`);
       } else {
         await apiClient.client.api.deleteClient(client.id, password);
       }
