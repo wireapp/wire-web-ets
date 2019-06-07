@@ -414,13 +414,16 @@ export class InstanceService {
     const instances = this.cachedInstances.getAll();
 
     for (const client of clients) {
-      for (const instanceId in instances) {
-        const instance = this.cachedInstances.get(instanceId);
-        if (instance && instance.client.context && instance.client.context.clientId === client.id) {
+      for (const [instanceId, instance] of Object.entries(instances)) {
+        if (instance.client.context && instance.client.context.clientId === client.id) {
           await this.deleteInstance(instanceId);
         }
       }
-      await apiClient.client.api.deleteClient(client.id, password);
+      if (client.class === ClientClassification.LEGAL_HOLD) {
+        logger.info(`Can't delete client with ID "${client.id} since it's a Legal Hold client`);
+      } else {
+        await apiClient.client.api.deleteClient(client.id, password);
+      }
     }
 
     await account.logout();
