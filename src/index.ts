@@ -33,7 +33,10 @@ const server = new Server(config);
 server
   .start()
   .then(port => logger.info(`[${formatDate()}] Server is running on port ${port}.`))
-  .catch(error => logger.error(`[${formatDate()}]`, error));
+  .catch(error => {
+    logger.error(`[${formatDate()}]`, error);
+    process.exit(1);
+  });
 
 process.on('SIGINT', async () => {
   logger.log(`[${formatDate()}] Received "SIGINT" signal. Exiting.`);
@@ -56,8 +59,8 @@ process.on('SIGTERM', async () => {
 });
 
 process.on('uncaughtException', error => {
-  logger.error(`[${formatDate()}] Uncaught exception: ${error.message}`, error);
+  console.error(`[${formatDate()}] Uncaught exception: ${error.message}`, error);
 });
-process.on('unhandledRejection', (reason, promise) =>
-  console.log(`[${formatDate()}] Unhandled Rejection at:`, promise, 'reason:', reason)
-);
+process.on('unhandledRejection', (reason, promise) => {
+  console.error(`[${formatDate()}] Unhandled rejection at:`, promise, 'reason:', reason);
+});
