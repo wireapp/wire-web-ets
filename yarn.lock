@@ -506,6 +506,11 @@
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.1.18.tgz#8bca74d2d7ac58493d456891772717ac80fe962b"
   integrity sha512-hQZjJFGNP0VK5AvDSLAThy4f55z7h9qIJ0LC/0HqtGbpu2cxeDH9WrfIGrG7imRQ1bcYOD6N8eNrePVjsoG1bA==
 
+"@wireapp/lru-cache@3.1.19":
+  version "3.1.19"
+  resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.1.19.tgz#2d0dbeb309243a136f64acc6881f2faaa8aa6b16"
+  integrity sha512-Y455wcRf0EzqdU34sYKsrgx4mfdql/aBydnfY4G65z9ZMwYSe1wB82uavdmynbhN4BWU9+jxpx4EVcNZu2IrWQ==
+
 "@wireapp/prettier-config@0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@wireapp/prettier-config/-/prettier-config-0.2.0.tgz#822f5d1db902550c09c8ef5efda2a36ca263a481"
