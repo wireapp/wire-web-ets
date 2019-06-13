@@ -7,7 +7,7 @@
     "@types/joi": "14.3.3",
     "@types/node": "~10",
     "@wireapp/core": "12.3.3",
-    "@wireapp/lru-cache": "3.1.19",
+    "@wireapp/lru-cache": "3.1.20",
     "body-parser": "1.19.0",
     "celebrate": "10.0.0",
     "compression": "1.7.4",
