@@ -54,7 +54,7 @@ import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from './utils'
 
 const {version}: {version: string} = require('../package.json');
 
-const logger = logdown('@wireapp/wire-web-ets/instanceService', {
+const logger = logdown('@wireapp/wire-web-ets/InstanceService', {
   logger: console,
   markdown: false,
 });
