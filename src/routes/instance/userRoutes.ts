@@ -59,7 +59,7 @@ export const userRoutes = (instanceService: InstanceService): express.Router => 
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
-    }
+    },
   );
 
   return router;

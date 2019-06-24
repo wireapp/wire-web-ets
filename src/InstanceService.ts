@@ -451,7 +451,7 @@ export class InstanceService {
     quote?: QuoteContent,
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -501,7 +501,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     firstMessageId: string,
-    moreMessageIds?: string[]
+    moreMessageIds?: string[],
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -512,7 +512,7 @@ export class InstanceService {
         firstMessageId,
         Confirmation.Type.DELIVERED,
         undefined,
-        moreMessageIds
+        moreMessageIds,
       );
       await service.conversation.send(payload);
       return instance.name;
@@ -525,7 +525,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     firstMessageId: string,
-    moreMessageIds?: string[]
+    moreMessageIds?: string[],
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -536,7 +536,7 @@ export class InstanceService {
         firstMessageId,
         Confirmation.Type.READ,
         undefined,
-        moreMessageIds
+        moreMessageIds,
       );
       await service.conversation.send(payload);
       return instance.name;
@@ -549,7 +549,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     firstMessageId: string,
-    moreMessageIds?: string[]
+    moreMessageIds?: string[],
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const message = instance.messages.get(firstMessageId);
@@ -565,7 +565,7 @@ export class InstanceService {
         firstMessageId,
         Confirmation.Type.DELIVERED,
         undefined,
-        moreMessageIds
+        moreMessageIds,
       );
       await service.conversation.send(confirmationPayload);
       await service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
@@ -591,7 +591,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     firstMessageId: string,
-    moreMessageIds?: string[]
+    moreMessageIds?: string[],
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const message = instance.messages.get(firstMessageId);
@@ -607,7 +607,7 @@ export class InstanceService {
         firstMessageId,
         Confirmation.Type.READ,
         undefined,
-        moreMessageIds
+        moreMessageIds,
       );
       await service.conversation.send(confirmationPayload);
       await service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
@@ -634,7 +634,7 @@ export class InstanceService {
     image: ImageContent,
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -646,7 +646,7 @@ export class InstanceService {
         image,
         undefined,
         expectsReadConfirmation,
-        legalHoldStatus
+        legalHoldStatus,
       );
       const sentImage = await service.conversation.send(payload);
 
@@ -666,7 +666,7 @@ export class InstanceService {
     metadata: FileMetaDataContent,
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -679,7 +679,7 @@ export class InstanceService {
         metadata,
         undefined,
         expectsReadConfirmation,
-        legalHoldStatus
+        legalHoldStatus,
       );
       await service.conversation.send(metadataPayload);
 
@@ -688,7 +688,7 @@ export class InstanceService {
         file,
         metadataPayload.id,
         expectsReadConfirmation,
-        legalHoldStatus
+        legalHoldStatus,
       );
       const sentFile = await service.conversation.send(filePayload);
 
@@ -705,7 +705,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     location: LocationContent,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -727,7 +727,7 @@ export class InstanceService {
     conversationId: string,
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -768,7 +768,7 @@ export class InstanceService {
     conversationId: string,
     originalMessageId: string,
     type: ReactionType,
-    legalHoldStatus?: LegalHoldStatus
+    legalHoldStatus?: LegalHoldStatus,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -795,7 +795,7 @@ export class InstanceService {
     newMentions?: MentionContent[],
     newQuote?: QuoteContent,
     expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus
+    legalHoldStatus?: LegalHoldStatus,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;

@@ -59,7 +59,7 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
           instanceId,
           conversationId,
           firstMessageId,
-          moreMessageIds
+          moreMessageIds,
         );
         return res.json({
           instanceId,
@@ -68,7 +68,7 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
-    }
+    },
   );
 
   router.post(
@@ -99,7 +99,7 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
           instanceId,
           conversationId,
           firstMessageId,
-          moreMessageIds
+          moreMessageIds,
         );
         return res.json({
           instanceId,
@@ -108,7 +108,7 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
-    }
+    },
   );
 
   router.post(
@@ -139,7 +139,7 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
           instanceId,
           conversationId,
           firstMessageId,
-          moreMessageIds
+          moreMessageIds,
         );
         return res.json({
           instanceId,
@@ -148,7 +148,7 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
-    }
+    },
   );
 
   router.post(
@@ -179,7 +179,7 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
           instanceId,
           conversationId,
           firstMessageId,
-          moreMessageIds
+          moreMessageIds,
         );
         return res.json({
           instanceId,
@@ -188,7 +188,7 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
-    }
+    },
   );
 
   return router;

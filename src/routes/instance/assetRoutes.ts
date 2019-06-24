@@ -99,7 +99,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           metadata,
           expectsReadConfirmation,
           legalHoldStatus,
-          messageTimer
+          messageTimer,
         );
         const instanceName = instanceService.getInstance(instanceId).name;
 
@@ -111,7 +111,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
-    }
+    },
   );
 
   router.post(
@@ -168,7 +168,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           image,
           expectsReadConfirmation,
           legalHoldStatus,
-          messageTimer
+          messageTimer,
         );
         const instanceName = instanceService.getInstance(instanceId).name;
 
@@ -180,7 +180,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
-    }
+    },
   );
 
   return router;
