@@ -59,7 +59,7 @@ export class Server {
       compression({
         level: this.config.COMPRESS_LEVEL,
         threshold: this.config.COMPRESS_MIN_SIZE,
-      })
+      }),
     );
     this.initAPIRoutes();
     this.app.use(logRoute());
@@ -112,7 +112,7 @@ export class Server {
     this.app.use(
       helmet({
         frameguard: {action: 'deny'},
-      })
+      }),
     );
     this.app.use(helmet.noSniff());
     this.app.use(helmet.xssFilter());
