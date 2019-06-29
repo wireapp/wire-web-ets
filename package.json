@@ -51,18 +51,23 @@
     "dist",
     "swagger.json"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "license": "GPL-3.0",
   "lint-staged": {
+    "*.{json,md,js,yml}": [
+      "prettier --write",
+      "git add"
+    ],
     "src/**/!(*.spec).ts": [
       "tslint --project tsconfig.json --fix",
       "git add"
     ],
     "src/**/*.spec.ts": [
       "tslint --project tsconfig.jasmine.json --fix",
-      "git add"
-    ],
-    "*.{json,md,js,yml}": [
-      "prettier --write",
       "git add"
     ]
   },
@@ -73,8 +78,8 @@
   "repository": "https://github.com/wireapp/wire-web-ets",
   "scripts": {
     "build": "yarn build:node && yarn build:docs",
-    "build:node": "tsc",
     "build:docs": "swagger-markdown -i swagger.json -o docs/swagger.md",
+    "build:node": "tsc",
     "clean": "rimraf dist",
     "dist": "yarn clean && yarn build",
     "fix": "yarn fix:other && yarn fix:ts && yarn fix:ts:tests",
