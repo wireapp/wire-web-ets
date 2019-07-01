@@ -381,30 +381,36 @@
           "type": "string"
         },
         "instance": {
-          "properties": {
-            "env": {
-              "properties": {
-                "LOG_ERROR": {
-                  "type": "string"
-                },
-                "LOG_OUTPUT": {
-                  "type": "string"
-                },
-                "NODE_DEBUG": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "required": ["env", "uptime"],
-          "type": "object"
+          "$ref": "#/definitions/ServerInfoInstance"
         },
         "message": {
           "type": "string"
         }
       },
       "required": ["code", "instance", "message"],
+      "type": "object"
+    },
+    "ServerInfoInstance": {
+      "properties": {
+        "env": {
+          "properties": {
+            "LOG_ERROR": {
+              "type": "string"
+            },
+            "LOG_OUTPUT": {
+              "type": "string"
+            },
+            "NODE_DEBUG": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "uptime": {
+          "type": "string"
+        }
+      },
+      "required": ["env", "uptime"],
       "type": "object"
     },
     "TextMessage": {
