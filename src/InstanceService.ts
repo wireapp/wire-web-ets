@@ -855,6 +855,8 @@ export class InstanceService {
         if (!messageToReact.reactions.length) {
           delete messageToReact.reactions;
         }
+
+        instance.messages.set(messageToReact.id, messageToReact);
       }
     });
   }
