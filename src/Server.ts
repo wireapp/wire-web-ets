@@ -34,15 +34,14 @@ import {mainRoute} from './routes/mainRoute';
 import {initSwaggerRoute} from './routes/swagger-ui/swaggerRoute';
 
 export class Server {
-  private readonly app: express.Express;
-  private server?: http.Server;
-  private readonly instanceService: InstanceService;
-
   constructor(private readonly config: ServerConfig) {
     this.app = express();
     this.instanceService = new InstanceService();
     this.init();
   }
+  private readonly app: express.Express;
+  private server?: http.Server;
+  private readonly instanceService: InstanceService;
 
   init(): void {
     // The order is important here, please don't sort!

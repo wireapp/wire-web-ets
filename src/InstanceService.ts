@@ -86,123 +86,10 @@ export interface InstanceCreationOptions {
 }
 
 export class InstanceService {
-  private readonly cachedInstances: LRUCache<Instance>;
-
   constructor(private readonly maximumInstances = 100) {
     this.cachedInstances = new LRUCache(this.maximumInstances);
   }
-
-  private attachListeners(account: Account, instance: Instance): void {
-    account.on('error', error => logger.error(`[${formatDate()}]`, error));
-
-    account.on(PayloadBundleType.TEXT, (payload: PayloadBundle) => {
-      const linkPreviewContent = payload.content as TextContent;
-      if (linkPreviewContent.linkPreviews) {
-        linkPreviewContent.linkPreviews.forEach(preview => {
-          stripLinkPreview(preview);
-        });
-      }
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.ASSET, (payload: PayloadBundle) => {
-      const metaPayload = instance.messages.get(payload.id);
-      if (metaPayload && isAssetContent(payload.content) && isAssetContent(metaPayload.content)) {
-        payload.content.original = metaPayload.content.original;
-      }
-      stripAsset(payload.content);
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundle) => {
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundle) => {
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundle) => {
-      const editedContent = payload.content as EditedTextContent;
-      instance.messages.set(payload.id, payload);
-      instance.messages.delete(editedContent.originalMessageId);
-    });
-
-    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundle) => {
-      const clearedContent = payload.content as ClearedContent;
-
-      for (const message of instance.messages) {
-        if (message.conversation === clearedContent.conversationId) {
-          instance.messages.delete(message.id);
-        }
-      }
-    });
-
-    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundle) => {
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundle) => {
-      const deleteContent = payload.content as DeletedContent;
-      instance.messages.delete(deleteContent.messageId);
-    });
-
-    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundle) => {
-      const hideContent = payload.content as HiddenContent;
-      instance.messages.delete(hideContent.messageId);
-    });
-
-    account.on(PayloadBundleType.PING, (payload: PayloadBundle) => {
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.CONFIRMATION, (payload: PayloadBundle) => {
-      const confirmationContent = payload.content as ConfirmationContent;
-      const confirmationWithSender = {...confirmationContent, from: payload.from};
-
-      const messageToConfirm = instance.messages.get(confirmationContent.firstMessageId);
-
-      if (messageToConfirm) {
-        if (!messageToConfirm.confirmations) {
-          messageToConfirm.confirmations = [];
-        }
-        messageToConfirm.confirmations.push(confirmationWithSender);
-        instance.messages.set(messageToConfirm.id, messageToConfirm);
-      }
-
-      if (confirmationContent.moreMessageIds) {
-        for (const furtherMessageId in confirmationContent.moreMessageIds) {
-          const furtherMessageToConfirm = instance.messages.get(furtherMessageId);
-
-          if (furtherMessageToConfirm) {
-            if (!furtherMessageToConfirm.confirmations) {
-              furtherMessageToConfirm.confirmations = [];
-            }
-            furtherMessageToConfirm.confirmations.push(confirmationWithSender);
-            instance.messages.set(furtherMessageToConfirm.id, furtherMessageToConfirm);
-          }
-        }
-      }
-    });
-  }
-
-  private parseBackend(backend?: string | BackendData): BackendData {
-    if (typeof backend === 'string') {
-      switch (backend) {
-        case 'production':
-        case 'prod': {
-          return APIClient.BACKEND.PRODUCTION;
-        }
-        default: {
-          return APIClient.BACKEND.STAGING;
-        }
-      }
-    } else if (typeof backend === 'undefined') {
-      return APIClient.BACKEND.STAGING;
-    } else {
-      return backend;
-    }
-  }
+  private readonly cachedInstances: LRUCache<Instance>;
 
   async toggleArchiveConversation(instanceId: string, conversationId: string, archived: boolean): Promise<string> {
     const instance = this.getInstance(instanceId);
@@ -845,6 +732,118 @@ export class InstanceService {
       await instance.account.service.user.setAvailability(teamId, type);
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  private attachListeners(account: Account, instance: Instance): void {
+    account.on('error', error => logger.error(`[${formatDate()}]`, error));
+
+    account.on(PayloadBundleType.TEXT, (payload: PayloadBundle) => {
+      const linkPreviewContent = payload.content as TextContent;
+      if (linkPreviewContent.linkPreviews) {
+        linkPreviewContent.linkPreviews.forEach(preview => {
+          stripLinkPreview(preview);
+        });
+      }
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.ASSET, (payload: PayloadBundle) => {
+      const metaPayload = instance.messages.get(payload.id);
+      if (metaPayload && isAssetContent(payload.content) && isAssetContent(metaPayload.content)) {
+        payload.content.original = metaPayload.content.original;
+      }
+      stripAsset(payload.content);
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundle) => {
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundle) => {
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundle) => {
+      const editedContent = payload.content as EditedTextContent;
+      instance.messages.set(payload.id, payload);
+      instance.messages.delete(editedContent.originalMessageId);
+    });
+
+    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundle) => {
+      const clearedContent = payload.content as ClearedContent;
+
+      for (const message of instance.messages) {
+        if (message.conversation === clearedContent.conversationId) {
+          instance.messages.delete(message.id);
+        }
+      }
+    });
+
+    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundle) => {
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundle) => {
+      const deleteContent = payload.content as DeletedContent;
+      instance.messages.delete(deleteContent.messageId);
+    });
+
+    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundle) => {
+      const hideContent = payload.content as HiddenContent;
+      instance.messages.delete(hideContent.messageId);
+    });
+
+    account.on(PayloadBundleType.PING, (payload: PayloadBundle) => {
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.CONFIRMATION, (payload: PayloadBundle) => {
+      const confirmationContent = payload.content as ConfirmationContent;
+      const confirmationWithSender = {...confirmationContent, from: payload.from};
+
+      const messageToConfirm = instance.messages.get(confirmationContent.firstMessageId);
+
+      if (messageToConfirm) {
+        if (!messageToConfirm.confirmations) {
+          messageToConfirm.confirmations = [];
+        }
+        messageToConfirm.confirmations.push(confirmationWithSender);
+        instance.messages.set(messageToConfirm.id, messageToConfirm);
+      }
+
+      if (confirmationContent.moreMessageIds) {
+        for (const furtherMessageId in confirmationContent.moreMessageIds) {
+          const furtherMessageToConfirm = instance.messages.get(furtherMessageId);
+
+          if (furtherMessageToConfirm) {
+            if (!furtherMessageToConfirm.confirmations) {
+              furtherMessageToConfirm.confirmations = [];
+            }
+            furtherMessageToConfirm.confirmations.push(confirmationWithSender);
+            instance.messages.set(furtherMessageToConfirm.id, furtherMessageToConfirm);
+          }
+        }
+      }
+    });
+  }
+
+  private parseBackend(backend?: string | BackendData): BackendData {
+    if (typeof backend === 'string') {
+      switch (backend) {
+        case 'production':
+        case 'prod': {
+          return APIClient.BACKEND.PRODUCTION;
+        }
+        default: {
+          return APIClient.BACKEND.STAGING;
+        }
+      }
+    } else if (typeof backend === 'undefined') {
+      return APIClient.BACKEND.STAGING;
+    } else {
+      return backend;
     }
   }
 }
