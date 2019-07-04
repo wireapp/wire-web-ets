@@ -17,12 +17,15 @@
     "BackendData": {
       "properties": {
         "name": {
+          "example": "my custom backend",
           "type": "string"
         },
         "rest": {
+          "example": "https://...",
           "type": "string"
         },
         "ws": {
+          "example": "wss://...",
           "type": "string"
         }
       },
@@ -39,10 +42,12 @@
           "$ref": "#/definitions/BackendData"
         },
         "email": {
+          "example": "email@example.com",
           "format": "email",
           "type": "string"
         },
         "password": {
+          "example": "",
           "format": "password",
           "type": "string"
         }
@@ -252,9 +257,11 @@
               "type": "string"
             },
             "deviceLabel": {
+              "example": "",
               "type": "string"
             },
             "deviceName": {
+              "example": "",
               "type": "string"
             },
             "name": {
@@ -632,7 +639,7 @@
         "operationId": "deleteInstance",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -668,7 +675,7 @@
         "operationId": "getInstance",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -700,7 +707,7 @@
         "operationId": "archiveConversation",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -756,7 +763,7 @@
         "operationId": "setAvailability",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -803,7 +810,7 @@
         "operationId": "clearConversation",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -856,7 +863,7 @@
         "operationId": "getClients",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -891,7 +898,7 @@
         "operationId": "deleteMessage",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -948,7 +955,7 @@
         "operationId": "deleteMessageEverywhere",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1005,7 +1012,7 @@
         "operationId": "getFingerprint",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1046,7 +1053,7 @@
         "operationId": "getMessages",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1102,7 +1109,7 @@
         "operationId": "muteConversation",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1158,7 +1165,7 @@
         "operationId": "sendConfirmationDelivered",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1219,7 +1226,7 @@
         "operationId": "sendConfirmationRead",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1284,7 +1291,7 @@
         "operationId": "sendEphemeralConfirmationDelivered",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1341,7 +1348,7 @@
         "operationId": "sendEphemeralConfirmationRead",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1398,7 +1405,7 @@
         "operationId": "sendFile",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1482,7 +1489,7 @@
         "operationId": "sendImage",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1569,7 +1576,7 @@
         "operationId": "sendLocation",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1642,7 +1649,7 @@
         "operationId": "sendPing",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1716,7 +1723,7 @@
         "operationId": "sendReaction",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1789,7 +1796,7 @@
         "operationId": "sendSessionReset",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1854,7 +1861,7 @@
         "operationId": "sendText",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1929,7 +1936,7 @@
         "operationId": "sendTyping",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1976,7 +1983,7 @@
         "operationId": "updateText",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
