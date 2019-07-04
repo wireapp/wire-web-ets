@@ -557,7 +557,7 @@ Send a text message to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to return | Yes | string (uuid) |
-| body | body |  | Yes | object & [TextMessage](#textmessage) |
+| body | body |  | Yes | [TextMessage](#textmessage) & object |
 
 ##### Responses
 
@@ -685,6 +685,12 @@ Get the complete log as plain text
 | moreMessageIds | [ string (uuid) ] |  | No |
 | type | integer | Type can be `0` (Delivered) or `1` (Read). | Yes |
 
+#### ConfirmationWithSender
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| ConfirmationWithSender |  |  |  |
+
 #### Instance
 
 | Name | Type | Description | Required |
@@ -753,12 +759,13 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| confirmations | [ [Confirmation](#confirmation) ] |  | No |
+| confirmations | [ [ConfirmationWithSender](#confirmationwithsender) ] |  | No |
 | content | [MessageContent](#messagecontent) |  | No |
 | conversation | string (uuid) |  | Yes |
 | from | string (uuid) |  | Yes |
 | id | string (uuid) |  | Yes |
 | messageTimer | integer |  | Yes |
+| reactions | [ [ReactionWithSender](#reactionwithsender) ] |  | No |
 | state | string |  | Yes |
 | timestamp | string |  | Yes |
 | type | string |  | Yes |
@@ -785,6 +792,12 @@ You can either set `backend` or `customBackend`. If you set neither, the "stagin
 | legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | originalMessageId | string (uuid) |  | Yes |
 | type | string |  | Yes |
+
+#### ReactionWithSender
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| ReactionWithSender |  |  |  |
 
 #### ServerError
 

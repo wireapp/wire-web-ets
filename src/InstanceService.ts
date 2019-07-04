@@ -40,6 +40,7 @@ import {
   LocationContent,
   MentionContent,
   QuoteContent,
+  ReactionContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
@@ -60,9 +61,13 @@ const logger = logdown('@wireapp/wire-web-ets/InstanceService', {
 });
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
+type ReactionWithSender = ReactionContent & {
+  from: string;
+};
 
 type MessagePayload = PayloadBundle & {
   confirmations?: ConfirmationWithSender[];
+  reactions?: ReactionWithSender[];
 };
 
 export interface Instance {
@@ -781,24 +786,6 @@ export class InstanceService {
       }
     });
 
-    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundle) => {
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundle) => {
-      const deleteContent = payload.content as DeletedContent;
-      instance.messages.delete(deleteContent.messageId);
-    });
-
-    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundle) => {
-      const hideContent = payload.content as HiddenContent;
-      instance.messages.delete(hideContent.messageId);
-    });
-
-    account.on(PayloadBundleType.PING, (payload: PayloadBundle) => {
-      instance.messages.set(payload.id, payload);
-    });
-
     account.on(PayloadBundleType.CONFIRMATION, (payload: PayloadBundle) => {
       const confirmationContent = payload.content as ConfirmationContent;
       const confirmationWithSender = {...confirmationContent, from: payload.from};
@@ -824,6 +811,49 @@ export class InstanceService {
             furtherMessageToConfirm.confirmations.push(confirmationWithSender);
             instance.messages.set(furtherMessageToConfirm.id, furtherMessageToConfirm);
           }
+        }
+      }
+    });
+
+    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundle) => {
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundle) => {
+      const deleteContent = payload.content as DeletedContent;
+      instance.messages.delete(deleteContent.messageId);
+    });
+
+    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundle) => {
+      const hideContent = payload.content as HiddenContent;
+      instance.messages.delete(hideContent.messageId);
+    });
+
+    account.on(PayloadBundleType.PING, (payload: PayloadBundle) => {
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.REACTION, (payload: PayloadBundle) => {
+      const reactionContent = payload.content as ReactionContent;
+      const reactionWithSender = {...reactionContent, from: payload.from};
+
+      const messageToReact = instance.messages.get(reactionContent.originalMessageId);
+
+      if (messageToReact) {
+        if (!messageToReact.reactions) {
+          messageToReact.reactions = [];
+        }
+
+        if (reactionContent.type === ReactionType.LIKE) {
+          messageToReact.reactions.push(reactionWithSender);
+        } else {
+          messageToReact.reactions = messageToReact.reactions.filter(reaction => {
+            return reaction.from !== payload.from;
+          });
+        }
+
+        if (!messageToReact.reactions.length) {
+          delete messageToReact.reactions;
         }
       }
     });

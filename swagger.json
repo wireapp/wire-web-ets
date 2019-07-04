@@ -111,6 +111,23 @@
       "required": ["firstMessageId", "type"],
       "type": "object"
     },
+    "ConfirmationWithSender": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Confirmation"
+        },
+        {
+          "properties": {
+            "from": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": ["from"],
+          "type": "object"
+        }
+      ]
+    },
     "Instance": {
       "allOf": [
         {
@@ -269,20 +286,7 @@
       "properties": {
         "confirmations": {
           "items": {
-            "allOf": [
-              {
-                "$ref": "#/definitions/Confirmation"
-              },
-              {
-                "properties": {
-                  "from": {
-                    "format": "uuid",
-                    "type": "string"
-                  }
-                },
-                "required": ["from"]
-              }
-            ]
+            "$ref": "#/definitions/ConfirmationWithSender"
           },
           "type": "array"
         },
@@ -303,6 +307,12 @@
         },
         "messageTimer": {
           "type": "integer"
+        },
+        "reactions": {
+          "items": {
+            "$ref": "#/definitions/ReactionWithSender"
+          },
+          "type": "array"
         },
         "state": {
           "enum": ["PayloadBundleState.INCOMING", "PayloadBundleState.OUTGOING_SENT"],
@@ -360,6 +370,23 @@
       },
       "required": ["originalMessageId", "type"],
       "type": "object"
+    },
+    "ReactionWithSender": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Reaction"
+        },
+        {
+          "properties": {
+            "from": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": ["from"],
+          "type": "object"
+        }
+      ]
     },
     "ServerError": {
       "properties": {
@@ -1842,6 +1869,9 @@
             "schema": {
               "allOf": [
                 {
+                  "$ref": "#/definitions/TextMessage"
+                },
+                {
                   "properties": {
                     "conversationId": {
                       "format": "uuid",
@@ -1850,9 +1880,6 @@
                   },
                   "required": ["conversationId"],
                   "type": "object"
-                },
-                {
-                  "$ref": "#/definitions/TextMessage"
                 }
               ]
             }
