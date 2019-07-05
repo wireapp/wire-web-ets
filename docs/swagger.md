@@ -103,7 +103,7 @@ Delete an instance
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 
 ##### Responses
 
@@ -122,7 +122,7 @@ Get information about an instance
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 
 ##### Responses
 
@@ -142,7 +142,7 @@ Archive a conversation
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -164,7 +164,7 @@ Set a user's availability
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body | Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`). | Yes | [Availability](#availability) |
 
 ##### Responses
@@ -186,7 +186,7 @@ Clear a conversation
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -208,7 +208,7 @@ Get all clients of an instance
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 
 ##### Responses
 
@@ -228,7 +228,7 @@ Delete a message locally
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -250,7 +250,7 @@ Delete a message for everyone
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -272,7 +272,7 @@ Get the fingerprint from the instance's client
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 
 ##### Responses
 
@@ -292,7 +292,7 @@ Get all messages
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -314,7 +314,7 @@ Mute a conversation
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -336,7 +336,7 @@ Send a delivery confirmation for a message
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object & [Confirmation](#confirmation) |
 
 ##### Responses
@@ -358,7 +358,7 @@ Send a read confirmation for a message
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -380,7 +380,7 @@ Send a delivery confirmation for an ephemeral message
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -402,7 +402,7 @@ Send a read confirmation for an ephemeral message
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -424,7 +424,7 @@ Send a file to a conversation
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -446,7 +446,7 @@ Send an image to a conversation
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -468,7 +468,7 @@ Send a location to a conversation
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object & [Location](#location) |
 
 ##### Responses
@@ -490,7 +490,7 @@ Send a ping to a conversation
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -512,7 +512,7 @@ Send a reaction to a message
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object & [Reaction](#reaction) |
 
 ##### Responses
@@ -534,7 +534,7 @@ Send a session reset message
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | object |
 
 ##### Responses
@@ -556,7 +556,7 @@ Send a text message to a conversation
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | [TextMessage](#textmessage) & object |
 
 ##### Responses
@@ -578,7 +578,7 @@ Send a typing indicator to a conversation
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | [Typing](#typing) |
 
 ##### Responses
@@ -600,7 +600,7 @@ Update a text message in a conversation
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
-| instanceId | path | ID of instance to return | Yes | string (uuid) |
+| instanceId | path | ID of instance to use | Yes | string (uuid) |
 | body | body |  | Yes | [TextMessage](#textmessage) & object |
 
 ##### Responses
