@@ -3,7 +3,6 @@
 .idea
 .tmp
 .yarnclean
-bower_components
 coverage
 dist
 node_modules
