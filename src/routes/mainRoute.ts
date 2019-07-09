@@ -25,7 +25,7 @@ import * as path from 'path';
 import {ServerConfig} from '../config';
 import {formatDate, formatUptime} from '../utils';
 
-const logger = logdown('@wireapp/wire-web-ets/instanceService', {
+const logger = logdown('@wireapp/wire-web-ets/mainRoute', {
   logger: console,
   markdown: false,
 });

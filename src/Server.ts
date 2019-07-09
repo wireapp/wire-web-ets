@@ -34,15 +34,14 @@ import {mainRoute} from './routes/mainRoute';
 import {initSwaggerRoute} from './routes/swagger-ui/swaggerRoute';
 
 export class Server {
-  private readonly app: express.Express;
-  private server?: http.Server;
-  private readonly instanceService: InstanceService;
-
   constructor(private readonly config: ServerConfig) {
     this.app = express();
     this.instanceService = new InstanceService();
     this.init();
   }
+  private readonly app: express.Express;
+  private server?: http.Server;
+  private readonly instanceService: InstanceService;
 
   init(): void {
     // The order is important here, please don't sort!
@@ -59,7 +58,7 @@ export class Server {
       compression({
         level: this.config.COMPRESS_LEVEL,
         threshold: this.config.COMPRESS_MIN_SIZE,
-      })
+      }),
     );
     this.initAPIRoutes();
     this.app.use(logRoute());
@@ -112,7 +111,7 @@ export class Server {
     this.app.use(
       helmet({
         frameguard: {action: 'deny'},
-      })
+      }),
     );
     this.app.use(helmet.noSniff());
     this.app.use(helmet.xssFilter());

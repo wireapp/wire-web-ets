@@ -287,7 +287,7 @@ describe('Routes', () => {
     const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest(
       'post',
       messagesRequestUrl,
-      messagesRequestData
+      messagesRequestData,
     );
 
     const receivedPayload = JSON.parse(requestedBody);

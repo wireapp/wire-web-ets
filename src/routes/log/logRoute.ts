@@ -25,7 +25,7 @@ const router = express.Router();
 const outLogFile = process.env.LOG_OUTPUT;
 const errorLogFile = process.env.LOG_ERROR;
 
-const logger = logdown('@wireapp/wire-web-ets/routes/log/logRoute', {
+const logger = logdown('@wireapp/wire-web-ets/logRoute', {
   logger: console,
   markdown: false,
 });

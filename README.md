@@ -398,6 +398,15 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
     "from": "<string in UUID format>",
     "id": "<string in UUID format>",
     "messageTimer": "<number>",
+    "reactions?": [
+      {
+        "conversationId": "<string in UUID format>",
+        "from": "<string in UUID format>",
+        "legalHoldStatus?": "<0|1>",
+        "originalMessageId": "<string in UUID format>",
+        "type": "❤️"
+      }
+    ],
     "state": "<'PayloadBundleState.INCOMING'|'PayloadBundleState.OUTGOING_SENT'>",
     "timestamp": "<number in Unix time stamp format>",
     "type": "<string>"

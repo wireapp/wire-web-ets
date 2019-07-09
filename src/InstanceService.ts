@@ -40,6 +40,7 @@ import {
   LocationContent,
   MentionContent,
   QuoteContent,
+  ReactionContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content/';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
@@ -54,15 +55,19 @@ import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from './utils'
 
 const {version}: {version: string} = require('../package.json');
 
-const logger = logdown('@wireapp/wire-web-ets/instanceService', {
+const logger = logdown('@wireapp/wire-web-ets/InstanceService', {
   logger: console,
   markdown: false,
 });
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
+type ReactionWithSender = ReactionContent & {
+  from: string;
+};
 
 type MessagePayload = PayloadBundle & {
   confirmations?: ConfirmationWithSender[];
+  reactions?: ReactionWithSender[];
 };
 
 export interface Instance {
@@ -86,123 +91,10 @@ export interface InstanceCreationOptions {
 }
 
 export class InstanceService {
-  private readonly cachedInstances: LRUCache<Instance>;
-
   constructor(private readonly maximumInstances = 100) {
     this.cachedInstances = new LRUCache(this.maximumInstances);
   }
-
-  private attachListeners(account: Account, instance: Instance): void {
-    account.on('error', error => logger.error(`[${formatDate()}]`, error));
-
-    account.on(PayloadBundleType.TEXT, (payload: PayloadBundle) => {
-      const linkPreviewContent = payload.content as TextContent;
-      if (linkPreviewContent.linkPreviews) {
-        linkPreviewContent.linkPreviews.forEach(preview => {
-          stripLinkPreview(preview);
-        });
-      }
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.ASSET, (payload: PayloadBundle) => {
-      const metaPayload = instance.messages.get(payload.id);
-      if (metaPayload && isAssetContent(payload.content) && isAssetContent(metaPayload.content)) {
-        payload.content.original = metaPayload.content.original;
-      }
-      stripAsset(payload.content);
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundle) => {
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundle) => {
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundle) => {
-      const editedContent = payload.content as EditedTextContent;
-      instance.messages.set(payload.id, payload);
-      instance.messages.delete(editedContent.originalMessageId);
-    });
-
-    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundle) => {
-      const clearedContent = payload.content as ClearedContent;
-
-      for (const message of instance.messages) {
-        if (message.conversation === clearedContent.conversationId) {
-          instance.messages.delete(message.id);
-        }
-      }
-    });
-
-    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundle) => {
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundle) => {
-      const deleteContent = payload.content as DeletedContent;
-      instance.messages.delete(deleteContent.messageId);
-    });
-
-    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundle) => {
-      const hideContent = payload.content as HiddenContent;
-      instance.messages.delete(hideContent.messageId);
-    });
-
-    account.on(PayloadBundleType.PING, (payload: PayloadBundle) => {
-      instance.messages.set(payload.id, payload);
-    });
-
-    account.on(PayloadBundleType.CONFIRMATION, (payload: PayloadBundle) => {
-      const confirmationContent = payload.content as ConfirmationContent;
-      const confirmationWithSender = {...confirmationContent, from: payload.from};
-
-      const messageToConfirm = instance.messages.get(confirmationContent.firstMessageId);
-
-      if (messageToConfirm) {
-        if (!messageToConfirm.confirmations) {
-          messageToConfirm.confirmations = [];
-        }
-        messageToConfirm.confirmations.push(confirmationWithSender);
-        instance.messages.set(messageToConfirm.id, messageToConfirm);
-      }
-
-      if (confirmationContent.moreMessageIds) {
-        for (const furtherMessageId in confirmationContent.moreMessageIds) {
-          const furtherMessageToConfirm = instance.messages.get(furtherMessageId);
-
-          if (furtherMessageToConfirm) {
-            if (!furtherMessageToConfirm.confirmations) {
-              furtherMessageToConfirm.confirmations = [];
-            }
-            furtherMessageToConfirm.confirmations.push(confirmationWithSender);
-            instance.messages.set(furtherMessageToConfirm.id, furtherMessageToConfirm);
-          }
-        }
-      }
-    });
-  }
-
-  private parseBackend(backend?: string | BackendData): BackendData {
-    if (typeof backend === 'string') {
-      switch (backend) {
-        case 'production':
-        case 'prod': {
-          return APIClient.BACKEND.PRODUCTION;
-        }
-        default: {
-          return APIClient.BACKEND.STAGING;
-        }
-      }
-    } else if (typeof backend === 'undefined') {
-      return APIClient.BACKEND.STAGING;
-    } else {
-      return backend;
-    }
-  }
+  private readonly cachedInstances: LRUCache<Instance>;
 
   async toggleArchiveConversation(instanceId: string, conversationId: string, archived: boolean): Promise<string> {
     const instance = this.getInstance(instanceId);
@@ -414,13 +306,16 @@ export class InstanceService {
     const instances = this.cachedInstances.getAll();
 
     for (const client of clients) {
-      for (const instanceId in instances) {
-        const instance = this.cachedInstances.get(instanceId);
-        if (instance && instance.client.context && instance.client.context.clientId === client.id) {
+      for (const [instanceId, instance] of Object.entries(instances)) {
+        if (instance.client.context && instance.client.context.clientId === client.id) {
           await this.deleteInstance(instanceId);
         }
       }
-      await apiClient.client.api.deleteClient(client.id, password);
+      if (client.class === ClientClassification.LEGAL_HOLD) {
+        logger.info(`Can't delete client with ID "${client.id} since it's a Legal Hold client`);
+      } else {
+        await apiClient.client.api.deleteClient(client.id, password);
+      }
     }
 
     await account.logout();
@@ -448,7 +343,7 @@ export class InstanceService {
     quote?: QuoteContent,
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -498,7 +393,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     firstMessageId: string,
-    moreMessageIds?: string[]
+    moreMessageIds?: string[],
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -509,7 +404,7 @@ export class InstanceService {
         firstMessageId,
         Confirmation.Type.DELIVERED,
         undefined,
-        moreMessageIds
+        moreMessageIds,
       );
       await service.conversation.send(payload);
       return instance.name;
@@ -522,7 +417,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     firstMessageId: string,
-    moreMessageIds?: string[]
+    moreMessageIds?: string[],
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -533,7 +428,7 @@ export class InstanceService {
         firstMessageId,
         Confirmation.Type.READ,
         undefined,
-        moreMessageIds
+        moreMessageIds,
       );
       await service.conversation.send(payload);
       return instance.name;
@@ -546,7 +441,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     firstMessageId: string,
-    moreMessageIds?: string[]
+    moreMessageIds?: string[],
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const message = instance.messages.get(firstMessageId);
@@ -562,7 +457,7 @@ export class InstanceService {
         firstMessageId,
         Confirmation.Type.DELIVERED,
         undefined,
-        moreMessageIds
+        moreMessageIds,
       );
       await service.conversation.send(confirmationPayload);
       await service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
@@ -588,7 +483,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     firstMessageId: string,
-    moreMessageIds?: string[]
+    moreMessageIds?: string[],
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const message = instance.messages.get(firstMessageId);
@@ -604,7 +499,7 @@ export class InstanceService {
         firstMessageId,
         Confirmation.Type.READ,
         undefined,
-        moreMessageIds
+        moreMessageIds,
       );
       await service.conversation.send(confirmationPayload);
       await service.conversation.deleteMessageEveryone(conversationId, firstMessageId, [message.from]);
@@ -631,7 +526,7 @@ export class InstanceService {
     image: ImageContent,
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -643,7 +538,7 @@ export class InstanceService {
         image,
         undefined,
         expectsReadConfirmation,
-        legalHoldStatus
+        legalHoldStatus,
       );
       const sentImage = await service.conversation.send(payload);
 
@@ -663,7 +558,7 @@ export class InstanceService {
     metadata: FileMetaDataContent,
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -676,7 +571,7 @@ export class InstanceService {
         metadata,
         undefined,
         expectsReadConfirmation,
-        legalHoldStatus
+        legalHoldStatus,
       );
       await service.conversation.send(metadataPayload);
 
@@ -685,7 +580,7 @@ export class InstanceService {
         file,
         metadataPayload.id,
         expectsReadConfirmation,
-        legalHoldStatus
+        legalHoldStatus,
       );
       const sentFile = await service.conversation.send(filePayload);
 
@@ -702,7 +597,7 @@ export class InstanceService {
     instanceId: string,
     conversationId: string,
     location: LocationContent,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -724,7 +619,7 @@ export class InstanceService {
     conversationId: string,
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
-    expireAfterMillis = 0
+    expireAfterMillis = 0,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -765,7 +660,7 @@ export class InstanceService {
     conversationId: string,
     originalMessageId: string,
     type: ReactionType,
-    legalHoldStatus?: LegalHoldStatus
+    legalHoldStatus?: LegalHoldStatus,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -792,7 +687,7 @@ export class InstanceService {
     newMentions?: MentionContent[],
     newQuote?: QuoteContent,
     expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus
+    legalHoldStatus?: LegalHoldStatus,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -842,6 +737,145 @@ export class InstanceService {
       await instance.account.service.user.setAvailability(teamId, type);
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  private attachListeners(account: Account, instance: Instance): void {
+    account.on('error', error => logger.error(`[${formatDate()}]`, error));
+
+    account.on(PayloadBundleType.TEXT, (payload: PayloadBundle) => {
+      const linkPreviewContent = payload.content as TextContent;
+      if (linkPreviewContent.linkPreviews) {
+        linkPreviewContent.linkPreviews.forEach(preview => {
+          stripLinkPreview(preview);
+        });
+      }
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.ASSET, (payload: PayloadBundle) => {
+      const metaPayload = instance.messages.get(payload.id);
+      if (metaPayload && isAssetContent(payload.content) && isAssetContent(metaPayload.content)) {
+        payload.content.original = metaPayload.content.original;
+      }
+      stripAsset(payload.content);
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.ASSET_META, (payload: PayloadBundle) => {
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.ASSET_IMAGE, (payload: PayloadBundle) => {
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.MESSAGE_EDIT, (payload: PayloadBundle) => {
+      const editedContent = payload.content as EditedTextContent;
+      instance.messages.set(payload.id, payload);
+      instance.messages.delete(editedContent.originalMessageId);
+    });
+
+    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundle) => {
+      const clearedContent = payload.content as ClearedContent;
+
+      for (const message of instance.messages) {
+        if (message.conversation === clearedContent.conversationId) {
+          instance.messages.delete(message.id);
+        }
+      }
+    });
+
+    account.on(PayloadBundleType.CONFIRMATION, (payload: PayloadBundle) => {
+      const confirmationContent = payload.content as ConfirmationContent;
+      const confirmationWithSender = {...confirmationContent, from: payload.from};
+
+      const messageToConfirm = instance.messages.get(confirmationContent.firstMessageId);
+
+      if (messageToConfirm) {
+        if (!messageToConfirm.confirmations) {
+          messageToConfirm.confirmations = [];
+        }
+        messageToConfirm.confirmations.push(confirmationWithSender);
+        instance.messages.set(messageToConfirm.id, messageToConfirm);
+      }
+
+      if (confirmationContent.moreMessageIds) {
+        for (const furtherMessageId in confirmationContent.moreMessageIds) {
+          const furtherMessageToConfirm = instance.messages.get(furtherMessageId);
+
+          if (furtherMessageToConfirm) {
+            if (!furtherMessageToConfirm.confirmations) {
+              furtherMessageToConfirm.confirmations = [];
+            }
+            furtherMessageToConfirm.confirmations.push(confirmationWithSender);
+            instance.messages.set(furtherMessageToConfirm.id, furtherMessageToConfirm);
+          }
+        }
+      }
+    });
+
+    account.on(PayloadBundleType.LOCATION, (payload: PayloadBundle) => {
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.MESSAGE_DELETE, (payload: PayloadBundle) => {
+      const deleteContent = payload.content as DeletedContent;
+      instance.messages.delete(deleteContent.messageId);
+    });
+
+    account.on(PayloadBundleType.MESSAGE_HIDE, (payload: PayloadBundle) => {
+      const hideContent = payload.content as HiddenContent;
+      instance.messages.delete(hideContent.messageId);
+    });
+
+    account.on(PayloadBundleType.PING, (payload: PayloadBundle) => {
+      instance.messages.set(payload.id, payload);
+    });
+
+    account.on(PayloadBundleType.REACTION, (payload: PayloadBundle) => {
+      const reactionContent = payload.content as ReactionContent;
+      const reactionWithSender = {...reactionContent, from: payload.from};
+
+      const messageToReact = instance.messages.get(reactionContent.originalMessageId);
+
+      if (messageToReact) {
+        if (!messageToReact.reactions) {
+          messageToReact.reactions = [];
+        }
+
+        if (reactionContent.type === ReactionType.LIKE) {
+          messageToReact.reactions.push(reactionWithSender);
+        } else {
+          messageToReact.reactions = messageToReact.reactions.filter(reaction => {
+            return reaction.from !== payload.from;
+          });
+        }
+
+        if (!messageToReact.reactions.length) {
+          delete messageToReact.reactions;
+        }
+
+        instance.messages.set(messageToReact.id, messageToReact);
+      }
+    });
+  }
+
+  private parseBackend(backend?: string | BackendData): BackendData {
+    if (typeof backend === 'string') {
+      switch (backend) {
+        case 'production':
+        case 'prod': {
+          return APIClient.BACKEND.PRODUCTION;
+        }
+        default: {
+          return APIClient.BACKEND.STAGING;
+        }
+      }
+    } else if (typeof backend === 'undefined') {
+      return APIClient.BACKEND.STAGING;
+    } else {
+      return backend;
     }
   }
 }

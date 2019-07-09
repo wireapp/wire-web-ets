@@ -120,7 +120,7 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
-    }
+    },
   );
 
   router.get('/api/v1/instance/:instanceId/?', (req, res) => {
@@ -207,7 +207,7 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
       } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack});
       }
-    }
+    },
   );
 
   router.get('/api/v1/instance/:instanceId/clients/?', async (req: express.Request, res: express.Response) => {

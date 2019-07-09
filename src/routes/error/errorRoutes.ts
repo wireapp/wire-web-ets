@@ -25,7 +25,7 @@ import {formatDate} from '../../utils';
 
 const router = express.Router();
 
-const logger = logdown('@wireapp/wire-web-ets/routes/error/errorRoutes', {
+const logger = logdown('@wireapp/wire-web-ets/errorRoutes', {
   logger: console,
   markdown: false,
 });
