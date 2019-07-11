@@ -190,10 +190,7 @@ yarn start
 
 #### Request
 
-**Notes**:
-
-- You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
-- `deviceClass` can be set to any string if `backend` is unset and `customBackend` is set.
+**Note**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
 
 ```json
 {
@@ -239,11 +236,7 @@ yarn start
 
 #### Request
 
-**Notes**:
-
-- You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
-
-- The device class can be set to any string if `backend` is unset and `customBackend` is set.
+**Note**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
 
 ```json
 {

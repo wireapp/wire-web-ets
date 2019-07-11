@@ -27,7 +27,7 @@ import {InstanceService} from '../../InstanceService';
 export interface InstanceRequest {
   backend?: string;
   customBackend?: BackendData;
-  deviceClass?: string;
+  deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
   deviceLabel?: string;
   deviceName: string;
   email: string;
@@ -61,15 +61,9 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
       body: {
         backend: validateBackend.allow('').optional(),
         customBackend: validateCustomBackend.optional(),
-        deviceClass: Joi.when('customBackend', {
-          is: validateCustomBackend.required(),
-          otherwise: Joi.string().valid([
-            ClientClassification.DESKTOP,
-            ClientClassification.PHONE,
-            ClientClassification.TABLET,
-          ]),
-          then: Joi.string().allow(''),
-        }).optional(),
+        deviceClass: Joi.string()
+          .valid([ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET])
+          .optional(),
         deviceLabel: Joi.string()
           .allow('')
           .optional(),

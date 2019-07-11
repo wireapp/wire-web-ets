@@ -33,9 +33,7 @@ Delete all clients
 
 ##### Description:
 
-**Notes**:
-
-You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
+**Note**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
 
 ##### Parameters
 
@@ -738,14 +736,11 @@ Type can be `0` (Disabled) or `1` (Enabled).
 
 #### Login
 
-**Notes**:
-
-You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
-`deviceClass` can be set to any string if `backend` is unset and `customBackend` is set.
+**Note**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| Login |  | **Notes**:  You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence. `deviceClass` can be set to any string if `backend` is unset and `customBackend` is set. |  |
+| Login |  | **Note**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence. |  |
 
 #### Mention
 
