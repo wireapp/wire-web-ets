@@ -98,5 +98,5 @@
     "test": "ts-node -P tsconfig.jasmine.json node_modules/jasmine/bin/jasmine --config=jasmine.json",
     "version": "yarn dist"
   },
-  "version": "1.19.0"
+  "version": "1.19.1"
 }
