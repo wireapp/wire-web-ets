@@ -335,7 +335,7 @@ Send a delivery confirmation for a message
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes |  |
+| body | body |  | Yes | object & [Confirmation](#confirmation) |
 
 ##### Responses
 
@@ -429,7 +429,7 @@ Send a file to a conversation
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  |  |
+| 200 |  | [InstanceAndName](#instanceandname) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -451,7 +451,7 @@ Send an image to a conversation
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  |  |
+| 200 |  | [InstanceAndName](#instanceandname) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -467,13 +467,13 @@ Send a location to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes |  |
+| body | body |  | Yes | object & [Location](#location) |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  |  |
+| 200 |  | [InstanceAndName](#instanceandname) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -495,7 +495,7 @@ Send a ping to a conversation
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  |  |
+| 200 |  | [InstanceAndName](#instanceandname) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -511,13 +511,13 @@ Send a reaction to a message
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes |  |
+| body | body |  | Yes | object & [Reaction](#reaction) |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  |  |
+| 200 |  | [InstanceAndName](#instanceandname) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -539,7 +539,7 @@ Send a session reset message
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  |  |
+| 200 |  | [InstanceAndName](#instanceandname) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -555,13 +555,13 @@ Send a text message to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes |  |
+| body | body |  | Yes | [TextMessage](#textmessage) & object |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  |  |
+| 200 |  | [InstanceAndName](#instanceandname) & object |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -599,13 +599,13 @@ Update a text message in a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes |  |
+| body | body |  | Yes | [TextMessage](#textmessage) & object |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  |  |
+| 200 |  | [InstanceAndName](#instanceandname) |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
