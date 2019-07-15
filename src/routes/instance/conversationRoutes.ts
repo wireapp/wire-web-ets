@@ -342,7 +342,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .optional(),
         latitude: Joi.number().required(),
         legalHoldStatus: Joi.number()
-          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .valid([LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
           .optional(),
         locationName: Joi.string()
           .allow('')
@@ -406,7 +406,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .default(false)
           .optional(),
         legalHoldStatus: Joi.number()
-          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .valid([LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
           .optional(),
         linkPreview: Joi.object(validateLinkPreview).optional(),
         mentions: Joi.array()
@@ -500,7 +500,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .default(false)
           .optional(),
         legalHoldStatus: Joi.number()
-          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .valid([LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
           .optional(),
         messageTimer: Joi.number()
           .default(0)
@@ -543,7 +543,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .uuid()
           .required(),
         legalHoldStatus: Joi.number()
-          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .valid([LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
           .optional(),
         originalMessageId: Joi.string()
           .uuid()
@@ -595,7 +595,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .uuid()
           .required(),
         legalHoldStatus: Joi.number()
-          .valid([LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .valid([LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
           .optional(),
         linkPreview: Joi.object(validateLinkPreview).optional(),
         mentions: Joi.array()
