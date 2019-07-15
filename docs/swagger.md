@@ -33,9 +33,7 @@ Delete all clients
 
 ##### Description:
 
-**Notes**:
-
-You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
+**Note**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
 
 ##### Parameters
 
@@ -165,7 +163,7 @@ Set a user's availability
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body | Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`). | Yes | [Availability](#availability) |
+| body | body | Type can be `0` (none), `1` (available), `2` (away), `3` (busy). | Yes | [Availability](#availability) |
 
 ##### Responses
 
@@ -683,7 +681,7 @@ Get the complete log as plain text
 | ---- | ---- | ----------- | -------- |
 | firstMessageId | string (uuid) |  | Yes |
 | moreMessageIds | [ string (uuid) ] |  | No |
-| type | integer | Type can be `0` (Delivered) or `1` (Read). | Yes |
+| type | integer | Type can be `0` (delivered) or `1` (read). | Yes |
 
 #### ConfirmationWithSender
 
@@ -706,11 +704,11 @@ Get the complete log as plain text
 
 #### LegalHoldStatus
 
-Type can be `0` (Disabled) or `1` (Enabled).
+Type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| LegalHoldStatus | integer | Type can be `0` (Disabled) or `1` (Enabled). |  |
+| LegalHoldStatus | integer | Type can be `0` (unknown), `1` (disabled) or `2` (enabled). |  |
 
 #### LinkPreview
 
@@ -738,14 +736,11 @@ Type can be `0` (Disabled) or `1` (Enabled).
 
 #### Login
 
-**Notes**:
-
-You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
-`deviceClass` can be set to any string if `backend` is unset and `customBackend` is set.
+**Note**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| Login |  | **Notes**:  You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence. `deviceClass` can be set to any string if `backend` is unset and `customBackend` is set. |  |
+| Login |  | **Note**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence. |  |
 
 #### Mention
 

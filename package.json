@@ -6,8 +6,8 @@
     "@types/hapi__joi": "15.0.2",
     "@types/helmet": "0.0.43",
     "@types/node": "~10",
-    "@wireapp/core": "12.15.3",
-    "@wireapp/lru-cache": "3.3.1",
+    "@wireapp/core": "12.17.5",
+    "@wireapp/lru-cache": "3.3.2",
     "body-parser": "1.19.0",
     "celebrate": "10.0.1",
     "compression": "1.7.4",
@@ -20,7 +20,7 @@
     "pm2-logrotate": "2.6.0",
     "pure-uuid": "1.5.7",
     "swagger-ui-express": "4.0.7",
-    "typescript": "3.5.2"
+    "typescript": "3.5.3"
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
@@ -33,7 +33,7 @@
     "cross-env": "5.2.0",
     "husky": "3.0.0",
     "jasmine": "3.4.0",
-    "lint-staged": "9.0.2",
+    "lint-staged": "9.2.0",
     "logdown": "3.2.8",
     "nock": "10.0.6",
     "prettier": "1.18.2",

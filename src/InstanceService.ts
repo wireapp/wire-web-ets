@@ -83,7 +83,7 @@ export interface Instance {
 export interface InstanceCreationOptions {
   backend?: string;
   customBackend?: BackendData;
-  deviceClass?: string;
+  deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
   deviceLabel?: string;
   deviceName?: string;
   instanceName?: string;
@@ -145,7 +145,7 @@ export class InstanceService {
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
-      classification: (options.deviceClass as any) || ClientClassification.DESKTOP,
+      classification: options.deviceClass || ClientClassification.DESKTOP,
       cookieLabel: 'default',
       label: options.deviceLabel,
       model: options.deviceName || `E2E Test Server v${version}`,

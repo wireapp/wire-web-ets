@@ -190,10 +190,7 @@ yarn start
 
 #### Request
 
-**Notes**:
-
-- You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
-- `deviceClass` can be set to any string if `backend` is unset and `customBackend` is set.
+**Note**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
 
 ```json
 {
@@ -239,11 +236,7 @@ yarn start
 
 #### Request
 
-**Notes**:
-
-- You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
-
-- The device class can be set to any string if `backend` is unset and `customBackend` is set.
+**Note**: You can either set `backend` or `customBackend`. If you set neither, the "staging" backend will be used. If you set both, `backend` takes the precedence.
 
 ```json
 {
@@ -284,7 +277,7 @@ yarn start
 
 #### Request
 
-Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
+Type can be `0` (none), `1` (available), `2` (away), `3` (busy).
 
 ```json
 {
@@ -374,16 +367,16 @@ Type can be `0` (`NONE`), `1` (`AVAILABLE`), `2` (`AWAY`), `3` (`BUSY`).
 
 #### Response
 
-Confirmation type can be `0` (Delivered) or `1` (Read).
+Confirmation type can be `0` (delivered) or `1` (read).
 
-Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 [
   {
     "content?": {
       "expectsReadConfirmation?": "<boolean>",
-      "legalHoldStatus?": "<0|1>",
+      "legalHoldStatus?": "<0|1|2>",
       "text": "<string>"
     },
     "confirmations?": [
@@ -402,7 +395,7 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
       {
         "conversationId": "<string in UUID format>",
         "from": "<string in UUID format>",
-        "legalHoldStatus?": "<0|1>",
+        "legalHoldStatus?": "<0|1|2>",
         "originalMessageId": "<string in UUID format>",
         "type": "❤️"
       }
@@ -522,7 +515,7 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 #### Request
 
-Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
@@ -530,7 +523,7 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
   "data": "<string in base64 format>",
   "expectsReadConfirmation?": "<boolean>",
   "fileName": "<string>",
-  "legalHoldStatus?": "<0|1>",
+  "legalHoldStatus?": "<0|1|2>",
   "messageTimer?": "<number>",
   "type": "<string>"
 }
@@ -550,7 +543,7 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 #### Request
 
-Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
@@ -558,7 +551,7 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
   "data": "<string in base64 format>",
   "expectsReadConfirmation?": "<boolean>",
   "height": "<number>",
-  "legalHoldStatus?": "<0|1>",
+  "legalHoldStatus?": "<0|1|2>",
   "messageTimer?": "<number>",
   "type": "<string>",
   "width": "<number>"
@@ -579,14 +572,14 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 #### Request
 
-Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
   "conversationId": "<string>",
   "expectsReadConfirmation?": "<boolean>",
   "latitude": "<number>",
-  "legalHoldStatus?": "<0|1>",
+  "legalHoldStatus?": "<0|1|2>",
   "locationName?": "<string>",
   "longitude": "<number>",
   "messageTimer?": "<number>",
@@ -608,13 +601,13 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 #### Request
 
-Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
-  "legalHoldStatus?": "<0|1>",
+  "legalHoldStatus?": "<0|1|2>",
   "messageTimer?": "<number>"
 }
 ```
@@ -633,12 +626,12 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 #### Request
 
-Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
   "conversationId": "<string in UUID format>",
-  "legalHoldStatus?": "<0|1>",
+  "legalHoldStatus?": "<0|1|2>",
   "originalMessageId": "<string in UUID format>",
   "type": "<'❤️'|''>"
 }
@@ -678,13 +671,13 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 #### Request
 
-Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
-  "legalHoldStatus?": "<0|1>",
+  "legalHoldStatus?": "<0|1|2>",
   "linkPreview?": {
     "image?": {
       "data": "<string in base64 format>",
@@ -752,14 +745,14 @@ Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
 
 #### Request
 
-Legal Hold status type can be `0` (Disabled) or `1` (Enabled).
+Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
   "firstMessageId": "<string in UUID format>",
-  "legalHoldStatus?": "<0|1>",
+  "legalHoldStatus?": "<0|1|2>",
   "linkPreview?": {
     "image?": {
       "data": "<string in base64 format>",
