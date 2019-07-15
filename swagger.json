@@ -165,7 +165,7 @@
     },
     "LegalHoldStatus": {
       "description": "Type can be `0` (unknown), `1` (disabled) or `2` (enabled).",
-      "enum": [0, 1],
+      "enum": [0, 1, 2],
       "type": "integer"
     },
     "LinkPreview": {
