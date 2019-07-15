@@ -108,7 +108,7 @@
           "type": "array"
         },
         "type": {
-          "description": "Type can be `0` (Delivered) or `1` (Read).",
+          "description": "Type can be `0` (delivered) or `1` (read).",
           "enum": [0, 1],
           "type": "integer"
         }
@@ -164,7 +164,7 @@
       "type": "object"
     },
     "LegalHoldStatus": {
-      "description": "Type can be `0` (Disabled) or `1` (Enabled).",
+      "description": "Type can be `0` (unknown), `1` (disabled) or `2` (enabled).",
       "enum": [0, 1],
       "type": "integer"
     },
@@ -771,7 +771,7 @@
             "type": "string"
           },
           {
-            "description": "Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`).",
+            "description": "Type can be `0` (none), `1` (available), `2` (away), `3` (busy).",
             "in": "body",
             "name": "body",
             "required": true,

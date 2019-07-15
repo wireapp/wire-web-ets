@@ -163,7 +163,7 @@ Set a user's availability
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body | Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`). | Yes | [Availability](#availability) |
+| body | body | Type can be `0` (none), `1` (available), `2` (away), `3` (busy). | Yes | [Availability](#availability) |
 
 ##### Responses
 
@@ -335,7 +335,7 @@ Send a delivery confirmation for a message
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes | object & [Confirmation](#confirmation) |
+| body | body |  | Yes |  |
 
 ##### Responses
 
@@ -429,7 +429,7 @@ Send a file to a conversation
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | [InstanceAndName](#instanceandname) |
+| 200 |  |  |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -451,7 +451,7 @@ Send an image to a conversation
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | [InstanceAndName](#instanceandname) |
+| 200 |  |  |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -467,13 +467,13 @@ Send a location to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes | object & [Location](#location) |
+| body | body |  | Yes |  |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | [InstanceAndName](#instanceandname) |
+| 200 |  |  |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -495,7 +495,7 @@ Send a ping to a conversation
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | [InstanceAndName](#instanceandname) |
+| 200 |  |  |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -511,13 +511,13 @@ Send a reaction to a message
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes | object & [Reaction](#reaction) |
+| body | body |  | Yes |  |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | [InstanceAndName](#instanceandname) |
+| 200 |  |  |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -539,7 +539,7 @@ Send a session reset message
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | [InstanceAndName](#instanceandname) |
+| 200 |  |  |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -555,13 +555,13 @@ Send a text message to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes | [TextMessage](#textmessage) & object |
+| body | body |  | Yes |  |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | [InstanceAndName](#instanceandname) & object |
+| 200 |  |  |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -599,13 +599,13 @@ Update a text message in a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes | [TextMessage](#textmessage) & object |
+| body | body |  | Yes |  |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 |  | [InstanceAndName](#instanceandname) |
+| 200 |  |  |
 | 404 | Not found | [NotFoundError](#notfounderror) |
 | 422 | Validation error | [ValidationError](#validationerror) |
 
@@ -681,7 +681,7 @@ Get the complete log as plain text
 | ---- | ---- | ----------- | -------- |
 | firstMessageId | string (uuid) |  | Yes |
 | moreMessageIds | [ string (uuid) ] |  | No |
-| type | integer | Type can be `0` (Delivered) or `1` (Read). | Yes |
+| type | integer | Type can be `0` (delivered) or `1` (read). | Yes |
 
 #### ConfirmationWithSender
 
@@ -704,11 +704,11 @@ Get the complete log as plain text
 
 #### LegalHoldStatus
 
-Type can be `0` (Disabled) or `1` (Enabled).
+Type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| LegalHoldStatus | integer | Type can be `0` (Disabled) or `1` (Enabled). |  |
+| LegalHoldStatus | integer | Type can be `0` (unknown), `1` (disabled) or `2` (enabled). |  |
 
 #### LinkPreview
 
