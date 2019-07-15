@@ -395,7 +395,7 @@ Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
       {
         "conversationId": "<string in UUID format>",
         "from": "<string in UUID format>",
-        "legalHoldStatus?": "<0|1>",
+        "legalHoldStatus?": "<0|1|2>",
         "originalMessageId": "<string in UUID format>",
         "type": "❤️"
       }
