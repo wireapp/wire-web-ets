@@ -434,17 +434,17 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
-"@wireapp/api-client@6.1.11":
-  version "6.1.11"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-6.1.11.tgz#31620876b5509e0ca68e24daf129b09b47a2a3d6"
-  integrity sha512-+29+t1jTxU6/rB0vvTni79MBT2pRHk7Hi1oszLuqA1lEK019k2R8K+iipHqcosfqtK5/WArP3zgjJSFOVEFAig==
+"@wireapp/api-client@6.1.12":
+  version "6.1.12"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-6.1.12.tgz#d3b72121a4f0c7245418256fa487d744224533a9"
+  integrity sha512-9vO1fDjcOesXTKl1JEV2hSSU7SrPNuuoZtJ+s/ixBd5wcE3SSR9pzDyPLaW0DXLS3uu9XPBjem3E+wmiQNKobg==
   dependencies:
     "@types/node" "~10"
     "@types/spark-md5" "3.0.1"
     "@types/tough-cookie" "2.3.5"
     "@wireapp/commons" "2.2.8"
     "@wireapp/priority-queue" "1.2.8"
-    "@wireapp/store-engine" "3.6.2"
+    "@wireapp/store-engine" "3.6.3"
     axios "0.19.0"
     html5-websocket "2.0.4"
     logdown "3.2.8"
@@ -452,10 +452,10 @@
     spark-md5 "3.0.0"
     tough-cookie "3.0.1"
 
-"@wireapp/cbor@4.3.7":
-  version "4.3.7"
-  resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-4.3.7.tgz#753bc97b0861500876a617d0fdf1809ccaabbfbb"
-  integrity sha512-NxGVToOrq5dy1oiMyW09HdzHdYrKKDRKFzzGc3j9dDJvO4iayctqNVv5PRTp4a3Jtw4rLYzF+VjnM5xBkGKizA==
+"@wireapp/cbor@4.3.8":
+  version "4.3.8"
+  resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-4.3.8.tgz#5b1a49ce1bda1a5fd2b1d7eaff37f39b7b9b1eb1"
+  integrity sha512-9FJPFsy+N+YuRgOZZ91O0z4vW9/oP2adimwMmKEpJsNYxNWUgtoBiJjqxjKaEvDIH7wGOtNR1YHnbSHUyM9U6A==
 
 "@wireapp/commons@2.2.8":
   version "2.2.8"
@@ -473,34 +473,34 @@
     platform "1.3.5"
     url-search-params-polyfill "7.0.0"
 
-"@wireapp/core@12.17.26":
-  version "12.17.26"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-12.17.26.tgz#82bc89c52124bede74b218eba5eab51f5fd36f65"
-  integrity sha512-GBtHJTu7GkBQ0x/by2h8G7k1XIg7cdzV162+B5MMSSXNVLUVVS2jinWMAXIhIHlgmXoWsfmHCOymju5++aaLxQ==
+"@wireapp/core@12.17.27":
+  version "12.17.27"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-12.17.27.tgz#a545b29ea8b9261654464d12d99f9255b54b8d85"
+  integrity sha512-0djyzqdBDzIGVRKMHTf2CZs4UFbQvzNC9/TOAAwoEbr1JKits3/7nGUSBFMz0dl7G1c0m7GLNCViClYmxFR9ZQ==
   dependencies:
     "@types/long" "4.0.0"
     "@types/node" "~10"
-    "@wireapp/api-client" "6.1.11"
-    "@wireapp/cryptobox" "11.4.13"
+    "@wireapp/api-client" "6.1.12"
+    "@wireapp/cryptobox" "11.4.14"
     "@wireapp/protocol-messaging" "1.24.2"
-    "@wireapp/store-engine" "3.6.2"
-    bazinga64 "5.5.8"
+    "@wireapp/store-engine" "3.6.3"
+    bazinga64 "5.5.9"
     hash.js "1.1.7"
     logdown "3.2.8"
     protobufjs "6.8.8"
     pure-uuid "1.5.7"
 
-"@wireapp/cryptobox@11.4.13":
-  version "11.4.13"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-11.4.13.tgz#8f1c434c8ee8dc81da0a0ccae25a1d4e3cf9c279"
-  integrity sha512-o2m9/xGhAUL6hlLwYKQytfZVs0Lf0EnzUqMj4ev28tN9PfkhsZ/xpIN2uXog8RrzXAtFd9I0IwexpnCB8Rs24A==
+"@wireapp/cryptobox@11.4.14":
+  version "11.4.14"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-11.4.14.tgz#1f5cbf0f8bc08194f289f68417d5b3632b909eaf"
+  integrity sha512-bTZ/ItYFY+ImhIf3i13qRoCeei0qKgA6oamZ6culOh8tvRHgI07qzAfyTDm4Z74GoIcu0QwDMOIF3dOdoH/CiQ==
   dependencies:
     "@types/node" "~10"
     "@wireapp/lru-cache" "3.3.6"
     "@wireapp/priority-queue" "1.2.8"
-    "@wireapp/proteus" "9.3.10"
-    "@wireapp/store-engine" "3.6.2"
-    bazinga64 "5.5.8"
+    "@wireapp/proteus" "9.3.11"
+    "@wireapp/store-engine" "3.6.3"
+    bazinga64 "5.5.9"
     logdown "3.2.8"
 
 "@wireapp/lru-cache@3.3.6":
@@ -521,15 +521,15 @@
     "@types/node" "~10"
     pure-uuid "1.5.7"
 
-"@wireapp/proteus@9.3.10":
-  version "9.3.10"
-  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-9.3.10.tgz#976793588f42a161e9151ab3ae9a752586f7bf86"
-  integrity sha512-rolkR0ufuffz0jft386OZiCDRbs3lKd0DEGqsuQ+QuwNXPW697arKPiWUorOQVQ6NCe3SMYUPsq/RpEDP6JnTw==
+"@wireapp/proteus@9.3.11":
+  version "9.3.11"
+  resolved "https://registry.yarnpkg.com/@wireapp/proteus/-/proteus-9.3.11.tgz#a1ba6b0fde3d5aaf45808f3f8b0da9b27c26737b"
+  integrity sha512-dPr0TLG061oZrqxfMRd1p2o2J9ZyIEOSO87jtdTUjUC5zag8fnTlDVijetNyRkx30bk3wQE4yWndjkd2X2YAUw==
   dependencies:
     "@types/chai" "4.1.7"
     "@types/ed2curve" "0.2.2"
     "@types/node" "~10"
-    "@wireapp/cbor" "4.3.7"
+    "@wireapp/cbor" "4.3.8"
     ed2curve "0.2.1"
     libsodium-wrappers-sumo "0.7.5"
 
@@ -540,10 +540,10 @@
   dependencies:
     protobufjs "6.8.8"
 
-"@wireapp/store-engine@3.6.2":
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/@wireapp/store-engine/-/store-engine-3.6.2.tgz#91d018ef719e3189ed01e3beb17610b4b9080f9e"
-  integrity sha512-Tckrad52rOp8VWT/QOO+e4tydSArGXrQi/amOhN1tl1YMUCd89b8rUibkR+K9PLoGxawYPksHYqqBCjSkOusbg==
+"@wireapp/store-engine@3.6.3":
+  version "3.6.3"
+  resolved "https://registry.yarnpkg.com/@wireapp/store-engine/-/store-engine-3.6.3.tgz#50c8de70ce7dd38e0392d286de53672f33817d21"
+  integrity sha512-xauzZ+Y/TlrvUO9bn3BmH+WzhfsVVLEOh7DRbh3RWgyoUkyfXWVcxFWEjvw8y1XACYITjh2jXHeL1VPtLlGDyg==
   dependencies:
     "@types/bro-fs" "0.4.2"
     "@types/filesystem" "0.0.29"
@@ -800,10 +800,10 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
-bazinga64@5.5.8:
-  version "5.5.8"
-  resolved "https://registry.yarnpkg.com/bazinga64/-/bazinga64-5.5.8.tgz#ab47e335029c0c1b70eedfe57523aac613af1b53"
-  integrity sha512-6mYi/uDlNG5Ex5aBPNB2UwW2zeEU+8aqkd0ZyrWPlKfJMFMIXIhASjWcLEHJHly0hDgu5R12tlwbCFvGFqm1lQ==
+bazinga64@5.5.9:
+  version "5.5.9"
+  resolved "https://registry.yarnpkg.com/bazinga64/-/bazinga64-5.5.9.tgz#3faeb6f8e9a9469a6f7595ba3ebf81a69553000c"
+  integrity sha512-lcD5mEg+Z4Ty25pZqgrBk+/SAABG0tOyY8Cls0VBOZy+ejV8HLtb99kPNtWCkVxEcvXEA4Rhk61jhepST5Jedw==
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.1"
