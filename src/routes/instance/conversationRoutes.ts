@@ -162,7 +162,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {archive, conversationId}: ArchiveRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
@@ -192,7 +192,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {mute, conversationId}: MuteRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
@@ -221,7 +221,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {conversationId}: MessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
@@ -253,7 +253,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {conversationId, messageId}: DeletionRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
@@ -285,7 +285,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {conversationId, messageId}: DeletionRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
@@ -314,7 +314,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {conversationId}: MessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
@@ -355,7 +355,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {
         conversationId,
         expectsReadConfirmation,
@@ -420,7 +420,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {
         conversationId,
         expectsReadConfirmation,
@@ -508,7 +508,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {conversationId, expectsReadConfirmation, legalHoldStatus, messageTimer}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
@@ -554,7 +554,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {conversationId, legalHoldStatus, originalMessageId, type}: ReactionRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
@@ -606,7 +606,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {
         conversationId,
         expectsReadConfirmation,
