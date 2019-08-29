@@ -73,7 +73,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {
         conversationId,
         data: base64Data,
@@ -143,7 +143,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {
         conversationId,
         data: base64Data,

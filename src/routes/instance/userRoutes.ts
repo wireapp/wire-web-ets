@@ -43,7 +43,7 @@ export const userRoutes = (instanceService: InstanceService): express.Router => 
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {teamId, type}: AvailabilityRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {

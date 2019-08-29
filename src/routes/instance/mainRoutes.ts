@@ -118,7 +118,7 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
   );
 
   router.get('/api/v1/instance/:instanceId/?', (req, res) => {
-    const {instanceId = ''}: {instanceId: string} = req.params;
+    const {instanceId = ''} = req.params;
 
     if (!instanceService.instanceExists(instanceId)) {
       return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -141,7 +141,7 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
   });
 
   router.delete('/api/v1/instance/:instanceId/?', async (req, res) => {
-    const {instanceId = ''}: {instanceId: string} = req.params;
+    const {instanceId = ''} = req.params;
 
     if (!instanceService.instanceExists(instanceId)) {
       return res.status(400).json({error: `Instance "${instanceId}" not found.`});
@@ -205,7 +205,7 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
   );
 
   router.get('/api/v1/instance/:instanceId/clients/?', async (req: express.Request, res: express.Response) => {
-    const {instanceId = ''}: {instanceId: string} = req.params;
+    const {instanceId = ''} = req.params;
 
     if (!instanceService.instanceExists(instanceId)) {
       return res.status(400).json({error: `Instance "${instanceId}" not found.`});
