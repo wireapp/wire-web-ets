@@ -73,7 +73,7 @@ describe('Routes', () => {
 
     nock(backendURL)
       .post(AuthAPI.URL.LOGIN)
-      .query({persist: true})
+      .query({persist: 'true'})
       .reply(HTTP_CODE_OK, accessTokenData)
       .persist();
 
@@ -94,7 +94,7 @@ describe('Routes', () => {
 
     nock(backendURL)
       .post(new RegExp(`${ConversationAPI.URL.CONVERSATIONS}/.*/otr/messages`))
-      .query({ignore_missing: false})
+      .query({ignore_missing: 'false'})
       .reply(HTTP_CODE_OK)
       .persist();
 
