@@ -475,11 +475,6 @@
     bazinga64 "5.5.16"
     logdown "3.2.8"
 
-"@wireapp/lru-cache@3.3.13":
-  version "3.3.13"
-  resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.3.13.tgz#43bd77432bc43a56b1bf3a0d6d9e2a99d19462b6"
-  integrity sha512-z/zK/xBJBJZl+4HxNKXkd/3p3YDaj+/N/2mgVj6IjMw55K590/fTnH1LHqY7GpMEwH8khzT9+6yOhKI3ewmb7w==
-
 "@wireapp/lru-cache@3.3.14":
   version "3.3.14"
   resolved "https://registry.yarnpkg.com/@wireapp/lru-cache/-/lru-cache-3.3.14.tgz#b9314180f9a77d0a90f6cbdbd84f06f1bcaf504b"
