@@ -406,10 +406,10 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
-"@wireapp/api-client@6.5.3":
-  version "6.5.3"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-6.5.3.tgz#b7c9cb0975b128c7ec2404a3ad62a9e7918e057f"
-  integrity sha512-LFqmfEX8/k0a7bJZR6JgJ+EcFr6sqNuGOsfvzbi20g72iaUr4HqVDrZ/0bJqlcqMFmERb//fhp5/8E6hu+eMmQ==
+"@wireapp/api-client@6.5.4":
+  version "6.5.4"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-6.5.4.tgz#478ce2f5ff210d1910ac741b21a2f007850f43f7"
+  integrity sha512-fAJR/Ds5qQ7WBrGB7E4A2azVDDnpQJJEFuhVpcBhKU43xFCFk2BnwDp+lhG5Wo29jucdoubpzDCvXkGPJZw4WA==
   dependencies:
     "@types/node" "~10"
     "@types/spark-md5" "3.0.1"
@@ -445,14 +445,14 @@
     platform "1.3.5"
     url-search-params-polyfill "7.0.0"
 
-"@wireapp/core@12.17.66":
-  version "12.17.66"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-12.17.66.tgz#3e84eef15d436d715aea7dbdc2a28505006014ab"
-  integrity sha512-sdWB/kw3gXLhwNluNvHU+IPL42dmW6TOvdIsbLXU7hdQhGYdP5JBT9LPDdvrJbJn26m51dJxq4Xzf5Jr7OZodA==
+"@wireapp/core@12.17.67":
+  version "12.17.67"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-12.17.67.tgz#b96c7a30d9eb3ca34b01a3d5494bb99b671128a9"
+  integrity sha512-i/JUu18+5hwGWgk56QrWc+8vDUqHQi7KmG76G7ZLd8czpBoltQyeYl+BDM4Cz7M+0KxOW2wTcem2ftgvCvG15Q==
   dependencies:
     "@types/long" "4.0.0"
     "@types/node" "~10"
-    "@wireapp/api-client" "6.5.3"
+    "@wireapp/api-client" "6.5.4"
     "@wireapp/cryptobox" "11.4.34"
     "@wireapp/protocol-messaging" "1.24.2"
     "@wireapp/store-engine" "3.9.12"
