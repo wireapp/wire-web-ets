@@ -6,7 +6,7 @@
     "@types/hapi__joi": "15.0.4",
     "@types/helmet": "0.0.44",
     "@types/node": "~10",
-    "@wireapp/core": "12.17.70",
+    "@wireapp/core": "12.17.74",
     "@wireapp/lru-cache": "3.3.16",
     "body-parser": "1.19.0",
     "celebrate": "10.0.1",
