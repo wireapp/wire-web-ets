@@ -406,10 +406,10 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
-"@wireapp/api-client@6.6.4":
-  version "6.6.4"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-6.6.4.tgz#5b4998232020da7387861ad86a0e5974be2fa6e6"
-  integrity sha512-7sEvRjTZCLgNLl4ZvgUTbyV3Y/OWINs+hKM6eJepG6Tm2dIz4xnxIvlL/gv+5+XX5909SXF/0r9zSmnEL/K7Kg==
+"@wireapp/api-client@6.6.6":
+  version "6.6.6"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-6.6.6.tgz#e7f7eddb734074bf340f4f75004cb37cbbda0269"
+  integrity sha512-+BaCeX6mDl0xdyPS0Wcmqs2Sw4qfW50F5jTQpuYCrHCv/m7LAGcyt+UNCNMUt5MsJzrq0AnBdbycAkf+k1SIaA==
   dependencies:
     "@types/node" "~10"
     "@types/spark-md5" "3.0.1"
@@ -445,15 +445,15 @@
     platform "1.3.5"
     url-search-params-polyfill "7.0.0"
 
-"@wireapp/core@12.17.75":
-  version "12.17.75"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-12.17.75.tgz#29ab37076411d09090e9235b0cebc78fc443dced"
-  integrity sha512-X1WwkCS53vfCesoRdeC9xNU+FUYGT86q4h4txlRDnh0TSjlLd8TUzP0wV3GhxoH48+lSCsMIXyaGCcqEJJUJUA==
+"@wireapp/core@12.17.77":
+  version "12.17.77"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-12.17.77.tgz#418d3b9b13d57ddf935d3504d614b199326d661e"
+  integrity sha512-1ynJ7ImAK2JFP2aERjaoPSSQJjo43aGd1v8A674whUvGZfceKNjhPtf+wAnsVCcFrv2pESaThVmGRXgsoVumqA==
   dependencies:
     "@types/long" "4.0.0"
     "@types/node" "~10"
-    "@wireapp/api-client" "6.6.4"
-    "@wireapp/cryptobox" "11.4.37"
+    "@wireapp/api-client" "6.6.6"
+    "@wireapp/cryptobox" "11.4.38"
     "@wireapp/protocol-messaging" "1.24.2"
     "@wireapp/store-engine" "3.9.15"
     bazinga64 "5.5.19"
@@ -462,10 +462,10 @@
     protobufjs "6.8.8"
     pure-uuid "1.5.7"
 
-"@wireapp/cryptobox@11.4.37":
-  version "11.4.37"
-  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-11.4.37.tgz#9e45dd2bb73d3d5e630c1bebc7b2530862ad99f8"
-  integrity sha512-5FHGju5z/VQ0wvFEchaI4RLC/xvfYZqDP+9VXWejn8geFv0Fzl3t9eHXi7mcQ06gzuC87N1penqE86IwkAHU7g==
+"@wireapp/cryptobox@11.4.38":
+  version "11.4.38"
+  resolved "https://registry.yarnpkg.com/@wireapp/cryptobox/-/cryptobox-11.4.38.tgz#69c782d33a40b903fb4aa9fb0c5599c11e1b48b3"
+  integrity sha512-5spnFs4wjq3XK0nqZAbhBCkCCrGr4RzXDc0HybQh8rHgCqPE1ubjpOD5UYKq1B39Z0TnTPI2ahx2/YW0DBYjlw==
   dependencies:
     "@types/node" "~10"
     "@wireapp/lru-cache" "3.3.18"
