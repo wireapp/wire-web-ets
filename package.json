@@ -24,7 +24,7 @@
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
-    "@types/jasmine": "3.4.0",
+    "@types/jasmine": "3.4.1",
     "@types/request": "2.48.3",
     "@types/swagger-ui-express": "3.0.1",
     "@wireapp/prettier-config": "0.3.0",
