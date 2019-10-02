@@ -20,7 +20,7 @@
 import {APIClient} from '@wireapp/api-client';
 import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
 import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/dist/commonjs/client/';
-import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/conversation/data/';
 import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/commonjs/http/';
 import {Account} from '@wireapp/core';
 import {AvailabilityType} from '@wireapp/core/dist/broadcast/';
@@ -29,6 +29,7 @@ import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist
 import {
   ClearedContent,
   ConfirmationContent,
+  ConversationContent,
   DeletedContent,
   EditedTextContent,
   FileContent,
@@ -758,7 +759,7 @@ export class InstanceService {
       if (metaPayload && isAssetContent(payload.content) && isAssetContent(metaPayload.content)) {
         payload.content.original = metaPayload.content.original;
       }
-      stripAsset(payload.content);
+      stripAsset(payload.content as ConversationContent);
       instance.messages.set(payload.id, payload);
     });
 

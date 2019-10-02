@@ -17,7 +17,7 @@
  *
  */
 
-import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/conversation/data/';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 

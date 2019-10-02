@@ -131,9 +131,15 @@ describe('Routes', () => {
       .persist();
 
     nock(backendURL)
-      .get(`${NotificationAPI.URL.NOTIFICATION}/last`)
+      .get(`${NotificationAPI.URL.NOTIFICATION}/${NotificationAPI.URL.LAST}`)
       .query({client: clientId})
       .reply(HTTP_CODE_OK, {})
+      .persist();
+
+    nock(backendURL)
+      .get(NotificationAPI.URL.NOTIFICATION)
+      .query({client: clientId, size: 10000})
+      .reply(HTTP_CODE_OK, {has_more: false, notifications: []})
       .persist();
 
     nock(backendURL)
