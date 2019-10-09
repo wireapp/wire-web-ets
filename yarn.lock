@@ -217,10 +217,12 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@types/ansi-regex@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@types/ansi-regex/-/ansi-regex-4.0.0.tgz#cb20bb66da7700ea9b26f16971f03f0e092eddad"
-  integrity sha512-r1W316vjsZXn1/csLC4HcCJs6jIHIzksHJd7xx+Dl+PAb0S2Dh9cR8ZsIMEfGmbBtP7JNWlf2KKahSkDP6rg3g==
+"@types/ansi-regex@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/ansi-regex/-/ansi-regex-5.0.0.tgz#569a5189a92cc46d63fb2ad91e6b130f33d999c1"
+  integrity sha512-SQafVL3pXFh/5qq/nN6p5858g//zSVzcb8JzCLtoVxm8YNPggMQfEIm7aaTNysxpw1S+lFTaW8kv+aR0/CEhCA==
+  dependencies:
+    ansi-regex "*"
 
 "@types/body-parser@*":
   version "1.17.1"
@@ -406,15 +408,15 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
-"@wireapp/api-client@7.1.1":
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-7.1.1.tgz#8f5ae9de946c4109ef8d71b67c8c7b5ad1971905"
-  integrity sha512-TcS5Rde5IZmW1Wpl0STfAhm8g6az85ip93kz6aDmTPCotRKm/dg21j109XNgqh71bR8JSJD2ZccoiUR/OS7+PA==
+"@wireapp/api-client@7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@wireapp/api-client/-/api-client-7.1.2.tgz#c8cd291906257b843ed5e5172302dc2e7076df96"
+  integrity sha512-aIcj4FDp/zqw+KWWEWAia0B1Y24JlTH3UyMXvfwpw699K0plvUXwUfjK7l/i6IjKQviy7sl5Hk6bK9N/2C0Ttg==
   dependencies:
     "@types/node" "~10"
     "@types/spark-md5" "3.0.1"
     "@types/tough-cookie" "2.3.5"
-    "@wireapp/commons" "2.2.16"
+    "@wireapp/commons" "2.2.17"
     "@wireapp/priority-queue" "1.2.22"
     "@wireapp/store-engine" "3.9.17"
     axios "0.19.0"
@@ -429,12 +431,12 @@
   resolved "https://registry.yarnpkg.com/@wireapp/cbor/-/cbor-4.3.20.tgz#7c49f1026c0e92ce6731e296032cb8129ec3da3f"
   integrity sha512-m2klznA9AItSy0MZrWMnat1YB7YOgKFV8NlqmZx8Ky0w0u7HRzkSenZawLCxFMkkNKqsuMA8+4wx/i/dg0T7gg==
 
-"@wireapp/commons@2.2.16":
-  version "2.2.16"
-  resolved "https://registry.yarnpkg.com/@wireapp/commons/-/commons-2.2.16.tgz#7fb0b397c1b07b8c5e72ec514951f68ee7026074"
-  integrity sha512-Ow+85eLJp38Fd4mg/7Zq9m8bhLmkz7FKSFGKyrmXIPSrvBC9a8kV3ms3jmQSRJUVbE/6wZdVwHR3VpVB1f5tSQ==
+"@wireapp/commons@2.2.17":
+  version "2.2.17"
+  resolved "https://registry.yarnpkg.com/@wireapp/commons/-/commons-2.2.17.tgz#58b8dd136b811b90c8ca59046883b9981956ddf7"
+  integrity sha512-to3gyUC/bDPR81Iler9ehtIpnbo/fZ6qIi26z5zz0YOnEW5B8/KcTebP0IFPwBGIhWm702sqIeOTa6lPla7Sng==
   dependencies:
-    "@types/ansi-regex" "4.0.0"
+    "@types/ansi-regex" "5.0.0"
     "@types/fs-extra" "8.0.0"
     "@types/node" "~10"
     "@types/platform" "1.3.2"
@@ -445,14 +447,14 @@
     platform "1.3.5"
     url-search-params-polyfill "7.0.0"
 
-"@wireapp/core@13.2.0":
-  version "13.2.0"
-  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-13.2.0.tgz#ee3e296ee222e9095e91efb583481d1e10afa77b"
-  integrity sha512-xYIbqXSRO+Gep86xYMIriXTRSTLZa9qSxa/MHIHNImaWIrCkSl9XnHkIPjn1VfWSY/haAOwqnL8v05LAitwsSQ==
+"@wireapp/core@13.2.1":
+  version "13.2.1"
+  resolved "https://registry.yarnpkg.com/@wireapp/core/-/core-13.2.1.tgz#10506d0eb007f64d39f814472dbcfa1b9fb69b0e"
+  integrity sha512-6yd1llI/iQfYOXw/Ab97Lro+WuMjm11f1jvY5QtbJzBkz6TsXmRaU065J2xrb0jCZRqLs4WplM3RyzjUUfoymw==
   dependencies:
     "@types/long" "4.0.0"
     "@types/node" "~10"
-    "@wireapp/api-client" "7.1.1"
+    "@wireapp/api-client" "7.1.2"
     "@wireapp/cryptobox" "11.4.41"
     "@wireapp/protocol-messaging" "1.24.2"
     "@wireapp/store-engine" "3.9.17"
@@ -586,7 +588,7 @@ ansi-escapes@^3.0.0:
   resolved "https://registry.yarnpkg.com/ansi-escapes/-/ansi-escapes-3.2.0.tgz#8780b98ff9dbf5638152d1f1fe5c1d7b4442976b"
   integrity sha512-cBhpre4ma+U0T1oM5fXg7Dy1Jw7zzwv7lt/GoCpr+hDQJoYnKVPLL4dCvSEFMmQurOQvSrwT7SL/DAlhBI97RQ==
 
-ansi-regex@5.0.0:
+ansi-regex@*, ansi-regex@5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-5.0.0.tgz#388539f55179bf39339c81af30a654d69f87cb75"
   integrity sha512-bY6fj56OUQ0hU1KjFNDQuJFezqKdrAyFdIevADiqrWHwSlbmBNMHp5ak2f40Pm8JTFyM2mqxkG6ngkHO11f/lg==
