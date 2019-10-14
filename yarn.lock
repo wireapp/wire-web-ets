@@ -3086,9 +3086,9 @@ node-pre-gyp@^0.12.0:
     semver "^5.3.0"
     tar "^4"
 
-node-schedule@^1.1.1:
+node-schedule@^1.3.1:
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/node-schedule/-/node-schedule-1.3.2.tgz#d774b383e2a6f6ade59eecc62254aea07cd758cb"
+  resolved "https://registry.npmjs.org/node-schedule/-/node-schedule-1.3.2.tgz#d774b383e2a6f6ade59eecc62254aea07cd758cb"
   integrity sha512-GIND2pHMHiReSZSvS6dpZcDH7pGPGFfWBIEud6S00Q8zEIzAs9ommdyRK1ZbQt8y1LyZsJYZgPnyi7gpU2lcdw==
   dependencies:
     cron-parser "^2.7.3"
@@ -3486,14 +3486,14 @@ pm2-deploy@^0.4.0:
     async "^2.6"
     tv4 "^1.3"
 
-pm2-logrotate@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/pm2-logrotate/-/pm2-logrotate-2.6.0.tgz#ab969310779f5bf735e2295cdc8d352f550599ec"
-  integrity sha512-BjSppigieMpsBuBE24Uxthzt4htlcilU94EgShfsGL/tUWxaUbNUfywaWulXl+p3LJtdL1GW+qH24evJVN03aA==
+pm2-logrotate@2.7.0:
+  version "2.7.0"
+  resolved "https://registry.npmjs.org/pm2-logrotate/-/pm2-logrotate-2.7.0.tgz#c1faa1974f707d8439d3a334c6a27c8e8a0d23bf"
+  integrity sha512-8yyTDu4hINmbFvxV1GqChVtfws0Zgh08mchhlVN9aRlNdgYsMmMTrVZDnEusEaqEuA+jOUJ2Ks633exfpeEAKA==
   dependencies:
-    graceful-fs "^4.1.11"
+    graceful-fs "^4.2.2"
     moment-timezone "^0.5.11"
-    node-schedule "^1.1.1"
+    node-schedule "^1.3.1"
     pm2 latest
     pmx latest
 
