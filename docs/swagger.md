@@ -646,6 +646,13 @@ Get the complete log as plain text
 | teamId | string (uuid) |  | No |
 | type | integer |  | No |
 
+#### AudioMetaData
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| durationInMillis | integer |  | No |
+| normalizedLoudness | [ integer ] |  | No |
+
 #### BackendData
 
 | Name | Type | Description | Required |
@@ -841,3 +848,11 @@ Type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | error | string |  | No |
+
+#### VideoMetaData
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| durationInMillis | integer |  | No |
+| height | integer |  | No |
+| width | integer |  | No |
