@@ -567,7 +567,7 @@ export class InstanceService {
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
-      const metadataPayload = await service.conversation.messageBuilder.createFileMetadata(
+      const metadataPayload = service.conversation.messageBuilder.createFileMetadata(
         conversationId,
         metadata,
         undefined,

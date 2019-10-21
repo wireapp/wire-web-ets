@@ -519,13 +519,22 @@ Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
+  "audio?": {
+    "durationInMillis?": "<number>",
+    "normalizedLoudness?": "<Array of numbers>"
+  },
   "conversationId": "<string in UUID format>",
   "data": "<string in base64 format>",
   "expectsReadConfirmation?": "<boolean>",
   "fileName": "<string>",
   "legalHoldStatus?": "<0|1|2>",
   "messageTimer?": "<number>",
-  "type": "<string>"
+  "type": "<string>",
+  "video?": {
+    "durationInMillis?": "<number>",
+    "height?": "<number>",
+    "width?": "<number>"
+  }
 }
 ```
 
