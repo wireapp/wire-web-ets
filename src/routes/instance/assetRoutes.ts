@@ -38,13 +38,35 @@ interface AssetMessageRequest extends MessageRequest {
 }
 
 export interface FileMessageRequest extends AssetMessageRequest {
+  audio?: {
+    durationInMillis?: number;
+    normalizedLoudness?: number[];
+  };
   fileName: string;
+  video?: {
+    durationInMillis?: number;
+    height?: number;
+    width?: number;
+  };
 }
 
 export interface ImageMessageRequest extends AssetMessageRequest {
   height: number;
   width: number;
 }
+
+export const validateAudioMetaData = Joi.object({
+  durationInMillis: Joi.number().optional(),
+  normalizedLoudness: Joi.array()
+    .items(Joi.number())
+    .optional(),
+});
+
+export const validateVideoMetaData = Joi.object({
+  durationInMillis: Joi.number().optional(),
+  height: Joi.number().optional(),
+  width: Joi.number().optional(),
+});
 
 export const assetRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
@@ -53,6 +75,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
     '/api/v1/instance/:instanceId/sendFile/?',
     celebrate({
       body: {
+        audio: validateAudioMetaData.optional(),
         conversationId: Joi.string()
           .uuid()
           .required(),
@@ -70,11 +93,13 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           .default(0)
           .optional(),
         type: Joi.string().required(),
+        video: validateVideoMetaData.optional(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {
+        audio,
         conversationId,
         data: base64Data,
         expectsReadConfirmation,
@@ -82,6 +107,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
         legalHoldStatus,
         messageTimer,
         type,
+        video,
       }: FileMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
@@ -91,7 +117,18 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
       try {
         const data = Buffer.from(base64Data, 'base64');
         const fileContent: FileContent = {data};
-        const metadata: FileMetaDataContent = {length: data.length, name: fileName, type};
+        const metadata: FileMetaDataContent = {length: data.length, name: fileName, type, video};
+
+        if (audio) {
+          metadata.audio = {
+            durationInMillis: audio.durationInMillis,
+          };
+
+          if (audio.normalizedLoudness) {
+            metadata.audio.normalizedLoudness = Buffer.from(audio.normalizedLoudness);
+          }
+        }
+
         const messageId = await instanceService.sendFile(
           instanceId,
           conversationId,
@@ -143,7 +180,7 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {
         conversationId,
         data: base64Data,

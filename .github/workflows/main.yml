@@ -1,0 +1,31 @@
+name: Build, lint and test
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+  pull_request:
+    paths:
+      - '*'
+
+jobs:
+  build_lint_test:
+    name: Build, lint and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Build, lint and test
+        if: |
+          contains(github.event.commits[0].message, '[skip ci]') == false &&
+          contains(github.event.commits[0].message, '[ci skip]') == false
+        run: |
+          yarn
+          yarn lint
+          yarn dist
+          yarn test

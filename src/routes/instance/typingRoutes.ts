@@ -17,7 +17,7 @@
  *
  */
 
-import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/event/';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/conversation/data/';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 
@@ -44,7 +44,7 @@ export const typingRoutes = (instanceService: InstanceService): express.Router =
       },
     }),
     async (req: express.Request, res: express.Response) => {
-      const {instanceId = ''}: {instanceId: string} = req.params;
+      const {instanceId = ''} = req.params;
       const {conversationId, status}: TypingMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
