@@ -1,7 +1,7 @@
 # E2E Test Service
 End-to-end Test Service (ETS) for Wire's test automation suite.
 
-## Version: 1.16.1
+## Version: 1.20.0
 
 ### Terms of service
 https://wire.com/legal/
