@@ -742,7 +742,7 @@ export class InstanceService {
   }
 
   private attachListeners(account: Account, instance: Instance): void {
-    account.on('error', error => logger.error(`[${formatDate()}]`, error));
+    account.on(Account.TOPIC.ERROR, error => logger.error(`[${formatDate()}]`, error));
 
     account.on(PayloadBundleType.TEXT, (payload: PayloadBundle) => {
       const linkPreviewContent = payload.content as TextContent;
@@ -777,7 +777,7 @@ export class InstanceService {
       instance.messages.delete(editedContent.originalMessageId);
     });
 
-    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundle) => {
+    account.on(PayloadBundleType.CONVERSATION_CLEAR, (payload: PayloadBundle) => {
       const clearedContent = payload.content as ClearedContent;
 
       for (const message of instance.messages) {
