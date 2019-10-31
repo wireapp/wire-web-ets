@@ -399,10 +399,10 @@
   resolved "https://registry.npmjs.org/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
-"@wireapp/api-client@8.0.1":
-  version "8.0.1"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-8.0.1.tgz#72227db1e2eb830317919c682779ad99628b159c"
-  integrity sha512-6ofcO4xomN5SZNDwjD7O7FHrop7qPqrWn7huirKwSO3kjwPO8Llk/fUDpi5dBcTqtK8aMM+b+2aMAwD5lvZB0Q==
+"@wireapp/api-client@8.1.0":
+  version "8.1.0"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-8.1.0.tgz#8bebddc789c45aa6b428510e21ab55d14bcbb549"
+  integrity sha512-rN9bKVXeB5gE8Up+8FO8vAjCkkEhJwVIq+CsT1CHHg7/w4zFUzeh3qPGL5Y9PVbd099BQPAPlWScHH9aR32oBg==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.1"
@@ -438,14 +438,14 @@
     platform "1.3.5"
     url-search-params-polyfill "7.0.0"
 
-"@wireapp/core@14.0.3":
-  version "14.0.3"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-14.0.3.tgz#ac7a1ce81143826faf20db408f9bb80c66be03d9"
-  integrity sha512-yjJVKMpTkDMiHwHrbRuweYJCcGIE+hM/ADnOWJoXI0eofsiVbhRHvktClkLRYBSmfRtFWyJ9+KEV9hYSaz1phw==
+"@wireapp/core@14.3.0":
+  version "14.3.0"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-14.3.0.tgz#060a3362c2cb548ca924a8c58fe9fbca52d3497b"
+  integrity sha512-9kp6UsagrlcVvyJLYbGaN8mUcKOOFFVrSOFXnkWaFk5gixdvVmdeBnZMQdhMjdzXisXyuoLiAzPmIpXiGqd8+A==
   dependencies:
     "@types/long" "4.0.0"
     "@types/node" "~12"
-    "@wireapp/api-client" "8.0.1"
+    "@wireapp/api-client" "8.1.0"
     "@wireapp/cryptobox" "12.0.0"
     "@wireapp/protocol-messaging" "1.24.2"
     "@wireapp/store-engine" "4.0.0"
