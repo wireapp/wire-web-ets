@@ -468,11 +468,6 @@
     bazinga64 "5.5.28"
     logdown "3.2.8"
 
-"@wireapp/lru-cache@3.3.23":
-  version "3.3.23"
-  resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.3.23.tgz#02ba2dc5d5327403e7e1bdb60c8dfa48ff9d2ade"
-  integrity sha512-eaVNj4pxug9A3cKIljzj7IiUWwmJUO56hSebj3m9zoVL5rKkQX5qdSzgLiKKnbMBbZvBMIGz9pSeOSqJAnSjBw==
-
 "@wireapp/lru-cache@3.3.24":
   version "3.3.24"
   resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.3.24.tgz#202c246d118288df1779d92c910be70e87d44242"
