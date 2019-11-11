@@ -11,3 +11,4 @@ package-lock.json
 temp
 *.log
 run.sh
+.vscode
