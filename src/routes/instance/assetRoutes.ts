@@ -25,7 +25,9 @@ import {
 } from '@wireapp/core/dist/conversation/content/';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 
+import {ErrorMessage, ServerErrorMessage} from '../../config';
 import {InstanceService} from '../../InstanceService';
 import {MessageRequest} from './conversationRoutes';
 
@@ -111,7 +113,11 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
       }: FileMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
@@ -146,7 +152,12 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -193,7 +204,11 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
       }: ImageMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
@@ -215,7 +230,11 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );

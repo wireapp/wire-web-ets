@@ -19,9 +19,10 @@
 
 import * as express from 'express';
 import * as fs from 'fs-extra';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 import * as path from 'path';
 
-import {ServerConfig} from '../../config';
+import {ServerConfig, ServerErrorMessage} from '../../config';
 
 const router = express.Router();
 
@@ -33,7 +34,12 @@ export const commitRoute = (config: ServerConfig) => {
       const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
       return res.contentType('text/plain; charset=UTF-8').send(commitHash.trim());
     } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
+      const errorMessage: ServerErrorMessage = {
+        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        error: error.message,
+        stack: error.stack,
+      };
+      return res.status(errorMessage.code).json(errorMessage);
     }
   });
 };

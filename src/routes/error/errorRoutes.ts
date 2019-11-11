@@ -19,8 +19,10 @@
 
 import {isCelebrate} from 'celebrate';
 import * as express from 'express';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 import * as logdown from 'logdown';
 
+import {ErrorMessage, ServerErrorMessage} from '../../config';
 import {formatDate} from '../../utils';
 
 const router = express.Router();
@@ -30,31 +32,38 @@ const logger = logdown('@wireapp/wire-web-ets/errorRoutes', {
   markdown: false,
 });
 
-const celebrateErrorRoute = (): express.ErrorRequestHandler => (err, req, res, next) => {
-  if (isCelebrate(err)) {
-    const message = err.joi ? err.joi.message : err.message;
-    return res.status(422).json({error: `Validation error: ${message}`});
-  }
-  return next();
-};
-
-const internalErrorRoute = (): express.ErrorRequestHandler => (err, req, res, next) => {
-  logger.error(`[${formatDate()}] ${err.stack}`);
-  const error = {
-    code: 500,
-    message: 'Internal server error',
-    stack: err.stack,
+export function celebrateErrorRoute(): express.ErrorRequestHandler {
+  return (err, req, res, next) => {
+    if (isCelebrate(err)) {
+      const message = err.joi ? err.joi.message : err.message;
+      const errorMessage: ErrorMessage = {
+        code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
+        error: `Validation error: ${message}`,
+      };
+      return res.status(errorMessage.code).json(errorMessage);
+    }
+    return next();
   };
-  return res.status(error.code).json(error);
-};
+}
 
-const notFoundRoute = () =>
-  router.get('*', (req, res) => {
-    const error = {
-      code: 404,
-      message: 'Not found',
+export function internalErrorRoute(): express.ErrorRequestHandler {
+  return (error, req, res, next) => {
+    logger.error(`[${formatDate()}] ${error.stack}`);
+    const errorMessage: ServerErrorMessage = {
+      code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+      error: 'Internal server error',
+      stack: error.stack,
     };
-    return res.status(error.code).json(error);
-  });
+    return res.status(errorMessage.code).json(error);
+  };
+}
 
-export {celebrateErrorRoute, internalErrorRoute, notFoundRoute};
+export function notFoundRoute(): express.Router {
+  return router.get('*', (req, res) => {
+    const errorMessage: ErrorMessage = {
+      code: HTTP_STATUS_CODE.NOT_FOUND,
+      error: 'Not found',
+    };
+    return res.status(errorMessage.code).json(errorMessage);
+  });
+}

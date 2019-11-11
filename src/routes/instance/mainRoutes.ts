@@ -21,7 +21,9 @@ import {ClientClassification, ClientType} from '@wireapp/api-client/dist/commonj
 import {BackendData} from '@wireapp/api-client/dist/commonjs/env';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 
+import {ErrorMessage, ServerErrorMessage} from '../../config';
 import {InstanceService} from '../../InstanceService';
 
 export interface InstanceRequest {
@@ -112,7 +114,12 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -121,7 +128,11 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
     const {instanceId = ''} = req.params;
 
     if (!instanceService.instanceExists(instanceId)) {
-      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      const errorMessage: ErrorMessage = {
+        code: HTTP_STATUS_CODE.NOT_FOUND,
+        error: `Instance "${instanceId}" not found.`,
+      };
+      return res.status(errorMessage.code).json(errorMessage);
     }
 
     let instance;
@@ -129,7 +140,12 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
     try {
       instance = instanceService.getInstance(instanceId);
     } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
+      const errorMessage: ServerErrorMessage = {
+        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        error: error.message,
+        stack: error.stack,
+      };
+      return res.status(errorMessage.code).json(errorMessage);
     }
 
     return res.json({
@@ -144,14 +160,23 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
     const {instanceId = ''} = req.params;
 
     if (!instanceService.instanceExists(instanceId)) {
-      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      const errorMessage: ErrorMessage = {
+        code: HTTP_STATUS_CODE.NOT_FOUND,
+        error: `Instance "${instanceId}" not found.`,
+      };
+      return res.status(errorMessage.code).json(errorMessage);
     }
 
     try {
       await instanceService.deleteInstance(instanceId);
       return res.json({});
     } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
+      const errorMessage: ServerErrorMessage = {
+        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        error: error.message,
+        stack: error.stack,
+      };
+      return res.status(errorMessage.code).json(errorMessage);
     }
   });
 
@@ -199,7 +224,12 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
         await instanceService.removeAllClients(email, password, backend || customBackend);
         return res.json({});
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -208,14 +238,23 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
     const {instanceId = ''} = req.params;
 
     if (!instanceService.instanceExists(instanceId)) {
-      return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+      const errorMessage: ErrorMessage = {
+        code: HTTP_STATUS_CODE.NOT_FOUND,
+        error: `Instance "${instanceId}" not found.`,
+      };
+      return res.status(errorMessage.code).json(errorMessage);
     }
 
     try {
       const clients = await instanceService.getAllClients(instanceId);
       return res.json(clients);
     } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
+      const errorMessage: ServerErrorMessage = {
+        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        error: error.message,
+        stack: error.stack,
+      };
+      return res.status(errorMessage.code).json(errorMessage);
     }
   });
 

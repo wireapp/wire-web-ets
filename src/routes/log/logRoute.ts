@@ -19,7 +19,9 @@
 
 import * as express from 'express';
 import * as fs from 'fs-extra';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 import * as logdown from 'logdown';
+import {ServerErrorMessage} from '../../config';
 
 const router = express.Router();
 const outLogFile = process.env.LOG_OUTPUT;
@@ -65,6 +67,11 @@ export const logRoute = () =>
 
       return res.contentType('text/plain; charset=UTF-8').send(logData);
     } catch (error) {
-      return res.status(500).json({error: error.message, stack: error.stack});
+      const errorMessage: ServerErrorMessage = {
+        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        error: error.message,
+        stack: error.stack,
+      };
+      return res.status(errorMessage.code).json(errorMessage);
     }
   });

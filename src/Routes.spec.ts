@@ -23,6 +23,7 @@ import {ClientAPI} from '@wireapp/api-client/dist/commonjs/client/';
 import {ConversationAPI} from '@wireapp/api-client/dist/commonjs/conversation/';
 import {NotificationAPI} from '@wireapp/api-client/dist/commonjs/notification/';
 import {UserAPI} from '@wireapp/api-client/dist/commonjs/user/';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 import UUID from 'pure-uuid';
 import {config} from './config';
 import {Server} from './Server';
@@ -32,9 +33,6 @@ import * as request from 'request';
 
 const backendURL = APIClient.BACKEND.PRODUCTION.rest;
 const UUID_VERSION = 4;
-const HTTP_CODE_OK = 200;
-const HTTP_CODE_NOT_FOUND = 404;
-const HTTP_CODE_UNPROCESSABLE_ENTITY = 422;
 
 type RequestOptions = Record<string, string | any>;
 
@@ -74,33 +72,33 @@ describe('Routes', () => {
     nock(backendURL)
       .post(AuthAPI.URL.LOGIN)
       .query({persist: 'true'})
-      .reply(HTTP_CODE_OK, accessTokenData)
+      .reply(HTTP_STATUS_CODE.OK, accessTokenData)
       .persist();
 
     nock(backendURL)
       .post(`${AuthAPI.URL.ACCESS}/${AuthAPI.URL.LOGOUT}`)
-      .reply(HTTP_CODE_OK)
+      .reply(HTTP_STATUS_CODE.OK)
       .persist();
 
     nock(backendURL)
       .post(AuthAPI.URL.ACCESS)
-      .reply(HTTP_CODE_OK, accessTokenData)
+      .reply(HTTP_STATUS_CODE.OK, accessTokenData)
       .persist();
 
     nock(backendURL)
       .post(ClientAPI.URL.CLIENTS)
-      .reply(HTTP_CODE_OK, {id: clientId})
+      .reply(HTTP_STATUS_CODE.OK, {id: clientId})
       .persist();
 
     nock(backendURL)
       .post(new RegExp(`${ConversationAPI.URL.CONVERSATIONS}/.*/otr/messages`))
       .query({ignore_missing: 'false'})
-      .reply(HTTP_CODE_OK)
+      .reply(HTTP_STATUS_CODE.OK)
       .persist();
 
     nock(backendURL)
       .get(new RegExp(`${UserAPI.URL.USERS}/.*/${UserAPI.URL.PRE_KEYS}`))
-      .reply(HTTP_CODE_OK, {
+      .reply(HTTP_STATUS_CODE.OK, {
         clients: [
           {
             client: clientId,
@@ -113,7 +111,7 @@ describe('Routes', () => {
 
     nock(backendURL)
       .get(new RegExp(`${ConversationAPI.URL.CONVERSATIONS}/.*`))
-      .reply(HTTP_CODE_OK, {
+      .reply(HTTP_STATUS_CODE.OK, {
         creator: new UUID(UUID_VERSION).format(),
         members: {
           others: [
@@ -133,18 +131,18 @@ describe('Routes', () => {
     nock(backendURL)
       .get(`${NotificationAPI.URL.NOTIFICATION}/${NotificationAPI.URL.LAST}`)
       .query({client: clientId})
-      .reply(HTTP_CODE_OK, {})
+      .reply(HTTP_STATUS_CODE.OK, {})
       .persist();
 
     nock(backendURL)
       .get(NotificationAPI.URL.NOTIFICATION)
       .query({client: clientId, size: 10000})
-      .reply(HTTP_CODE_OK, {has_more: false, notifications: []})
+      .reply(HTTP_STATUS_CODE.OK, {has_more: false, notifications: []})
       .persist();
 
     nock(backendURL)
       .get(ClientAPI.URL.CLIENTS)
-      .reply(HTTP_CODE_OK, [{id: clientId}])
+      .reply(HTTP_STATUS_CODE.OK, [{id: clientId}])
       .persist();
 
     await etsServer.start();
@@ -165,33 +163,33 @@ describe('Routes', () => {
 
   it('can create instances', async () => {
     const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_CODE_OK);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
     const {instanceId} = JSON.parse(body);
     expect(instanceId).toBeDefined();
   });
 
   it(`doesn't create an instance without login data`, async () => {
     const {statusCode, body} = await createInstance({backend: 'staging'});
-    expect(statusCode).toBe(HTTP_CODE_UNPROCESSABLE_ENTITY);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY);
     const {error} = JSON.parse(body);
     expect(error).toContain('Validation error');
   });
 
   it(`doesn't create an instance without login data`, async () => {
     const {statusCode, body} = await createInstance({});
-    expect(statusCode).toBe(HTTP_CODE_UNPROCESSABLE_ENTITY);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY);
     const {error} = JSON.parse(body);
     expect(error).toContain('Validation error');
   });
 
   it('can get the instance', async () => {
     const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_CODE_OK);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
     const {instanceId} = JSON.parse(body);
 
     const requestUrl = `${baseURL}/instance/${instanceId}`;
     const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
-    expect(requestedStatusCode).toBe(HTTP_CODE_OK);
+    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.OK);
     const {instanceId: requestedId} = JSON.parse(requestedBody);
 
     expect(requestedId).toBe(instanceId);
@@ -199,14 +197,14 @@ describe('Routes', () => {
 
   it('can send a text message', async () => {
     const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_CODE_OK);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
     const {instanceId} = JSON.parse(body);
 
     const conversationId = new UUID(UUID_VERSION).format();
     const requestUrl = `${baseURL}/instance/${instanceId}/sendText`;
     const requestData = {conversationId, text: 'Hello from Jasmine'};
     const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
-    expect(requestedStatusCode).toBe(HTTP_CODE_OK);
+    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.OK);
 
     const {instanceId: requestedId} = JSON.parse(requestedBody);
     expect(requestedId).toBe(instanceId);
@@ -214,7 +212,7 @@ describe('Routes', () => {
 
   it('can send a text message with mention', async () => {
     const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_CODE_OK);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
     const {instanceId} = JSON.parse(body);
 
     const conversationId = new UUID(UUID_VERSION).format();
@@ -231,7 +229,7 @@ describe('Routes', () => {
       text: 'Hello @Jasmine!',
     };
     const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
-    expect(requestedStatusCode).toBe(HTTP_CODE_OK);
+    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.OK);
 
     const {instanceId: requestedId} = JSON.parse(requestedBody);
     expect(requestedId).toBe(instanceId);
@@ -239,7 +237,7 @@ describe('Routes', () => {
 
   it('can send a text message with multiple mentions', async () => {
     const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_CODE_OK);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
     const {instanceId} = JSON.parse(body);
 
     const conversationId = new UUID(UUID_VERSION).format();
@@ -261,7 +259,7 @@ describe('Routes', () => {
       text: 'Hello @Jasmine and @Bernd!',
     };
     const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
-    expect(requestedStatusCode).toBe(HTTP_CODE_OK);
+    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.OK);
 
     const {instanceId: requestedId} = JSON.parse(requestedBody);
     expect(requestedId).toBe(instanceId);
@@ -269,16 +267,16 @@ describe('Routes', () => {
 
   it('sends the correct error code for not found', async () => {
     const {statusCode} = await createInstance();
-    expect(statusCode).toBe(HTTP_CODE_OK);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
 
     const requestUrl = `${baseURL}/doesnotexist`;
     const {statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
-    expect(requestedStatusCode).toBe(HTTP_CODE_NOT_FOUND);
+    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.NOT_FOUND);
   });
 
   it('saves sent messages', async () => {
     const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_CODE_OK);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
     const {instanceId} = JSON.parse(body);
 
     const message = 'Hello from Jasmine';
@@ -298,7 +296,7 @@ describe('Routes', () => {
 
     const receivedPayload = JSON.parse(requestedBody);
 
-    expect(requestedStatusCode).toBe(HTTP_CODE_OK);
+    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(receivedPayload[0].content.text).toEqual(message);
   });
 });

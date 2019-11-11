@@ -1,19 +1,6 @@
 {
   "basePath": "/api/v1",
   "definitions": {
-    "Availability": {
-      "properties": {
-        "teamId": {
-          "format": "uuid",
-          "type": "string"
-        },
-        "type": {
-          "enum": [0, 1, 2, 3],
-          "type": "integer"
-        }
-      },
-      "type": "object"
-    },
     "AudioMetaData": {
       "properties": {
         "durationInMillis": {
@@ -26,6 +13,19 @@
           },
           "required": false,
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Availability": {
+      "properties": {
+        "teamId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "type": {
+          "enum": [0, 1, 2, 3],
+          "type": "integer"
         }
       },
       "type": "object"
@@ -149,6 +149,46 @@
         }
       ]
     },
+    "ErrorMessage": {
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "error": {
+          "type": "string"
+        }
+      },
+      "required": ["code", "error"],
+      "type": "object"
+    },
+    "Image": {
+      "properties": {
+        "data": {
+          "format": "base64",
+          "type": "string"
+        },
+        "expectsReadConfirmation": {
+          "type": "boolean"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
+        },
+        "messageTimer": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        },
+        "width": {
+          "type": "integer"
+        }
+      },
+      "required": ["conversationId", "data", "height", "type", "width"],
+      "type": "object"
+    },
     "Instance": {
       "allOf": [
         {
@@ -187,22 +227,7 @@
     "LinkPreview": {
       "properties": {
         "image": {
-          "properties": {
-            "data": {
-              "format": "base64",
-              "type": "string"
-            },
-            "height": {
-              "type": "integer"
-            },
-            "type": {
-              "type": "string"
-            },
-            "width": {
-              "type": "integer"
-            }
-          },
-          "type": "object"
+          "$ref": "#/definitions/Image"
         },
         "permanentUrl": {
           "type": "string"
@@ -366,17 +391,6 @@
       "required": ["text"],
       "type": "object"
     },
-    "NotFoundError": {
-      "properties": {
-        "error": {
-          "type": "string"
-        },
-        "stack": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "Reaction": {
       "properties": {
         "legalHoldStatus": {
@@ -411,16 +425,20 @@
         }
       ]
     },
-    "ServerError": {
-      "properties": {
-        "error": {
-          "type": "string"
+    "ServerErrorMessage": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ErrorMessage"
         },
-        "stack": {
-          "type": "string"
+        {
+          "properties": {
+            "stack": {
+              "type": "string"
+            }
+          },
+          "type": "object"
         }
-      },
-      "type": "object"
+      ]
     },
     "ServerInfo": {
       "properties": {
@@ -515,14 +533,6 @@
       },
       "type": "object"
     },
-    "ValidationError": {
-      "properties": {
-        "error": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "VideoMetaData": {
       "properties": {
         "durationInMillis": {
@@ -565,6 +575,12 @@
             "schema": {
               "$ref": "#/definitions/ServerInfo"
             }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
+            }
           }
         },
         "summary": "Get information about the server",
@@ -601,7 +617,13 @@
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -623,7 +645,7 @@
           "500": {
             "description": "Internal server error",
             "schema": {
-              "$ref": "#/definitions/ServerError"
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -658,7 +680,13 @@
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -689,15 +717,15 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
-          "422": {
-            "description": "Validation error",
+          "500": {
+            "description": "Internal server error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -725,9 +753,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -775,15 +815,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -822,15 +868,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -875,15 +927,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -916,9 +974,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -967,15 +1037,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1024,15 +1100,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1071,9 +1153,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1121,15 +1215,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1177,15 +1277,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1238,15 +1344,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1303,15 +1415,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1360,15 +1478,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1417,15 +1541,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1508,15 +1638,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1542,35 +1678,20 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "conversationId": {
-                  "format": "uuid",
-                  "type": "string"
+              "allOf": [
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": ["conversationId"]
                 },
-                "data": {
-                  "format": "base64",
-                  "type": "string"
-                },
-                "expectsReadConfirmation": {
-                  "type": "boolean"
-                },
-                "height": {
-                  "type": "integer"
-                },
-                "legalHoldStatus": {
-                  "$ref": "#/definitions/LegalHoldStatus"
-                },
-                "messageTimer": {
-                  "type": "integer"
-                },
-                "type": {
-                  "type": "string"
-                },
-                "width": {
-                  "type": "integer"
+                {
+                  "$ref": "#/definitions/Image"
                 }
-              },
-              "type": "object"
+              ]
             }
           }
         ],
@@ -1595,15 +1716,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1668,15 +1795,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1742,15 +1875,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1815,15 +1954,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1880,15 +2025,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -1955,15 +2106,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -2002,15 +2159,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -2078,15 +2241,21 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Instance not found",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ErrorMessage"
             }
           },
           "422": {
             "description": "Validation error",
             "schema": {
-              "$ref": "#/definitions/ValidationError"
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -2105,10 +2274,10 @@
               "$ref": "#/definitions/Instance"
             }
           },
-          "404": {
-            "description": "Not found",
+          "500": {
+            "description": "Internal server error",
             "schema": {
-              "$ref": "#/definitions/NotFoundError"
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
@@ -2125,6 +2294,12 @@
             "description": "",
             "schema": {
               "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
             }
           }
         },
