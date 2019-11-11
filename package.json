@@ -34,7 +34,7 @@
     "lint-staged": "9.4.2",
     "logdown": "3.2.8",
     "nock": "11.7.0",
-    "prettier": "1.18.2",
+    "prettier": "1.19.1",
     "request": "2.88.0",
     "rimraf": "3.0.0",
     "swagger-markdown": "1.2.0",
