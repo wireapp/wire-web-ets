@@ -31,5 +31,5 @@ export function initSwaggerRoute(app: express.Express, config: ServerConfig): vo
     host: `localhost:${config.PORT_HTTP}`,
   };
 
-  app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerUiOptions));
+  app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {options: swaggerUiOptions}));
 }
