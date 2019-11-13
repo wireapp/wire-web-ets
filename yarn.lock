@@ -438,10 +438,10 @@
     platform "1.3.5"
     url-search-params-polyfill "7.0.0"
 
-"@wireapp/core@14.4.1":
-  version "14.4.1"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-14.4.1.tgz#a2d24da921c2da588ac64430d18b668806e375ac"
-  integrity sha512-RlXIvLZ+sT6btYNMcKGN8aXEhj49qPK+UiVH501fSj2rmzTBamh302oEUvKwREF5xdl4V5duOiDwuMzFid+SJw==
+"@wireapp/core@14.4.2":
+  version "14.4.2"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-14.4.2.tgz#b9051f7e8de4ab689bcdb4b8b069514a0a9343ef"
+  integrity sha512-mcdg+Jh4Af1BmcFPNFmgXRZJNMLZ5K1RPJgKxOBVecX56GfAm5wzIh6BWIp9iKKeOBLI7j8CadXBmred5MvT6Q==
   dependencies:
     "@types/long" "4.0.0"
     "@types/node" "~12"
