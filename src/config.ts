@@ -35,6 +35,15 @@ export interface ServerConfig {
   VERSION: string;
 }
 
+export interface ErrorMessage {
+  code: number;
+  error: string;
+}
+
+export interface ServerErrorMessage extends ErrorMessage {
+  stack: string;
+}
+
 const config: ServerConfig = {
   CACHE_DURATION_SECONDS: 300, // 5 minutes
   COMPRESS_LEVEL: 6,

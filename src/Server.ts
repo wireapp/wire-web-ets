@@ -22,8 +22,9 @@ import * as compression from 'compression';
 import * as express from 'express';
 import * as helmet from 'helmet';
 import * as http from 'http';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 
-import {ServerConfig} from './config';
+import {ErrorMessage, ServerConfig} from './config';
 import {InstanceService} from './InstanceService';
 import {healthCheckRoute} from './routes/_health/healthCheckRoute';
 import {commitRoute} from './routes/commit/commitRoute';
@@ -48,7 +49,11 @@ export class Server {
     this.app.use((req, res, next) => {
       bodyParser.json({limit: '200mb'})(req, res, error => {
         if (error) {
-          return res.status(400).json({error: 'Payload is not valid JSON data.'});
+          const errorMessage: ErrorMessage = {
+            code: HTTP_STATUS_CODE.BAD_REQUEST,
+            error: 'Payload is not valid JSON data.',
+          };
+          return res.status(errorMessage.code).json(errorMessage);
         }
         return next();
       });

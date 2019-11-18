@@ -19,6 +19,7 @@
 
 import * as express from 'express';
 import * as fs from 'fs-extra';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 import * as logdown from 'logdown';
 import * as path from 'path';
 
@@ -53,7 +54,7 @@ export const mainRoute = (config: ServerConfig) => {
 
   return router.get(['/', '/api/v1/?'], async (req, res) => {
     const infoData: InfoData = {
-      code: 200,
+      code: HTTP_STATUS_CODE.OK,
       instance: {
         env: {
           LOG_ERROR,

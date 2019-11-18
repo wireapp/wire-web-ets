@@ -17,11 +17,11 @@
  *
  */
 
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 import * as request from 'request';
+
 import {config} from './config';
 import {Server} from './Server';
-
-const HTTP_CODE_OK = 200;
 
 describe('Server', () => {
   let etsServer: Server;
@@ -47,7 +47,7 @@ describe('Server', () => {
       if (error) {
         done.fail(error);
       } else {
-        expect(response.statusCode).toBe(HTTP_CODE_OK);
+        expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
         const {message} = JSON.parse(response.body);
         expect(message).toContain('ready');
         done();
