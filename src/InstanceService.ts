@@ -142,7 +142,7 @@ export class InstanceService {
 
     logger.log(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
 
-    const client = new APIClient({store: engine, urls: backendType});
+    const client = new APIClient({urls: backendType});
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
@@ -275,10 +275,7 @@ export class InstanceService {
 
   async removeAllClients(email: string, password: string, backend?: string | BackendData): Promise<void> {
     const backendType = this.parseBackend(backend);
-
-    const engine = new MemoryEngine();
-    await engine.init('temporary');
-    const apiClient = new APIClient({store: engine, urls: backendType});
+    const apiClient = new APIClient({urls: backendType});
     const account = new Account(apiClient);
 
     const ClientInfo: ClientInfo = {
