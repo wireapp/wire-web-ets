@@ -18,10 +18,10 @@
  */
 
 import {APIClient} from '@wireapp/api-client';
-import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
-import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/dist/commonjs/client/';
-import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/conversation/data/';
-import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/commonjs/http/';
+import {LoginData} from '@wireapp/api-client/dist/auth/';
+import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/dist/client/';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
+import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/http/';
 import {Account} from '@wireapp/core';
 import {AvailabilityType} from '@wireapp/core/dist/broadcast/';
 import {ClientInfo} from '@wireapp/core/dist/client/';
@@ -50,7 +50,7 @@ import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 
-import {BackendData} from '@wireapp/api-client/dist/commonjs/env/';
+import {BackendData} from '@wireapp/api-client/dist/env/';
 import {Confirmation} from '@wireapp/protocol-messaging';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from './utils';
 
