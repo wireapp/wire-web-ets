@@ -17,8 +17,8 @@
  *
  */
 
-import {ClientClassification, ClientType} from '@wireapp/api-client/dist/commonjs/client/';
-import {BackendData} from '@wireapp/api-client/dist/commonjs/env';
+import {ClientClassification, ClientType} from '@wireapp/api-client/dist/client/';
+import {BackendData} from '@wireapp/api-client/dist/env';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
 import * as HTTP_STATUS_CODE from 'http-status-codes';

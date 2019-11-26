@@ -18,11 +18,11 @@
  */
 
 import {APIClient} from '@wireapp/api-client';
-import {AuthAPI} from '@wireapp/api-client/dist/commonjs/auth/';
-import {ClientAPI} from '@wireapp/api-client/dist/commonjs/client/';
-import {ConversationAPI} from '@wireapp/api-client/dist/commonjs/conversation/';
-import {NotificationAPI} from '@wireapp/api-client/dist/commonjs/notification/';
-import {UserAPI} from '@wireapp/api-client/dist/commonjs/user/';
+import {AuthAPI} from '@wireapp/api-client/dist/auth/';
+import {ClientAPI} from '@wireapp/api-client/dist/client/';
+import {ConversationAPI} from '@wireapp/api-client/dist/conversation/';
+import {NotificationAPI} from '@wireapp/api-client/dist/notification/';
+import {UserAPI} from '@wireapp/api-client/dist/user/';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
 import UUID from 'pure-uuid';
 import {config} from './config';
@@ -92,7 +92,7 @@ describe('Routes', () => {
 
     nock(backendURL)
       .post(new RegExp(`${ConversationAPI.URL.CONVERSATIONS}/.*/otr/messages`))
-      .query({ignore_missing: 'false'})
+      .query(true)
       .reply(HTTP_STATUS_CODE.OK)
       .persist();
 
