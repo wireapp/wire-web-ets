@@ -23,39 +23,77 @@ import {ClientAPI} from '@wireapp/api-client/dist/client/';
 import {ConversationAPI} from '@wireapp/api-client/dist/conversation/';
 import {NotificationAPI} from '@wireapp/api-client/dist/notification/';
 import {UserAPI} from '@wireapp/api-client/dist/user/';
+import axios, {AxiosError, AxiosRequestConfig, Method as RequestMethod} from 'axios';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
+import * as nock from 'nock';
 import UUID from 'pure-uuid';
-import {config} from './config';
+
+import {ErrorMessage, config} from './config';
 import {Server} from './Server';
 
-import * as nock from 'nock';
-import * as request from 'request';
+type RequestResult<T> = {data: T; statusCode: number};
 
 const backendURL = APIClient.BACKEND.PRODUCTION.rest;
 const UUID_VERSION = 4;
+const baseURL = `http://localhost:${config.PORT_HTTP}/api/v1`;
 
-type RequestOptions = Record<string, string | any>;
-
-const sendRequest = (method: string, url: string, data?: RequestOptions): Promise<request.Response> => {
-  let options: request.CoreOptions = {method};
-  if (data) {
-    const body = JSON.stringify(data);
-    options = {body, headers: {'Content-Type': 'application/json'}, method};
+async function sendRequest<T>(
+  method: RequestMethod,
+  url: string,
+  requestData: any,
+  allowFailure: true,
+): Promise<RequestResult<T | ErrorMessage>>;
+async function sendRequest<T>(
+  method: RequestMethod,
+  url: string,
+  requestData?: any,
+  allowFailure?: boolean,
+): Promise<RequestResult<T>>;
+async function sendRequest<T>(
+  method: RequestMethod,
+  url: string,
+  requestData?: any,
+  allowFailure?: boolean,
+): Promise<RequestResult<T | ErrorMessage>> {
+  const requestConfig: AxiosRequestConfig = {method, url};
+  if (requestData) {
+    requestConfig.data = requestData;
+    requestConfig.headers = {'Content-Type': 'application/json'};
   }
-  return new Promise((resolve, reject) => {
-    request(url, options, (error, response) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(response);
-      }
-    });
-  });
-};
+
+  try {
+    const {data, status: statusCode} = await axios.request<T>(requestConfig);
+    return {data, statusCode};
+  } catch (error) {
+    if (allowFailure) {
+      return {
+        data: (error as AxiosError<ErrorMessage>).response!.data,
+        statusCode: (error as AxiosError).response!.status,
+      };
+    }
+    throw error;
+  }
+}
+
+function createInstance(
+  data: {backend?: string; email?: string; password?: string},
+  allowFailure: true,
+): Promise<RequestResult<{instanceId: string} | ErrorMessage>>;
+function createInstance(
+  data?: {backend?: string; email?: string; password?: string},
+  allowFailure?: boolean,
+): Promise<RequestResult<{instanceId: string}>>;
+function createInstance(
+  data?: {backend?: string; email?: string; password?: string},
+  allowFailure?: boolean,
+): Promise<RequestResult<{instanceId: string} | ErrorMessage>> {
+  const url = `${baseURL}/instance`;
+  data = data || {backend: 'production', email: 'test@example.com', password: 'supersecret'};
+  return sendRequest<{instanceId: string}>('put', url, data, allowFailure);
+}
 
 describe('Routes', () => {
   let etsServer: Server;
-  const baseURL = `http://localhost:${config.PORT_HTTP}/api/v1`;
 
   const accessTokenData = {
     access_token:
@@ -155,68 +193,65 @@ describe('Routes', () => {
     nock.cleanAll();
   });
 
-  const createInstance = (data?: RequestOptions) => {
-    const url = `${baseURL}/instance`;
-    data = data || {backend: 'production', email: 'test@example.com', password: 'supersecret'};
-    return sendRequest('put', url, data);
-  };
-
   it('can create instances', async () => {
-    const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
-    const {instanceId} = JSON.parse(body);
-    expect(instanceId).toBeDefined();
+    const returnValue = await createInstance();
+    expect(returnValue.statusCode).toBe(HTTP_STATUS_CODE.OK);
+    expect(returnValue.data.instanceId).toBeDefined();
   });
 
   it(`doesn't create an instance without login data`, async () => {
-    const {statusCode, body} = await createInstance({backend: 'staging'});
-    expect(statusCode).toBe(HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY);
-    const {error} = JSON.parse(body);
-    expect(error).toContain('Validation error');
+    const requestResult = await createInstance({backend: 'staging'}, true);
+    if (!('error' in requestResult.data)) {
+      return fail('No error returned');
+    }
+    expect(requestResult.statusCode).toBe(HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY);
+    expect(requestResult.data.error).toContain('Validation error');
   });
 
   it(`doesn't create an instance without login data`, async () => {
-    const {statusCode, body} = await createInstance({});
-    expect(statusCode).toBe(HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY);
-    const {error} = JSON.parse(body);
-    expect(error).toContain('Validation error');
+    const requestResult = await createInstance({}, true);
+    if (!('error' in requestResult.data)) {
+      return fail('No error returned');
+    }
+    expect(requestResult.statusCode).toBe(HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY);
+    expect(requestResult.data.error).toContain('Validation error');
   });
 
   it('can get the instance', async () => {
-    const {statusCode, body} = await createInstance();
+    const {data: createData, statusCode} = await createInstance();
     expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
-    const {instanceId} = JSON.parse(body);
 
-    const requestUrl = `${baseURL}/instance/${instanceId}`;
-    const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
-    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.OK);
-    const {instanceId: requestedId} = JSON.parse(requestedBody);
-
-    expect(requestedId).toBe(instanceId);
+    const requestUrl = `${baseURL}/instance/${createData.instanceId}`;
+    const {data: getInstanceData, statusCode: getInstanceStatusCode} = await sendRequest<{instanceId: string}>(
+      'get',
+      requestUrl,
+    );
+    expect(getInstanceStatusCode).toBe(HTTP_STATUS_CODE.OK);
+    expect(getInstanceData.instanceId).toBe(createData.instanceId);
   });
 
   it('can send a text message', async () => {
-    const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
-    const {instanceId} = JSON.parse(body);
+    const {data: createData, statusCode: createInstanceStatusCode} = await createInstance();
+    expect(createInstanceStatusCode).toBe(HTTP_STATUS_CODE.OK);
 
     const conversationId = new UUID(UUID_VERSION).format();
-    const requestUrl = `${baseURL}/instance/${instanceId}/sendText`;
+    const requestUrl = `${baseURL}/instance/${createData.instanceId}/sendText`;
     const requestData = {conversationId, text: 'Hello from Jasmine'};
-    const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
-    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.OK);
-
-    const {instanceId: requestedId} = JSON.parse(requestedBody);
-    expect(requestedId).toBe(instanceId);
+    const {data: getData, statusCode: getStatusCode} = await sendRequest<{instanceId: string}>(
+      'post',
+      requestUrl,
+      requestData,
+    );
+    expect(getStatusCode).toBe(HTTP_STATUS_CODE.OK);
+    expect(getData.instanceId).toBe(createData.instanceId);
   });
 
   it('can send a text message with mention', async () => {
-    const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
-    const {instanceId} = JSON.parse(body);
+    const {data: createData, statusCode: createInstanceStatusCode} = await createInstance();
+    expect(createInstanceStatusCode).toBe(HTTP_STATUS_CODE.OK);
 
     const conversationId = new UUID(UUID_VERSION).format();
-    const requestUrl = `${baseURL}/instance/${instanceId}/sendText`;
+    const requestUrl = `${baseURL}/instance/${createData.instanceId}/sendText`;
     const requestData = {
       conversationId,
       mentions: [
@@ -228,20 +263,21 @@ describe('Routes', () => {
       ],
       text: 'Hello @Jasmine!',
     };
-    const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
-    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.OK);
-
-    const {instanceId: requestedId} = JSON.parse(requestedBody);
-    expect(requestedId).toBe(instanceId);
+    const {data: sendTextData, statusCode: sendTextStatusCode} = await sendRequest<{instanceId: string}>(
+      'post',
+      requestUrl,
+      requestData,
+    );
+    expect(sendTextStatusCode).toBe(HTTP_STATUS_CODE.OK);
+    expect(sendTextData.instanceId).toBe(createData.instanceId);
   });
 
   it('can send a text message with multiple mentions', async () => {
-    const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
-    const {instanceId} = JSON.parse(body);
+    const {data: createData, statusCode: createInstanceStatusCode} = await createInstance();
+    expect(createInstanceStatusCode).toBe(HTTP_STATUS_CODE.OK);
 
     const conversationId = new UUID(UUID_VERSION).format();
-    const requestUrl = `${baseURL}/instance/${instanceId}/sendText`;
+    const requestUrl = `${baseURL}/instance/${createData.instanceId}/sendText`;
     const requestData = {
       conversationId,
       mentions: [
@@ -258,45 +294,41 @@ describe('Routes', () => {
       ],
       text: 'Hello @Jasmine and @Bernd!',
     };
-    const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest('post', requestUrl, requestData);
-    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.OK);
-
-    const {instanceId: requestedId} = JSON.parse(requestedBody);
-    expect(requestedId).toBe(instanceId);
+    const requestResult = await sendRequest<{instanceId: string}>('post', requestUrl, requestData);
+    const {data: sendTextData, statusCode: sendTextStatusCode} = requestResult;
+    expect(sendTextStatusCode).toBe(HTTP_STATUS_CODE.OK);
+    expect(sendTextData.instanceId).toBe(createData.instanceId);
   });
 
   it('sends the correct error code for not found', async () => {
-    const {statusCode} = await createInstance();
-    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
+    const {statusCode: createInstanceStatusCode} = await createInstance();
+    expect(createInstanceStatusCode).toBe(HTTP_STATUS_CODE.OK);
 
     const requestUrl = `${baseURL}/doesnotexist`;
-    const {statusCode: requestedStatusCode} = await sendRequest('get', requestUrl);
-    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.NOT_FOUND);
+    const {statusCode: invalidURLStatusCode} = await sendRequest('get', requestUrl, {}, true);
+    expect(invalidURLStatusCode).toBe(HTTP_STATUS_CODE.NOT_FOUND);
   });
 
   it('saves sent messages', async () => {
-    const {statusCode, body} = await createInstance();
-    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
-    const {instanceId} = JSON.parse(body);
+    const {data: createData, statusCode: createInstanceStatusCode} = await createInstance();
+    expect(createInstanceStatusCode).toBe(HTTP_STATUS_CODE.OK);
 
     const message = 'Hello from Jasmine';
 
     const conversationId = new UUID(UUID_VERSION).format();
-    const textRequestUrl = `${baseURL}/instance/${instanceId}/sendText`;
+    const textRequestUrl = `${baseURL}/instance/${createData.instanceId}/sendText`;
     const textRequestData = {conversationId, text: message};
     await sendRequest('post', textRequestUrl, textRequestData);
 
-    const messagesRequestUrl = `${baseURL}/instance/${instanceId}/getMessages`;
+    const messagesRequestUrl = `${baseURL}/instance/${createData.instanceId}/getMessages`;
     const messagesRequestData = {conversationId};
-    const {body: requestedBody, statusCode: requestedStatusCode} = await sendRequest(
+    const {data: getMessagesData, statusCode: getMessagesStatusCode} = await sendRequest<{content: {text: string}}[]>(
       'post',
       messagesRequestUrl,
       messagesRequestData,
     );
 
-    const receivedPayload = JSON.parse(requestedBody);
-
-    expect(requestedStatusCode).toBe(HTTP_STATUS_CODE.OK);
-    expect(receivedPayload[0].content.text).toEqual(message);
+    expect(getMessagesStatusCode).toBe(HTTP_STATUS_CODE.OK);
+    expect(getMessagesData[0].content.text).toEqual(message);
   });
 });

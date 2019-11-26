@@ -7,6 +7,7 @@
     "@types/node": "~12",
     "@wireapp/core": "15.0.8",
     "@wireapp/lru-cache": "3.3.27",
+    "axios": "0.19.0",
     "body-parser": "1.19.0",
     "celebrate": "10.0.1",
     "compression": "1.7.4",
@@ -25,7 +26,6 @@
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
     "@types/jasmine": "3.5.0",
-    "@types/request": "2.48.3",
     "@types/swagger-ui-express": "4.1.0",
     "@wireapp/prettier-config": "0.3.0",
     "@wireapp/tslint-config": "1.4.1",
@@ -36,7 +36,6 @@
     "logdown": "3.2.8",
     "nock": "11.7.0",
     "prettier": "1.19.1",
-    "request": "2.88.0",
     "rimraf": "3.0.0",
     "swagger-markdown": "1.2.0",
     "ts-node": "8.5.2",
