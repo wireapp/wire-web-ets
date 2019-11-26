@@ -37,7 +37,7 @@ export interface InstanceRequest {
   password: string;
 }
 
-export interface ReducedInstances {
+interface ReducedInstances {
   [id: string]: {
     backend: string;
     clientId: string;
