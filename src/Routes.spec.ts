@@ -92,7 +92,7 @@ describe('Routes', () => {
 
     nock(backendURL)
       .post(new RegExp(`${ConversationAPI.URL.CONVERSATIONS}/.*/otr/messages`))
-      .query({ignore_missing: 'false'})
+      .query(true)
       .reply(HTTP_STATUS_CODE.OK)
       .persist();
 
