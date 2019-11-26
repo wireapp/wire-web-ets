@@ -348,7 +348,7 @@ export class InstanceService {
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await service.conversation.messageBuilder
+      const payload = service.conversation.messageBuilder
         .createText(conversationId, message)
         .withMentions(mentions)
         .withQuote(quote)
