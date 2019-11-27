@@ -384,10 +384,10 @@
   resolved "https://registry.npmjs.org/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
-"@wireapp/api-client@9.1.4":
-  version "9.1.4"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-9.1.4.tgz#e1a1bca5f07c4b23f311742b48d3fc7a66baeae1"
-  integrity sha512-0W/JmfbUqoD/LpEw6OSvITZJeqcZaFzFVIfRKV+/dIhMByKgOmlxK1RnEuug0FYghyviWUuvFSceqrHDSZj5Pg==
+"@wireapp/api-client@9.1.5":
+  version "9.1.5"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-9.1.5.tgz#803a5e6fdfe77a9a393ecf34769ac8b20bfe6ca4"
+  integrity sha512-RX1hLQ+pn6CIy3nmMqS6XzPG7QlIVQu7nCRAEp+H2c7VhMBqxLjSxLzmjEXHPBpQZZkzNUmjMCOF07dkKUaDPQ==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
@@ -396,7 +396,7 @@
     "@wireapp/priority-queue" "1.3.6"
     axios "0.19.0"
     logdown "3.2.8"
-    reconnecting-websocket "github:wireapp/reconnecting-websocket#96ac796ae8c7a7d9d857f46ed39dbedd7b9ad378"
+    reconnecting-websocket wireapp/reconnecting-websocket#96ac796ae8c7a7d9d857f46ed39dbedd7b9ad378
     spark-md5 "3.0.0"
     tough-cookie "3.0.1"
     ws "7.2.0"
@@ -422,33 +422,33 @@
     platform "1.3.5"
     url-search-params-polyfill "7.0.0"
 
-"@wireapp/core@15.1.2":
-  version "15.1.2"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.1.2.tgz#abe37313c8d4789c62005717017ba0beaeba1256"
-  integrity sha512-lG6d3DZfFSjBTkogPvaFmstZ7x1EvXQ9uaAEgPTin/l3fr+8MhV42UocUSLBRlBSK7t9Qphg7CFcBHghA7Cb8A==
+"@wireapp/core@15.1.3":
+  version "15.1.3"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.1.3.tgz#4f0a1c452170349a2e91afaca5dc501576290891"
+  integrity sha512-eWT//h+cokCNVBStUwpCj5GhRekH4w3lGtC5pVaBfHEYg8ivuolnlhm+Gfnl1azfwzNcRfUs13ZYVBVFoKnqUw==
   dependencies:
     "@types/long" "4.0.0"
     "@types/node" "~12"
-    "@wireapp/api-client" "9.1.4"
-    "@wireapp/cryptobox" "12.0.9"
+    "@wireapp/api-client" "9.1.5"
+    "@wireapp/cryptobox" "12.0.10"
     "@wireapp/protocol-messaging" "1.24.2"
-    "@wireapp/store-engine" "4.1.4"
+    "@wireapp/store-engine" "4.1.5"
     bazinga64 "5.5.32"
     hash.js "1.1.7"
     logdown "3.2.8"
     protobufjs "6.8.8"
     pure-uuid "1.5.7"
 
-"@wireapp/cryptobox@12.0.9":
-  version "12.0.9"
-  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.0.9.tgz#c6d8097cb761c4b686d76dd8db4f5001b99afb7a"
-  integrity sha512-zhwwRZZ0cVx/VcQdyrICqVlZVn81cFN09RFc8OdcVWnJXJ+LAgucyJ6elwddsICY0M9OyDSkJwOjbSiYzXMIyg==
+"@wireapp/cryptobox@12.0.10":
+  version "12.0.10"
+  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.0.10.tgz#0d978289b0e36ba1c693c7cda822a500bd798772"
+  integrity sha512-ppi7mCDr50zvtmUyAVRIv1fGEltz4L7AmrPeqJigXKh2rsWnPF3ddia4aW2YjaIgAU1mGEqJPRa5gbWvvFNHqA==
   dependencies:
     "@types/node" "~12"
     "@wireapp/lru-cache" "3.3.28"
     "@wireapp/priority-queue" "1.3.6"
-    "@wireapp/proteus" "9.4.24"
-    "@wireapp/store-engine" "4.1.4"
+    "@wireapp/proteus" "9.4.25"
+    "@wireapp/store-engine" "4.1.5"
     bazinga64 "5.5.32"
     logdown "3.2.8"
 
@@ -471,10 +471,10 @@
     logdown "3.2.8"
     pure-uuid "1.5.7"
 
-"@wireapp/proteus@9.4.24":
-  version "9.4.24"
-  resolved "https://registry.npmjs.org/@wireapp/proteus/-/proteus-9.4.24.tgz#962c373a68e1bcd6b67bdd3fed44c55ba37f1558"
-  integrity sha512-tuYJaAzE48vkOmjooD7S9h/WZGwT9nHsSOVRYaQa662qqs/63Psz939DJTEP8vVp0CQseL2enTzVZwztENpmog==
+"@wireapp/proteus@9.4.25":
+  version "9.4.25"
+  resolved "https://registry.npmjs.org/@wireapp/proteus/-/proteus-9.4.25.tgz#0ad06d9dce71472ee72c457441e7a4663459d83b"
+  integrity sha512-eYJpwmIoqjaplznxdDGNk3+5tfs6OgYPvAna8Z0hPP9fnp8TNlRGH1ELWldirN7uGnsmUsa5OCesxhqCBH1yJw==
   dependencies:
     "@types/chai" "4.2.5"
     "@types/ed2curve" "0.2.2"
@@ -490,10 +490,10 @@
   dependencies:
     protobufjs "6.8.8"
 
-"@wireapp/store-engine@4.1.4":
-  version "4.1.4"
-  resolved "https://registry.npmjs.org/@wireapp/store-engine/-/store-engine-4.1.4.tgz#ca52365b325bcce687fb0e9853eaf57aac496995"
-  integrity sha512-89CiRrnNTOZ5w9uRbejAkxOyURtOq9uodRwKfej8k7i384K8KF2CLkuNnLHLhGpxfxdYy+5zsGG70JHBZiekSA==
+"@wireapp/store-engine@4.1.5":
+  version "4.1.5"
+  resolved "https://registry.npmjs.org/@wireapp/store-engine/-/store-engine-4.1.5.tgz#ffeed969b36dbe08c808e9a325c3978d9e4afafc"
+  integrity sha512-I+Wzs0hiYOsr9Dj05QwYFKdAv0tm4LdN9muB0/XBqLGw0pKTJcA4nORjWaIVnEVy/dmMdmeKbjL6Pr//HImt8g==
   dependencies:
     "@types/node" "~12"
 
@@ -3668,7 +3668,6 @@ rechoir@^0.6.2:
 
 "reconnecting-websocket@github:wireapp/reconnecting-websocket#96ac796ae8c7a7d9d857f46ed39dbedd7b9ad378":
   version "4.2.0"
-  uid "96ac796ae8c7a7d9d857f46ed39dbedd7b9ad378"
   resolved "https://codeload.github.com/wireapp/reconnecting-websocket/tar.gz/96ac796ae8c7a7d9d857f46ed39dbedd7b9ad378"
 
 referrer-policy@1.2.0:
