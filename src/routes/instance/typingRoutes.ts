@@ -41,7 +41,7 @@ export const typingRoutes = (instanceService: InstanceService): express.Router =
           .uuid()
           .required(),
         status: Joi.string()
-          .valid([CONVERSATION_TYPING.STARTED, CONVERSATION_TYPING.STOPPED])
+          .valid(CONVERSATION_TYPING.STARTED, CONVERSATION_TYPING.STOPPED)
           .required(),
       },
     }),

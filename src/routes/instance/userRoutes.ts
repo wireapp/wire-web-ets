@@ -41,7 +41,7 @@ export const userRoutes = (instanceService: InstanceService): express.Router => 
           .uuid()
           .required(),
         type: Joi.number()
-          .valid([0, 1, 2, 3])
+          .valid(0, 1, 2, 3)
           .required(),
       },
     }),
