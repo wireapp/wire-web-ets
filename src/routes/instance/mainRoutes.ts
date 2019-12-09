@@ -52,7 +52,7 @@ const validateCustomBackend = Joi.object({
   ws: Joi.string().required(),
 });
 
-const validateBackend = Joi.string().valid(['prod', 'production', 'staging']);
+const validateBackend = Joi.string().valid('prod', 'production', 'staging');
 
 export const mainRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
@@ -64,7 +64,7 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
         backend: validateBackend.allow('').optional(),
         customBackend: validateCustomBackend.optional(),
         deviceClass: Joi.string()
-          .valid([ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET])
+          .valid(ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET)
           .optional(),
         deviceLabel: Joi.string()
           .allow('')
@@ -208,7 +208,7 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
     celebrate({
       body: {
         backend: Joi.string()
-          .valid(['prod', 'production', 'staging', ''])
+          .valid('prod', 'production', 'staging', '')
           .optional(),
         customBackend: validateCustomBackend,
         email: Joi.string()
