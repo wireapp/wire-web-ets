@@ -2679,6 +2679,13 @@ logdown@3.2.8:
   dependencies:
     chalk "^2.3.0"
 
+logdown@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.npmjs.org/logdown/-/logdown-3.3.0.tgz#639dd2d3becaf0d9657ab63e812fa0e0f0b19fe7"
+  integrity sha512-CECrThg4JtaVNJ8P7zlWDaFveHTg3VIrrUXvc8L2840VVuyZcLW3dDrdURgzHLSAxoKJt/F55RbKdQ0alI+Njg==
+  dependencies:
+    chalk "^2.3.0"
+
 long-timeout@0.1.1:
   version "0.1.1"
   resolved "https://registry.npmjs.org/long-timeout/-/long-timeout-0.1.1.tgz#9721d788b47e0bcb5a24c2e2bee1a0da55dab514"
