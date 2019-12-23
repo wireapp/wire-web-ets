@@ -20,7 +20,7 @@
     "pm2-logrotate": "2.7.0",
     "pure-uuid": "1.5.7",
     "swagger-ui-express": "4.1.2",
-    "typescript": "3.7.3"
+    "typescript": "3.7.4"
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
