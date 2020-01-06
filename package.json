@@ -34,7 +34,7 @@
     "jasmine": "3.5.0",
     "lint-staged": "9.5.0",
     "logdown": "3.3.0",
-    "nock": "11.7.0",
+    "nock": "11.7.1",
     "prettier": "1.19.1",
     "rimraf": "3.0.0",
     "swagger-markdown": "1.2.0",
