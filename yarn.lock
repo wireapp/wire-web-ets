@@ -438,15 +438,15 @@
     platform "1.3.5"
     url-search-params-polyfill "7.0.1"
 
-"@wireapp/core@15.2.14":
-  version "15.2.14"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.2.14.tgz#1ff20fcfac1c2aedf586fa251ba3d931ca6c7450"
-  integrity sha512-WVzb1o3sY42i1lQ8VXjFmLpYg4M+6O8hb1WXKXiitLVJdSGwu1hR98o7l/sgRGhaZlmYCUeMRH92CHTITmf8Ug==
+"@wireapp/core@15.2.15":
+  version "15.2.15"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.2.15.tgz#95e24f00694fd3361c742eab94e5e003369a4a06"
+  integrity sha512-bUN95nFUqeZLgmNLlScxQM/qENYv+H8XGslk8nhVODN5AUTfIBZiV0ZQBUoHAPx78R8LgatT5IiFztEafOUVjQ==
   dependencies:
     "@types/long" "4.0.0"
     "@types/node" "~12"
     "@wireapp/api-client" "9.15.1"
-    "@wireapp/cryptobox" "12.1.1"
+    "@wireapp/cryptobox" "12.1.2"
     "@wireapp/protocol-messaging" "1.24.2"
     "@wireapp/store-engine" "4.3.1"
     bazinga64 "5.6.1"
@@ -455,10 +455,10 @@
     protobufjs "6.8.8"
     pure-uuid "1.5.8"
 
-"@wireapp/cryptobox@12.1.1":
-  version "12.1.1"
-  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.1.1.tgz#0ca693af7643b21e1dfc629a84d1d82709a12431"
-  integrity sha512-ah0XiLyvJYFl+DaMGnGbM8oGwT75qfibgImPFeRf2AfzgMYgwUl3fDrK6rq8fqfqZACy9p0lQP478OeFngwfbg==
+"@wireapp/cryptobox@12.1.2":
+  version "12.1.2"
+  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.1.2.tgz#ae6b20c418c772e739e12ee49c20903d54c9d73f"
+  integrity sha512-kMJOlodF7KQya3FgXNbtBQ8Arv8cvGlcLKRrEdAuYnD9aM0XR+iVUWZp7e5F5K3wnX10+MCzwd82IRCoJABsrQ==
   dependencies:
     "@types/node" "~12"
     "@wireapp/lru-cache" "3.4.1"
