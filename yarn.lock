@@ -402,10 +402,10 @@
   resolved "https://registry.npmjs.org/@types/tough-cookie/-/tough-cookie-2.3.6.tgz#c880579e087d7a0db13777ff8af689f4ffc7b0d5"
   integrity sha512-wHNBMnkoEBiRAd3s8KTKwIuO9biFtTf0LehITzBhSco+HQI0xkXZbLOD55SW3Aqw3oUkHstkm5SPv58yaAdFPQ==
 
-"@wireapp/api-client@9.16.1":
-  version "9.16.1"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-9.16.1.tgz#6e447b395ae043a7eb11d4e71df47929d186d77f"
-  integrity sha512-Q4kP0Or7410WxXVPhXR7qmjeHTeaynbZ0Ma/1damdv1N4dBzwQp4H3AIQynlzO5LX28kmRDvOgqdbDeYtFt4fA==
+"@wireapp/api-client@9.16.2":
+  version "9.16.2"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-9.16.2.tgz#a0a4983a3e9f81e25036988614342b1bb8910669"
+  integrity sha512-pwfQa+oWDru0lm+Nl1gHWBfHVlrLsjSJFpmTWv7AXzd5bpOjwBJJlGYUKYf8xVSydAQnbqLH7fGm5Fel9cKYYg==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
@@ -419,10 +419,10 @@
     tough-cookie "3.0.1"
     ws "7.2.1"
 
-"@wireapp/cbor@4.4.0":
-  version "4.4.0"
-  resolved "https://registry.npmjs.org/@wireapp/cbor/-/cbor-4.4.0.tgz#cdcdd7f90e6dff708ce463098c17ae3ed50f7520"
-  integrity sha512-zK+s1Vpwii+1e4ggW4rbSKFSTVcGE6GuMpUoDHkxAqtmoms91muyHMr3z9t4dGoq9wdFElLxY/rwQHBVcsruFg==
+"@wireapp/cbor@4.5.0":
+  version "4.5.0"
+  resolved "https://registry.npmjs.org/@wireapp/cbor/-/cbor-4.5.0.tgz#571f328e446a88e28910e84a222dbcfa8852523e"
+  integrity sha512-X1DMF/ee516Ap6BLu32YyDWx87fwFO1A01RwYTogM/7MjgDTbDcU8+rjwzTsDTFpW9X531gAD1hRq8dUsr++/w==
 
 "@wireapp/commons@3.2.0":
   version "3.2.0"
@@ -438,15 +438,15 @@
     platform "1.3.5"
     url-search-params-polyfill "7.0.1"
 
-"@wireapp/core@15.2.18":
-  version "15.2.18"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.2.18.tgz#f242cd1ff81aae45730eb06e287d19b872e0b062"
-  integrity sha512-IjRqVvvv0BJ3aTFYk81py/bBUvirJ1PLpjmHPLEPhkIfuHLvNLztXuO1+4p6UVKUyMqRkibm8wkN/orKdwCX6A==
+"@wireapp/core@15.3.2":
+  version "15.3.2"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.3.2.tgz#c934f6a62603542fdda20fe88b682ea675fa04a7"
+  integrity sha512-d2f/fHJTAEeqdgxgmMwWSmohhRFXtUroNO/kig41BsdhWmcK9eGDAipS4cZPme/gdotUwTlLD5huFfMof3Ycfw==
   dependencies:
     "@types/long" "4.0.0"
     "@types/node" "~12"
-    "@wireapp/api-client" "9.16.1"
-    "@wireapp/cryptobox" "12.1.2"
+    "@wireapp/api-client" "9.16.2"
+    "@wireapp/cryptobox" "12.1.3"
     "@wireapp/protocol-messaging" "1.24.2"
     "@wireapp/store-engine" "4.3.1"
     bazinga64 "5.6.1"
@@ -455,15 +455,15 @@
     protobufjs "6.8.8"
     pure-uuid "1.5.8"
 
-"@wireapp/cryptobox@12.1.2":
-  version "12.1.2"
-  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.1.2.tgz#ae6b20c418c772e739e12ee49c20903d54c9d73f"
-  integrity sha512-kMJOlodF7KQya3FgXNbtBQ8Arv8cvGlcLKRrEdAuYnD9aM0XR+iVUWZp7e5F5K3wnX10+MCzwd82IRCoJABsrQ==
+"@wireapp/cryptobox@12.1.3":
+  version "12.1.3"
+  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.1.3.tgz#4ea0d881140adb059268f54fe3bdfb0ea499438a"
+  integrity sha512-Nlm8EiAZbabqKqM4YcF5YYnPBZ+phS6rXJ/gjjuJ8ohzKVgTpNGoWVISlunTYZbkReFcXHYqKofnqQVYDV621Q==
   dependencies:
     "@types/node" "~12"
     "@wireapp/lru-cache" "3.4.1"
     "@wireapp/priority-queue" "1.4.0"
-    "@wireapp/proteus" "9.5.0"
+    "@wireapp/proteus" "9.6.0"
     "@wireapp/store-engine" "4.3.1"
     bazinga64 "5.6.1"
     logdown "3.3.0"
@@ -487,15 +487,15 @@
     logdown "3.3.0"
     pure-uuid "1.5.8"
 
-"@wireapp/proteus@9.5.0":
-  version "9.5.0"
-  resolved "https://registry.npmjs.org/@wireapp/proteus/-/proteus-9.5.0.tgz#1cd975b3242c620d573b9625961f9c8cf3111ac1"
-  integrity sha512-4TJXRET06ItglaBnA1GCWj/iYEScwP4Z1Y1xJM+iHf/THfQzrApmToD4uBQmBtQ8Rmrrbs3xa1BjVfKBi6zbpA==
+"@wireapp/proteus@9.6.0":
+  version "9.6.0"
+  resolved "https://registry.npmjs.org/@wireapp/proteus/-/proteus-9.6.0.tgz#e901ec90667b45fcc8c5fa70fbddd8ab646f8cc6"
+  integrity sha512-DUmubSA7J/oJj494Rr5fgtmyDBWBFEkwhYCYwywchsAC8npj0cRXqCTWbTqw3oEhT3SAix/NKlnGNfUYN1xMOQ==
   dependencies:
     "@types/chai" "4.2.7"
     "@types/ed2curve" "0.2.2"
     "@types/node" "~12"
-    "@wireapp/cbor" "4.4.0"
+    "@wireapp/cbor" "4.5.0"
     ed2curve "0.2.1"
     libsodium-wrappers-sumo "0.7.6"
 
