@@ -32,7 +32,7 @@
     "cross-env": "6.0.3",
     "husky": "4.0.10",
     "jasmine": "3.5.0",
-    "lint-staged": "9.5.0",
+    "lint-staged": "10.0.0",
     "logdown": "3.3.0",
     "nock": "11.7.2",
     "prettier": "1.19.1",
@@ -57,16 +57,13 @@
   "license": "GPL-3.0",
   "lint-staged": {
     "*.{json,md,js,yml}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "src/**/!(*.spec).ts": [
-      "tslint --project tsconfig.json --fix",
-      "git add"
+      "tslint --project tsconfig.json --fix"
     ],
     "src/**/*.spec.ts": [
-      "tslint --project tsconfig.jasmine.json --fix",
-      "git add"
+      "tslint --project tsconfig.jasmine.json --fix"
     ]
   },
   "main": "dist/index.js",
