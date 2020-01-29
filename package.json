@@ -36,7 +36,7 @@
     "logdown": "3.3.0",
     "nock": "11.7.2",
     "prettier": "1.19.1",
-    "rimraf": "3.0.0",
+    "rimraf": "3.0.1",
     "swagger-markdown": "1.2.0",
     "ts-node": "8.6.2",
     "tslint": "5.20.1",
