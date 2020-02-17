@@ -2,7 +2,7 @@
   "dependencies": {
     "@types/compression": "1.0.1",
     "@types/express": "4.17.2",
-    "@types/hapi__joi": "16.0.9",
+    "@types/hapi__joi": "16.0.10",
     "@types/helmet": "0.0.45",
     "@types/node": "~12",
     "@wireapp/core": "15.4.4",
