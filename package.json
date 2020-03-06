@@ -29,7 +29,7 @@
     "@wireapp/prettier-config": "0.3.0",
     "@wireapp/tslint-config": "1.4.1",
     "axios": "0.19.2",
-    "cross-env": "7.0.1",
+    "cross-env": "7.0.2",
     "husky": "4.2.3",
     "jasmine": "3.5.0",
     "lint-staged": "10.0.8",
