@@ -724,6 +724,7 @@ Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
+  "buttons": "<string[]>",
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
   "legalHoldStatus?": "<0|1|2>",
@@ -798,7 +799,6 @@ Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
-  "buttons": "<string[]>",
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
   "firstMessageId": "<string in UUID format>",
