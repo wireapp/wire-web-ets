@@ -1,7 +1,7 @@
 # E2E Test Service
 End-to-end Test Service (ETS) for Wire's test automation suite.
 
-## Version: 1.16.1
+## Version: 1.20.0
 
 ### Terms of service
 https://wire.com/legal/
@@ -23,6 +23,7 @@ Get information about the server
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [ServerInfo](#serverinfo) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /clients
 
@@ -46,7 +47,8 @@ Delete all clients
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [ [Client](#client) ] |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /commit
 
@@ -60,7 +62,7 @@ Get the latest commit hash as plain text
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | string |
-| 500 | Internal server error | [ServerError](#servererror) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance
 
@@ -84,7 +86,8 @@ Create a new instance
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}
 
@@ -108,8 +111,8 @@ Delete an instance
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | object |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 #### GET
 ##### Summary:
@@ -127,7 +130,9 @@ Get information about an instance
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [Instance](#instance) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/archive
 
@@ -148,8 +153,9 @@ Archive a conversation
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/availability
 
@@ -170,8 +176,9 @@ Set a user's availability
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/clear
 
@@ -192,8 +199,9 @@ Clear a conversation
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/clients
 
@@ -213,7 +221,9 @@ Get all clients of an instance
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [ [Client](#client) ] |
-| 404 | Not found | [NotFoundError](#notfounderror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/delete
 
@@ -234,8 +244,9 @@ Delete a message locally
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/deleteEverywhere
 
@@ -256,8 +267,9 @@ Delete a message for everyone
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/fingerprint
 
@@ -277,7 +289,9 @@ Get the fingerprint from the instance's client
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | object |
-| 404 | Not found | [NotFoundError](#notfounderror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/getMessages
 
@@ -298,8 +312,9 @@ Get all messages
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [ [Message](#message) ] |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/mute
 
@@ -320,8 +335,9 @@ Mute a conversation
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendConfirmationDelivered
 
@@ -342,8 +358,9 @@ Send a delivery confirmation for a message
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendConfirmationRead
 
@@ -364,8 +381,9 @@ Send a read confirmation for a message
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendEphemeralConfirmationDelivered
 
@@ -386,8 +404,9 @@ Send a delivery confirmation for an ephemeral message
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendEphemeralConfirmationRead
 
@@ -408,8 +427,9 @@ Send a read confirmation for an ephemeral message
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendFile
 
@@ -430,8 +450,9 @@ Send a file to a conversation
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendImage
 
@@ -445,15 +466,16 @@ Send an image to a conversation
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | instanceId | path | ID of instance to use | Yes | string (uuid) |
-| body | body |  | Yes | object |
+| body | body |  | Yes | [Image](#image) |
 
 ##### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendLocation
 
@@ -474,8 +496,9 @@ Send a location to a conversation
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendPing
 
@@ -496,8 +519,9 @@ Send a ping to a conversation
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendReaction
 
@@ -518,8 +542,9 @@ Send a reaction to a message
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendSessionReset
 
@@ -540,8 +565,9 @@ Send a session reset message
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendText
 
@@ -562,8 +588,9 @@ Send a text message to a conversation
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) & object |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/sendTyping
 
@@ -584,8 +611,9 @@ Send a typing indicator to a conversation
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instance/{instanceId}/updateText
 
@@ -606,8 +634,9 @@ Update a text message in a conversation
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [InstanceAndName](#instanceandname) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
-| 422 | Validation error | [ValidationError](#validationerror) |
+| 404 | Instance not found | [ErrorMessage](#errormessage) |
+| 422 | Validation error | [ErrorMessage](#errormessage) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /instances
 
@@ -621,7 +650,7 @@ Get all instances
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | [Instance](#instance) |
-| 404 | Not found | [NotFoundError](#notfounderror) |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### /log
 
@@ -635,16 +664,10 @@ Get the complete log as plain text
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 |  | string |
+| 500 | Internal server error | [ServerErrorMessage](#servererrormessage) |
 
 ### Models
 
-
-#### Availability
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| teamId | string (uuid) |  | No |
-| type | integer |  | No |
 
 #### AudioMetaData
 
@@ -652,6 +675,13 @@ Get the complete log as plain text
 | ---- | ---- | ----------- | -------- |
 | durationInMillis | integer |  | No |
 | normalizedLoudness | [ integer ] |  | No |
+
+#### Availability
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| teamId | string (uuid) |  | No |
+| type | integer |  | No |
 
 #### BackendData
 
@@ -696,6 +726,25 @@ Get the complete log as plain text
 | ---- | ---- | ----------- | -------- |
 | ConfirmationWithSender |  |  |  |
 
+#### ErrorMessage
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| code | integer |  | Yes |
+| error | string |  | Yes |
+
+#### Image
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| data | string (base64) |  | Yes |
+| expectsReadConfirmation | boolean |  | No |
+| height | integer |  | Yes |
+| legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
+| messageTimer | integer |  | No |
+| type | string |  | Yes |
+| width | integer |  | Yes |
+
 #### Instance
 
 | Name | Type | Description | Required |
@@ -721,7 +770,7 @@ Type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| image | object |  | No |
+| image | [Image](#image) |  | No |
 | permanentUrl | string |  | No |
 | summary | string |  | No |
 | title | string |  | No |
@@ -780,13 +829,6 @@ Type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 | legalHoldStatus | [LegalHoldStatus](#legalholdstatus) |  | No |
 | text | string |  | Yes |
 
-#### NotFoundError
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| error | string |  | No |
-| stack | string |  | No |
-
 #### Reaction
 
 | Name | Type | Description | Required |
@@ -801,12 +843,11 @@ Type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 | ---- | ---- | ----------- | -------- |
 | ReactionWithSender |  |  |  |
 
-#### ServerError
+#### ServerErrorMessage
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| error | string |  | No |
-| stack | string |  | No |
+| ServerErrorMessage |  |  |  |
 
 #### ServerInfo
 
@@ -842,12 +883,6 @@ Type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 | ---- | ---- | ----------- | -------- |
 | conversationId | string (uuid) |  | No |
 | status | string |  | No |
-
-#### ValidationError
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| error | string |  | No |
 
 #### VideoMetaData
 

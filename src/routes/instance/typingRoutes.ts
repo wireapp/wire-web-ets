@@ -17,10 +17,12 @@
  *
  */
 
-import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/conversation/data/';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 
+import {ErrorMessage, ServerErrorMessage} from '../../config';
 import {InstanceService} from '../../InstanceService';
 import {MessageRequest} from './conversationRoutes';
 
@@ -39,7 +41,7 @@ export const typingRoutes = (instanceService: InstanceService): express.Router =
           .uuid()
           .required(),
         status: Joi.string()
-          .valid([CONVERSATION_TYPING.STARTED, CONVERSATION_TYPING.STOPPED])
+          .valid(CONVERSATION_TYPING.STARTED, CONVERSATION_TYPING.STOPPED)
           .required(),
       },
     }),
@@ -48,7 +50,11 @@ export const typingRoutes = (instanceService: InstanceService): express.Router =
       const {conversationId, status}: TypingMessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
@@ -58,7 +64,12 @@ export const typingRoutes = (instanceService: InstanceService): express.Router =
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );

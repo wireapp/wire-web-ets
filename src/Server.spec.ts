@@ -17,11 +17,11 @@
  *
  */
 
-import * as request from 'request';
+import axios from 'axios';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
+
 import {config} from './config';
 import {Server} from './Server';
-
-const HTTP_CODE_OK = 200;
 
 describe('Server', () => {
   let etsServer: Server;
@@ -39,19 +39,12 @@ describe('Server', () => {
     expect(port).toBe(config.PORT_HTTP);
   });
 
-  it('responds to requests', async done => {
+  it('responds to requests', async () => {
     const port = await etsServer.start();
 
     const url = `http://localhost:${port}/`;
-    request.get(url, (error, response) => {
-      if (error) {
-        done.fail(error);
-      } else {
-        expect(response.statusCode).toBe(HTTP_CODE_OK);
-        const {message} = JSON.parse(response.body);
-        expect(message).toContain('ready');
-        done();
-      }
-    });
+    const {data, status: statusCode} = await axios.get<{message: string}>(url);
+    expect(statusCode).toBe(HTTP_STATUS_CODE.OK);
+    expect(data.message).toContain('ready');
   });
 });

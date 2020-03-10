@@ -18,10 +18,10 @@
  */
 
 import {APIClient} from '@wireapp/api-client';
-import {LoginData} from '@wireapp/api-client/dist/commonjs/auth/';
-import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/dist/commonjs/client/';
-import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/commonjs/conversation/data/';
-import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/commonjs/http/';
+import {LoginData} from '@wireapp/api-client/dist/auth/';
+import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/dist/client/';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
+import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/http/';
 import {Account} from '@wireapp/core';
 import {AvailabilityType} from '@wireapp/core/dist/broadcast/';
 import {ClientInfo} from '@wireapp/core/dist/client/';
@@ -44,13 +44,14 @@ import {
   ReactionContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content/';
+import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 import * as logdown from 'logdown';
 import UUID from 'pure-uuid';
 
-import {BackendData} from '@wireapp/api-client/dist/commonjs/env/';
+import {BackendData} from '@wireapp/api-client/dist/env/';
 import {Confirmation} from '@wireapp/protocol-messaging';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from './utils';
 
@@ -95,6 +96,7 @@ export class InstanceService {
   constructor(private readonly maximumInstances = 100) {
     this.cachedInstances = new LRUCache(this.maximumInstances);
   }
+
   private readonly cachedInstances: LRUCache<Instance>;
 
   async toggleArchiveConversation(instanceId: string, conversationId: string, archived: boolean): Promise<string> {
@@ -142,7 +144,7 @@ export class InstanceService {
 
     logger.log(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
 
-    const client = new APIClient({store: engine, urls: backendType});
+    const client = new APIClient({urls: backendType});
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
@@ -275,10 +277,7 @@ export class InstanceService {
 
   async removeAllClients(email: string, password: string, backend?: string | BackendData): Promise<void> {
     const backendType = this.parseBackend(backend);
-
-    const engine = new MemoryEngine();
-    await engine.init('temporary');
-    const apiClient = new APIClient({store: engine, urls: backendType});
+    const apiClient = new APIClient({urls: backendType});
     const account = new Account(apiClient);
 
     const ClientInfo: ClientInfo = {
@@ -345,21 +344,29 @@ export class InstanceService {
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
     expireAfterMillis = 0,
+    buttons: string[] = [],
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await service.conversation.messageBuilder
-        .createText(conversationId, message)
-        .withMentions(mentions)
-        .withQuote(quote)
-        .withReadConfirmation(expectsReadConfirmation)
-        .withLegalHoldStatus(legalHoldStatus)
-        .build();
 
-      let sentMessage = await service.conversation.send(payload);
+      let payloadBundle: OtrMessage;
+
+      if (buttons.length > 0) {
+        payloadBundle = service.conversation.messageBuilder.createPollMessage(conversationId, message, buttons);
+      } else {
+        payloadBundle = service.conversation.messageBuilder
+          .createText(conversationId, message)
+          .withMentions(mentions)
+          .withQuote(quote)
+          .withReadConfirmation(expectsReadConfirmation)
+          .withLegalHoldStatus(legalHoldStatus)
+          .build();
+      }
+
+      let sentMessage = await service.conversation.send(payloadBundle);
 
       if (linkPreview) {
         const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(linkPreview);
@@ -629,6 +636,7 @@ export class InstanceService {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = service.conversation.messageBuilder.createPing(conversationId, {
         expectsReadConfirmation,
+        hotKnock: false,
         legalHoldStatus,
       });
       const sentPing = await service.conversation.send(payload);
@@ -742,7 +750,7 @@ export class InstanceService {
   }
 
   private attachListeners(account: Account, instance: Instance): void {
-    account.on('error', error => logger.error(`[${formatDate()}]`, error));
+    account.on(Account.TOPIC.ERROR, error => logger.error(`[${formatDate()}]`, error));
 
     account.on(PayloadBundleType.TEXT, (payload: PayloadBundle) => {
       const linkPreviewContent = payload.content as TextContent;
@@ -777,7 +785,7 @@ export class InstanceService {
       instance.messages.delete(editedContent.originalMessageId);
     });
 
-    account.on(PayloadBundleType.CLEARED, (payload: PayloadBundle) => {
+    account.on(PayloadBundleType.CONVERSATION_CLEAR, (payload: PayloadBundle) => {
       const clearedContent = payload.content as ClearedContent;
 
       for (const message of instance.messages) {

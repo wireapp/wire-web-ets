@@ -28,7 +28,9 @@ import {
 } from '@wireapp/core/dist/conversation/content/';
 import {Joi, celebrate} from 'celebrate';
 import * as express from 'express';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
 
+import {ErrorMessage, ServerErrorMessage} from '../../config';
 import {InstanceService} from '../../InstanceService';
 import {hexToUint8Array} from '../../utils';
 
@@ -67,6 +69,7 @@ export interface LinkPreviewRequest {
 }
 
 export interface TextRequest extends MessageRequest {
+  buttons?: string[];
   expectsReadConfirmation?: boolean;
   linkPreview?: LinkPreviewRequest;
   mentions?: MentionContent[];
@@ -166,7 +169,11 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       const {archive, conversationId}: ArchiveRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
@@ -176,7 +183,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -196,7 +208,11 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       const {mute, conversationId}: MuteRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
@@ -206,7 +222,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -225,7 +246,11 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       const {conversationId}: MessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
@@ -235,7 +260,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -257,7 +287,11 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       const {conversationId, messageId}: DeletionRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
@@ -267,7 +301,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -289,7 +328,11 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       const {conversationId, messageId}: DeletionRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
@@ -299,7 +342,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -318,14 +366,23 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       const {conversationId}: MessageRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
         const messages = instanceService.getMessages(instanceId, conversationId);
         return res.json(messages || []);
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -342,7 +399,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .optional(),
         latitude: Joi.number().required(),
         legalHoldStatus: Joi.number()
-          .valid([LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
         locationName: Joi.string()
           .allow('')
@@ -368,7 +425,11 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       }: LocationRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       const location: LocationContent = {
@@ -390,7 +451,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -399,6 +465,9 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/sendText/?',
     celebrate({
       body: {
+        buttons: Joi.array()
+          .items(Joi.string())
+          .optional(),
         conversationId: Joi.string()
           .uuid()
           .required(),
@@ -406,7 +475,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .default(false)
           .optional(),
         legalHoldStatus: Joi.number()
-          .valid([LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
         linkPreview: Joi.object(validateLinkPreview).optional(),
         mentions: Joi.array()
@@ -422,6 +491,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''} = req.params;
       const {
+        buttons,
         conversationId,
         expectsReadConfirmation,
         linkPreview,
@@ -433,7 +503,11 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       }: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       let linkPreviewContent: LinkPreviewContent | undefined;
@@ -476,6 +550,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           expectsReadConfirmation,
           legalHoldStatus,
           messageTimer,
+          buttons,
         );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
@@ -484,7 +559,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -500,7 +580,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .default(false)
           .optional(),
         legalHoldStatus: Joi.number()
-          .valid([LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
         messageTimer: Joi.number()
           .default(0)
@@ -512,7 +592,11 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       const {conversationId, expectsReadConfirmation, legalHoldStatus, messageTimer}: TextRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
@@ -530,7 +614,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -543,13 +632,13 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .uuid()
           .required(),
         legalHoldStatus: Joi.number()
-          .valid([LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
         originalMessageId: Joi.string()
           .uuid()
           .required(),
         type: Joi.string()
-          .valid([ReactionType.LIKE, ReactionType.NONE])
+          .valid(ReactionType.LIKE, ReactionType.NONE)
           .required(),
       },
     }),
@@ -558,7 +647,11 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       const {conversationId, legalHoldStatus, originalMessageId, type}: ReactionRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       try {
@@ -576,7 +669,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );
@@ -595,7 +693,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .uuid()
           .required(),
         legalHoldStatus: Joi.number()
-          .valid([LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED])
+          .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
         linkPreview: Joi.object(validateLinkPreview).optional(),
         mentions: Joi.array()
@@ -619,7 +717,11 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       }: MessageUpdateRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
-        return res.status(400).json({error: `Instance "${instanceId}" not found.`});
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
 
       let linkPreviewContent: LinkPreviewContent | undefined;
@@ -672,7 +774,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           name: instanceName,
         });
       } catch (error) {
-        return res.status(500).json({error: error.message, stack: error.stack});
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
       }
     },
   );

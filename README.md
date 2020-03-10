@@ -40,13 +40,14 @@ yarn dist
 yarn start
 ```
 
-## API documentation (Swagger)
+## Swagger API documentation
 
-- [swagger.md](./docs/swagger.md)
+- See [swagger.md](./docs/swagger.md)
 - Swagger UI is available at `/swagger-ui` when the ETS is running.
 
-## API documentation (old)
+## Local API documentation
 
+- [Errors](#errors)
 - [`GET /`](#get-)
 - [`GET /log`](#get-log)
 - [`GET /commit`](#get-commit)
@@ -80,13 +81,52 @@ yarn start
 
 ---
 
+### Errors
+
+#### Invalid JSON provided
+
+```json
+{
+  "code": "400",
+  "error": "Payload is not valid JSON data."
+}
+```
+
+#### Instance or endpoint not found
+
+```json
+{
+  "code": "404",
+  "error": "<string>"
+}
+```
+
+#### JSON data with missing or invalid fields provided
+
+```json
+{
+  "code": "422",
+  "error": "<string>"
+}
+```
+
+#### Internal server error
+
+```json
+{
+  "code": "500",
+  "error": "<string>",
+  "stack": "string"
+}
+```
+
 ### `GET /`
 
 #### Response
 
 ```json
 {
-  "code": "<number in HTTP status format>",
+  "code": "<HTTP status number>",
   "commit?": "<string>",
   "instance": {
     "env": {
@@ -684,6 +724,7 @@ Legal Hold status type can be `0` (unknown), `1` (disabled) or `2` (enabled).
 
 ```json
 {
+  "buttons": "<string[]>",
   "conversationId": "<string in UUID format>",
   "expectsReadConfirmation?": "<boolean>",
   "legalHoldStatus?": "<0|1|2>",
