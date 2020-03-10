@@ -464,6 +464,9 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/sendText/?',
     celebrate({
       body: {
+        buttons: Joi.array()
+          .items(Joi.string())
+          .optional(),
         conversationId: Joi.string()
           .uuid()
           .required(),
