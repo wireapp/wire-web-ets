@@ -226,10 +226,10 @@
     "@types/connect" "*"
     "@types/node" "*"
 
-"@types/chai@4.2.8":
-  version "4.2.8"
-  resolved "https://registry.npmjs.org/@types/chai/-/chai-4.2.8.tgz#c8d645506db0d15f4aafd4dfa873f443ad87ea59"
-  integrity sha512-U1bQiWbln41Yo6EeHMr+34aUhvrMVyrhn9lYfPSpLTCrZlGxU4Rtn1bocX+0p2Fc/Jkd2FanCEXdw0WNfHHM0w==
+"@types/chai@4.2.10":
+  version "4.2.10"
+  resolved "https://registry.npmjs.org/@types/chai/-/chai-4.2.10.tgz#1122da40faabb81795580dc9f06c1e71e2ebbbe4"
+  integrity sha512-TlWWgb21+0LdkuFqEqfmy7NEgfB/7Jjux15fWQAh3P93gbmXuwTM/vxEdzW89APIcI2BgKR48yjeAkdeH+4qvQ==
 
 "@types/color-name@^1.1.1":
   version "1.1.1"
@@ -274,10 +274,10 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
-"@types/fs-extra@8.0.1":
-  version "8.0.1"
-  resolved "https://registry.npmjs.org/@types/fs-extra/-/fs-extra-8.0.1.tgz#a2378d6e7e8afea1564e44aafa2e207dadf77686"
-  integrity sha512-J00cVDALmi/hJOYsunyT52Hva5TnJeKP5yd1r+mH/ZU0mbYZflR0Z5kw5kITtKTRYMhm1JMClOFYdHnQszEvqw==
+"@types/fs-extra@8.1.0":
+  version "8.1.0"
+  resolved "https://registry.npmjs.org/@types/fs-extra/-/fs-extra-8.1.0.tgz#1114834b53c3914806cd03b3304b37b3bd221a4d"
+  integrity sha512-UoOfVEzAUpeSPmjm7h1uk5MH6KZma2z2O7a75onTGjnNvAvMVrPzPL/vBbT65iIGHWj6rokwfmYcmxmlSf2uwg==
   dependencies:
     "@types/node" "*"
 
@@ -364,34 +364,34 @@
   resolved "https://registry.npmjs.org/@types/tough-cookie/-/tough-cookie-2.3.6.tgz#c880579e087d7a0db13777ff8af689f4ffc7b0d5"
   integrity sha512-wHNBMnkoEBiRAd3s8KTKwIuO9biFtTf0LehITzBhSco+HQI0xkXZbLOD55SW3Aqw3oUkHstkm5SPv58yaAdFPQ==
 
-"@wireapp/api-client@9.20.0":
-  version "9.20.0"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-9.20.0.tgz#9a2d97d0ffa63b34bbb6a793ee8369c3a61a4d24"
-  integrity sha512-F011EkrjYyf74+xga8ozB3lVto53pjAEmOFIJjynsmKFIrgKZCnksw9GtulTHKUkB5/KVJQmx/ObWqhUm28XHQ==
+"@wireapp/api-client@9.20.1":
+  version "9.20.1"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-9.20.1.tgz#bdbbb889ba7ce54430ef37019a8f95b08c10070e"
+  integrity sha512-7EoZwo8Id/X7Wf0wjNlZWYldeel5YaymcpMDNe280wO0DhSYRe8bBPfO05CrPufpXbqGPX/DobV7EEg/vi+Aug==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
     "@types/tough-cookie" "2.3.6"
-    "@wireapp/commons" "3.3.5"
-    "@wireapp/priority-queue" "1.5.4"
+    "@wireapp/commons" "3.3.6"
+    "@wireapp/priority-queue" "1.5.5"
     axios "0.19.2"
     logdown "3.3.0"
-    reconnecting-websocket "github:wireapp/reconnecting-websocket#96ac796ae8c7a7d9d857f46ed39dbedd7b9ad378"
+    reconnecting-websocket "4.4.0"
     spark-md5 "3.0.0"
     tough-cookie "3.0.1"
     ws "7.2.1"
 
-"@wireapp/cbor@4.5.6":
-  version "4.5.6"
-  resolved "https://registry.npmjs.org/@wireapp/cbor/-/cbor-4.5.6.tgz#37b4c735cd769201cc067f7650bd3e17c8cc1645"
-  integrity sha512-V+su7lOKf17uea1qqupdJfL8RYmxmJ2X3tyCz9DeIuPe4f3DHrNUamF9KFHeVDqbX8R2CREqr54X7bMbPAAnig==
+"@wireapp/cbor@4.5.7":
+  version "4.5.7"
+  resolved "https://registry.npmjs.org/@wireapp/cbor/-/cbor-4.5.7.tgz#f6db72c37339829856e566b47c0de7ef5c30993a"
+  integrity sha512-E9U84zZtOsgAh+Iw/x3v0y8ZU7oJu4fHIxD3mLXF1Xk89WrWmUIo/FpMkqHFp5geQTxwSgdYnd+zhYiPUDMwHA==
 
-"@wireapp/commons@3.3.5":
-  version "3.3.5"
-  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-3.3.5.tgz#174c594f432608d8b04180fb4f37379db14cdd5b"
-  integrity sha512-tOpJ8xXwK24AWbtDcYx/kBSTiHtZolEJ95VyXJLfN8IZMn/yYv6miArw9Q109lipn7jBZtDtu8upzFYhabWQ6A==
+"@wireapp/commons@3.3.6":
+  version "3.3.6"
+  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-3.3.6.tgz#59c41ef01de069866646ca805e7c31146343c6ce"
+  integrity sha512-Tnf90GFkvy0lgCmyXWxdbUAKaHp/YvV7aq43cPqLWD6qQ94BB8PnF4ZdBizLH1EBtS+UHch8H/M+KxemcG7b8A==
   dependencies:
-    "@types/fs-extra" "8.0.1"
+    "@types/fs-extra" "8.1.0"
     "@types/node" "~12"
     "@types/platform" "1.3.2"
     ansi-regex "5.0.0"
@@ -400,40 +400,35 @@
     platform "1.3.5"
     url-search-params-polyfill "8.0.0"
 
-"@wireapp/core@15.4.7":
-  version "15.4.7"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.4.7.tgz#bb63d4b0a2d0dc3b38a7bfa14f9162421138c657"
-  integrity sha512-rKjXXxBLEpBSqBrGzTGrw5j6u9oUme0B3NL780CNC1amPtLcL55QAq6bBbGtQ3Ma6+rrBXgo4y4i0jAWxJcsyA==
+"@wireapp/core@15.5.0":
+  version "15.5.0"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.5.0.tgz#3b03276d10c65b194145126d8ca8ea296ad3c547"
+  integrity sha512-mC63XAHgm2Ax4KaN1QCcSQKzK/alPIph/OuFo5n1rNo/3/cbsK1n8hSx7YA+YgiuQzt4a02XAU3dn2ixlxO4+A==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~12"
-    "@wireapp/api-client" "9.20.0"
-    "@wireapp/cryptobox" "12.1.10"
-    "@wireapp/protocol-messaging" "1.24.2"
-    "@wireapp/store-engine" "4.3.8"
-    bazinga64 "5.6.7"
+    "@wireapp/api-client" "9.20.1"
+    "@wireapp/cryptobox" "12.1.11"
+    "@wireapp/protocol-messaging" "1.25.4"
+    "@wireapp/store-engine" "4.3.9"
+    bazinga64 "5.6.8"
     hash.js "1.1.7"
     logdown "3.3.0"
     protobufjs "6.8.8"
     pure-uuid "1.6.0"
 
-"@wireapp/cryptobox@12.1.10":
-  version "12.1.10"
-  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.1.10.tgz#584eafa4ab6d34cec149721c2926eadc95cb5d3f"
-  integrity sha512-LziX3KF6NOa66et4C9ae5C7IBUAJqD4Ay7Arze3feDSsYtDet96hhsIQjaO7tigNuipShmkB9RKpwc3hnkKTrw==
+"@wireapp/cryptobox@12.1.11":
+  version "12.1.11"
+  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.1.11.tgz#9bc973412cfabcefeb6dfbaa769a4e08c1f04a93"
+  integrity sha512-3cVsqBL0L04kTi9rbSLiaOBaTBxoV9C1LJdjhfJvWt4+IC1Pe+wUzdjISife096qCG2mP/wUhg1BtGGUJIQq1w==
   dependencies:
     "@types/node" "~12"
-    "@wireapp/lru-cache" "3.4.6"
-    "@wireapp/priority-queue" "1.5.4"
-    "@wireapp/proteus" "9.6.6"
-    "@wireapp/store-engine" "4.3.8"
-    bazinga64 "5.6.7"
+    "@wireapp/lru-cache" "3.4.7"
+    "@wireapp/priority-queue" "1.5.5"
+    "@wireapp/proteus" "9.6.7"
+    "@wireapp/store-engine" "4.3.9"
+    bazinga64 "5.6.8"
     logdown "3.3.0"
-
-"@wireapp/lru-cache@3.4.6":
-  version "3.4.6"
-  resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.4.6.tgz#4ae6aacba3cbf8fa89e25a30e3321aa7f9f27abb"
-  integrity sha512-60ijESIRiHVmbezXkBSoDxZ+Zrl8lMysfAEdwpFa7KPs5NYMHtRb5ww0c8S88lLB38iy/id+9h5KzfKZvAMiOw==
 
 "@wireapp/lru-cache@3.4.7":
   version "3.4.7"
@@ -445,38 +440,38 @@
   resolved "https://registry.npmjs.org/@wireapp/prettier-config/-/prettier-config-0.3.0.tgz#e8129b31021c81d90d564d9c4ff0f7f7b514e943"
   integrity sha512-BFokvX4NZlkhWq5/OoJUCS8Iels+MeRgzpd5V9QR3hj5swwCFGxJOAL7soPXkSNWo91gI1qwiTp8szB1O9aCfQ==
 
-"@wireapp/priority-queue@1.5.4":
-  version "1.5.4"
-  resolved "https://registry.npmjs.org/@wireapp/priority-queue/-/priority-queue-1.5.4.tgz#ce70403e2ced211dd8c8f31a04423f79a1caa3a3"
-  integrity sha512-HpfI1G8BBxbVbqPU7QPpFAADkFbV0Q3ZqTP5zyeNlsRpM/dg/E/JGkBYx8kYNVeRhjjKPFzmPVFDxu8nBrQ7jw==
+"@wireapp/priority-queue@1.5.5":
+  version "1.5.5"
+  resolved "https://registry.npmjs.org/@wireapp/priority-queue/-/priority-queue-1.5.5.tgz#dcd5c849844101506614d533dc3a137a0c3e588a"
+  integrity sha512-XpnwV1voNSxrZsqXqIsoziep1T6eKSwS9XH5+6ugnRRyX5arOiF/jHMnIsZIDIXoNJAusPmcdyZmnyEmBnhwJA==
   dependencies:
     "@types/node" "~12"
     logdown "3.3.0"
     pure-uuid "1.6.0"
 
-"@wireapp/proteus@9.6.6":
-  version "9.6.6"
-  resolved "https://registry.npmjs.org/@wireapp/proteus/-/proteus-9.6.6.tgz#51ca4ac06083bc47ec91b9e8323e002ab731a1c9"
-  integrity sha512-qibahREmuG+FN4KsYByrCgHizaq3Pp+FCJQcowtCMSp3tW9UTMqlakBoe1dYojuxZJwwXhFKZgiMziOlCGH/Vw==
+"@wireapp/proteus@9.6.7":
+  version "9.6.7"
+  resolved "https://registry.npmjs.org/@wireapp/proteus/-/proteus-9.6.7.tgz#01df76f0ef7f7cfc8116da354e2cd0f6882e3ef6"
+  integrity sha512-Mtr0K+oXcJOSeSL53NPQqKBsqA2mcM0F4hDq5WkWSJ5ffW9Au/+vw/UYLbIUdz+MPMydFQ0enc8WjOcbK9Kh5A==
   dependencies:
-    "@types/chai" "4.2.8"
+    "@types/chai" "4.2.10"
     "@types/ed2curve" "0.2.2"
     "@types/node" "~12"
-    "@wireapp/cbor" "4.5.6"
+    "@wireapp/cbor" "4.5.7"
     ed2curve "0.3.0"
     libsodium-wrappers-sumo "0.7.6"
 
-"@wireapp/protocol-messaging@1.24.2":
-  version "1.24.2"
-  resolved "https://registry.npmjs.org/@wireapp/protocol-messaging/-/protocol-messaging-1.24.2.tgz#a9c990943c8af74e2cc233fc96454f4c9424de6b"
-  integrity sha512-GX+ffTWSgNI5JLIaWfHPf6R8CkMSFqoquud7zQ2PRvIZWPIeXissQDWlmxQbqrJ9sKCD85+faEA2aFLs2vjENw==
+"@wireapp/protocol-messaging@1.25.4":
+  version "1.25.4"
+  resolved "https://registry.npmjs.org/@wireapp/protocol-messaging/-/protocol-messaging-1.25.4.tgz#49a22683c19c628997f28e24f5eca909aab4e4b9"
+  integrity sha512-Z53Cw+u2rJhE/tlEAo1onYcD4FyuDEMjW2PQV9GTuGNA9iEv+rKnmha6YDI+m5NQxrlPc7Dsebqf+u04X7fB7g==
   dependencies:
     protobufjs "6.8.8"
 
-"@wireapp/store-engine@4.3.8":
-  version "4.3.8"
-  resolved "https://registry.npmjs.org/@wireapp/store-engine/-/store-engine-4.3.8.tgz#ea14e85cce2c2deca4aa7e93e36fcd26140465c8"
-  integrity sha512-KO9OaVKZKpl8opGNR+h9pSCs1ZRqT18n0fRbedgggeGTnxd4TQx4imt3ElzWopPwJ4MvExZmPIm+lZeYMF2ylg==
+"@wireapp/store-engine@4.3.9":
+  version "4.3.9"
+  resolved "https://registry.npmjs.org/@wireapp/store-engine/-/store-engine-4.3.9.tgz#a6f14504c27da44d0dfc82f34fa52ecd4aaf45d0"
+  integrity sha512-jxFWv6RxdlCljnVl892+4dURZtUpq+T3mTx6X1+0OL+iafqDixdEc+uzLpNxJX92y9w4syrH8AnyzbFL+vt2PA==
   dependencies:
     "@types/node" "~12"
 
@@ -717,10 +712,10 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
-bazinga64@5.6.7:
-  version "5.6.7"
-  resolved "https://registry.npmjs.org/bazinga64/-/bazinga64-5.6.7.tgz#bc6630e273962a6c0ef503c17481db5aa7572ccf"
-  integrity sha512-mTHhv/CQXKQvliSdeDlzi1VyF8x1X75+PxRAoP9hee5N6pMeqqDBn3C18ylFJrdJWOWOFcx5BqIbBCTq1TviDA==
+bazinga64@5.6.8:
+  version "5.6.8"
+  resolved "https://registry.npmjs.org/bazinga64/-/bazinga64-5.6.8.tgz#02590c733666a8615102e63b151658d8f31a6445"
+  integrity sha512-Pts6qxX7kUSgs77VnedBaXkH3rLsfE5x2wo72nG7YzfTvVln49/PVEot7dKq53GF20V/3E/kExisjpYRE+yczw==
 
 binary-extensions@^1.0.0:
   version "1.13.1"
@@ -3456,10 +3451,10 @@ rechoir@^0.6.2:
   dependencies:
     resolve "^1.1.6"
 
-"reconnecting-websocket@github:wireapp/reconnecting-websocket#96ac796ae8c7a7d9d857f46ed39dbedd7b9ad378":
-  version "4.2.0"
-  uid "96ac796ae8c7a7d9d857f46ed39dbedd7b9ad378"
-  resolved "https://codeload.github.com/wireapp/reconnecting-websocket/tar.gz/96ac796ae8c7a7d9d857f46ed39dbedd7b9ad378"
+reconnecting-websocket@4.4.0:
+  version "4.4.0"
+  resolved "https://registry.npmjs.org/reconnecting-websocket/-/reconnecting-websocket-4.4.0.tgz#3b0e5b96ef119e78a03135865b8bb0af1b948783"
+  integrity sha512-D2E33ceRPga0NvTDhJmphEgJ7FUYF0v4lr1ki0csq06OdlxKfugGzN0dSkxM/NfqCxYELK4KcaTOUOjTV6Dcng==
 
 referrer-policy@1.2.0:
   version "1.2.0"
