@@ -69,6 +69,7 @@ export interface LinkPreviewRequest {
 }
 
 export interface TextRequest extends MessageRequest {
+  buttons?: string[];
   expectsReadConfirmation?: boolean;
   linkPreview?: LinkPreviewRequest;
   mentions?: MentionContent[];
@@ -490,6 +491,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''} = req.params;
       const {
+        buttons,
         conversationId,
         expectsReadConfirmation,
         linkPreview,
@@ -548,6 +550,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           expectsReadConfirmation,
           legalHoldStatus,
           messageTimer,
+          buttons,
         );
         const instanceName = instanceService.getInstance(instanceId).name;
         return res.json({
