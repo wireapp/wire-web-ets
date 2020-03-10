@@ -44,6 +44,7 @@ import {
   ReactionContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content/';
+import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
@@ -95,6 +96,7 @@ export class InstanceService {
   constructor(private readonly maximumInstances = 100) {
     this.cachedInstances = new LRUCache(this.maximumInstances);
   }
+
   private readonly cachedInstances: LRUCache<Instance>;
 
   async toggleArchiveConversation(instanceId: string, conversationId: string, archived: boolean): Promise<string> {
@@ -342,21 +344,29 @@ export class InstanceService {
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
     expireAfterMillis = 0,
+    buttons: string[] = [],
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = service.conversation.messageBuilder
-        .createText(conversationId, message)
-        .withMentions(mentions)
-        .withQuote(quote)
-        .withReadConfirmation(expectsReadConfirmation)
-        .withLegalHoldStatus(legalHoldStatus)
-        .build();
 
-      let sentMessage = await service.conversation.send(payload);
+      let payloadBundle: OtrMessage;
+
+      if (buttons.length > 0) {
+        payloadBundle = service.conversation.messageBuilder.createPollMessage(conversationId, message, buttons);
+      } else {
+        payloadBundle = service.conversation.messageBuilder
+          .createText(conversationId, message)
+          .withMentions(mentions)
+          .withQuote(quote)
+          .withReadConfirmation(expectsReadConfirmation)
+          .withLegalHoldStatus(legalHoldStatus)
+          .build();
+      }
+
+      let sentMessage = await service.conversation.send(payloadBundle);
 
       if (linkPreview) {
         const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(linkPreview);
@@ -626,6 +636,7 @@ export class InstanceService {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = service.conversation.messageBuilder.createPing(conversationId, {
         expectsReadConfirmation,
+        hotKnock: false,
         legalHoldStatus,
       });
       const sentPing = await service.conversation.send(payload);
