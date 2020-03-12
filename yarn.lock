@@ -834,10 +834,10 @@ camelize@1.0.0:
   resolved "https://registry.npmjs.org/camelize/-/camelize-1.0.0.tgz#164a5483e630fa4321e5af07020e531831b2609b"
   integrity sha1-FkpUg+Yw+kMh5a8HAg5TGDGyYJs=
 
-celebrate@12.0.0:
-  version "12.0.0"
-  resolved "https://registry.npmjs.org/celebrate/-/celebrate-12.0.0.tgz#1972fcfe8c5118e6e65029b259edb7d927a89318"
-  integrity sha512-+6xa+Kz8zaTaYaUIInkwUrEGalha7t7jvZn+nXPCRWdpOWdNJmeyCuxjwF8P2YUc5MJSCrkQBxK5mlHfIJrl/A==
+celebrate@12.0.1:
+  version "12.0.1"
+  resolved "https://registry.npmjs.org/celebrate/-/celebrate-12.0.1.tgz#f5cd71186e98dfc1884c5b063e2640b1627a0851"
+  integrity sha512-QOoWyuOdr3yWC1k4OFmmtYlv7bAz30iz32xMO5ruT46ubqMedIpI3z8egZNLL+7UR+PDA6XjfQKw/lvzfrIyEQ==
   dependencies:
     "@hapi/joi" "17.x.x"
     escape-html "1.0.3"
