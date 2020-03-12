@@ -400,10 +400,10 @@
     platform "1.3.5"
     url-search-params-polyfill "8.0.0"
 
-"@wireapp/core@15.6.0":
-  version "15.6.0"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.6.0.tgz#5e7f3704cb2e0063f6c2f39cc1707a6ac845a054"
-  integrity sha512-2ZIbigzBDXa43S//+2x3dxOE8w39bEqvxkpcYOJaDzt6DqG7UJMEIEj3GojgIBvtV8N2L3m3uivGvIxNv4ywFw==
+"@wireapp/core@15.10.1":
+  version "15.10.1"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.10.1.tgz#74e3a34857cbee7aa4238be12785ee90177bbaa2"
+  integrity sha512-mcZsSR5/cX7gnqYkAb+PBZdHxFBTPnWwCDJ2lEqJ7txD9+bX258HGFObp+sJW9dqknhew8/V0IoTFWg8wIiqiw==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~12"
