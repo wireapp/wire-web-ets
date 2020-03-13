@@ -1954,7 +1954,10 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Empty object",
+            "schema": {
+              "type": "object"
+            }
           },
           "404": {
             "description": "Instance not found",
