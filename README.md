@@ -51,6 +51,37 @@ The following ETS deployments are reachable via Wire's VPN:
 - [ETS "dev" branch](http://192.168.120.44:27080/swagger-ui/)
 - [ETS "master" branch](http://192.168.120.44:28080/swagger-ui/)
 
+## How it works
+
+1. Create an instance (POST `/instance`)
+1. Use the received `instanceId` to use resources like `sendText`
+
+**Example payload to create an instance**
+
+- http://localhost:21080/swagger-ui/#/Instance/createInstance
+
+```json
+{
+  "backend": "staging",
+  "email": "you@email.com",
+  "password": "secret",
+  "deviceClass": "desktop",
+  "name": "Some Instance Name"
+}
+```
+
+**Example payload to start a poll**
+
+- http://localhost:21080/swagger-ui/#/Instance/sendText
+
+```json
+{
+  "buttons": ["A", "B"],
+  "text": "Do you like A or B?",
+  "conversationId": "b894b2e4-e862-4b55-a97e-56ea3690be20"
+}
+```
+
 ## Common errors
 
 ### Invalid JSON provided

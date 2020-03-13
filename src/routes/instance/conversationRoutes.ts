@@ -68,6 +68,11 @@ export interface LinkPreviewRequest {
   urlOffset: number;
 }
 
+export interface ButtonActionRequest extends MessageRequest {
+  buttonId: string;
+  referenceMessageId: string;
+}
+
 export interface TextRequest extends MessageRequest {
   buttons?: string[];
   expectsReadConfirmation?: boolean;
@@ -613,6 +618,43 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           messageId,
           name: instanceName,
         });
+      } catch (error) {
+        const errorMessage: ServerErrorMessage = {
+          code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+          error: error.message,
+          stack: error.stack,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
+      }
+    },
+  );
+
+  router.post(
+    '/api/v1/instance/:instanceId/sendButtonAction/?',
+    celebrate({
+      body: {
+        buttonId: Joi.string().required(),
+        conversationId: Joi.string()
+          .uuid()
+          .required(),
+        referenceMessageId: Joi.string().required(),
+      },
+    }),
+    async (req: express.Request, res: express.Response) => {
+      const {instanceId = ''} = req.params;
+      const {conversationId, referenceMessageId, buttonId}: ButtonActionRequest = req.body;
+
+      if (!instanceService.instanceExists(instanceId)) {
+        const errorMessage: ErrorMessage = {
+          code: HTTP_STATUS_CODE.NOT_FOUND,
+          error: `Instance "${instanceId}" not found.`,
+        };
+        return res.status(errorMessage.code).json(errorMessage);
+      }
+
+      try {
+        await instanceService.sendButtonAction(instanceId, conversationId, referenceMessageId, buttonId);
+        return res.json({});
       } catch (error) {
         const errorMessage: ServerErrorMessage = {
           code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
