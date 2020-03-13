@@ -481,8 +481,26 @@
       "required": ["env", "uptime"],
       "type": "object"
     },
+    "ButtonAction": {
+      "properties": {
+        "buttonId": {
+          "type": "string"
+        },
+        "referenceMessageId": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "TextMessage": {
       "properties": {
+        "buttons": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "expectsReadConfirmation": {
           "type": "boolean"
         },
@@ -1897,6 +1915,85 @@
         "tags": ["Instance"]
       }
     },
+    "/instance/{instanceId}/sendButtonAction": {
+      "post": {
+        "operationId": "sendButtonAction",
+        "parameters": [
+          {
+            "description": "ID of instance to use",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ButtonAction"
+                },
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": ["conversationId"],
+                  "type": "object"
+                }
+              ]
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InstanceAndName"
+                },
+                {
+                  "properties": {
+                    "messageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Instance not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorMessage"
+            }
+          }
+        },
+        "summary": "Send a reaction to a message",
+        "tags": ["Instance"]
+      }
+    },
     "/instance/{instanceId}/sendReaction": {
       "post": {
         "operationId": "sendReaction",
@@ -1953,18 +2050,6 @@
               ]
             }
           },
-          "404": {
-            "description": "Instance not found",
-            "schema": {
-              "$ref": "#/definitions/ErrorMessage"
-            }
-          },
-          "422": {
-            "description": "Validation error",
-            "schema": {
-              "$ref": "#/definitions/ErrorMessage"
-            }
-          },
           "500": {
             "description": "Internal server error",
             "schema": {
@@ -1972,7 +2057,7 @@
             }
           }
         },
-        "summary": "Send a reaction to a message",
+        "summary": "Send a button action to a poll",
         "tags": ["Instance"]
       }
     },

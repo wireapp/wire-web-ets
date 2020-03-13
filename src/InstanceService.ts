@@ -397,6 +397,26 @@ export class InstanceService {
     }
   }
 
+  async sendButtonAction(
+    instanceId: string,
+    conversationId: string,
+    referenceMessageId: string,
+    buttonId: string,
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+    if (service) {
+      const payload = service.conversation.messageBuilder.createButtonActionMessage(conversationId, {
+        buttonId,
+        referenceMessageId,
+      });
+      await service.conversation.send(payload);
+      return instance.name;
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
   async sendConfirmationDelivered(
     instanceId: string,
     conversationId: string,
