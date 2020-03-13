@@ -653,18 +653,8 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       }
 
       try {
-        const messageId = await instanceService.sendButtonAction(
-          instanceId,
-          conversationId,
-          referenceMessageId,
-          buttonId,
-        );
-        const instanceName = instanceService.getInstance(instanceId).name;
-        return res.json({
-          instanceId,
-          messageId,
-          name: instanceName,
-        });
+        await instanceService.sendButtonAction(instanceId, conversationId, referenceMessageId, buttonId);
+        return res.status(200);
       } catch (error) {
         const errorMessage: ServerErrorMessage = {
           code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,

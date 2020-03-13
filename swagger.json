@@ -1954,22 +1954,7 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "",
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/InstanceAndName"
-                },
-                {
-                  "properties": {
-                    "messageId": {
-                      "format": "uuid",
-                      "type": "string"
-                    }
-                  }
-                }
-              ]
-            }
+            "description": ""
           },
           "404": {
             "description": "Instance not found",
@@ -1990,7 +1975,7 @@
             }
           }
         },
-        "summary": "Send a reaction to a message",
+        "summary": "Send a button action to a poll",
         "tags": ["Instance"]
       }
     },
@@ -2057,7 +2042,7 @@
             }
           }
         },
-        "summary": "Send a button action to a poll",
+        "summary": "Send a reaction to a message",
         "tags": ["Instance"]
       }
     },
