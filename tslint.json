@@ -1,5 +1,5 @@
 {
-  "extends": ["@wireapp/tslint-config"],
+  "extends": [],
   "linterOptions": {
     "exclude": ["**/dist/**", "**/node_modules/**"]
   }
