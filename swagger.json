@@ -2069,7 +2069,7 @@
             }
           }
         },
-        "summary": "Send a button action to a poll",
+        "summary": "Send a confirmation to a button action",
         "tags": ["Instance"]
       }
     },
