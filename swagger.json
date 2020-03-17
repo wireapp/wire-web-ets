@@ -507,6 +507,12 @@
         "referenceMessageId": {
           "format": "uuid",
           "type": "string"
+        },
+        "userIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"

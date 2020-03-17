@@ -420,6 +420,7 @@ export class InstanceService {
   async sendButtonActionConfirmation(
     instanceId: string,
     conversationId: string,
+    userIds: string[],
     referenceMessageId: string,
     buttonId: string,
   ): Promise<void> {
@@ -430,7 +431,7 @@ export class InstanceService {
         buttonId,
         referenceMessageId,
       });
-      await service.conversation.send(payload);
+      await service.conversation.send(payload, userIds);
     } else {
       throw new Error(`Account service for instance "${instanceId}" not set.`);
     }

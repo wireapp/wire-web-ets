@@ -77,6 +77,7 @@ export interface ButtonActionRequest extends MessageRequest {
 export interface ButtonActionConfirmationRequest extends MessageRequest {
   buttonId: string;
   referenceMessageId: string;
+  userIds: string[];
 }
 
 export interface TextRequest extends MessageRequest {
@@ -682,11 +683,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .uuid()
           .required(),
         referenceMessageId: Joi.string().required(),
+        userIds: Joi.array().items(Joi.string()),
       },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''} = req.params;
-      const {conversationId, referenceMessageId, buttonId}: ButtonActionConfirmationRequest = req.body;
+      const {conversationId, referenceMessageId, buttonId, userIds}: ButtonActionConfirmationRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         const errorMessage: ErrorMessage = {
@@ -697,7 +699,13 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       }
 
       try {
-        await instanceService.sendButtonActionConfirmation(instanceId, conversationId, referenceMessageId, buttonId);
+        await instanceService.sendButtonActionConfirmation(
+          instanceId,
+          conversationId,
+          userIds,
+          referenceMessageId,
+          buttonId,
+        );
         return res.json({});
       } catch (error) {
         const errorMessage: ServerErrorMessage = {
