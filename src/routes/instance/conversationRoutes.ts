@@ -71,6 +71,7 @@ export interface LinkPreviewRequest {
 export interface ButtonActionRequest extends MessageRequest {
   buttonId: string;
   referenceMessageId: string;
+  userIds: string[];
 }
 
 export interface ButtonActionConfirmationRequest extends MessageRequest {
@@ -643,11 +644,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
           .uuid()
           .required(),
         referenceMessageId: Joi.string().required(),
+        userIds: Joi.array().items(Joi.string()),
       },
     }),
     async (req: express.Request, res: express.Response) => {
       const {instanceId = ''} = req.params;
-      const {conversationId, referenceMessageId, buttonId}: ButtonActionRequest = req.body;
+      const {conversationId, referenceMessageId, buttonId, userIds}: ButtonActionRequest = req.body;
 
       if (!instanceService.instanceExists(instanceId)) {
         const errorMessage: ErrorMessage = {
@@ -658,7 +660,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
       }
 
       try {
-        await instanceService.sendButtonAction(instanceId, conversationId, referenceMessageId, buttonId);
+        await instanceService.sendButtonAction(instanceId, conversationId, userIds, referenceMessageId, buttonId);
         return res.json({});
       } catch (error) {
         const errorMessage: ServerErrorMessage = {
