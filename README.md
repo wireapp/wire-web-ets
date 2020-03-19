@@ -44,6 +44,12 @@ yarn start
 
 - Swagger UI is available at `/swagger-ui` when running the ETS, i.e. http://localhost:21080/swagger-ui/
 
+## Implementation
+
+1. Add endpoint description in `swagger.json`
+1. Add business logic in `InstanceService.ts`
+1. Add endpoint implementation in `conversationRoutes.ts`
+
 ## Deployments
 
 The following ETS deployments are reachable via Wire's VPN:
