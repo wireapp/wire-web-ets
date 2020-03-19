@@ -54,6 +54,7 @@ import UUID from 'pure-uuid';
 import {BackendData} from '@wireapp/api-client/dist/env/';
 import {Confirmation} from '@wireapp/protocol-messaging';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from './utils';
+import {MessageToProtoMapper} from "@wireapp/core/dist/conversation/message/MessageToProtoMapper";
 
 const {version}: {version: string} = require('../package.json');
 
@@ -352,18 +353,17 @@ export class InstanceService {
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
-      let payloadBundle: OtrMessage;
+      let payloadBundle: OtrMessage = service.conversation.messageBuilder
+        .createText(conversationId, message)
+        .withMentions(mentions)
+        .withQuote(quote)
+        .withReadConfirmation(expectsReadConfirmation)
+        .withLegalHoldStatus(legalHoldStatus)
+        .build();
 
       if (buttons.length > 0) {
-        payloadBundle = service.conversation.messageBuilder.createPollMessage(conversationId, message, buttons);
-      } else {
-        payloadBundle = service.conversation.messageBuilder
-          .createText(conversationId, message)
-          .withMentions(mentions)
-          .withQuote(quote)
-          .withReadConfirmation(expectsReadConfirmation)
-          .withLegalHoldStatus(legalHoldStatus)
-          .build();
+        const textProto = MessageToProtoMapper.mapText(payloadBundle);
+        payloadBundle = service.conversation.messageBuilder.createPollMessage(conversationId, textProto, buttons);
       }
 
       let sentMessage = await service.conversation.send(payloadBundle);
@@ -394,6 +394,46 @@ export class InstanceService {
       return sentMessage.id;
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendButtonAction(
+    instanceId: string,
+    conversationId: string,
+    userIds: string[],
+    referenceMessageId: string,
+    buttonId: string,
+  ): Promise<void> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+    if (service) {
+      const payload = service.conversation.messageBuilder.createButtonActionMessage(conversationId, {
+        buttonId,
+        referenceMessageId,
+      });
+      await service.conversation.send(payload, userIds);
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
+
+  async sendButtonActionConfirmation(
+    instanceId: string,
+    conversationId: string,
+    userIds: string[],
+    referenceMessageId: string,
+    buttonId: string,
+  ): Promise<void> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+    if (service) {
+      const payload = service.conversation.messageBuilder.createButtonActionConfirmationMessage(conversationId, {
+        buttonId,
+        referenceMessageId,
+      });
+      await service.conversation.send(payload, userIds);
+    } else {
+      throw new Error(`Account service for instance "${instanceId}" not set.`);
     }
   }
 
