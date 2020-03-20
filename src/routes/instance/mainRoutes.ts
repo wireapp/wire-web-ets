@@ -57,7 +57,7 @@ const validateBackend = Joi.string().valid('prod', 'production', 'staging');
 export const mainRoutes = (instanceService: InstanceService): express.Router => {
   const router = express.Router();
 
-    router.put(
+  router.put(
     '/api/v1/instance/?',
     celebrate({
       body: {

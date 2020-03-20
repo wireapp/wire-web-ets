@@ -1,8 +1,8 @@
 import {NestFactory} from '@nestjs/core';
 import {NestExpressApplication} from '@nestjs/platform-express';
 import {ValidationPipe} from '@nestjs/common';
-import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
-import {RootModule} from "./RootModule";
+import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
+import {RootModule} from './RootModule';
 
 const port = process.env.PORT || 3000;
 
@@ -14,7 +14,7 @@ async function bootstrap(): Promise<void> {
       forbidNonWhitelisted: true,
       transform: true,
       whitelist: true,
-    })
+    }),
   );
 
   // https://docs.nestjs.com/recipes/swagger

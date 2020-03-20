@@ -1,7 +1,7 @@
 import {BackendData} from '@wireapp/api-client/dist/env/';
 import {ClientClassification} from '@wireapp/api-client/dist/client/';
-import {Equals, IsOptional} from "class-validator";
-import {ApiModelProperty} from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
+import {Equals, IsOptional} from 'class-validator';
+import {ApiModelProperty} from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 
 export class InstanceCreationOptions {
   @IsOptional()

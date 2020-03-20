@@ -1,11 +1,10 @@
 import {Controller, Get, Req, Res} from '@nestjs/common';
 import {Request, Response} from 'express';
-import { ApiExcludeEndpoint } from '@nestjs/swagger';
+import {ApiExcludeEndpoint} from '@nestjs/swagger';
 
 @Controller()
 export class RootController {
-  constructor() {
-  }
+  constructor() {}
 
   @ApiExcludeEndpoint()
   @Get()

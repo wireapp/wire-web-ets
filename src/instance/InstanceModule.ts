@@ -1,10 +1,10 @@
-import { Module } from "@nestjs/common";
-import {InstanceController} from "./InstanceController";
-import {InstanceService} from "./InstanceService";
+import {Module} from '@nestjs/common';
+import {InstanceController} from './InstanceController';
+import {InstanceService} from './InstanceService';
 
 @Module({
   controllers: [InstanceController],
+  exports: [InstanceService],
   providers: [InstanceService],
-  exports: [InstanceService]
 })
 export class InstanceModule {}

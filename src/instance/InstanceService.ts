@@ -1,23 +1,27 @@
-import {Injectable} from "@nestjs/common";
-import UUID from "pure-uuid";
-import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from "../utils";
-import {Account} from "@wireapp/core";
-import {LRUCache} from "@wireapp/lru-cache";
-import {Instance,} from "../InstanceService";
+import {Injectable} from '@nestjs/common';
+import UUID from 'pure-uuid';
+import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
+import {Account} from '@wireapp/core';
+import {LRUCache} from '@wireapp/lru-cache';
+import {Instance} from '../InstanceService';
 import {BackendData} from '@wireapp/api-client/dist/env/';
 import {ClientClassification} from '@wireapp/api-client/dist/client/';
 import {APIClient} from '@wireapp/api-client';
 import {ClientInfo} from '@wireapp/core/dist/client/';
 import {MemoryEngine} from '@wireapp/store-engine';
-import {PayloadBundle, PayloadBundleType, ReactionType} from "@wireapp/core/dist/conversation";
+import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation';
 import {ClientType} from '@wireapp/api-client/dist/client/ClientType';
 import {
-  ClearedContent, ConfirmationContent,
-  ConversationContent, DeletedContent,
-  EditedTextContent, HiddenContent, ReactionContent,
-  TextContent
-} from "@wireapp/core/dist/conversation/content";
-import { InstanceCreationOptions } from "./InstanceCreationOptions";
+  ClearedContent,
+  ConfirmationContent,
+  ConversationContent,
+  DeletedContent,
+  EditedTextContent,
+  HiddenContent,
+  ReactionContent,
+  TextContent,
+} from '@wireapp/core/dist/conversation/content';
+import {InstanceCreationOptions} from './InstanceCreationOptions';
 
 const {version}: {version: string} = require('../../package.json');
 
@@ -168,18 +172,17 @@ export class InstanceService {
     });
   }
 
-
   async createInstance(options: InstanceCreationOptions): Promise<string> {
     const instanceId = new UUID(4).format();
     const backendType = this.parseBackend(options.backend || options.customBackend);
 
     const engine = new MemoryEngine();
 
-    console.log(`[${formatDate()}] Initializing MemoryEngine...`);
+    console.info(`[${formatDate()}] Initializing MemoryEngine...`);
 
     await engine.init('wire-web-ets');
 
-    console.log(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
+    console.info(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
 
     const client = new APIClient({urls: backendType});
     const account = new Account(client);
@@ -191,14 +194,18 @@ export class InstanceService {
       model: options.deviceName || `E2E Test Server v${version}`,
     };
 
-    console.log(`[${formatDate()}] Logging in ...`);
+    console.info(`[${formatDate()}] Logging in ...`);
 
     try {
-      await account.login(  {
-        email: options.email,
-        password: options.password,
-        clientType: ClientType.TEMPORARY
-      }, true, ClientInfo);
+      await account.login(
+        {
+          clientType: ClientType.TEMPORARY,
+          email: options.email,
+          password: options.password,
+        },
+        true,
+        ClientInfo,
+      );
       await account.listen();
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -223,7 +230,7 @@ export class InstanceService {
 
     this.attachListeners(account, instance);
 
-    console.log(`[${formatDate()}] Created instance with id "${instanceId}".`);
+    console.info(`[${formatDate()}] Created instance with id "${instanceId}".`);
 
     return instanceId;
   }
