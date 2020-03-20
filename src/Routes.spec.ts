@@ -25,7 +25,7 @@ import {NotificationAPI} from '@wireapp/api-client/dist/notification/';
 import {UserAPI} from '@wireapp/api-client/dist/user/';
 import axios, {AxiosError, AxiosRequestConfig, Method as RequestMethod} from 'axios';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
-import * as nock from 'nock';
+import nock from 'nock';
 import UUID from 'pure-uuid';
 
 import {ErrorMessage, config} from './config';

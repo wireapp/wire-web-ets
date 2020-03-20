@@ -17,7 +17,7 @@
  *
  */
 
-import * as logdown from 'logdown';
+import logdown from 'logdown';
 
 import {config} from './config';
 import {Server} from './Server';
