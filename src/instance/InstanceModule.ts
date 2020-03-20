@@ -4,7 +4,7 @@ import {InstanceService} from "./InstanceService";
 
 @Module({
   controllers: [InstanceController],
-  exports: [InstanceService],
   providers: [InstanceService],
+  exports: [InstanceService]
 })
 export class InstanceModule {}

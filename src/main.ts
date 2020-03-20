@@ -1,8 +1,8 @@
 import {NestFactory} from '@nestjs/core';
 import {NestExpressApplication} from '@nestjs/platform-express';
-import {RootModule} from './RootModule';
 import {ValidationPipe} from '@nestjs/common';
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
+import {RootModule} from "./RootModule";
 
 const port = process.env.PORT || 3000;
 

@@ -5,14 +5,14 @@ import {InstanceService} from "./InstanceService";
 import {InstanceCreationOptions} from "./InstanceCreationOptions";
 
 @ApiTags('Instance')
-@Controller('instance/')
+@Controller('instance')
 export class InstanceController {
   constructor(private readonly instanceService: InstanceService) {
   }
 
   @Post(':id')
   @ApiResponse({status: 201, type: NewInstanceResponse})
-  async postById(@Param('id') id: number, @Body() body: InstanceCreationOptions): Promise<NewInstanceResponse> {
+  async createInstance(@Param('id') id: number, @Body() body: InstanceCreationOptions): Promise<NewInstanceResponse> {
     const instanceId = await this.instanceService.createInstance(body);
 
     return {
