@@ -23,8 +23,6 @@ import {
 } from '@wireapp/core/dist/conversation/content';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 
-const {version}: {version: string} = require('../../package.json');
-
 @Injectable()
 export class InstanceService {
   private readonly cachedInstances: LRUCache<Instance>;
@@ -191,7 +189,7 @@ export class InstanceService {
       classification: options.deviceClass || ClientClassification.DESKTOP,
       cookieLabel: 'default',
       label: options.deviceLabel,
-      model: options.deviceName || `E2E Test Server v${version}`,
+      model: options.deviceName || 'E2E Test Server',
     };
 
     console.info(`[${formatDate()}] Logging in ...`);

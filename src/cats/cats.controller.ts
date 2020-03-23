@@ -1,4 +1,7 @@
-import {Body, Controller, Get, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {ApiResponse} from '@nestjs/swagger';
+import {InstanceCreationOptions} from '../instance/InstanceCreationOptions';
+import {NewInstanceResponse} from '../instance/NewInstanceResponse';
 import {CatsService} from './cats.service';
 import {Cat} from './interfaces/cat.interface';
 
@@ -6,9 +9,13 @@ import {Cat} from './interfaces/cat.interface';
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
-  @Post()
-  async create(@Body() cat: Cat) {
-    this.catsService.create(cat);
+  @Post(':id')
+  @ApiResponse({status: 201, type: NewInstanceResponse})
+  async createInstance(@Param('id') id: number, @Body() body: InstanceCreationOptions): Promise<NewInstanceResponse> {
+    return {
+      instanceId: '',
+      name: body.name || '',
+    };
   }
 
   @Get()
