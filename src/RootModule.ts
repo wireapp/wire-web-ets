@@ -1,14 +1,15 @@
-import {Module, NestModule, MiddlewareConsumer} from '@nestjs/common';
-import {RootController} from './RootController';
+import {MiddlewareConsumer, Module, NestModule} from '@nestjs/common';
 import {CatsModule} from './cats/cats.module';
-import {CatsController} from './cats/cats.controller';
+import {InstanceModule} from './instance/InstanceModule';
+import {RootController} from './RootController';
+import {InstanceController} from './instance/InstanceController';
 
 @Module({
   controllers: [RootController],
-  imports: [CatsModule],
+  imports: [CatsModule, InstanceModule],
 })
 export class RootModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply().forRoutes(CatsController);
+    consumer.apply().forRoutes(InstanceController);
   }
 }
