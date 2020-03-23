@@ -25,11 +25,7 @@ import {InstanceCreationOptions} from './InstanceCreationOptions';
 
 @Injectable()
 export class InstanceService {
-  private readonly cachedInstances: LRUCache<Instance>;
-
-  constructor(private readonly maximumInstances = 100) {
-    this.cachedInstances = new LRUCache(this.maximumInstances);
-  }
+  private readonly cachedInstances: LRUCache<Instance> = new LRUCache(100);
 
   private parseBackend(backend?: string | BackendData): BackendData {
     if (typeof backend === 'string') {
