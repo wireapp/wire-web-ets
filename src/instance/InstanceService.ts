@@ -228,4 +228,23 @@ export class InstanceService {
 
     return instanceId;
   }
+
+  getInstance(instanceId: string): Instance {
+    const instance = this.cachedInstances.get(instanceId);
+
+    if (!instance) {
+      throw new Error(`Instance "${instanceId}" not found.`);
+    }
+
+    return instance;
+  }
+
+  async deleteInstance(instanceId: string): Promise<void> {
+    const instance = this.getInstance(instanceId);
+
+    await instance.account.logout();
+
+    this.cachedInstances.delete(instanceId);
+    console.info(`[${formatDate()}] Deleted instance with id "${instanceId}".`);
+  }
 }

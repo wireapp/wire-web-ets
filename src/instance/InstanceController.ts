@@ -28,7 +28,7 @@ export class InstanceController {
   @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
   @ApiResponse({description: 'Instance not found', status: 404})
   @ApiResponse({description: 'Internal server error', status: 500})
-  async deleteInstance(@Param('instanceId') instanceId: string) {
-    console.info('InstanceId', instanceId);
+  async deleteInstance(@Param('instanceId') instanceId: string): Promise<void> {
+    await this.instanceService.deleteInstance(instanceId);
   }
 }
