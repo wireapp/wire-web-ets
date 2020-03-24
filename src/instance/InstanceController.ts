@@ -97,7 +97,7 @@ export class InstanceController {
     }
   }
 
-  @Post(':instanceId/archive/')
+  @Post(':instanceId/archive')
   @ApiOperation({summary: 'Archive a conversation.'})
   @ApiResponse({description: 'The conversation archived status has been updated.', status: 200})
   @ApiResponse({description: 'Instance not found', status: 404})
