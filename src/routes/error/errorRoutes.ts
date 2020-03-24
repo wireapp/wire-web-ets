@@ -20,7 +20,7 @@
 import {isCelebrate} from 'celebrate';
 import * as express from 'express';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
-import * as logdown from 'logdown';
+import logdown from 'logdown';
 
 import {ErrorMessage, ServerErrorMessage} from '../../config';
 import {formatDate} from '../../utils';

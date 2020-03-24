@@ -48,13 +48,13 @@ import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
-import * as logdown from 'logdown';
+import logdown from 'logdown';
 import UUID from 'pure-uuid';
 
 import {BackendData} from '@wireapp/api-client/dist/env/';
 import {Confirmation} from '@wireapp/protocol-messaging';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from './utils';
-import {MessageToProtoMapper} from "@wireapp/core/dist/conversation/message/MessageToProtoMapper";
+import {MessageToProtoMapper} from '@wireapp/core/dist/conversation/message/MessageToProtoMapper';
 
 const {version}: {version: string} = require('../package.json');
 
@@ -106,9 +106,8 @@ export class InstanceService {
     if (instance.account.service) {
       await instance.account.service.conversation.toggleArchiveConversation(conversationId, archived);
       return instance.name;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async toggleMuteConversation(instanceId: string, conversationId: string, muted: boolean): Promise<string> {
@@ -117,9 +116,8 @@ export class InstanceService {
     if (instance.account.service) {
       await instance.account.service.conversation.setConversationMutedStatus(conversationId, muted ? 3 : 0, new Date());
       return instance.name;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async clearConversation(instanceId: string, conversationId: string): Promise<string> {
@@ -128,9 +126,8 @@ export class InstanceService {
     if (instance.account.service) {
       await instance.account.service.conversation.clearConversation(conversationId);
       return instance.name;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async createInstance(options: InstanceCreationOptions): Promise<string> {
@@ -203,9 +200,8 @@ export class InstanceService {
     if (instance.account.service) {
       await instance.account.service.conversation.deleteMessageLocal(conversationId, messageId);
       return instance.name;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async deleteMessageEveryone(instanceId: string, conversationId: string, messageId: string): Promise<string> {
@@ -214,9 +210,8 @@ export class InstanceService {
     if (instance.account.service) {
       await instance.account.service.conversation.deleteMessageEveryone(conversationId, messageId);
       return instance.name;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   instanceExists(instanceId: string): boolean {
@@ -230,9 +225,8 @@ export class InstanceService {
       const cryptoboxIdentity = instance.account.service.cryptography.cryptobox.identity;
       if (cryptoboxIdentity) {
         return cryptoboxIdentity.public_key.fingerprint();
-      } else {
-        throw new Error(`Identity of instance "${instance.id}" broken.`);
       }
+      throw new Error(`Identity of instance "${instance.id}" broken.`);
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
@@ -261,9 +255,8 @@ export class InstanceService {
       return Object.keys(allMessages)
         .map(messageId => allMessages[messageId])
         .filter(message => message.conversation === conversationId);
-    } else {
-      throw new Error('Account service not set.');
     }
+    throw new Error('Account service not set.');
   }
 
   getAllClients(instanceId: string): Promise<RegisteredClient[]> {
@@ -271,9 +264,8 @@ export class InstanceService {
 
     if (instance.account.service) {
       return instance.account.service.client.getClients();
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async removeAllClients(email: string, password: string, backend?: string | BackendData): Promise<void> {
@@ -330,9 +322,8 @@ export class InstanceService {
       const sessionResetPayload = service.conversation.messageBuilder.createSessionReset(conversationId);
       const {id: messageId} = await service.conversation.send(sessionResetPayload);
       return messageId;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendText(
@@ -392,9 +383,8 @@ export class InstanceService {
 
       instance.messages.set(sentMessage.id, sentMessage);
       return sentMessage.id;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendButtonAction(
@@ -456,9 +446,8 @@ export class InstanceService {
       );
       await service.conversation.send(payload);
       return instance.name;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendConfirmationRead(
@@ -480,9 +469,8 @@ export class InstanceService {
       );
       await service.conversation.send(payload);
       return instance.name;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendEphemeralConfirmationDelivered(
@@ -522,9 +510,8 @@ export class InstanceService {
         }
       }
       return instance.name;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendEphemeralConfirmationRead(
@@ -563,9 +550,8 @@ export class InstanceService {
         }
       }
       return instance.name;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendImage(
@@ -594,9 +580,8 @@ export class InstanceService {
 
       instance.messages.set(sentImage.id, sentImage);
       return sentImage.id;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendFile(
@@ -636,9 +621,8 @@ export class InstanceService {
 
       instance.messages.set(sentFile.id, sentFile);
       return sentFile.id;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendLocation(
@@ -657,9 +641,8 @@ export class InstanceService {
 
       instance.messages.set(sentLocation.id, sentLocation);
       return sentLocation.id;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendPing(
@@ -683,9 +666,8 @@ export class InstanceService {
 
       instance.messages.set(sentPing.id, sentPing);
       return sentPing.id;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendTyping(instanceId: string, conversationId: string, status: CONVERSATION_TYPING): Promise<string> {
@@ -699,9 +681,8 @@ export class InstanceService {
         await service.conversation.sendTypingStop(conversationId);
       }
       return instance.name;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendReaction(
@@ -722,9 +703,8 @@ export class InstanceService {
       });
       const {id: messageId} = await service.conversation.send(payload);
       return messageId;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async sendEditedText(
@@ -774,9 +754,8 @@ export class InstanceService {
 
       instance.messages.set(originalMessageId, editedMessage);
       return editedMessage.id;
-    } else {
-      throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
   async setAvailability(instanceId: string, teamId: string, type: AvailabilityType): Promise<void> {

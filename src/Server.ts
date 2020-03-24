@@ -18,9 +18,9 @@
  */
 
 import * as bodyParser from 'body-parser';
-import * as compression from 'compression';
-import * as express from 'express';
-import * as helmet from 'helmet';
+import compression from 'compression';
+import express from 'express';
+import helmet from 'helmet';
 import * as http from 'http';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
 
@@ -125,11 +125,11 @@ export class Server {
   start(): Promise<number> {
     return new Promise((resolve, reject) => {
       if (this.server) {
-        reject('Server is already running.');
+        reject(new Error('Server is already running.'));
       } else if (this.config.PORT_HTTP) {
         this.server = this.app.listen(this.config.PORT_HTTP, () => resolve(this.config.PORT_HTTP));
       } else {
-        reject('Server port not specified.');
+        reject(new Error('Server port not specified.'));
       }
     });
   }

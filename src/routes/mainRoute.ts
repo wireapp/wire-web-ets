@@ -20,7 +20,7 @@
 import * as express from 'express';
 import * as fs from 'fs-extra';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
-import * as logdown from 'logdown';
+import logdown from 'logdown';
 import * as path from 'path';
 
 import {ServerConfig} from '../config';
