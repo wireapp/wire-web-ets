@@ -1,13 +1,12 @@
-import {Body, Controller, Put, Delete, Param, Res, Get, Post} from '@nestjs/common';
-import {ApiTags, ApiResponse, ApiOperation} from '@nestjs/swagger';
+import {Body, Controller, Delete, Get, Param, Post, Put, Res} from '@nestjs/common';
+import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
+import {Validator} from 'class-validator';
+import {Response} from 'express';
+import * as HTTP_STATUS_CODE from 'http-status-codes';
+import {ErrorMessage, ServerErrorMessage} from '../config';
+import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceService} from './InstanceService';
-import {NewInstanceResponse} from './NewInstanceResponse';
-import {ErrorMessage, ServerErrorMessage} from '../config';
-import * as HTTP_STATUS_CODE from 'http-status-codes';
-import {Response} from 'express';
-import {Validator} from 'class-validator';
-import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 
 @ApiTags('Instance')
 @Controller('instance')
