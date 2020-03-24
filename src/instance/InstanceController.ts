@@ -1,4 +1,4 @@
-import {Body, Controller, Put} from '@nestjs/common';
+import {Body, Controller, Put, Delete, Param} from '@nestjs/common';
 import {ApiTags, ApiResponse, ApiOperation} from '@nestjs/swagger';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceService} from './InstanceService';
@@ -21,5 +21,14 @@ export class InstanceController {
       instanceId,
       name: body.name || '',
     };
+  }
+
+  @Delete(':instanceId')
+  @ApiOperation({summary: 'Delete an instance.'})
+  @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
+  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse({description: 'Internal server error', status: 500})
+  async deleteInstance(@Param('instanceId') instanceId: string) {
+    console.info('InstanceId', instanceId);
   }
 }
