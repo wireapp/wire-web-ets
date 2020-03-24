@@ -1,7 +1,7 @@
 import {BackendData} from '@wireapp/api-client/dist/env/';
 import {ClientClassification} from '@wireapp/api-client/dist/client/';
 import {IsOptional, IsNotEmpty, IsEnum} from 'class-validator';
-import {ApiModelProperty} from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
+import {ApiProperty} from '@nestjs/swagger';
 
 export class InstanceCreationOptions {
   @IsOptional()
@@ -10,7 +10,7 @@ export class InstanceCreationOptions {
   @IsOptional()
   customBackend?: BackendData;
 
-  @ApiModelProperty({enum: [ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET]})
+  @ApiProperty({enum: [ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET]})
   @IsEnum(ClientClassification)
   deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
 
@@ -20,14 +20,14 @@ export class InstanceCreationOptions {
   @IsOptional()
   deviceName?: string;
 
-  @ApiModelProperty()
+  @ApiProperty()
   @IsNotEmpty()
   email!: string;
 
   @IsOptional()
   name?: string;
 
-  @ApiModelProperty()
+  @ApiProperty()
   @IsNotEmpty()
   password!: string;
 }
