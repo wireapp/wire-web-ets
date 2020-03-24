@@ -127,7 +127,7 @@ export class InstanceController {
 
     try {
       const instanceName = await this.instanceService.toggleArchiveConversation(instanceId, body);
-      res.json({
+      res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
         name: instanceName,
       });
