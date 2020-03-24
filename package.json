@@ -75,11 +75,8 @@
     "*.{json,md,js,yml}": [
       "prettier --write"
     ],
-    "src/**/!(*.spec).ts": [
-      "tslint --project tsconfig.json --fix"
-    ],
-    "src/**/*.spec.ts": [
-      "tslint --project tsconfig.jasmine.json --fix"
+    "src/**/*.ts": [
+      "yarn fix:code"
     ]
   },
   "main": "dist/index.js",

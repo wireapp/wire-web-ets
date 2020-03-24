@@ -8,6 +8,7 @@ const port = process.env.PORT || 3000;
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(RootModule);
+  app.setGlobalPrefix('api/v1');
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -27,7 +28,7 @@ async function bootstrap(): Promise<void> {
 
   const host = '127.0.0.1';
   await app.listen(port, host, () => {
-    console.info(`Server running on "http://${host}:${port}".`);
+    console.info(`Swagger UI running on "http://${host}:${port}/documentation/"`);
   });
 }
 
