@@ -99,7 +99,7 @@ export class InstanceController {
 
   @Post(':instanceId/clear')
   @ApiOperation({summary: 'Clear a conversation.'})
-  @ApiResponse({description: 'The conversation archived status has been updated.', status: 200})
+  @ApiResponse({description: 'The conversation has been cleared.', status: 200})
   @ApiResponse({description: 'Instance not found', status: 404})
   @ApiResponse({description: 'Validation error', status: 422})
   @ApiResponse({description: 'Internal server error', status: 500})
@@ -126,7 +126,7 @@ export class InstanceController {
     }
 
     try {
-      const instanceName = await this.instanceService.toggleArchiveConversation(instanceId, body);
+      const instanceName = await this.instanceService.clearConversation(instanceId, body);
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
         name: instanceName,
