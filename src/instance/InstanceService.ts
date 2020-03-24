@@ -239,6 +239,10 @@ export class InstanceService {
     return instance;
   }
 
+  instanceExists(instanceId: string): boolean {
+    return !!this.cachedInstances.get(instanceId);
+  }
+
   async deleteInstance(instanceId: string): Promise<void> {
     const instance = this.getInstance(instanceId);
 
