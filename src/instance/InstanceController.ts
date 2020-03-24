@@ -20,12 +20,12 @@ export class InstanceController {
   @ApiResponse({description: 'Bad request', status: 400})
   @ApiResponse({description: 'Validation error', status: 422})
   @ApiResponse({description: 'Internal server error', status: 500})
-  async putInstance(@Body() body: InstanceCreationOptions): Promise<NewInstanceResponse> {
+  async putInstance(@Body() body: InstanceCreationOptions, @Res() res: Response): Promise<void> {
     const instanceId = await this.instanceService.createInstance(body);
-    return {
+    res.status(HTTP_STATUS_CODE.OK).json({
       instanceId,
       name: body.name || '',
-    };
+    });
   }
 
   @Delete(':instanceId')
