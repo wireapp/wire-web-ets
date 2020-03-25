@@ -1,5 +1,5 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {IsNotEmpty} from 'class-validator';
+import {IsNotEmpty, IsUUID} from 'class-validator';
 
 export class InstanceArchiveOptions {
   @ApiProperty()
@@ -7,6 +7,6 @@ export class InstanceArchiveOptions {
   archived!: boolean;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsUUID('4')
   conversationId!: string;
 }
