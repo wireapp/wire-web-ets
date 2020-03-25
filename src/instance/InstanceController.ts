@@ -37,11 +37,15 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async putInstance(@Body() body: InstanceCreationOptions, @Res() res: Response): Promise<void> {
-    const instanceId = await this.instanceService.createInstance(body);
-    res.status(HTTP_STATUS_CODE.OK).json({
-      instanceId,
-      name: body.name || '',
-    });
+    try {
+      const instanceId = await this.instanceService.createInstance(body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: body.name || '',
+      });
+    } catch (error) {
+      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
+    }
   }
 
   @Delete(':instanceId')
@@ -63,7 +67,11 @@ export class InstanceController {
       res.status(errorMessage.code).json(errorMessage);
     }
 
-    await this.instanceService.deleteInstance(instanceId);
+    try {
+      await this.instanceService.deleteInstance(instanceId);
+    } catch (error) {
+      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
+    }
   }
 
   @Get(':instanceId')
