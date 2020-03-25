@@ -1,9 +1,9 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {IsNotEmpty, IsUUID} from 'class-validator';
+import {IsBoolean, IsUUID} from 'class-validator';
 
 export class InstanceArchiveOptions {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsBoolean()
   archived!: boolean;
 
   @ApiProperty()

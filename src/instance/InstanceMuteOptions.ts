@@ -1,9 +1,9 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {IsNotEmpty, IsUUID} from 'class-validator';
+import {IsUUID, IsBoolean} from 'class-validator';
 
 export class InstanceMuteOptions {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsBoolean()
   muted!: boolean;
 
   @ApiProperty()
