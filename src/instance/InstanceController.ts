@@ -4,7 +4,7 @@ import {Validator} from 'class-validator';
 import {Response} from 'express';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
 import {ErrorMessage, ServerErrorMessage} from '../config';
-import {InstanceClearOptions} from './InstanceClearOptions';
+import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceService} from './InstanceService';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
@@ -174,7 +174,7 @@ export class InstanceController {
   @ApiResponse(status500description)
   async clearConversation(
     @Param('instanceId') instanceId: string,
-    @Body() body: InstanceClearOptions,
+    @Body() body: InstanceConversationOptions,
     @Res() res: Response,
   ): Promise<void> {
     if (!isUUID(instanceId)) {
@@ -300,6 +300,33 @@ export class InstanceController {
         fingerprint,
         instanceId,
       });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/getMessages')
+  @ApiOperation({summary: 'Get all messages.'})
+  @ApiResponse({description: 'All messages.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async getMessages(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceConversationOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const messages = this.instanceService.getMessages(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json(messages || []);
     } catch (error) {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
