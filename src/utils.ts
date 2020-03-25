@@ -83,4 +83,16 @@ function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
   }
 }
 
-export {formatDate, formatUptime, hexToUint8Array, isAssetContent, stripAsset, stripLinkPreview};
+const status422description = {description: 'Validation error', status: 422};
+const status500description = {description: 'Internal server error', status: 500};
+
+export {
+  formatDate,
+  formatUptime,
+  hexToUint8Array,
+  isAssetContent,
+  stripAsset,
+  stripLinkPreview,
+  status422description,
+  status500description,
+};

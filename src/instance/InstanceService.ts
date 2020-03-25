@@ -22,6 +22,7 @@ import {
   TextContent,
 } from '@wireapp/core/dist/conversation/content';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
+import {InstanceClearOptions} from './InstanceClearOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 
 @Injectable()
@@ -258,6 +259,16 @@ export class InstanceService {
 
     if (instance.account.service) {
       await instance.account.service.conversation.toggleArchiveConversation(options.conversationId, options.archived);
+      return instance.name;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async clearConversation(instanceId: string, options: InstanceClearOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.clearConversation(options.conversationId);
       return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
