@@ -314,4 +314,18 @@ export class InstanceService {
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
+
+  getFingerprint(instanceId: string): string {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      const cryptoboxIdentity = instance.account.service.cryptography.cryptobox.identity;
+      if (cryptoboxIdentity) {
+        return cryptoboxIdentity.public_key.fingerprint();
+      }
+      throw new Error(`Identity of instance "${instance.id}" broken.`);
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+  }
 }
