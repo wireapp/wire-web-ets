@@ -17,7 +17,7 @@ const errorMessageInstanceUUID: ErrorMessage = {
   error: `Instance ID must me a UUID.`,
 };
 
-const errorMessageInternalServer = (error: Error): ServerErrorMessage => {
+const createInternalServerError = (error: Error): ServerErrorMessage => {
   return {
     code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
     error: error.message,
@@ -44,7 +44,7 @@ export class InstanceController {
         name: body.name || '',
       });
     } catch (error) {
-      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 
@@ -70,7 +70,7 @@ export class InstanceController {
     try {
       await this.instanceService.deleteInstance(instanceId);
     } catch (error) {
-      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 
@@ -102,7 +102,7 @@ export class InstanceController {
         name: instance.name,
       });
     } catch (error) {
-      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 
@@ -136,7 +136,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 
@@ -170,7 +170,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 
@@ -204,7 +204,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 
@@ -231,7 +231,7 @@ export class InstanceController {
       const clients = this.instanceService.getAllClients(instanceId);
       res.json(clients);
     } catch (error) {
-      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 }
