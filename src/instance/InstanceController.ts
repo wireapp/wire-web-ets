@@ -17,11 +17,11 @@ const errorMessageInstanceUUID: ErrorMessage = {
   error: `Instance ID must me a UUID.`,
 };
 
-const errorMessageInternalServer = (error: any): ServerErrorMessage => {
+const errorMessageInternalServer = (error: Error): ServerErrorMessage => {
   return {
     code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
     error: error.message,
-    stack: error.stack,
+    stack: error.stack!,
   };
 };
 
