@@ -76,7 +76,7 @@
       "prettier --write"
     ],
     "src/**/*.ts": [
-      "yarn fix:code"
+      "eslint --fix"
     ]
   },
   "main": "dist/index.js",
