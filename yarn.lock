@@ -180,10 +180,10 @@
     tslib "1.11.1"
     uuid "7.0.2"
 
-"@nestjs/platform-express@7.0.3":
-  version "7.0.3"
-  resolved "https://registry.npmjs.org/@nestjs/platform-express/-/platform-express-7.0.3.tgz#319a672343f389d04a2e5e975d2f159d96e03b5e"
-  integrity sha512-epWK3NcywQclcWF/JrCdq4H1PH7v2h/HVOH2GtYEoKLr5Y4KrTcgaeyZfIzh6t+Vm8w8/N4Jqk2mIUltGtu2ug==
+"@nestjs/platform-express@7.0.5":
+  version "7.0.5"
+  resolved "https://registry.npmjs.org/@nestjs/platform-express/-/platform-express-7.0.5.tgz#0c84487b0daa006b4062e60a404227cb911806a3"
+  integrity sha512-8o6+mTuIuOMJTwftS9y/bcFmnyp5uQMMZWSE7tjxdtPuQiZl7v0P00NdsUeBpwUmATJax07KH1zuSrcok57+KA==
   dependencies:
     body-parser "1.19.0"
     cors "2.8.5"
@@ -5413,7 +5413,7 @@ ts-node@8.8.1:
     source-map-support "^0.5.6"
     yn "3.1.1"
 
-tslib@1.11.1:
+tslib@1.11.1, tslib@^1.8.1, tslib@^1.9.0:
   version "1.11.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
   integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
@@ -5422,11 +5422,6 @@ tslib@1.9.3:
   version "1.9.3"
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
   integrity sha512-4krF8scpejhaOgqzBEcGM7yDIEfi0/8+8zDRZhNZZ2kjmHJ4hv3zCbQWxoJGz1iw5U0Jl0nma13xzHXcncMavQ==
-
-tslib@^1.8.1, tslib@^1.9.0:
-  version "1.10.0"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
-  integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
 
 tsutils@^3.17.1:
   version "3.17.1"
