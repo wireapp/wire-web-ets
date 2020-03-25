@@ -8,6 +8,7 @@ import {InstanceClearOptions} from './InstanceClearOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceService} from './InstanceService';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
+import {status500description, status422description} from '../utils';
 
 @ApiTags('Instance')
 @Controller('instance')
@@ -18,8 +19,8 @@ export class InstanceController {
   @ApiOperation({summary: 'Create a new instance.'})
   @ApiResponse({description: 'The instance has successfully created.', status: 200})
   @ApiResponse({description: 'Bad request', status: 400})
-  @ApiResponse({description: 'Validation error', status: 422})
-  @ApiResponse({description: 'Internal server error', status: 500})
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
   async putInstance(@Body() body: InstanceCreationOptions, @Res() res: Response): Promise<void> {
     const instanceId = await this.instanceService.createInstance(body);
     res.status(HTTP_STATUS_CODE.OK).json({
@@ -32,8 +33,8 @@ export class InstanceController {
   @ApiOperation({summary: 'Delete an instance.'})
   @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
   @ApiResponse({description: 'Instance not found', status: 404})
-  @ApiResponse({description: 'Validation error', status: 422})
-  @ApiResponse({description: 'Internal server error', status: 500})
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
   async deleteInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
     const validator = new Validator();
     if (!validator.isUUID(instanceId, '4')) {
@@ -59,8 +60,8 @@ export class InstanceController {
   @ApiOperation({summary: 'Get information about an instance.'})
   @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
   @ApiResponse({description: 'Instance not found', status: 404})
-  @ApiResponse({description: 'Validation error', status: 422})
-  @ApiResponse({description: 'Internal server error', status: 500})
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
   async getInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
     const validator = new Validator();
     if (!validator.isUUID(instanceId, '4')) {
@@ -101,8 +102,8 @@ export class InstanceController {
   @ApiOperation({summary: 'Archive a conversation.'})
   @ApiResponse({description: 'The conversation archived status has been updated.', status: 200})
   @ApiResponse({description: 'Instance not found', status: 404})
-  @ApiResponse({description: 'Validation error', status: 422})
-  @ApiResponse({description: 'Internal server error', status: 500})
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
   async arvhiveConversation(
     @Param('instanceId') instanceId: string,
     @Body() body: InstanceArchiveOptions,
@@ -145,8 +146,8 @@ export class InstanceController {
   @ApiOperation({summary: 'Clear a conversation.'})
   @ApiResponse({description: 'The conversation has been cleared.', status: 200})
   @ApiResponse({description: 'Instance not found', status: 404})
-  @ApiResponse({description: 'Validation error', status: 422})
-  @ApiResponse({description: 'Internal server error', status: 500})
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
   async clearConversation(
     @Param('instanceId') instanceId: string,
     @Body() body: InstanceClearOptions,
