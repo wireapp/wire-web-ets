@@ -304,4 +304,14 @@ export class InstanceService {
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
+
+  async deleteMessageEveryone(instanceId: string, options: InstanceDeleteOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.deleteMessageEveryone(options.conversationId, options.messageId);
+      return instance.name;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
 }

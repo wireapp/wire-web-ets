@@ -248,4 +248,34 @@ export class InstanceController {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
+
+  @Post(':instanceId/deleteEverywhere')
+  @ApiOperation({summary: 'Delete a message for everyone.'})
+  @ApiResponse({description: 'The message was deleted for everyone.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async deleteEverywhere(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceDeleteOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const instanceName = await this.instanceService.deleteMessageEveryone(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
 }
