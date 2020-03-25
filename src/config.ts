@@ -41,7 +41,7 @@ export interface ErrorMessage {
 }
 
 export interface ServerErrorMessage extends ErrorMessage {
-  stack: string;
+  stack?: string;
 }
 
 const config: ServerConfig = {

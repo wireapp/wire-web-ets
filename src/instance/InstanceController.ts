@@ -21,7 +21,7 @@ const errorMessageInternalServer = (error: Error): ServerErrorMessage => {
   return {
     code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
     error: error.message,
-    stack: error.stack!,
+    stack: error.stack,
   };
 };
 
