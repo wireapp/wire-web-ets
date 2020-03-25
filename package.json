@@ -76,7 +76,7 @@
       "prettier --write"
     ],
     "src/**/*.ts": [
-      "eslint"
+      "eslint --fix"
     ]
   },
   "main": "dist/index.js",

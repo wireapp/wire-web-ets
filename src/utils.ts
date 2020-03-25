@@ -83,6 +83,7 @@ function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
   }
 }
 
+const status404instance = {description: 'Instance not found', status: 404};
 const status422description = {description: 'Validation error', status: 422};
 const status500description = {description: 'Internal server error', status: 500};
 
@@ -93,6 +94,7 @@ export {
   isAssetContent,
   stripAsset,
   stripLinkPreview,
+  status404instance,
   status422description,
   status500description,
 };

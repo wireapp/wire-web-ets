@@ -8,7 +8,7 @@ import {InstanceClearOptions} from './InstanceClearOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceService} from './InstanceService';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
-import {status500description, status422description} from '../utils';
+import {status500description, status422description, status404instance} from '../utils';
 import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 
@@ -59,7 +59,7 @@ export class InstanceController {
   @Delete(':instanceId')
   @ApiOperation({summary: 'Delete an instance.'})
   @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
-  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async deleteInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
@@ -81,7 +81,7 @@ export class InstanceController {
   @Get(':instanceId')
   @ApiOperation({summary: 'Get information about an instance.'})
   @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
-  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async getInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
@@ -109,7 +109,7 @@ export class InstanceController {
   @Post(':instanceId/archive')
   @ApiOperation({summary: 'Archive a conversation.'})
   @ApiResponse({description: 'The conversation archived status has been updated.', status: 200})
-  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async arvhiveConversation(
@@ -139,7 +139,7 @@ export class InstanceController {
   @Post(':instanceId/availability')
   @ApiOperation({summary: "Set a user's availiability."})
   @ApiResponse({description: "The user's availability has been updated.", status: 200})
-  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async setAvailability(
@@ -169,7 +169,7 @@ export class InstanceController {
   @Post(':instanceId/clear')
   @ApiOperation({summary: 'Clear a conversation.'})
   @ApiResponse({description: 'The conversation has been cleared.', status: 200})
-  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async clearConversation(
@@ -199,7 +199,7 @@ export class InstanceController {
   @Get(':instanceId/clients')
   @ApiOperation({summary: 'Get all clients of an instance.'})
   @ApiResponse({description: 'The list of all clients.', status: 200})
-  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async getClients(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
@@ -222,7 +222,7 @@ export class InstanceController {
   @Post(':instanceId/delete')
   @ApiOperation({summary: 'Delete a message locally.'})
   @ApiResponse({description: 'The message was deleted locally.', status: 200})
-  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async deleteMessage(
