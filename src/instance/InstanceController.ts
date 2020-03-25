@@ -11,6 +11,8 @@ import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {status500description, status422description} from '../utils';
 import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
 
+const isUUID = (text: string) => new Validator().isUUID(text, '4');
+
 @ApiTags('Instance')
 @Controller('instance')
 export class InstanceController {
@@ -37,7 +39,7 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async deleteInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
-    if (!new Validator().isUUID(instanceId, '4')) {
+    if (!isUUID(instanceId)) {
       const errorMessage: ErrorMessage = {
         code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
         error: `Instance ID must me a UUID.`,
@@ -63,7 +65,7 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async getInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
-    if (!new Validator().isUUID(instanceId, '4')) {
+    if (!isUUID(instanceId)) {
       const errorMessage: ErrorMessage = {
         code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
         error: `Instance ID must me a UUID.`,
@@ -108,7 +110,7 @@ export class InstanceController {
     @Body() body: InstanceArchiveOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!new Validator().isUUID(instanceId, '4')) {
+    if (!isUUID(instanceId)) {
       const errorMessage: ErrorMessage = {
         code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
         error: `Instance ID must me a UUID.`,
@@ -151,7 +153,7 @@ export class InstanceController {
     @Body() body: InstanceAvailiabilityOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!new Validator().isUUID(instanceId, '4')) {
+    if (!isUUID(instanceId)) {
       const errorMessage: ErrorMessage = {
         code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
         error: `Instance ID must me a UUID.`,
@@ -194,7 +196,7 @@ export class InstanceController {
     @Body() body: InstanceClearOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!new Validator().isUUID(instanceId, '4')) {
+    if (!isUUID(instanceId)) {
       const errorMessage: ErrorMessage = {
         code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
         error: `Instance ID must me a UUID.`,
