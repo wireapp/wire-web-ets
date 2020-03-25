@@ -10,6 +10,7 @@ import {InstanceService} from './InstanceService';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {status500description, status422description} from '../utils';
 import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
+import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 
 const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
@@ -230,6 +231,40 @@ export class InstanceController {
     try {
       const clients = this.instanceService.getAllClients(instanceId);
       res.json(clients);
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/delete')
+  @ApiOperation({summary: 'Delete a message locally.'})
+  @ApiResponse({description: 'The message was deleted locally.', status: 200})
+  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async deleteMessage(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceDeleteOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      const errorMessage: ErrorMessage = {
+        code: HTTP_STATUS_CODE.NOT_FOUND,
+        error: `Instance "${instanceId}" not found.`,
+      };
+      res.status(errorMessage.code).json(errorMessage);
+    }
+
+    try {
+      const instanceName = await this.instanceService.deleteMessageLocal(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: instanceName,
+      });
     } catch (error) {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }

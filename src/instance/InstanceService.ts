@@ -25,6 +25,7 @@ import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
 import {InstanceClearOptions} from './InstanceClearOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
+import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 
 @Injectable()
 export class InstanceService {
@@ -290,6 +291,16 @@ export class InstanceService {
 
     if (instance.account.service) {
       return instance.account.service.client.getClients();
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async deleteMessageLocal(instanceId: string, options: InstanceDeleteOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.deleteMessageLocal(options.conversationId, options.messageId);
+      return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
