@@ -278,4 +278,30 @@ export class InstanceController {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
+
+  @Get(':instanceId/fingerprint')
+  @ApiOperation({summary: "Get the fingerprint from the instance's client."})
+  @ApiResponse({description: 'The fingerprint of the client.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async getFingerprint(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const fingerprint = this.instanceService.getFingerprint(instanceId);
+      res.json({
+        fingerprint,
+        instanceId,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
 }
