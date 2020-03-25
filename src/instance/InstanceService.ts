@@ -1,16 +1,11 @@
 import {Injectable} from '@nestjs/common';
-import UUID from 'pure-uuid';
-import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
-import {Account} from '@wireapp/core';
-import {LRUCache} from '@wireapp/lru-cache';
-import {Instance} from '../InstanceService';
-import {BackendData} from '@wireapp/api-client/dist/env/';
-import {ClientClassification} from '@wireapp/api-client/dist/client/';
 import {APIClient} from '@wireapp/api-client';
-import {ClientInfo} from '@wireapp/core/dist/client/';
-import {MemoryEngine} from '@wireapp/store-engine';
-import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation';
+import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/client/';
 import {ClientType} from '@wireapp/api-client/dist/client/ClientType';
+import {BackendData} from '@wireapp/api-client/dist/env/';
+import {Account} from '@wireapp/core';
+import {ClientInfo} from '@wireapp/core/dist/client/';
+import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation';
 import {
   ClearedContent,
   ConfirmationContent,
@@ -21,10 +16,15 @@ import {
   ReactionContent,
   TextContent,
 } from '@wireapp/core/dist/conversation/content';
-import {InstanceCreationOptions} from './InstanceCreationOptions';
-import {InstanceClearOptions} from './InstanceClearOptions';
+import {LRUCache} from '@wireapp/lru-cache';
+import {MemoryEngine} from '@wireapp/store-engine';
+import UUID from 'pure-uuid';
+import {Instance} from '../InstanceService';
+import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
+import {InstanceClearOptions} from './InstanceClearOptions';
+import {InstanceCreationOptions} from './InstanceCreationOptions';
 
 @Injectable()
 export class InstanceService {
@@ -281,6 +281,15 @@ export class InstanceService {
     if (instance.account.service) {
       await instance.account.service.conversation.clearConversation(options.conversationId);
       return instance.name;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  getAllClients(instanceId: string): Promise<RegisteredClient[]> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      return instance.account.service.client.getClients();
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }

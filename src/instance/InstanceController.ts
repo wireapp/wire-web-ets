@@ -17,6 +17,14 @@ const errorMessageInstanceUUID: ErrorMessage = {
   error: `Instance ID must me a UUID.`,
 };
 
+const createInternalServerError = (error: Error): ServerErrorMessage => {
+  return {
+    code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+    error: error.message,
+    stack: error.stack,
+  };
+};
+
 @ApiTags('Instance')
 @Controller('instance')
 export class InstanceController {
@@ -29,11 +37,15 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async putInstance(@Body() body: InstanceCreationOptions, @Res() res: Response): Promise<void> {
-    const instanceId = await this.instanceService.createInstance(body);
-    res.status(HTTP_STATUS_CODE.OK).json({
-      instanceId,
-      name: body.name || '',
-    });
+    try {
+      const instanceId = await this.instanceService.createInstance(body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: body.name || '',
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
   }
 
   @Delete(':instanceId')
@@ -55,7 +67,11 @@ export class InstanceController {
       res.status(errorMessage.code).json(errorMessage);
     }
 
-    await this.instanceService.deleteInstance(instanceId);
+    try {
+      await this.instanceService.deleteInstance(instanceId);
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
   }
 
   @Get(':instanceId')
@@ -86,12 +102,7 @@ export class InstanceController {
         name: instance.name,
       });
     } catch (error) {
-      const errorMessage: ServerErrorMessage = {
-        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-        error: error.message,
-        stack: error.stack,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 
@@ -125,12 +136,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const errorMessage: ServerErrorMessage = {
-        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-        error: error.message,
-        stack: error.stack,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 
@@ -164,12 +170,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const errorMessage: ServerErrorMessage = {
-        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-        error: error.message,
-        stack: error.stack,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 
@@ -203,12 +204,34 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const errorMessage: ServerErrorMessage = {
-        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-        error: error.message,
-        stack: error.stack,
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Get(':instanceId/clients')
+  @ApiOperation({summary: 'Get all clients of an instance.'})
+  @ApiResponse({description: 'The list of all clients.', status: 200})
+  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async getClients(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      const errorMessage: ErrorMessage = {
+        code: HTTP_STATUS_CODE.NOT_FOUND,
+        error: `Instance "${instanceId}" not found.`,
       };
       res.status(errorMessage.code).json(errorMessage);
+    }
+
+    try {
+      const clients = this.instanceService.getAllClients(instanceId);
+      res.json(clients);
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
 }
