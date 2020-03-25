@@ -24,6 +24,7 @@ import {
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceClearOptions} from './InstanceClearOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
+import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
 
 @Injectable()
 export class InstanceService {
@@ -262,6 +263,16 @@ export class InstanceService {
       return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async setAvailability(instanceId: string, options: InstanceAvailiabilityOptions): Promise<void> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.user.setAvailability(options.teamId, options.type);
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
   }
 
   async clearConversation(instanceId: string, options: InstanceClearOptions): Promise<string> {

@@ -9,6 +9,13 @@ import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceService} from './InstanceService';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {status500description, status422description} from '../utils';
+import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
+
+const isUUID = (text: string) => new Validator().isUUID(text, '4');
+const errorMessageInstanceUUID: ErrorMessage = {
+  code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
+  error: `Instance ID must me a UUID.`,
+};
 
 @ApiTags('Instance')
 @Controller('instance')
@@ -36,12 +43,8 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async deleteInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
-    if (!new Validator().isUUID(instanceId, '4')) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
-        error: `Instance ID must me a UUID.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
@@ -62,12 +65,8 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async getInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
-    if (!new Validator().isUUID(instanceId, '4')) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
-        error: `Instance ID must me a UUID.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
@@ -107,12 +106,8 @@ export class InstanceController {
     @Body() body: InstanceArchiveOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!new Validator().isUUID(instanceId, '4')) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
-        error: `Instance ID must me a UUID.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
@@ -139,6 +134,45 @@ export class InstanceController {
     }
   }
 
+  @Post(':instanceId/availability')
+  @ApiOperation({summary: "Set a user's availiability."})
+  @ApiResponse({description: "The user's availability has been updated.", status: 200})
+  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async setAvailability(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceAvailiabilityOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      const errorMessage: ErrorMessage = {
+        code: HTTP_STATUS_CODE.NOT_FOUND,
+        error: `Instance "${instanceId}" not found.`,
+      };
+      res.status(errorMessage.code).json(errorMessage);
+    }
+
+    try {
+      const instanceName = await this.instanceService.setAvailability(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      const errorMessage: ServerErrorMessage = {
+        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        error: error.message,
+        stack: error.stack,
+      };
+      res.status(errorMessage.code).json(errorMessage);
+    }
+  }
+
   @Post(':instanceId/clear')
   @ApiOperation({summary: 'Clear a conversation.'})
   @ApiResponse({description: 'The conversation has been cleared.', status: 200})
@@ -150,12 +184,8 @@ export class InstanceController {
     @Body() body: InstanceClearOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!new Validator().isUUID(instanceId, '4')) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
-        error: `Instance ID must me a UUID.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
