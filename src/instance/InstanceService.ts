@@ -23,9 +23,19 @@ import {Instance} from '../InstanceService';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
-import {InstanceClearOptions} from './InstanceClearOptions';
+import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
+
+type ConfirmationWithSender = ConfirmationContent & {from: string};
+type ReactionWithSender = ReactionContent & {
+  from: string;
+};
+
+type MessagePayload = PayloadBundle & {
+  confirmations?: ConfirmationWithSender[];
+  reactions?: ReactionWithSender[];
+};
 
 @Injectable()
 export class InstanceService {
@@ -276,7 +286,7 @@ export class InstanceService {
     }
   }
 
-  async clearConversation(instanceId: string, options: InstanceClearOptions): Promise<string> {
+  async clearConversation(instanceId: string, options: InstanceConversationOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
@@ -327,5 +337,18 @@ export class InstanceService {
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
+  }
+
+  getMessages(instanceId: string, options: InstanceConversationOptions): MessagePayload[] {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      const allMessages = instance.messages.getAll();
+
+      return Object.keys(allMessages)
+        .map(messageId => allMessages[messageId])
+        .filter(message => message.conversation === options.conversationId);
+    }
+    throw new Error('Account service not set.');
   }
 }
