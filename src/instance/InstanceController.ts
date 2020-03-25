@@ -26,6 +26,13 @@ const createInternalServerError = (error: Error): ServerErrorMessage => {
   };
 };
 
+const createInstanceNotFoundError = (instanceId: string): ErrorMessage => {
+  return {
+    code: HTTP_STATUS_CODE.NOT_FOUND,
+    error: `Instance "${instanceId}" not found.`,
+  };
+};
+
 @ApiTags('Instance')
 @Controller('instance')
 export class InstanceController {
@@ -61,11 +68,7 @@ export class InstanceController {
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.NOT_FOUND,
-        error: `Instance "${instanceId}" not found.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
     }
 
     try {
@@ -87,11 +90,7 @@ export class InstanceController {
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.NOT_FOUND,
-        error: `Instance "${instanceId}" not found.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
     }
 
     try {
@@ -123,11 +122,7 @@ export class InstanceController {
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.NOT_FOUND,
-        error: `Instance "${instanceId}" not found.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
     }
 
     try {
@@ -157,11 +152,7 @@ export class InstanceController {
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.NOT_FOUND,
-        error: `Instance "${instanceId}" not found.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
     }
 
     try {
@@ -191,11 +182,7 @@ export class InstanceController {
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.NOT_FOUND,
-        error: `Instance "${instanceId}" not found.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
     }
 
     try {
@@ -221,11 +208,7 @@ export class InstanceController {
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.NOT_FOUND,
-        error: `Instance "${instanceId}" not found.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
     }
 
     try {
@@ -252,11 +235,7 @@ export class InstanceController {
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
-      const errorMessage: ErrorMessage = {
-        code: HTTP_STATUS_CODE.NOT_FOUND,
-        error: `Instance "${instanceId}" not found.`,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
     }
 
     try {
