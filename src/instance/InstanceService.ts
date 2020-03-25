@@ -26,6 +26,7 @@ import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
+import {InstanceMuteOptions} from './InstanceMuteOptions';
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -350,5 +351,19 @@ export class InstanceService {
         .filter(message => message.conversation === options.conversationId);
     }
     throw new Error('Account service not set.');
+  }
+
+  async toggleMuteConversation(instanceId: string, options: InstanceMuteOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      await instance.account.service.conversation.setConversationMutedStatus(
+        options.conversationId,
+        options.muted ? 3 : 0,
+        new Date(),
+      );
+      return instance.name;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 }

@@ -1,10 +1,10 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {IsBoolean, IsUUID} from 'class-validator';
+import {IsUUID, IsBoolean} from 'class-validator';
 
-export class InstanceArchiveOptions {
+export class InstanceMuteOptions {
   @ApiProperty()
   @IsBoolean()
-  archived!: boolean;
+  muted!: boolean;
 
   @ApiProperty()
   @IsUUID('4')
