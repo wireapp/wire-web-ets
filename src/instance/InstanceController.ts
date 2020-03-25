@@ -17,6 +17,14 @@ const errorMessageInstanceUUID: ErrorMessage = {
   error: `Instance ID must me a UUID.`,
 };
 
+const errorMessageInternalServer = (error: any): ServerErrorMessage => {
+  return {
+    code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+    error: error.message,
+    stack: error.stack,
+  };
+};
+
 @ApiTags('Instance')
 @Controller('instance')
 export class InstanceController {
@@ -86,12 +94,7 @@ export class InstanceController {
         name: instance.name,
       });
     } catch (error) {
-      const errorMessage: ServerErrorMessage = {
-        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-        error: error.message,
-        stack: error.stack,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
     }
   }
 
@@ -125,12 +128,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const errorMessage: ServerErrorMessage = {
-        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-        error: error.message,
-        stack: error.stack,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
     }
   }
 
@@ -164,12 +162,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const errorMessage: ServerErrorMessage = {
-        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-        error: error.message,
-        stack: error.stack,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
     }
   }
 
@@ -203,12 +196,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const errorMessage: ServerErrorMessage = {
-        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-        error: error.message,
-        stack: error.stack,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
     }
   }
 
@@ -235,12 +223,7 @@ export class InstanceController {
       const clients = this.instanceService.getAllClients(instanceId);
       res.json(clients);
     } catch (error) {
-      const errorMessage: ServerErrorMessage = {
-        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-        error: error.message,
-        stack: error.stack,
-      };
-      res.status(errorMessage.code).json(errorMessage);
+      res.status(errorMessageInternalServer(error).code).json(errorMessageInternalServer(error));
     }
   }
 }
