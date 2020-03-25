@@ -214,7 +214,7 @@ export class InstanceController {
 
   @Get(':instanceId/clients')
   @ApiOperation({summary: 'Get all clients of an instance.'})
-  @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
+  @ApiResponse({description: 'The list of all clients.', status: 200})
   @ApiResponse({description: 'Instance not found', status: 404})
   @ApiResponse(status422description)
   @ApiResponse(status500description)
