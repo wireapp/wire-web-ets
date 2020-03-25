@@ -211,4 +211,36 @@ export class InstanceController {
       res.status(errorMessage.code).json(errorMessage);
     }
   }
+
+  @Get(':instanceId/clients')
+  @ApiOperation({summary: 'Get all clients of an instance.'})
+  @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
+  @ApiResponse({description: 'Instance not found', status: 404})
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async getClients(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      const errorMessage: ErrorMessage = {
+        code: HTTP_STATUS_CODE.NOT_FOUND,
+        error: `Instance "${instanceId}" not found.`,
+      };
+      res.status(errorMessage.code).json(errorMessage);
+    }
+
+    try {
+      const clients = this.instanceService.getAllClients(instanceId);
+      res.json(clients);
+    } catch (error) {
+      const errorMessage: ServerErrorMessage = {
+        code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        error: error.message,
+        stack: error.stack,
+      };
+      res.status(errorMessage.code).json(errorMessage);
+    }
+  }
 }
