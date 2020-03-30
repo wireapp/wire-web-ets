@@ -33,7 +33,7 @@
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
     "@types/jasmine": "3.5.10",
-    "@types/swagger-ui-express": "4.1.1",
+    "@types/swagger-ui-express": "4.1.2",
     "@typescript-eslint/eslint-plugin": "2.25.0",
     "@typescript-eslint/parser": "2.25.0",
     "@wireapp/eslint-config": "1.4.0",
