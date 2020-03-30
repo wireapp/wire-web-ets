@@ -14,7 +14,8 @@ import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceImageOptions} from './InstanceImageOptions';
-import {ImageContent} from '@wireapp/core/dist/conversation/content';
+import {ImageContent, LocationContent} from '@wireapp/core/dist/conversation/content';
+import {InstanceLocationOptions} from './InstanceLocationOptions';
 
 const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
@@ -514,6 +515,52 @@ export class InstanceController {
         image,
         body.expectsReadConfirmation,
         body.legalHoldStatus,
+        body.messageTimer,
+      );
+      const instanceName = this.instanceService.getInstance(instanceId).name;
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        messageId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/sendLocation')
+  @ApiOperation({summary: 'Send an location to a conversation.'})
+  @ApiResponse({description: 'Location sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendLocation(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceLocationOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const location: LocationContent = {
+        expectsReadConfirmation: body.expectsReadConfirmation,
+        latitude: body.latitude,
+        legalHoldStatus: body.legalHoldStatus,
+        longitude: body.longitude,
+        name: body.locationName,
+        zoom: body.zoom,
+      };
+
+      const messageId = await this.instanceService.sendLocation(
+        instanceId,
+        body.conversationId,
+        location,
         body.messageTimer,
       );
       const instanceName = this.instanceService.getInstance(instanceId).name;
