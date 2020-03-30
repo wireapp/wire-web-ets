@@ -613,4 +613,31 @@ export class InstanceController {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
+
+  @Post(':instanceId/sendButtonAction')
+  @ApiOperation({summary: 'Send a button action to a poll.'})
+  @ApiResponse({description: 'Button action sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendButtonAction(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstancePingOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      await this.instanceService.sendButtonAction(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({});
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
 }

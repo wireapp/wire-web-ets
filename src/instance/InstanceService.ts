@@ -31,6 +31,7 @@ import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
+import {InstanceButtonOptions} from './InstanceButtonOptions';
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -551,5 +552,19 @@ export class InstanceService {
       return sentPing.id;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async sendButtonAction(instanceId: string, options: InstanceButtonOptions): Promise<void> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+    if (service) {
+      const payload = service.conversation.messageBuilder.createButtonActionMessage(options.conversationId, {
+        buttonId: options.buttonId,
+        referenceMessageId: options.referenceMessageId,
+      });
+      await service.conversation.send(payload, options.userIds);
+    } else {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
   }
 }
