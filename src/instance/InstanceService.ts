@@ -17,6 +17,7 @@ import {
   ReactionContent,
   TextContent,
   ImageContent,
+  LocationContent,
 } from '@wireapp/core/dist/conversation/content';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
@@ -503,6 +504,26 @@ export class InstanceService {
 
       instance.messages.set(sentImage.id, sentImage);
       return sentImage.id;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async sendLocation(
+    instanceId: string,
+    conversationId: string,
+    location: LocationContent,
+    expireAfterMillis = 0,
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = await service.conversation.messageBuilder.createLocation(conversationId, location);
+      const sentLocation = await service.conversation.send(payload);
+
+      instance.messages.set(sentLocation.id, sentLocation);
+      return sentLocation.id;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
