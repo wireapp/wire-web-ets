@@ -701,4 +701,34 @@ export class InstanceController {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
+
+  @Post(':instanceId/sendSessionReset')
+  @ApiOperation({summary: 'Clear a conversation.'})
+  @ApiResponse({description: 'The conversation has been cleared.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendSessionReset(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceConversationOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const instanceName = await this.instanceService.sendSessionReset(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
 }

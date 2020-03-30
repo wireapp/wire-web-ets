@@ -601,4 +601,16 @@ export class InstanceService {
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
+
+  async sendSessionReset(instanceId: string, options: InstanceConversationOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      const sessionResetPayload = service.conversation.messageBuilder.createSessionReset(options.conversationId);
+      const {id: messageId} = await service.conversation.send(sessionResetPayload);
+      return messageId;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
 }
