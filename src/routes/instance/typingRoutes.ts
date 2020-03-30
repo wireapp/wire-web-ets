@@ -37,12 +37,8 @@ export const typingRoutes = (instanceService: InstanceService): express.Router =
     '/api/v1/instance/:instanceId/sendTyping/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        status: Joi.string()
-          .valid(CONVERSATION_TYPING.STARTED, CONVERSATION_TYPING.STOPPED)
-          .required(),
+        conversationId: Joi.string().uuid().required(),
+        status: Joi.string().valid(CONVERSATION_TYPING.STARTED, CONVERSATION_TYPING.STOPPED).required(),
       },
     }),
     async (req: express.Request, res: express.Response) => {

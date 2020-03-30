@@ -59,9 +59,7 @@ export interface ImageMessageRequest extends AssetMessageRequest {
 
 export const validateAudioMetaData = Joi.object({
   durationInMillis: Joi.number().optional(),
-  normalizedLoudness: Joi.array()
-    .items(Joi.number())
-    .optional(),
+  normalizedLoudness: Joi.array().items(Joi.number()).optional(),
 });
 
 export const validateVideoMetaData = Joi.object({
@@ -78,22 +76,14 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
     celebrate({
       body: {
         audio: validateAudioMetaData.optional(),
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        data: Joi.string()
-          .base64()
-          .required(),
-        expectsReadConfirmation: Joi.boolean()
-          .default(false)
-          .optional(),
+        conversationId: Joi.string().uuid().required(),
+        data: Joi.string().base64().required(),
+        expectsReadConfirmation: Joi.boolean().default(false).optional(),
         fileName: Joi.string().required(),
         legalHoldStatus: Joi.number()
           .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
-        messageTimer: Joi.number()
-          .default(0)
-          .optional(),
+        messageTimer: Joi.number().default(0).optional(),
         type: Joi.string().required(),
         video: validateVideoMetaData.optional(),
       },
@@ -166,28 +156,16 @@ export const assetRoutes = (instanceService: InstanceService): express.Router =>
     '/api/v1/instance/:instanceId/sendImage/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        data: Joi.string()
-          .base64()
-          .required(),
-        expectsReadConfirmation: Joi.boolean()
-          .default(false)
-          .optional(),
-        height: Joi.number()
-          .min(1)
-          .required(),
+        conversationId: Joi.string().uuid().required(),
+        data: Joi.string().base64().required(),
+        expectsReadConfirmation: Joi.boolean().default(false).optional(),
+        height: Joi.number().min(1).required(),
         legalHoldStatus: Joi.number()
           .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
-        messageTimer: Joi.number()
-          .default(0)
-          .optional(),
+        messageTimer: Joi.number().default(0).optional(),
         type: Joi.string().required(),
-        width: Joi.number()
-          .min(1)
-          .required(),
+        width: Joi.number().min(1).required(),
       },
     }),
     async (req: express.Request, res: express.Response) => {

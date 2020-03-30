@@ -113,20 +113,11 @@ describe('Routes', () => {
       .reply(HTTP_STATUS_CODE.OK, accessTokenData)
       .persist();
 
-    nock(backendURL)
-      .post(`${AuthAPI.URL.ACCESS}/${AuthAPI.URL.LOGOUT}`)
-      .reply(HTTP_STATUS_CODE.OK)
-      .persist();
+    nock(backendURL).post(`${AuthAPI.URL.ACCESS}/${AuthAPI.URL.LOGOUT}`).reply(HTTP_STATUS_CODE.OK).persist();
 
-    nock(backendURL)
-      .post(AuthAPI.URL.ACCESS)
-      .reply(HTTP_STATUS_CODE.OK, accessTokenData)
-      .persist();
+    nock(backendURL).post(AuthAPI.URL.ACCESS).reply(HTTP_STATUS_CODE.OK, accessTokenData).persist();
 
-    nock(backendURL)
-      .post(ClientAPI.URL.CLIENTS)
-      .reply(HTTP_STATUS_CODE.OK, {id: clientId})
-      .persist();
+    nock(backendURL).post(ClientAPI.URL.CLIENTS).reply(HTTP_STATUS_CODE.OK, {id: clientId}).persist();
 
     nock(backendURL)
       .post(new RegExp(`${ConversationAPI.URL.CONVERSATIONS}/.*/otr/messages`))

@@ -37,12 +37,8 @@ export const userRoutes = (instanceService: InstanceService): express.Router => 
     '/api/v1/instance/:instanceId/availability/?',
     celebrate({
       body: {
-        teamId: Joi.string()
-          .uuid()
-          .required(),
-        type: Joi.number()
-          .valid(0, 1, 2, 3)
-          .required(),
+        teamId: Joi.string().uuid().required(),
+        type: Joi.number().valid(0, 1, 2, 3).required(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
