@@ -527,4 +527,29 @@ export class InstanceService {
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
+
+  async sendPing(
+    instanceId: string,
+    conversationId: string,
+    expectsReadConfirmation?: boolean,
+    legalHoldStatus?: LegalHoldStatus,
+    expireAfterMillis = 0,
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = service.conversation.messageBuilder.createPing(conversationId, {
+        expectsReadConfirmation,
+        hotKnock: false,
+        legalHoldStatus,
+      });
+      const sentPing = await service.conversation.send(payload);
+
+      instance.messages.set(sentPing.id, sentPing);
+      return sentPing.id;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
 }
