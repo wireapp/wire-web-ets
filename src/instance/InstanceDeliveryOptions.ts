@@ -11,6 +11,6 @@ export class InstanceDeliveryOptions {
   firstMessageId!: string;
 
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID('4', {each: true})
   moreMessageIds!: string[];
 }

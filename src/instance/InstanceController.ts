@@ -9,7 +9,7 @@ import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceService} from './InstanceService';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {status500description, status422description, status404instance} from '../utils';
-import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
+import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
@@ -139,14 +139,14 @@ export class InstanceController {
   }
 
   @Post(':instanceId/availability')
-  @ApiOperation({summary: "Set a user's availiability."})
+  @ApiOperation({summary: "Set a user's availability."})
   @ApiResponse({description: "The user's availability has been updated.", status: 200})
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async setAvailability(
     @Param('instanceId') instanceId: string,
-    @Body() body: InstanceAvailiabilityOptions,
+    @Body() body: InstanceAvailabilityOptions,
     @Res() res: Response,
   ): Promise<void> {
     if (!isUUID(instanceId)) {
