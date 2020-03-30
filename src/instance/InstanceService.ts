@@ -3,6 +3,7 @@ import {APIClient} from '@wireapp/api-client';
 import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/client/';
 import {ClientType} from '@wireapp/api-client/dist/client/ClientType';
 import {BackendData} from '@wireapp/api-client/dist/env/';
+import {Confirmation} from '@wireapp/protocol-messaging';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/';
 import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation';
@@ -27,6 +28,7 @@ import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
+import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -362,6 +364,24 @@ export class InstanceService {
         options.muted ? 3 : 0,
         new Date(),
       );
+      return instance.name;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async sendConfirmationDelivered(instanceId: string, options: InstanceDeliveryOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      const payload = service.conversation.messageBuilder.createConfirmation(
+        options.conversationId,
+        options.firstMessageId,
+        Confirmation.Type.DELIVERED,
+        undefined,
+        options.moreMessageIds,
+      );
+      await service.conversation.send(payload);
       return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
