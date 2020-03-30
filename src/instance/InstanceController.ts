@@ -16,6 +16,7 @@ import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceImageOptions} from './InstanceImageOptions';
 import {ImageContent, LocationContent} from '@wireapp/core/dist/conversation/content';
 import {InstanceLocationOptions} from './InstanceLocationOptions';
+import {InstancePingOptions} from './InstancePingOptions';
 
 const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
@@ -563,6 +564,45 @@ export class InstanceController {
         location,
         body.messageTimer,
       );
+      const instanceName = this.instanceService.getInstance(instanceId).name;
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        messageId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/sendPing')
+  @ApiOperation({summary: 'Send an ping to a conversation.'})
+  @ApiResponse({description: 'Ping sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendPing(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstancePingOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const messageId = await this.instanceService.sendPing(
+        instanceId,
+        body.conversationId,
+        body.expectsReadConfirmation,
+        body.legalHoldStatus,
+        body.messageTimer,
+      );
+
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
