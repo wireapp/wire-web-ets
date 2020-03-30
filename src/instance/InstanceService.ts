@@ -2,6 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {APIClient} from '@wireapp/api-client';
 import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/client/';
 import {ClientType} from '@wireapp/api-client/dist/client/ClientType';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
 import {BackendData} from '@wireapp/api-client/dist/env/';
 import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {Account} from '@wireapp/core';
@@ -33,6 +34,7 @@ import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
+import {InstanceTypingOptions} from './InstanceTypingOptions';
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -610,6 +612,21 @@ export class InstanceService {
       const sessionResetPayload = service.conversation.messageBuilder.createSessionReset(options.conversationId);
       const {id: messageId} = await service.conversation.send(sessionResetPayload);
       return messageId;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async sendTyping(instanceId: string, options: InstanceTypingOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      if (options.status === CONVERSATION_TYPING.STARTED) {
+        await service.conversation.sendTypingStart(options.conversationId);
+      } else {
+        await service.conversation.sendTypingStop(options.conversationId);
+      }
+      return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }

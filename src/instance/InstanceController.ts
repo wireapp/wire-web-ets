@@ -19,6 +19,7 @@ import {InstanceLocationOptions} from './InstanceLocationOptions';
 import {InstancePingOptions} from './InstancePingOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
+import {InstanceTypingOptions} from './InstanceTypingOptions';
 
 const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
@@ -723,6 +724,36 @@ export class InstanceController {
 
     try {
       const instanceName = await this.instanceService.sendSessionReset(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/sendTyping')
+  @ApiOperation({summary: 'Send a typing indicator to a conversation.'})
+  @ApiResponse({description: 'Typing indicator has been sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendTyping(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceTypingOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const instanceName = await this.instanceService.sendTyping(instanceId, body);
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
         name: instanceName,
