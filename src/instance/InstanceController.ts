@@ -17,6 +17,7 @@ import {InstanceImageOptions} from './InstanceImageOptions';
 import {ImageContent, LocationContent} from '@wireapp/core/dist/conversation/content';
 import {InstanceLocationOptions} from './InstanceLocationOptions';
 import {InstancePingOptions} from './InstancePingOptions';
+import {InstanceButtonOptions} from './InstanceButtonOptions';
 
 const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
@@ -622,7 +623,7 @@ export class InstanceController {
   @ApiResponse(status500description)
   async sendButtonAction(
     @Param('instanceId') instanceId: string,
-    @Body() body: InstancePingOptions,
+    @Body() body: InstanceButtonOptions,
     @Res() res: Response,
   ): Promise<void> {
     if (!isUUID(instanceId)) {
