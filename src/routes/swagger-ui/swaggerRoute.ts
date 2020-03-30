@@ -27,9 +27,9 @@ const jsonFile = path.join(__dirname, '../../../swagger.json');
 const swaggerDocument = fs.readJSONSync(jsonFile);
 
 export function initSwaggerRoute(app: express.Express, config: ServerConfig): void {
-  const swaggerUiOptions = {
+  const swaggerOptions: swaggerUi.SwaggerOptions = {
     host: `localhost:${config.PORT_HTTP}`,
   };
 
-  app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {options: swaggerUiOptions}));
+  app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {}, {options: swaggerOptions}));
 }
