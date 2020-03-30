@@ -2,7 +2,7 @@ import {ApiProperty} from '@nestjs/swagger';
 import {Availability} from '@wireapp/protocol-messaging';
 import {IsEnum, IsUUID} from 'class-validator';
 
-export class InstanceAvailiabilityOptions {
+export class InstanceAvailabilityOptions {
   @ApiProperty({
     enum: [Availability.Type.AVAILABLE, Availability.Type.AWAY, Availability.Type.BUSY, Availability.Type.NONE],
   })
