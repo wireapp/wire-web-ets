@@ -487,7 +487,7 @@ export class InstanceController {
   }
 
   @Post(':instanceId/sendImage')
-  @ApiOperation({summary: 'SSend an image to a conversation.'})
+  @ApiOperation({summary: 'Send an image to a conversation.'})
   @ApiResponse({description: 'Image sent.', status: 200})
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
