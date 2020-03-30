@@ -3,7 +3,7 @@ import {APIClient} from '@wireapp/api-client';
 import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/client/';
 import {ClientType} from '@wireapp/api-client/dist/client/ClientType';
 import {BackendData} from '@wireapp/api-client/dist/env/';
-import {Confirmation} from '@wireapp/protocol-messaging';
+import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/';
 import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation';
@@ -16,6 +16,7 @@ import {
   HiddenContent,
   ReactionContent,
   TextContent,
+  ImageContent,
 } from '@wireapp/core/dist/conversation/content';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
@@ -472,6 +473,36 @@ export class InstanceService {
         }
       }
       return instance.name;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async sendImage(
+    instanceId: string,
+    conversationId: string,
+    image: ImageContent,
+    expectsReadConfirmation?: boolean,
+    legalHoldStatus?: LegalHoldStatus,
+    expireAfterMillis = 0,
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+      const payload = await service.conversation.messageBuilder.createImage(
+        conversationId,
+        image,
+        undefined,
+        expectsReadConfirmation,
+        legalHoldStatus,
+      );
+      const sentImage = await service.conversation.send(payload);
+
+      stripAsset(sentImage.content);
+
+      instance.messages.set(sentImage.id, sentImage);
+      return sentImage.id;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
