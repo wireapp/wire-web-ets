@@ -17,6 +17,7 @@ import {InstanceImageOptions} from './InstanceImageOptions';
 import {ImageContent, LocationContent} from '@wireapp/core/dist/conversation/content';
 import {InstanceLocationOptions} from './InstanceLocationOptions';
 import {InstancePingOptions} from './InstancePingOptions';
+import {InstanceButtonOptions} from './InstanceButtonOptions';
 
 const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
@@ -609,6 +610,60 @@ export class InstanceController {
         messageId,
         name: instanceName,
       });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/sendButtonAction')
+  @ApiOperation({summary: 'Send a button action to a poll.'})
+  @ApiResponse({description: 'Button action sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendButtonAction(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceButtonOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      await this.instanceService.sendButtonAction(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({});
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/sendButtonActionConfirmation')
+  @ApiOperation({summary: 'Send a confirmation to a button action.'})
+  @ApiResponse({description: 'Confirmation sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendButtonActionConfirmation(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceButtonOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      await this.instanceService.sendButtonActionConfirmation(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({});
     } catch (error) {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
