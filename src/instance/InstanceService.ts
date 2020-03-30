@@ -32,6 +32,7 @@ import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
+import {InstanceReactionOptions} from './InstanceReactionOptions';
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -583,5 +584,21 @@ export class InstanceService {
     } else {
       throw new Error(`Account service for instance "${instanceId}" not set.`);
     }
+  }
+
+  async sendReaction(instanceId: string, options: InstanceReactionOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      const payload = service.conversation.messageBuilder.createReaction(options.conversationId, {
+        legalHoldStatus: options.legalHoldStatus,
+        originalMessageId: options.originalMessageId,
+        type: options.type,
+      });
+      const {id: messageId} = await service.conversation.send(payload);
+      return messageId;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 }
