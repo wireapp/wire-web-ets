@@ -1,5 +1,5 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {IsUUID, IsBoolean, IsNumber, IsOptional, IsEnum} from 'class-validator';
+import {IsUUID, IsBoolean, IsNumber, IsOptional, IsEnum, IsString} from 'class-validator';
 import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content/';
 
 export class InstanceImageOptions {
@@ -8,6 +8,7 @@ export class InstanceImageOptions {
   conversationId!: string;
 
   @ApiProperty()
+  @IsString()
   data!: string;
 
   @ApiProperty()
@@ -19,6 +20,7 @@ export class InstanceImageOptions {
   width!: number;
 
   @ApiProperty()
+  @IsString()
   type!: string;
 
   @ApiProperty({
