@@ -690,13 +690,7 @@ export class InstanceController {
     }
 
     try {
-      const messageId = await this.instanceService.sendReaction(
-        instanceId,
-        conversationId,
-        originalMessageId,
-        type,
-        legalHoldStatus,
-      );
+      const messageId = await this.instanceService.sendReaction(instanceId, body);
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
