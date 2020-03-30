@@ -386,4 +386,22 @@ export class InstanceService {
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
+
+  async sendConfirmationRead(instanceId: string, options: InstanceDeliveryOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      const payload = service.conversation.messageBuilder.createConfirmation(
+        options.conversationId,
+        options.firstMessageId,
+        Confirmation.Type.READ,
+        undefined,
+        options.moreMessageIds,
+      );
+      await service.conversation.send(payload);
+      return instance.name;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
 }
