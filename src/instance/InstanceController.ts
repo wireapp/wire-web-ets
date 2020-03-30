@@ -393,4 +393,94 @@ export class InstanceController {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
   }
+
+  @Post(':instanceId/sendConfirmationRead')
+  @ApiOperation({summary: 'Send a read confirmation for a message.'})
+  @ApiResponse({description: 'The read confirmation has been sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendConfirmationRead(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceDeliveryOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const instanceName = await this.instanceService.sendConfirmationRead(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/sendEphemeralConfirmationDelivered')
+  @ApiOperation({summary: 'Send a delivery confirmation for an ephemeral message.'})
+  @ApiResponse({description: 'The delivery confirmation for an ephemeral message has been sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendEphemeralConfirmationDelivered(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceDeliveryOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const instanceName = await this.instanceService.sendEphemeralConfirmationDelivered(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/sendEphemeralConfirmationRead')
+  @ApiOperation({summary: 'Send a read confirmation for an ephemeral message.'})
+  @ApiResponse({description: 'The read confirmation for an ephemeral message has been sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendEphemeralConfirmationRead(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceDeliveryOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const instanceName = await this.instanceService.sendEphemeralConfirmationRead(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
 }
