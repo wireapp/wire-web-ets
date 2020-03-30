@@ -20,7 +20,7 @@ export class InstanceLocationOptions {
   })
   @IsOptional()
   @IsEnum(LegalHoldStatus)
-  legalHoldStatus!: LegalHoldStatus;
+  legalHoldStatus?: LegalHoldStatus;
 
   @ApiProperty()
   @IsOptional()
