@@ -32,9 +32,7 @@ export const sessionRoutes = (instanceService: InstanceService): express.Router 
     '/api/v1/instance/:instanceId/sendSessionReset/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
       },
     }),
     async (req: express.Request, res: express.Response) => {

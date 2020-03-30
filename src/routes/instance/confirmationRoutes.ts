@@ -37,15 +37,9 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/sendConfirmationDelivered',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        firstMessageId: Joi.string()
-          .uuid()
-          .required(),
-        moreMessageIds: Joi.array()
-          .items(Joi.string().uuid())
-          .optional(),
+        conversationId: Joi.string().uuid().required(),
+        firstMessageId: Joi.string().uuid().required(),
+        moreMessageIds: Joi.array().items(Joi.string().uuid()).optional(),
       },
     }),
     async (req: express.Request, res: express.Response): Promise<express.Response> => {
@@ -86,15 +80,9 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/sendConfirmationRead',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        firstMessageId: Joi.string()
-          .uuid()
-          .required(),
-        moreMessageIds: Joi.array()
-          .items(Joi.string().uuid())
-          .optional(),
+        conversationId: Joi.string().uuid().required(),
+        firstMessageId: Joi.string().uuid().required(),
+        moreMessageIds: Joi.array().items(Joi.string().uuid()).optional(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
@@ -135,15 +123,9 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/sendEphemeralConfirmationDelivered',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        firstMessageId: Joi.string()
-          .uuid()
-          .required(),
-        moreMessageIds: Joi.array()
-          .items(Joi.string().uuid())
-          .optional(),
+        conversationId: Joi.string().uuid().required(),
+        firstMessageId: Joi.string().uuid().required(),
+        moreMessageIds: Joi.array().items(Joi.string().uuid()).optional(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
@@ -184,15 +166,9 @@ export const confirmationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/sendEphemeralConfirmationRead',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        firstMessageId: Joi.string()
-          .uuid()
-          .required(),
-        moreMessageIds: Joi.array()
-          .items(Joi.string().uuid())
-          .optional(),
+        conversationId: Joi.string().uuid().required(),
+        firstMessageId: Joi.string().uuid().required(),
+        moreMessageIds: Joi.array().items(Joi.string().uuid()).optional(),
       },
     }),
     async (req: express.Request, res: express.Response) => {

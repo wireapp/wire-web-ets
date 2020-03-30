@@ -118,29 +118,17 @@ export interface QuoteStringContent {
 
 const validateLinkPreview = {
   image: Joi.object({
-    data: Joi.string()
-      .base64()
-      .required(),
+    data: Joi.string().base64().required(),
     height: Joi.number().required(),
     type: Joi.string().required(),
     width: Joi.number().required(),
   }).optional(),
-  permanentUrl: Joi.string()
-    .allow('')
-    .optional(),
-  summary: Joi.string()
-    .allow('')
-    .optional(),
-  title: Joi.string()
-    .allow('')
-    .optional(),
+  permanentUrl: Joi.string().allow('').optional(),
+  summary: Joi.string().allow('').optional(),
+  title: Joi.string().allow('').optional(),
   tweet: Joi.object({
-    author: Joi.string()
-      .allow('')
-      .optional(),
-    username: Joi.string()
-      .allow('')
-      .optional(),
+    author: Joi.string().allow('').optional(),
+    username: Joi.string().allow('').optional(),
   }).optional(),
   url: Joi.string().required(),
   urlOffset: Joi.number().required(),
@@ -149,15 +137,11 @@ const validateLinkPreview = {
 export const validateMention = Joi.object({
   length: Joi.number().required(),
   start: Joi.number().required(),
-  userId: Joi.string()
-    .uuid()
-    .required(),
+  userId: Joi.string().uuid().required(),
 });
 
 const validateQuote = {
-  quotedMessageId: Joi.string()
-    .uuid()
-    .required(),
+  quotedMessageId: Joi.string().uuid().required(),
   quotedMessageSha256: Joi.string()
     .regex(/[A-f0-9]{64}\b/)
     .required(),
@@ -171,9 +155,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     celebrate({
       body: {
         archive: Joi.boolean().required(),
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
@@ -209,9 +191,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/mute/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
         mute: Joi.boolean().required(),
       },
     }),
@@ -248,9 +228,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/clear/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
@@ -286,12 +264,8 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/delete/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        messageId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
+        messageId: Joi.string().uuid().required(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
@@ -327,12 +301,8 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/deleteEverywhere/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        messageId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
+        messageId: Joi.string().uuid().required(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
@@ -368,9 +338,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/getMessages/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
@@ -403,23 +371,15 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/sendLocation/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        expectsReadConfirmation: Joi.boolean()
-          .default(false)
-          .optional(),
+        conversationId: Joi.string().uuid().required(),
+        expectsReadConfirmation: Joi.boolean().default(false).optional(),
         latitude: Joi.number().required(),
         legalHoldStatus: Joi.number()
           .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
-        locationName: Joi.string()
-          .allow('')
-          .optional(),
+        locationName: Joi.string().allow('').optional(),
         longitude: Joi.number().required(),
-        messageTimer: Joi.number()
-          .default(0)
-          .optional(),
+        messageTimer: Joi.number().default(0).optional(),
         zoom: Joi.number().optional(),
       },
     }),
@@ -477,25 +437,15 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/sendText/?',
     celebrate({
       body: {
-        buttons: Joi.array()
-          .items(Joi.string())
-          .optional(),
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        expectsReadConfirmation: Joi.boolean()
-          .default(false)
-          .optional(),
+        buttons: Joi.array().items(Joi.string()).optional(),
+        conversationId: Joi.string().uuid().required(),
+        expectsReadConfirmation: Joi.boolean().default(false).optional(),
         legalHoldStatus: Joi.number()
           .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
         linkPreview: Joi.object(validateLinkPreview).optional(),
-        mentions: Joi.array()
-          .items(validateMention)
-          .optional(),
-        messageTimer: Joi.number()
-          .default(0)
-          .optional(),
+        mentions: Joi.array().items(validateMention).optional(),
+        messageTimer: Joi.number().default(0).optional(),
         quote: Joi.object(validateQuote).optional(),
         text: Joi.string().required(),
       },
@@ -585,18 +535,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/sendPing/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        expectsReadConfirmation: Joi.boolean()
-          .default(false)
-          .optional(),
+        conversationId: Joi.string().uuid().required(),
+        expectsReadConfirmation: Joi.boolean().default(false).optional(),
         legalHoldStatus: Joi.number()
           .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
-        messageTimer: Joi.number()
-          .default(0)
-          .optional(),
+        messageTimer: Joi.number().default(0).optional(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
@@ -641,9 +585,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     celebrate({
       body: {
         buttonId: Joi.string().required(),
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
         referenceMessageId: Joi.string().required(),
         userIds: Joi.array().items(Joi.string()),
       },
@@ -679,9 +621,7 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     celebrate({
       body: {
         buttonId: Joi.string().required(),
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
         referenceMessageId: Joi.string().required(),
         userIds: Joi.array().items(Joi.string()),
       },
@@ -722,18 +662,12 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/sendReaction/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
         legalHoldStatus: Joi.number()
           .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
-        originalMessageId: Joi.string()
-          .uuid()
-          .required(),
-        type: Joi.string()
-          .valid(ReactionType.LIKE, ReactionType.NONE)
-          .required(),
+        originalMessageId: Joi.string().uuid().required(),
+        type: Joi.string().valid(ReactionType.LIKE, ReactionType.NONE).required(),
       },
     }),
     async (req: express.Request, res: express.Response) => {
@@ -777,22 +711,14 @@ export const conversationRoutes = (instanceService: InstanceService): express.Ro
     '/api/v1/instance/:instanceId/updateText/?',
     celebrate({
       body: {
-        conversationId: Joi.string()
-          .uuid()
-          .required(),
-        expectsReadConfirmation: Joi.boolean()
-          .default(false)
-          .optional(),
-        firstMessageId: Joi.string()
-          .uuid()
-          .required(),
+        conversationId: Joi.string().uuid().required(),
+        expectsReadConfirmation: Joi.boolean().default(false).optional(),
+        firstMessageId: Joi.string().uuid().required(),
         legalHoldStatus: Joi.number()
           .valid(LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED)
           .optional(),
         linkPreview: Joi.object(validateLinkPreview).optional(),
-        mentions: Joi.array()
-          .items(validateMention)
-          .optional(),
+        mentions: Joi.array().items(validateMention).optional(),
         quote: Joi.object(validateQuote).optional(),
         text: Joi.string().required(),
       },

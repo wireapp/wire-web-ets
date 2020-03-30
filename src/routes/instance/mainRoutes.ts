@@ -66,18 +66,10 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
         deviceClass: Joi.string()
           .valid(ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET)
           .optional(),
-        deviceLabel: Joi.string()
-          .allow('')
-          .optional(),
-        deviceName: Joi.string()
-          .allow('')
-          .optional(),
-        email: Joi.string()
-          .email()
-          .required(),
-        name: Joi.string()
-          .allow('')
-          .optional(),
+        deviceLabel: Joi.string().allow('').optional(),
+        deviceName: Joi.string().allow('').optional(),
+        email: Joi.string().email().required(),
+        name: Joi.string().allow('').optional(),
         password: Joi.string().required(),
       },
     }),
@@ -207,13 +199,9 @@ export const mainRoutes = (instanceService: InstanceService): express.Router => 
     '/api/v1/clients/?',
     celebrate({
       body: {
-        backend: Joi.string()
-          .valid('prod', 'production', 'staging', '')
-          .optional(),
+        backend: Joi.string().valid('prod', 'production', 'staging', '').optional(),
         customBackend: validateCustomBackend,
-        email: Joi.string()
-          .email()
-          .required(),
+        email: Joi.string().email().required(),
         password: Joi.string().required(),
       },
     }),
