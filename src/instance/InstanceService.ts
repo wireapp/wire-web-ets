@@ -22,7 +22,7 @@ import UUID from 'pure-uuid';
 import {Instance} from '../InstanceService';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
-import {InstanceAvailiabilityOptions} from './InstanceAvailiabilityOptions';
+import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
@@ -277,7 +277,7 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async setAvailability(instanceId: string, options: InstanceAvailiabilityOptions): Promise<void> {
+  async setAvailability(instanceId: string, options: InstanceAvailabilityOptions): Promise<void> {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
