@@ -19,6 +19,8 @@ import {
   TextContent,
   ImageContent,
   LocationContent,
+  FileContent,
+  FileMetaDataContent,
 } from '@wireapp/core/dist/conversation/content';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
@@ -478,6 +480,47 @@ export class InstanceService {
         }
       }
       return instance.name;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async sendFile(
+    instanceId: string,
+    conversationId: string,
+    file: FileContent,
+    metadata: FileMetaDataContent,
+    expectsReadConfirmation?: boolean,
+    legalHoldStatus?: LegalHoldStatus,
+    expireAfterMillis = 0,
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+
+      const metadataPayload = service.conversation.messageBuilder.createFileMetadata(
+        conversationId,
+        metadata,
+        undefined,
+        expectsReadConfirmation,
+        legalHoldStatus,
+      );
+      await service.conversation.send(metadataPayload);
+
+      const filePayload = await service.conversation.messageBuilder.createFileData(
+        conversationId,
+        file,
+        metadataPayload.id,
+        expectsReadConfirmation,
+        legalHoldStatus,
+      );
+      const sentFile = await service.conversation.send(filePayload);
+
+      stripAsset(sentFile.content);
+
+      instance.messages.set(sentFile.id, sentFile);
+      return sentFile.id;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
