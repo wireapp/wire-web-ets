@@ -493,7 +493,7 @@ export class InstanceController {
   }
 
   @Post(':instanceId/sendFile')
-  @ApiOperation({summary: 'Send an file to a conversation.'})
+  @ApiOperation({summary: 'Send a file to a conversation.'})
   @ApiResponse({description: 'File sent.', status: 200})
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
