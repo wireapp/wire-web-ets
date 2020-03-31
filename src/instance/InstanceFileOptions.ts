@@ -1,19 +1,35 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {IsUUID, IsBoolean, IsNumber, IsOptional, IsEnum, IsString, ValidateNested} from 'class-validator';
-import {LegalHoldStatus, AudioMetaData, VideoMetaData} from '@wireapp/core/dist/conversation/content/';
+import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content/';
+import {IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, ValidateNested} from 'class-validator';
+
+class AudioMeta {
+  @ApiProperty()
+  @IsNumber()
+  durationInMillis!: number;
+
+  @ApiProperty()
+  @IsNumber({}, {each: true})
+  normalizedLoudness!: number[];
+}
+
+class VideoMeta {
+  @ApiProperty()
+  @IsNumber()
+  durationInMillis!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  height!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  width!: number;
+}
 
 export class InstanceFileOptions {
   @ApiProperty()
   @IsUUID('4')
   conversationId!: string;
-
-  @ApiProperty()
-  @ValidateNested()
-  audio!: AudioMetaData;
-
-  @ApiProperty()
-  @ValidateNested()
-  video!: VideoMetaData;
 
   @ApiProperty()
   @IsString()
@@ -34,6 +50,16 @@ export class InstanceFileOptions {
   @ApiProperty()
   @IsString()
   type!: string;
+
+  @ApiProperty()
+  @ValidateNested()
+  @IsOptional()
+  audio?: AudioMeta;
+
+  @ApiProperty()
+  @ValidateNested()
+  @IsOptional()
+  video?: VideoMeta;
 
   @ApiProperty({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
