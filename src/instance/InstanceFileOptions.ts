@@ -15,7 +15,8 @@ class AudioMeta {
 class VideoMeta {
   @ApiProperty()
   @IsNumber()
-  durationInMillis!: number;
+  @IsOptional
+  durationInMillis?: number;
 
   @ApiProperty()
   @IsNumber()
