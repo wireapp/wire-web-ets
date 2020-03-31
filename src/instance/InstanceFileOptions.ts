@@ -9,7 +9,8 @@ class AudioMeta {
 
   @ApiProperty()
   @IsNumber({}, {each: true})
-  normalizedLoudness!: number[];
+  @IsOptional
+  normalizedLoudness?: number[];
 }
 
 class VideoMeta {
