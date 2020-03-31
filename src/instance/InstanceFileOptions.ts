@@ -5,7 +5,8 @@ import {IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, ValidateNeste
 class AudioMeta {
   @ApiProperty()
   @IsNumber()
-  durationInMillis!: number;
+  @IsOptional
+  durationInMillis?: number;
 
   @ApiProperty()
   @IsNumber({}, {each: true})
