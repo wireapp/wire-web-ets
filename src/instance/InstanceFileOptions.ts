@@ -19,7 +19,8 @@ class VideoMeta {
 
   @ApiProperty()
   @IsNumber()
-  height!: number;
+  @IsOptional
+  height?: number;
 
   @ApiProperty()
   @IsNumber()
