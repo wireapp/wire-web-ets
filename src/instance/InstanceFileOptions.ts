@@ -5,29 +5,29 @@ import {IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, ValidateNeste
 class AudioMeta {
   @ApiProperty()
   @IsNumber()
-  @IsOptional
+  @IsOptional()
   durationInMillis?: number;
 
   @ApiProperty()
   @IsNumber({}, {each: true})
-  @IsOptional
+  @IsOptional()
   normalizedLoudness?: number[];
 }
 
 class VideoMeta {
   @ApiProperty()
   @IsNumber()
-  @IsOptional
+  @IsOptional()
   durationInMillis?: number;
 
   @ApiProperty()
   @IsNumber()
-  @IsOptional
+  @IsOptional()
   height?: number;
 
   @ApiProperty()
   @IsNumber()
-  @IsOptional
+  @IsOptional()
   width?: number;
 }
 
