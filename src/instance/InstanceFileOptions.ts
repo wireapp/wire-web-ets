@@ -23,7 +23,8 @@ class VideoMeta {
 
   @ApiProperty()
   @IsNumber()
-  width!: number;
+  @IsOptional
+  width?: number;
 }
 
 export class InstanceFileOptions {
