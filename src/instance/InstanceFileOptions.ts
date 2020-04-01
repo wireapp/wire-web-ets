@@ -1,6 +1,7 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content/';
 import {IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, ValidateNested} from 'class-validator';
+import {Type} from 'class-transformer';
 
 class AudioMeta {
   @ApiPropertyOptional()
@@ -58,12 +59,12 @@ export class InstanceFileOptions {
 
   @ApiPropertyOptional()
   @ValidateNested()
-  @IsOptional()
+  @Type(() => AudioMeta)
   audio?: AudioMeta;
 
   @ApiPropertyOptional()
   @ValidateNested()
-  @IsOptional()
+  @Type(() => VideoMeta)
   video?: VideoMeta;
 
   @ApiPropertyOptional({
