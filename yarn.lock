@@ -564,15 +564,15 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@wireapp/api-client@9.21.1":
-  version "9.21.1"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-9.21.1.tgz#a11b13c3ef1f097081f4da8fef68472da6e51ee9"
-  integrity sha512-CALAjfpIgCRNabWh2uhaOhK+8QdIDsxysFrHw+XIsm4Bt/v689rFVW2IbinzKZtTVEnr4Mu5HKNR0aBptW6+NA==
+"@wireapp/api-client@10.0.1":
+  version "10.0.1"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-10.0.1.tgz#67a8a009c35d2dc72b6440471c0c571f42f5c863"
+  integrity sha512-aoa2Ycv+9VZUT5rrfSyjIx9akQQzZucTP12OfFJn4V6zbA6dB9+nWu80kVBYSpGRA6BKOSvLKiXyuOi6vQmLdA==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
     "@types/tough-cookie" "2.3.6"
-    "@wireapp/commons" "3.3.8"
+    "@wireapp/commons" "3.3.9"
     "@wireapp/priority-queue" "1.5.6"
     axios "0.19.2"
     logdown "3.3.1"
@@ -586,41 +586,41 @@
   resolved "https://registry.npmjs.org/@wireapp/cbor/-/cbor-4.5.9.tgz#386cbc3d1da026755a10c7f655e85500d92c1b70"
   integrity sha512-GMCX1E5censs7cECyaMdjq1Tn+5uyTkkTvDldOr3961do3B45YV4Kvizqwe27F9589OTywf483uB5SolH1L/jw==
 
-"@wireapp/commons@3.3.8":
-  version "3.3.8"
-  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-3.3.8.tgz#0e8686c2e1c7256789df3d7f4ad2592df6c715cd"
-  integrity sha512-B+C9oNgMFi82Qq97mP+jebzdVR1lDlGrlHmXEUF4SkRWl67awxnXqlP1QXMNsZu988YEOVst0z174A7leSYMIg==
+"@wireapp/commons@3.3.9":
+  version "3.3.9"
+  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-3.3.9.tgz#3870679ac88a268bf0c8caa08597951833a62bc3"
+  integrity sha512-C9I8xIZk84T4yCrMALPsaXrMFklPvJeZ/qpL9sWkF+ib50d4kI4cm8qL+LDPy3BwAIhu9bss3kZ79ZJpHgA+BQ==
   dependencies:
     "@types/fs-extra" "8.1.0"
     "@types/node" "~12"
     "@types/platform" "1.3.2"
     ansi-regex "5.0.0"
-    fs-extra "8.1.0"
+    fs-extra "9.0.0"
     logdown "3.3.1"
     platform "1.3.5"
     url-search-params-polyfill "8.0.0"
 
-"@wireapp/core@15.12.5":
-  version "15.12.5"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-15.12.5.tgz#92b8b312e11a41a1568a8ef02ddae0423e8c9460"
-  integrity sha512-2IRh7clDkHqV9MXYmm/gA36jpRBsICFn0cyCo64hwvC/zaRT39WA19lqsGemm2pcskYiJS4xKM9Vd9qQP1eq+Q==
+"@wireapp/core@16.0.1":
+  version "16.0.1"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-16.0.1.tgz#3be0949c0ebb6c694960d20fd39b13699f1ff88e"
+  integrity sha512-j+vUM4+xAZoM6rLjvw7X9nnn4YrOvqno4nhDQJGb5LoR7/vVe9S81+4fPrlXrZHvgXZFq70ceCGMBLYto2XsvQ==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~12"
-    "@wireapp/api-client" "9.21.1"
-    "@wireapp/cryptobox" "12.1.14"
+    "@wireapp/api-client" "10.0.1"
+    "@wireapp/cryptobox" "12.1.15"
     "@wireapp/protocol-messaging" "1.25.4"
     "@wireapp/store-engine" "4.3.11"
     bazinga64 "5.6.10"
     hash.js "1.1.7"
     logdown "3.3.1"
-    protobufjs "6.8.8"
+    protobufjs "6.8.9"
     pure-uuid "1.6.0"
 
-"@wireapp/cryptobox@12.1.14":
-  version "12.1.14"
-  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.1.14.tgz#24e89f57aa68e6c31178eed9a7ef7c1682725e9b"
-  integrity sha512-axk0ODzYAhhMpLUeMoT46D8Ae8uNf64nEsJRA3DtHcjsn3GiqbaZ62osBrAPkYTXKdX0scMbYh9HWrzdI6sasg==
+"@wireapp/cryptobox@12.1.15":
+  version "12.1.15"
+  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.1.15.tgz#3a1e5b3761152671e61f2ddd3d772aa41b0e8816"
+  integrity sha512-cFdZQ22QsevNM40Sop4ftxQIz7jSPhvYU2d3Gy8s0P4PVRzXfnNwyTyfvfhnuLXzitcAEhcL/WIDKmYBS4cmzQ==
   dependencies:
     "@types/node" "~12"
     "@wireapp/lru-cache" "3.4.9"
@@ -2401,15 +2401,6 @@ fresh@0.5.2:
   resolved "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
   integrity sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=
 
-fs-extra@8.1.0:
-  version "8.1.0"
-  resolved "https://registry.npmjs.org/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
-  integrity sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==
-  dependencies:
-    graceful-fs "^4.2.0"
-    jsonfile "^4.0.0"
-    universalify "^0.1.0"
-
 fs-extra@9.0.0:
   version "9.0.0"
   resolved "https://registry.npmjs.org/fs-extra/-/fs-extra-9.0.0.tgz#b6afc31036e247b2466dc99c29ae797d5d4580a3"
@@ -3202,13 +3193,6 @@ json-stringify-safe@^5.0, json-stringify-safe@^5.0.1:
   version "5.0.1"
   resolved "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
-
-jsonfile@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
-  integrity sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=
-  optionalDependencies:
-    graceful-fs "^4.1.6"
 
 jsonfile@^6.0.1:
   version "6.0.1"
@@ -4441,6 +4425,25 @@ protobufjs@6.8.8:
     "@types/node" "^10.1.0"
     long "^4.0.0"
 
+protobufjs@6.8.9:
+  version "6.8.9"
+  resolved "https://registry.npmjs.org/protobufjs/-/protobufjs-6.8.9.tgz#0b1adbcdaa983d369c3d9108a97c814edc030754"
+  integrity sha512-j2JlRdUeL/f4Z6x4aU4gj9I2LECglC+5qR2TrWb193Tla1qfdaNQTZ8I27Pt7K0Ajmvjjpft7O3KWTGciz4gpw==
+  dependencies:
+    "@protobufjs/aspromise" "^1.1.2"
+    "@protobufjs/base64" "^1.1.2"
+    "@protobufjs/codegen" "^2.0.4"
+    "@protobufjs/eventemitter" "^1.1.0"
+    "@protobufjs/fetch" "^1.1.0"
+    "@protobufjs/float" "^1.0.2"
+    "@protobufjs/inquire" "^1.1.0"
+    "@protobufjs/path" "^1.1.2"
+    "@protobufjs/pool" "^1.1.0"
+    "@protobufjs/utf8" "^1.1.0"
+    "@types/long" "^4.0.0"
+    "@types/node" "^10.1.0"
+    long "^4.0.0"
+
 proxy-addr@~2.0.5:
   version "2.0.5"
   resolved "https://registry.npmjs.org/proxy-addr/-/proxy-addr-2.0.5.tgz#34cbd64a2d81f4b1fd21e76f9f06c8a45299ee34"
@@ -5534,11 +5537,6 @@ union-value@^1.0.0:
     get-value "^2.0.6"
     is-extendable "^0.1.1"
     set-value "^2.0.1"
-
-universalify@^0.1.0:
-  version "0.1.2"
-  resolved "https://registry.npmjs.org/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
-  integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
 
 universalify@^1.0.0:
   version "1.0.0"
