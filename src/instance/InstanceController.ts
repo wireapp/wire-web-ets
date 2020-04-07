@@ -14,12 +14,13 @@ import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceImageOptions} from './InstanceImageOptions';
-import {ImageContent, LocationContent} from '@wireapp/core/dist/conversation/content';
+import {ImageContent, LocationContent, FileContent, FileMetaDataContent} from '@wireapp/core/dist/conversation/content';
 import {InstanceLocationOptions} from './InstanceLocationOptions';
 import {InstancePingOptions} from './InstancePingOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
+import {InstanceFileOptions} from './InstanceFileOptions';
 
 const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
@@ -484,6 +485,65 @@ export class InstanceController {
       const instanceName = await this.instanceService.sendEphemeralConfirmationRead(instanceId, body);
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/sendFile')
+  @ApiOperation({summary: 'Send a file to a conversation.'})
+  @ApiResponse({description: 'File sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendFile(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceFileOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const data = Buffer.from(body.data, 'base64');
+      const fileContent: FileContent = {data};
+      const metadata: FileMetaDataContent = {
+        length: data.length,
+        name: body.fileName,
+        type: body.type,
+        video: body.video,
+      };
+
+      if (body.audio) {
+        metadata.audio = {
+          durationInMillis: body.audio.durationInMillis,
+        };
+
+        if (body.audio.normalizedLoudness) {
+          metadata.audio.normalizedLoudness = Buffer.from(body.audio.normalizedLoudness);
+        }
+      }
+
+      const messageId = await this.instanceService.sendFile(
+        instanceId,
+        body.conversationId,
+        fileContent,
+        metadata,
+        body.expectsReadConfirmation,
+        body.legalHoldStatus,
+        body.messageTimer,
+      );
+      const instanceName = this.instanceService.getInstance(instanceId).name;
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        messageId,
         name: instanceName,
       });
     } catch (error) {
