@@ -9,7 +9,7 @@ class AudioMeta {
   @IsOptional()
   durationInMillis?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({isArray: true, type: Number})
   @IsNumber({}, {each: true})
   @IsOptional()
   normalizedLoudness?: number[];

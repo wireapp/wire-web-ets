@@ -1,26 +1,35 @@
 import {Body, Controller, Delete, Get, Param, Post, Put, Res} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
+import {
+  FileContent,
+  FileMetaDataContent,
+  ImageContent,
+  LocationContent,
+  QuoteContent,
+  LinkPreviewContent,
+} from '@wireapp/core/dist/conversation/content';
 import {Validator} from 'class-validator';
 import {Response} from 'express';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
 import {ErrorMessage, ServerErrorMessage} from '../config';
+import {hexToUint8Array, status404instance, status422description, status500description} from '../utils';
+import {InstanceArchiveOptions} from './InstanceArchiveOptions';
+import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
+import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
-import {InstanceService} from './InstanceService';
-import {InstanceArchiveOptions} from './InstanceArchiveOptions';
-import {status500description, status422description, status404instance} from '../utils';
-import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
-import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
-import {InstanceImageOptions} from './InstanceImageOptions';
-import {ImageContent, LocationContent, FileContent, FileMetaDataContent} from '@wireapp/core/dist/conversation/content';
-import {InstanceLocationOptions} from './InstanceLocationOptions';
-import {InstancePingOptions} from './InstancePingOptions';
-import {InstanceButtonOptions} from './InstanceButtonOptions';
-import {InstanceReactionOptions} from './InstanceReactionOptions';
-import {InstanceTypingOptions} from './InstanceTypingOptions';
 import {InstanceFileOptions} from './InstanceFileOptions';
+import {InstanceImageOptions} from './InstanceImageOptions';
+import {InstanceLocationOptions} from './InstanceLocationOptions';
+import {InstanceMuteOptions} from './InstanceMuteOptions';
+import {InstancePingOptions} from './InstancePingOptions';
+import {InstanceReactionOptions} from './InstanceReactionOptions';
+import {InstanceService} from './InstanceService';
+import {InstanceTextOptions} from './InstanceTextOptions';
+import {InstanceTypingOptions} from './InstanceTypingOptions';
+import {InstanceTextUpdateOptions} from './InstanceTextUpdateOptions';
 
 const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
@@ -816,6 +825,149 @@ export class InstanceController {
       const instanceName = await this.instanceService.sendTyping(instanceId, body);
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/sendText')
+  @ApiOperation({summary: 'Send a text message to a conversation.'})
+  @ApiResponse({description: 'Text message has been sent.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendText(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceTextOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    let linkPreviewContent: LinkPreviewContent | undefined;
+    let quoteContent: QuoteContent | undefined;
+
+    if (body.linkPreview) {
+      linkPreviewContent = {
+        ...body.linkPreview,
+        image: undefined,
+      };
+
+      if (body.linkPreview.image) {
+        const data = Buffer.from(body.linkPreview.image.data, 'base64');
+        const imageContent: ImageContent = {
+          data,
+          height: body.linkPreview.image.height,
+          type: body.linkPreview.image.type,
+          width: body.linkPreview.image.width,
+        };
+
+        linkPreviewContent.image = imageContent;
+      }
+    }
+
+    if (body.quote) {
+      quoteContent = {
+        quotedMessageId: body.quote.quotedMessageId,
+        quotedMessageSha256: hexToUint8Array(body.quote.quotedMessageSha256),
+      };
+    }
+
+    try {
+      const messageId = await this.instanceService.sendText(
+        instanceId,
+        body.conversationId,
+        body.text,
+        linkPreviewContent,
+        body.mentions,
+        quoteContent,
+        body.expectsReadConfirmation,
+        body.legalHoldStatus,
+        body.messageTimer,
+        body.buttons,
+      );
+      const instanceName = this.instanceService.getInstance(instanceId).name;
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        messageId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/updateText')
+  @ApiOperation({summary: 'Update a text message in a conversation.'})
+  @ApiResponse({description: 'Text message has been updated.', status: 200})
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async updateText(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceTextUpdateOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    let linkPreviewContent: LinkPreviewContent | undefined;
+    let quoteContent: QuoteContent | undefined;
+
+    if (body.linkPreview) {
+      linkPreviewContent = {
+        ...body.linkPreview,
+        image: undefined,
+      };
+
+      if (body.linkPreview.image) {
+        const data = Buffer.from(body.linkPreview.image.data, 'base64');
+        const imageContent: ImageContent = {
+          data,
+          height: body.linkPreview.image.height,
+          type: body.linkPreview.image.type,
+          width: body.linkPreview.image.width,
+        };
+
+        linkPreviewContent.image = imageContent;
+      }
+    }
+
+    if (body.quote) {
+      quoteContent = {
+        quotedMessageId: body.quote.quotedMessageId,
+        quotedMessageSha256: hexToUint8Array(body.quote.quotedMessageSha256),
+      };
+    }
+
+    try {
+      const messageId = await this.instanceService.updateText(
+        instanceId,
+        body.conversationId,
+        body.firstMessageId,
+        body.text,
+        linkPreviewContent,
+        body.mentions,
+        quoteContent,
+        body.expectsReadConfirmation,
+        body.legalHoldStatus,
+      );
+      const instanceName = this.instanceService.getInstance(instanceId).name;
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        messageId,
         name: instanceName,
       });
     } catch (error) {

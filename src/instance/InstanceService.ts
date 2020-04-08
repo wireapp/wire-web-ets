@@ -21,6 +21,9 @@ import {
   LocationContent,
   FileContent,
   FileMetaDataContent,
+  LinkPreviewContent,
+  MentionContent,
+  QuoteContent,
 } from '@wireapp/core/dist/conversation/content';
 import {LRUCache} from '@wireapp/lru-cache';
 import {MemoryEngine} from '@wireapp/store-engine';
@@ -37,6 +40,8 @@ import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
+import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
+import {MessageToProtoMapper} from '@wireapp/core/dist/conversation/message/MessageToProtoMapper';
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -670,6 +675,118 @@ export class InstanceService {
         await service.conversation.sendTypingStop(options.conversationId);
       }
       return instance.name;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async sendText(
+    instanceId: string,
+    conversationId: string,
+    message: string,
+    linkPreview?: LinkPreviewContent,
+    mentions?: MentionContent[],
+    quote?: QuoteContent,
+    expectsReadConfirmation?: boolean,
+    legalHoldStatus?: LegalHoldStatus,
+    expireAfterMillis = 0,
+    buttons: string[] = [],
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
+
+      let payloadBundle: OtrMessage = service.conversation.messageBuilder
+        .createText(conversationId, message)
+        .withMentions(mentions)
+        .withQuote(quote)
+        .withReadConfirmation(expectsReadConfirmation)
+        .withLegalHoldStatus(legalHoldStatus)
+        .build();
+
+      if (buttons.length > 0) {
+        const textProto = MessageToProtoMapper.mapText(payloadBundle);
+        payloadBundle = service.conversation.messageBuilder.createPollMessage(conversationId, textProto, buttons);
+      }
+
+      let sentMessage = await service.conversation.send(payloadBundle);
+
+      if (linkPreview) {
+        const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(linkPreview);
+        const editedWithPreviewPayload = service.conversation.messageBuilder
+          .createText(conversationId, message, sentMessage.id)
+          .withLinkPreviews([linkPreviewPayload])
+          .withMentions(mentions)
+          .withQuote(quote)
+          .withReadConfirmation(expectsReadConfirmation)
+          .withLegalHoldStatus(legalHoldStatus)
+          .build();
+
+        sentMessage = await service.conversation.send(editedWithPreviewPayload);
+
+        const messageContent = sentMessage.content as TextContent;
+
+        if (messageContent.linkPreviews) {
+          messageContent.linkPreviews.forEach(preview => {
+            stripLinkPreview(preview);
+          });
+        }
+      }
+
+      instance.messages.set(sentMessage.id, sentMessage);
+      return sentMessage.id;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async updateText(
+    instanceId: string,
+    conversationId: string,
+    originalMessageId: string,
+    newMessageText: string,
+    newLinkPreview?: LinkPreviewContent,
+    newMentions?: MentionContent[],
+    newQuote?: QuoteContent,
+    expectsReadConfirmation?: boolean,
+    legalHoldStatus?: LegalHoldStatus,
+  ): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      const editedPayload = service.conversation.messageBuilder
+        .createEditedText(conversationId, newMessageText, originalMessageId)
+        .withMentions(newMentions)
+        .withQuote(newQuote)
+        .withReadConfirmation(expectsReadConfirmation)
+        .withLegalHoldStatus(legalHoldStatus)
+        .build();
+
+      let editedMessage = await service.conversation.send(editedPayload);
+
+      if (newLinkPreview) {
+        const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(newLinkPreview);
+        const editedWithPreviewPayload = service.conversation.messageBuilder
+          .createEditedText(conversationId, newMessageText, originalMessageId, editedMessage.id)
+          .withLinkPreviews([linkPreviewPayload])
+          .withMentions(newMentions)
+          .withQuote(newQuote)
+          .withReadConfirmation(expectsReadConfirmation)
+          .withLegalHoldStatus(legalHoldStatus)
+          .build();
+
+        editedMessage = await service.conversation.send(editedWithPreviewPayload);
+
+        const editedMessageContent = editedMessage.content as EditedTextContent;
+
+        if (editedMessageContent.linkPreviews) {
+          editedMessageContent.linkPreviews.forEach(preview => stripLinkPreview(preview));
+        }
+      }
+
+      instance.messages.set(originalMessageId, editedMessage);
+      return editedMessage.id;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
