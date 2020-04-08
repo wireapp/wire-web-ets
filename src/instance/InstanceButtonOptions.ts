@@ -14,7 +14,7 @@ export class InstanceButtonOptions {
   @IsString()
   buttonId!: string;
 
-  @ApiProperty()
+  @ApiProperty({isArray: true, type: String})
   @IsUUID('4', {each: true})
   userIds!: string[];
 }

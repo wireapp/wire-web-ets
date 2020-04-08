@@ -141,7 +141,7 @@ export class InstanceTextOptions {
   @IsBoolean()
   expectsReadConfirmation?: boolean;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({isArray: true, type: String})
   @IsString({each: true})
   @IsOptional()
   buttons?: string[];

@@ -10,7 +10,7 @@ export class InstanceDeliveryOptions {
   @IsUUID('4')
   firstMessageId!: string;
 
-  @ApiProperty()
+  @ApiProperty({isArray: true, type: String})
   @IsUUID('4', {each: true})
   moreMessageIds!: string[];
 }
