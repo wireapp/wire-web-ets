@@ -133,11 +133,11 @@ export class InstanceTextOptions {
   @IsBoolean()
   expectsReadConfirmation?: boolean;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString({each: true})
   buttons?: string[];
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({isArray: true, type: MentionsMeta})
   @IsOptional()
   @ValidateNested({each: true})
   @Type(() => MentionsMeta)
