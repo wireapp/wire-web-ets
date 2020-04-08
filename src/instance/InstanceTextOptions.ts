@@ -30,10 +30,12 @@ class MentionsMeta {
 class TweetMeta {
   @ApiPropertyOptional()
   @IsString()
+  @IsOptional()
   author?: string;
 
   @ApiPropertyOptional()
   @IsString()
+  @IsOptional()
   username?: string;
 }
 
@@ -82,24 +84,29 @@ class LinkPreviewMeta {
 
   @ApiPropertyOptional()
   @IsString()
+  @IsOptional()
   permanentUrl?: string;
 
   @ApiPropertyOptional()
   @IsString()
+  @IsOptional()
   summary?: string;
 
   @ApiPropertyOptional()
   @IsString()
+  @IsOptional()
   title?: string;
 
   @ApiPropertyOptional()
   @ValidateNested()
   @Type(() => TweetMeta)
+  @IsOptional()
   tweet?: TweetMeta;
 
   @ApiPropertyOptional()
   @ValidateNested()
   @Type(() => ImageMeta)
+  @IsOptional()
   image?: ImageMeta;
 }
 
@@ -118,6 +125,7 @@ export class InstanceTextOptions {
 
   @ApiPropertyOptional()
   @ValidateNested()
+  @IsOptional()
   @Type(() => QuoteMeta)
   quote?: QuoteMeta;
 
@@ -135,6 +143,7 @@ export class InstanceTextOptions {
 
   @ApiPropertyOptional()
   @IsString({each: true})
+  @IsOptional()
   buttons?: string[];
 
   @ApiPropertyOptional({isArray: true, type: MentionsMeta})
