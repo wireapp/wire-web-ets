@@ -94,11 +94,10 @@
     "lint": "yarn lint:code && yarn lint:other",
     "lint:code": "eslint --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:other": "yarn prettier --list-different",
-    "main": "pm2 start",
     "postversion": "git push && git push --tags",
     "prettier": "prettier \"**/*.{json,md,js,yml}\"",
     "preversion": "yarn && yarn test && yarn dist",
-    "start": "ts-node src/main.ts",
+    "start": "pm2 start",
     "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" ts-node src/index.ts",
     "test": "ts-node -P tsconfig.jasmine.json node_modules/jasmine/bin/jasmine --config=jasmine.json",
     "version": "yarn dist"

@@ -7,7 +7,7 @@ module.exports = {
         NODE_DEBUG: '@wireapp/*',
       },
       name: 'Wire Web ETS',
-      script: 'dist/index.js',
+      script: 'dist/main.js',
     },
   ],
 };
