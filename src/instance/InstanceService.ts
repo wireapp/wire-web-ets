@@ -42,6 +42,7 @@ import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
 import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
 import {MessageToProtoMapper} from '@wireapp/core/dist/conversation/message/MessageToProtoMapper';
+import {CompositeContentBuilder} from '@wireapp/core/dist/conversation/message/CompositeContentBuilder';
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -707,7 +708,12 @@ export class InstanceService {
 
       if (buttons.length > 0) {
         const textProto = MessageToProtoMapper.mapText(payloadBundle);
-        payloadBundle = service.conversation.messageBuilder.createPollMessage(conversationId, textProto, buttons);
+        const compositeBuilder = service.conversation.messageBuilder
+          .createComposite(conversationId)
+          .withReadConfirmation(expectsReadConfirmation)
+          .addText(textProto);
+        buttons.forEach(button => compositeBuilder.addButton(button));
+        payloadBundle = compositeBuilder.build();
       }
 
       let sentMessage = await service.conversation.send(payloadBundle);
