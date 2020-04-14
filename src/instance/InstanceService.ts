@@ -4,7 +4,6 @@ import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/c
 import {ClientType} from '@wireapp/api-client/dist/client/ClientType';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
 import {BackendData} from '@wireapp/api-client/dist/env/';
-import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/';
 import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation';
@@ -14,34 +13,35 @@ import {
   ConversationContent,
   DeletedContent,
   EditedTextContent,
-  HiddenContent,
-  ReactionContent,
-  TextContent,
-  ImageContent,
-  LocationContent,
   FileContent,
   FileMetaDataContent,
+  HiddenContent,
+  ImageContent,
   LinkPreviewContent,
+  LocationContent,
   MentionContent,
   QuoteContent,
+  ReactionContent,
+  TextContent,
 } from '@wireapp/core/dist/conversation/content';
+import {MessageToProtoMapper} from '@wireapp/core/dist/conversation/message/MessageToProtoMapper';
+import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
 import {LRUCache} from '@wireapp/lru-cache';
+import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {MemoryEngine} from '@wireapp/store-engine';
 import UUID from 'pure-uuid';
 import {Instance} from '../InstanceService';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
+import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
-import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
-import {InstanceButtonOptions} from './InstanceButtonOptions';
+import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
-import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
-import {MessageToProtoMapper} from '@wireapp/core/dist/conversation/message/MessageToProtoMapper';
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -707,7 +707,12 @@ export class InstanceService {
 
       if (buttons.length > 0) {
         const textProto = MessageToProtoMapper.mapText(payloadBundle);
-        payloadBundle = service.conversation.messageBuilder.createPollMessage(conversationId, textProto, buttons);
+        const compositeBuilder = service.conversation.messageBuilder
+          .createComposite(conversationId)
+          .withReadConfirmation(expectsReadConfirmation)
+          .addText(textProto);
+        buttons.forEach(button => compositeBuilder.addButton(button));
+        payloadBundle = compositeBuilder.build();
       }
 
       let sentMessage = await service.conversation.send(payloadBundle);
