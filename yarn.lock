@@ -576,10 +576,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@wireapp/api-client@11.0.5":
-  version "11.0.5"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.0.5.tgz#2c684586afb6604262f887073a7d03cf617db680"
-  integrity sha512-jhlkRvPbmauE6+046HmSswCFX4Rt9QcnyxFjoL0SqvmFZB1nN/TDTND1+ztK9hnI2rsOh1opVjr/lm1N5b6lLA==
+"@wireapp/api-client@11.0.6":
+  version "11.0.6"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.0.6.tgz#51c5de82a99cb730d36aa1976d2cd0f1c36cef8e"
+  integrity sha512-wRkXZRef3qtmwdL1GH9lmC2fdriiifY85wspNuxM7FrJUStkpeWJM5/04FrLXQNotQAHbb0uJuYfbw9UM3HexQ==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
@@ -612,14 +612,14 @@
     platform "1.3.5"
     url-search-params-polyfill "8.0.0"
 
-"@wireapp/core@16.1.0":
-  version "16.1.0"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-16.1.0.tgz#fdd85f2553334aff167e4a76f7d6a86523e4106e"
-  integrity sha512-ZeVbLjnVtfqqFPsbSKtnEDv1wV70Xkv+vBBL+zXy6NXWoWQsAqY/MyiDMGyDC17jQM6v7eXu5YDVDPfw/s4jJQ==
+"@wireapp/core@16.1.1":
+  version "16.1.1"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-16.1.1.tgz#8454fc0fe9c29705cd465e58094807c81a9df8d8"
+  integrity sha512-jyg4dFGKYe0zCOGXNi+wbfeEpDvYAb380Bn2iVzu4cx2EfUju8/WRa6Mfy/91CJztXDXWwgmAN1lb5xnF3ySCg==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~12"
-    "@wireapp/api-client" "11.0.5"
+    "@wireapp/api-client" "11.0.6"
     "@wireapp/cryptobox" "12.1.17"
     "@wireapp/protocol-messaging" "1.25.4"
     "@wireapp/store-engine" "4.3.12"
