@@ -576,10 +576,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@wireapp/api-client@11.0.5":
-  version "11.0.5"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.0.5.tgz#2c684586afb6604262f887073a7d03cf617db680"
-  integrity sha512-jhlkRvPbmauE6+046HmSswCFX4Rt9QcnyxFjoL0SqvmFZB1nN/TDTND1+ztK9hnI2rsOh1opVjr/lm1N5b6lLA==
+"@wireapp/api-client@11.0.7":
+  version "11.0.7"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.0.7.tgz#d6d6b3283bb43838de3add26159e61503bc519bc"
+  integrity sha512-Few6J/+L8cusJkw+zteGc7IK35ED72ZnRoW3DpjK2XrNb86Fy938Xay53Y/F5EW6zFdSRJ/chQ4nAjNY0OPb5A==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
@@ -612,15 +612,15 @@
     platform "1.3.5"
     url-search-params-polyfill "8.0.0"
 
-"@wireapp/core@16.1.0":
-  version "16.1.0"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-16.1.0.tgz#fdd85f2553334aff167e4a76f7d6a86523e4106e"
-  integrity sha512-ZeVbLjnVtfqqFPsbSKtnEDv1wV70Xkv+vBBL+zXy6NXWoWQsAqY/MyiDMGyDC17jQM6v7eXu5YDVDPfw/s4jJQ==
+"@wireapp/core@16.3.1":
+  version "16.3.1"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-16.3.1.tgz#31420bfbb611a64526980c9dbe4b3da5cdeede54"
+  integrity sha512-07YfkeZzVAc72aHnHWRvLwxGxoO44NgLA/cgr/1nh+r0lhBlgVNHooHaMyakjudy6u5+C7t7TX/p6TFXyPCjRA==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~12"
-    "@wireapp/api-client" "11.0.5"
-    "@wireapp/cryptobox" "12.1.17"
+    "@wireapp/api-client" "11.0.7"
+    "@wireapp/cryptobox" "12.1.19"
     "@wireapp/protocol-messaging" "1.25.4"
     "@wireapp/store-engine" "4.3.12"
     bazinga64 "5.6.11"
@@ -629,15 +629,15 @@
     protobufjs "6.8.9"
     pure-uuid "1.6.0"
 
-"@wireapp/cryptobox@12.1.17":
-  version "12.1.17"
-  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.1.17.tgz#388004b7b32d1403adba902c9df31558651fa0b6"
-  integrity sha512-XvDNKtb69zUG23vPhpzIN8jtHPuT13CpaBi2WYuwMHjOn5hPKRuW+aG/CWSkamQQAdIVP7PcyBRgns2QlcRuVA==
+"@wireapp/cryptobox@12.1.19":
+  version "12.1.19"
+  resolved "https://registry.npmjs.org/@wireapp/cryptobox/-/cryptobox-12.1.19.tgz#132b184accd40785e23101404fa1e0d516d54414"
+  integrity sha512-utV3h6SSnKdfSChns/W+5HebYyX93+ZG+1ipR3/RxxUYDJJlI3FtkmYtAHO0QBKDk515GDaEyKVv3D45NcO2dA==
   dependencies:
     "@types/node" "~12"
     "@wireapp/lru-cache" "3.4.10"
     "@wireapp/priority-queue" "1.5.7"
-    "@wireapp/proteus" "9.6.12"
+    "@wireapp/proteus" "9.7.0"
     "@wireapp/store-engine" "4.3.12"
     bazinga64 "5.6.11"
     logdown "3.3.1"
@@ -666,10 +666,10 @@
     logdown "3.3.1"
     pure-uuid "1.6.0"
 
-"@wireapp/proteus@9.6.12":
-  version "9.6.12"
-  resolved "https://registry.npmjs.org/@wireapp/proteus/-/proteus-9.6.12.tgz#ecb262f682d283cc885f43d62c7d867fb5c9940d"
-  integrity sha512-pMfsDoYJF45kS1cHVRPME0+dBKQbg41IBRrZc/HQ5+6z2SOnKqQEeAJgQ05e/akwbW0cT6EM4RoNo25Z5A4DFA==
+"@wireapp/proteus@9.7.0":
+  version "9.7.0"
+  resolved "https://registry.npmjs.org/@wireapp/proteus/-/proteus-9.7.0.tgz#c16b3dfca4fe66495a5be080b61b7873913078b8"
+  integrity sha512-x9teS6Mb/8Pgq3g7t15j4ndz2Moq/fPaB0i/WA1HEDzpew4tDPAqjY7liboWVvhhnOEsLk+Ex2L+BBP1PJoRyg==
   dependencies:
     "@types/chai" "4.2.11"
     "@types/ed2curve" "0.2.2"
