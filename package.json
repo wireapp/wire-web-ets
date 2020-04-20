@@ -10,7 +10,6 @@
     "@wireapp/lru-cache": "3.4.10",
     "class-transformer": "0.2.3",
     "class-validator": "0.11.1",
-    "dotenv": "8.2.0",
     "http-status-codes": "1.4.0",
     "moment": "2.24.0",
     "pm2": "4.3.0",

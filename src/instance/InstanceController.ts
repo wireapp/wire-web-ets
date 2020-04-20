@@ -11,7 +11,6 @@ import {
 import {Validator} from 'class-validator';
 import {Response} from 'express';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
-import {ErrorMessage, ServerErrorMessage} from '../config';
 import {hexToUint8Array, status404instance, status422description, status500description} from '../utils';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
@@ -30,6 +29,15 @@ import {InstanceService} from './InstanceService';
 import {InstanceTextOptions} from './InstanceTextOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
 import {InstanceTextUpdateOptions} from './InstanceTextUpdateOptions';
+
+interface ErrorMessage {
+  code: number;
+  error: string;
+}
+
+interface ServerErrorMessage extends ErrorMessage {
+  stack?: string;
+}
 
 const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
