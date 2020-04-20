@@ -1,7 +1,21 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {ClientClassification} from '@wireapp/api-client/dist/client/';
-import {BackendData} from '@wireapp/api-client/dist/env/';
-import {IsEnum, IsNotEmpty, IsOptional, ValidateNested} from 'class-validator';
+import {Type} from 'class-transformer';
+import {IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
+
+export class BackendMeta {
+  @ApiProperty()
+  @IsString()
+  name!: string;
+
+  @ApiProperty()
+  @IsString()
+  rest!: string;
+
+  @ApiProperty()
+  @IsString()
+  ws!: string;
+}
 
 export class InstanceCreationOptions {
   @ApiProperty()
@@ -11,7 +25,8 @@ export class InstanceCreationOptions {
   @ApiProperty()
   @ValidateNested()
   @IsOptional()
-  customBackend?: BackendData;
+  @Type(() => BackendMeta)
+  customBackend?: BackendMeta;
 
   @ApiProperty({enum: [ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET]})
   @IsEnum(ClientClassification)
