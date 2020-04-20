@@ -4,7 +4,7 @@ import {ValidationPipe} from '@nestjs/common';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {RootModule} from './RootModule';
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 21080;
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(RootModule);
