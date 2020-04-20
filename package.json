@@ -85,7 +85,7 @@
     "postversion": "git push && git push --tags",
     "prettier": "prettier \"**/*.{json,md,js,yml}\"",
     "preversion": "yarn && yarn test && yarn dist",
-    "start": "pm2 start dist/main.js",
+    "start": "pm2 start",
     "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" ts-node src/main.ts",
     "test": "yarn lint",
     "version": "yarn dist"
