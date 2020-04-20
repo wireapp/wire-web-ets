@@ -1,7 +1,4 @@
 {
-  "env": {
-    "jasmine": true
-  },
   "extends": "@wireapp/eslint-config",
   "overrides": [
     {
@@ -14,9 +11,8 @@
     }
   ],
   "parserOptions": {
-    "project": ["./tsconfig.json", "./tsconfig.jasmine.json"]
+    "project": ["./tsconfig.json"]
   },
-  "plugins": ["jasmine"],
   "rules": {
     "import/no-default-export": "off",
     "no-magic-numbers": "off",
