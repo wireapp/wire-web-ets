@@ -4,21 +4,21 @@ import {Type} from 'class-transformer';
 import {IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
 
 export class BackendMeta {
-  @ApiProperty()
+  @ApiProperty({example: 'my custom backend'})
   @IsString()
   name!: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 'https://...'})
   @IsString()
   rest!: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 'wss://...'})
   @IsString()
   ws!: string;
 }
 
 export class InstanceCreationOptions {
-  @ApiProperty()
+  @ApiProperty({example: 'staging'})
   @IsOptional()
   backend?: string;
 
@@ -32,15 +32,15 @@ export class InstanceCreationOptions {
   @IsEnum(ClientClassification)
   deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
 
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsOptional()
   deviceLabel?: string;
 
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsOptional()
   deviceName?: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 'email@example.com'})
   @IsNotEmpty()
   email!: string;
 
@@ -48,7 +48,7 @@ export class InstanceCreationOptions {
   @IsOptional()
   name?: string;
 
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsNotEmpty()
   password!: string;
 }
