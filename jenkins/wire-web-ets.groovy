@@ -57,6 +57,7 @@ LimitNOFILE=infinity
 LimitNPROC=infinity
 LimitCORE=infinity
 TimeoutStartSec=8
+WorkingDirectory=${WORKSPACE}
 Environment="PATH=/usr/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:${NODE}/bin"
 Environment="PM2_HOME=${HOME}/.pm2"
 PIDFile=${HOME}/.pm2/pm2.pid
