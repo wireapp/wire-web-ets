@@ -17,10 +17,6 @@
  *
  */
 
-import * as dotenv from 'dotenv';
-
-dotenv.config();
-
 export interface ErrorMessage {
   code: number;
   error: string;
