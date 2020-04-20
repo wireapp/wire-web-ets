@@ -256,7 +256,7 @@ export class InstanceService {
       client,
       engine,
       id: instanceId,
-      messages: new LRUCache(),
+      messages: new LRUCache(100),
       name: options.name || '',
     };
 
