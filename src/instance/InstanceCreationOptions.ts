@@ -1,33 +1,54 @@
-import {BackendData} from '@wireapp/api-client/dist/env/';
-import {ClientClassification} from '@wireapp/api-client/dist/client/';
-import {IsOptional, IsNotEmpty, IsEnum} from 'class-validator';
 import {ApiProperty} from '@nestjs/swagger';
+import {ClientClassification} from '@wireapp/api-client/dist/client/';
+import {Type} from 'class-transformer';
+import {IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
+
+export class BackendMeta {
+  @ApiProperty({example: 'my custom backend'})
+  @IsString()
+  name!: string;
+
+  @ApiProperty({example: 'https://...'})
+  @IsString()
+  rest!: string;
+
+  @ApiProperty({example: 'wss://...'})
+  @IsString()
+  ws!: string;
+}
 
 export class InstanceCreationOptions {
+  @ApiProperty({example: 'staging'})
   @IsOptional()
   backend?: string;
 
+  @ApiProperty()
+  @ValidateNested()
   @IsOptional()
-  customBackend?: BackendData;
+  @Type(() => BackendMeta)
+  customBackend?: BackendMeta;
 
   @ApiProperty({enum: [ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET]})
   @IsEnum(ClientClassification)
   deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
 
+  @ApiProperty({example: ''})
   @IsOptional()
   deviceLabel?: string;
 
+  @ApiProperty({example: ''})
   @IsOptional()
   deviceName?: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 'email@example.com'})
   @IsNotEmpty()
   email!: string;
 
+  @ApiProperty()
   @IsOptional()
   name?: string;
 
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsNotEmpty()
   password!: string;
 }

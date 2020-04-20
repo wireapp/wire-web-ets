@@ -3,7 +3,6 @@ import {APIClient} from '@wireapp/api-client';
 import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/client/';
 import {ClientType} from '@wireapp/api-client/dist/client/ClientType';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
-import {BackendData} from '@wireapp/api-client/dist/env/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/';
 import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation';
@@ -35,7 +34,7 @@ import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
-import {InstanceCreationOptions} from './InstanceCreationOptions';
+import {InstanceCreationOptions, BackendMeta} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
@@ -55,7 +54,7 @@ type MessagePayload = PayloadBundle & {
 
 interface Instance {
   account: Account;
-  backendType: BackendData;
+  backendType: BackendMeta;
   client: APIClient;
   engine: CRUDEngine;
   id: string;
@@ -67,7 +66,7 @@ interface Instance {
 export class InstanceService {
   private readonly cachedInstances: LRUCache<Instance> = new LRUCache(100);
 
-  private parseBackend(backend?: string | BackendData): BackendData {
+  private parseBackend(backend?: string | BackendMeta): BackendMeta {
     if (typeof backend === 'string') {
       switch (backend) {
         case 'production':
