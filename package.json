@@ -87,7 +87,7 @@
     "prettier": "prettier \"**/*.{json,md,js,yml}\"",
     "preversion": "yarn && yarn test && yarn dist",
     "start": "pm2 start",
-    "start:dev": "node dist/main.js",
+    "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" ts-node src/main.ts",
     "test": "yarn lint",
     "version": "yarn dist"
   },
