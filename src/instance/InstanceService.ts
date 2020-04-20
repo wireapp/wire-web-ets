@@ -30,7 +30,6 @@ import {LRUCache} from '@wireapp/lru-cache';
 import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {MemoryEngine} from '@wireapp/store-engine';
 import UUID from 'pure-uuid';
-import {Instance} from '../InstanceService';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
@@ -42,6 +41,7 @@ import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
+import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -52,6 +52,16 @@ type MessagePayload = PayloadBundle & {
   confirmations?: ConfirmationWithSender[];
   reactions?: ReactionWithSender[];
 };
+
+interface Instance {
+  account: Account;
+  backendType: BackendData;
+  client: APIClient;
+  engine: CRUDEngine;
+  id: string;
+  messages: LRUCache<MessagePayload>;
+  name: string;
+}
 
 @Injectable()
 export class InstanceService {
