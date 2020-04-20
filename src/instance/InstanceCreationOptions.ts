@@ -38,7 +38,8 @@ export class InstanceCreationOptions {
   deviceLabel?: string;
 
   @ApiProperty({example: ''})
-  deviceName?: string;
+  @IsNotEmpty()
+  deviceName!: string;
 
   @ApiProperty({example: 'email@example.com'})
   @IsNotEmpty()
