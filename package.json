@@ -68,7 +68,7 @@
       "eslint --fix"
     ]
   },
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "name": "wire-web-ets",
   "prettier": "@wireapp/prettier-config",
   "private": true,
