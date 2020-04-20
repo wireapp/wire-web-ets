@@ -26,10 +26,8 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('documentation', app, document);
 
-  const host = '127.0.0.1';
-  await app.listen(port, host, () => {
-    console.info(`Swagger UI running on "http://${host}:${port}/documentation/"`);
-  });
+  await app.listen(port);
+  console.info(`Swagger UI running on "http://localhost:${port}/documentation/"`);
 }
 
 bootstrap().catch(error => {
