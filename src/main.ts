@@ -5,6 +5,8 @@ import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {RootModule} from './RootModule';
 
 const port = process.env.PORT || 21080;
+const {name}: {name: string} = require('../package.json');
+const {version}: {version: string} = require('../package.json');
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(RootModule);
@@ -19,15 +21,12 @@ async function bootstrap(): Promise<void> {
   );
 
   // https://docs.nestjs.com/recipes/swagger
-  const options = new DocumentBuilder()
-    .setTitle(String(process.env.npm_package_name))
-    .setVersion(String(process.env.npm_package_version))
-    .build();
+  const options = new DocumentBuilder().setTitle(String(name)).setVersion(String(version)).build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('documentation', app, document);
+  SwaggerModule.setup('swagger-ui', app, document);
 
   await app.listen(port);
-  console.info(`Swagger UI running on "http://localhost:${port}/documentation/"`);
+  console.info(`Swagger UI running on "http://localhost:${port}/swagger-ui/"`);
 }
 
 bootstrap().catch(error => {
