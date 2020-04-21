@@ -1,4 +1,4 @@
-import {ApiProperty} from '@nestjs/swagger';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {IsUUID, IsBoolean, IsNumber, IsOptional, IsEnum, IsString} from 'class-validator';
 import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content/';
 
@@ -23,19 +23,19 @@ export class InstanceImageOptions {
   @IsString()
   type!: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
   })
   @IsOptional()
   @IsEnum(LegalHoldStatus)
   legalHoldStatus?: LegalHoldStatus;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
   expectsReadConfirmation?: boolean;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   messageTimer?: number;
 }

@@ -1,4 +1,4 @@
-import {ApiProperty} from '@nestjs/swagger';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {ClientClassification} from '@wireapp/api-client/dist/client/';
 import {Type} from 'class-transformer';
 import {IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
@@ -18,22 +18,22 @@ export class BackendMeta {
 }
 
 export class InstanceCreationOptions {
-  @ApiProperty({example: 'staging'})
+  @ApiPropertyOptional({example: 'staging'})
   @IsOptional()
   backend?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @ValidateNested()
   @IsOptional()
   @Type(() => BackendMeta)
   customBackend?: BackendMeta;
 
-  @ApiProperty({enum: [ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET]})
+  @ApiPropertyOptional({enum: [ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET]})
   @IsEnum(ClientClassification)
   @IsOptional()
   deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
 
-  @ApiProperty({example: ''})
+  @ApiPropertyOptional({example: ''})
   @IsOptional()
   deviceLabel?: string;
 
@@ -45,7 +45,7 @@ export class InstanceCreationOptions {
   @IsNotEmpty()
   email!: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   name?: string;
 
