@@ -5,8 +5,7 @@ import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {RootModule} from './RootModule';
 
 const port = process.env.PORT || 21080;
-const {name}: {name: string} = require('../package.json');
-const {version}: {version: string} = require('../package.json');
+const {name, version}: {name: string; version: string} = require('../package.json');
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(RootModule);
