@@ -1,4 +1,4 @@
-import {ApiProperty} from '@nestjs/swagger';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {ReactionType} from '@wireapp/core/dist/conversation';
 import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content/';
 import {IsEnum, IsOptional, IsUUID} from 'class-validator';
@@ -18,7 +18,7 @@ export class InstanceReactionOptions {
   @IsEnum(ReactionType)
   type!: ReactionType;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
   })
   @IsOptional()
