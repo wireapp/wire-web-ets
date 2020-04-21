@@ -5,30 +5,30 @@ import {Type} from 'class-transformer';
 
 class AudioMeta {
   @ApiPropertyOptional()
-  @IsNumber()
   @IsOptional()
+  @IsNumber()
   durationInMillis?: number;
 
   @ApiPropertyOptional({isArray: true, type: Number})
-  @IsNumber({}, {each: true})
   @IsOptional()
+  @IsNumber({}, {each: true})
   normalizedLoudness?: number[];
 }
 
 class VideoMeta {
   @ApiPropertyOptional()
-  @IsNumber()
   @IsOptional()
+  @IsNumber()
   durationInMillis?: number;
 
   @ApiPropertyOptional()
-  @IsNumber()
   @IsOptional()
+  @IsNumber()
   height?: number;
 
   @ApiPropertyOptional()
-  @IsNumber()
   @IsOptional()
+  @IsNumber()
   width?: number;
 }
 
@@ -46,24 +46,18 @@ export class InstanceFileOptions {
   fileName!: string;
 
   @ApiProperty()
-  @IsNumber()
-  height!: number;
-
-  @ApiProperty()
-  @IsNumber()
-  width!: number;
-
-  @ApiProperty()
   @IsString()
   type!: string;
 
   @ApiPropertyOptional()
   @ValidateNested()
+  @IsOptional()
   @Type(() => AudioMeta)
   audio?: AudioMeta;
 
   @ApiPropertyOptional()
   @ValidateNested()
+  @IsOptional()
   @Type(() => VideoMeta)
   video?: VideoMeta;
 
