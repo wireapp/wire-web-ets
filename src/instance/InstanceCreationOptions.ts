@@ -30,6 +30,7 @@ export class InstanceCreationOptions {
 
   @ApiProperty({enum: [ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET]})
   @IsEnum(ClientClassification)
+  @IsOptional()
   deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
 
   @ApiProperty({example: ''})
@@ -37,8 +38,8 @@ export class InstanceCreationOptions {
   deviceLabel?: string;
 
   @ApiProperty({example: ''})
-  @IsOptional()
-  deviceName?: string;
+  @IsNotEmpty()
+  deviceName!: string;
 
   @ApiProperty({example: 'email@example.com'})
   @IsNotEmpty()

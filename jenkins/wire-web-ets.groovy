@@ -53,13 +53,19 @@ Description=wire-web-ets
 After=network.target
 
 [Service]
-Type=forking
-Environment="PATH=\${PATH}:${NODE}/bin"
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TimeoutStartSec=8
+WorkingDirectory=${WORKSPACE}
+Environment="PATH=/usr/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:${NODE}/bin"
 Environment="PM2_HOME=${HOME}/.pm2"
 PIDFile=${HOME}/.pm2/pm2.pid
-ExecStart=${NODE}/bin/pm2 resurrect
+ExecStart=${NODE}/bin/pm2 start
 ExecReload=${NODE}/bin/pm2 reload all --update-env
 ExecStop=${NODE}/bin/pm2 kill
+Restart=always
+RestartSec=8
 
 [Install]
 WantedBy=default.target
