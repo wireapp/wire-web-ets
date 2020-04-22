@@ -3,7 +3,7 @@ import {NestExpressApplication} from '@nestjs/platform-express';
 import {ValidationPipe} from '@nestjs/common';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {RootModule} from './RootModule';
-import * as bodyParser from 'body-parser';
+import bodyParser from 'body-parser';
 
 const port = process.env.PORT || 21080;
 const {name, version}: {name: string; version: string} = require('../package.json');
