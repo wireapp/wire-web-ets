@@ -25,8 +25,8 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('swagger-ui', app, document);
 
-  app.use(bodyParser.json({limit: '50mb'}));
-  app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
+  app.use(bodyParser.json({limit: '101mb'}));
+  app.use(bodyParser.urlencoded({extended: true, limit: '101mb'}));
 
   await app.listen(port);
   console.info(`Swagger UI running on "http://localhost:${port}/swagger-ui/"`);
