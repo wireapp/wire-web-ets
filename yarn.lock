@@ -610,11 +610,6 @@
   resolved "https://registry.npmjs.org/@wireapp/eslint-config/-/eslint-config-1.4.0.tgz#2ba4c88ed7fd3ae52bb378cf862d408d692ab3f0"
   integrity sha512-dF4H3wcssqd4aiEPJxL5u2xzMyLwmbOeGJh7OtnBak80CTgOsS1f3hORokUuJ4axCzA+XVqjiPDLc8d51AEu7g==
 
-"@wireapp/lru-cache@3.4.10":
-  version "3.4.10"
-  resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.4.10.tgz#b5f7623d851bae7fd333dd1c5f9fdc2c75c250cc"
-  integrity sha512-MaX9um2hYIS2dke9XTL4THHyUkwd/C0goMAgblUuBawPxPR8YH58fm4dlvdwg/iNvS8HurRRE3w16+//eCfzQg==
-
 "@wireapp/lru-cache@3.5.0":
   version "3.5.0"
   resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.5.0.tgz#efb1a489655c92cef5e3476cb0d71ebd581f48dc"
