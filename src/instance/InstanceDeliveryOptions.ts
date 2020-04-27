@@ -1,5 +1,5 @@
-import {ApiProperty} from '@nestjs/swagger';
-import {IsUUID} from 'class-validator';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
+import {IsUUID, IsOptional} from 'class-validator';
 
 export class InstanceDeliveryOptions {
   @ApiProperty()
@@ -10,7 +10,8 @@ export class InstanceDeliveryOptions {
   @IsUUID(4)
   firstMessageId!: string;
 
-  @ApiProperty({isArray: true, type: String})
+  @ApiPropertyOptional({isArray: true, type: String})
   @IsUUID(4, {each: true})
-  moreMessageIds!: string[];
+  @IsOptional()
+  moreMessageIds?: string[];
 }
