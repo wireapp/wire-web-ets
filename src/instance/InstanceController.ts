@@ -8,7 +8,7 @@ import {
   QuoteContent,
   LinkPreviewContent,
 } from '@wireapp/core/dist/conversation/content';
-import {isUUID as ValidatorIsUUID} from 'class-validator';
+import {Validator} from 'class-validator';
 import {Response} from 'express';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
 import {hexToUint8Array, status404instance, status422description, status500description} from '../utils';
@@ -39,7 +39,7 @@ interface ServerErrorMessage extends ErrorMessage {
   stack?: string;
 }
 
-const isUUID = (text: string) => ValidatorIsUUID(text, '4');
+const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
   code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
   error: `Instance ID must me a UUID.`,
