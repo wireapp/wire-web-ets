@@ -18,7 +18,7 @@ import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
-import {InstanceDeliveryOptions} from './FInstanceDeliveryOptions';
+import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceFileOptions} from './InstanceFileOptions';
 import {InstanceImageOptions} from './InstanceImageOptions';
 import {InstanceLocationOptions} from './InstanceLocationOptions';
