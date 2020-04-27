@@ -4,7 +4,7 @@ import {IsEnum, IsUUID} from 'class-validator';
 
 export class InstanceTypingOptions {
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   conversationId!: string;
 
   @ApiProperty({

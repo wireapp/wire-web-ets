@@ -5,7 +5,7 @@ import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content';
 
 class QuoteMeta {
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   quotedMessageId!: string;
 
   @ApiProperty()
@@ -15,7 +15,7 @@ class QuoteMeta {
 
 class MentionsMeta {
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   userId!: string;
 
   @ApiProperty()
@@ -112,7 +112,7 @@ class LinkPreviewMeta {
 
 export class InstanceTextOptions {
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   conversationId!: string;
 
   @ApiProperty()

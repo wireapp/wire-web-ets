@@ -4,7 +4,7 @@ import {IsBoolean, IsEnum, IsOptional, IsUUID} from 'class-validator';
 
 export class InstancePingOptions {
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   conversationId!: string;
 
   @ApiProperty({

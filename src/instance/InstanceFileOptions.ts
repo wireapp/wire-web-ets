@@ -34,7 +34,7 @@ class VideoMeta {
 
 export class InstanceFileOptions {
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   conversationId!: string;
 
   @ApiProperty()

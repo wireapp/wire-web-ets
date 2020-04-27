@@ -5,11 +5,11 @@ import {IsEnum, IsOptional, IsUUID} from 'class-validator';
 
 export class InstanceReactionOptions {
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   conversationId!: string;
 
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   originalMessageId!: string;
 
   @ApiProperty({
