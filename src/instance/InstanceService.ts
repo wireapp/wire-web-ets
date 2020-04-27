@@ -36,7 +36,7 @@ import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions, BackendMeta} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
-import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
+import {InstanceDeliveryOptions} from './FInstanceDeliveryOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
