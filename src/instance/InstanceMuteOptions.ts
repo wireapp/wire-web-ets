@@ -7,6 +7,6 @@ export class InstanceMuteOptions {
   muted!: boolean;
 
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   conversationId!: string;
 }

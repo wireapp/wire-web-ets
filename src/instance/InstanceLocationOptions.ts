@@ -4,7 +4,7 @@ import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content/';
 
 export class InstanceLocationOptions {
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   conversationId!: string;
 
   @ApiProperty()

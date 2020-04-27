@@ -8,7 +8,7 @@ import {
   QuoteContent,
   LinkPreviewContent,
 } from '@wireapp/core/dist/conversation/content';
-import {Validator} from 'class-validator';
+import {isUUID} from 'class-validator';
 import {Response} from 'express';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
 import {hexToUint8Array, status404instance, status422description, status500description} from '../utils';
@@ -39,7 +39,6 @@ interface ServerErrorMessage extends ErrorMessage {
   stack?: string;
 }
 
-const isUUID = (text: string) => new Validator().isUUID(text, '4');
 const errorMessageInstanceUUID: ErrorMessage = {
   code: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY,
   error: `Instance ID must me a UUID.`,
@@ -90,7 +89,7 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async deleteInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -112,7 +111,7 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async getInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -144,7 +143,7 @@ export class InstanceController {
     @Body() body: InstanceArchiveOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -174,7 +173,7 @@ export class InstanceController {
     @Body() body: InstanceAvailabilityOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -204,7 +203,7 @@ export class InstanceController {
     @Body() body: InstanceConversationOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -230,7 +229,7 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async getClients(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -257,7 +256,7 @@ export class InstanceController {
     @Body() body: InstanceDeleteOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -287,7 +286,7 @@ export class InstanceController {
     @Body() body: InstanceDeleteOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -313,7 +312,7 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async getFingerprint(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -343,7 +342,7 @@ export class InstanceController {
     @Body() body: InstanceConversationOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -370,7 +369,7 @@ export class InstanceController {
     @Body() body: InstanceMuteOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -400,7 +399,7 @@ export class InstanceController {
     @Body() body: InstanceDeliveryOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -430,7 +429,7 @@ export class InstanceController {
     @Body() body: InstanceDeliveryOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -460,7 +459,7 @@ export class InstanceController {
     @Body() body: InstanceDeliveryOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -490,7 +489,7 @@ export class InstanceController {
     @Body() body: InstanceDeliveryOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -520,7 +519,7 @@ export class InstanceController {
     @Body() body: InstanceFileOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -579,7 +578,7 @@ export class InstanceController {
     @Body() body: InstanceImageOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -620,7 +619,7 @@ export class InstanceController {
     @Body() body: InstanceLocationOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -666,7 +665,7 @@ export class InstanceController {
     @Body() body: InstancePingOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -705,7 +704,7 @@ export class InstanceController {
     @Body() body: InstanceButtonOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -732,7 +731,7 @@ export class InstanceController {
     @Body() body: InstanceButtonOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -759,7 +758,7 @@ export class InstanceController {
     @Body() body: InstanceReactionOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -791,7 +790,7 @@ export class InstanceController {
     @Body() body: InstanceConversationOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -821,7 +820,7 @@ export class InstanceController {
     @Body() body: InstanceTypingOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -851,7 +850,7 @@ export class InstanceController {
     @Body() body: InstanceTextOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 
@@ -923,7 +922,7 @@ export class InstanceController {
     @Body() body: InstanceTextUpdateOptions,
     @Res() res: Response,
   ): Promise<void> {
-    if (!isUUID(instanceId)) {
+    if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
     }
 

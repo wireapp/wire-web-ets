@@ -10,6 +10,6 @@ export class InstanceAvailabilityOptions {
   type!: Availability.Type;
 
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   teamId!: string;
 }

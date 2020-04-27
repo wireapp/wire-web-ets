@@ -4,6 +4,6 @@ import {InstanceTextOptions} from './InstanceTextOptions';
 
 export class InstanceTextUpdateOptions extends InstanceTextOptions {
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   firstMessageId!: string;
 }

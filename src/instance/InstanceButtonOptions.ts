@@ -3,11 +3,11 @@ import {IsUUID, IsString} from 'class-validator';
 
 export class InstanceButtonOptions {
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   conversationId!: string;
 
   @ApiProperty()
-  @IsUUID('4')
+  @IsUUID(4)
   referenceMessageId!: string;
 
   @ApiProperty()
@@ -15,6 +15,6 @@ export class InstanceButtonOptions {
   buttonId!: string;
 
   @ApiProperty({isArray: true, type: String})
-  @IsUUID('4', {each: true})
+  @IsUUID(4, {each: true})
   userIds!: string[];
 }
