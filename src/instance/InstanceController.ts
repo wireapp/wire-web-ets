@@ -66,7 +66,16 @@ export class InstanceController {
 
   @Put()
   @ApiOperation({summary: 'Create a new instance.'})
-  @ApiResponse({description: 'The instance has successfully created.', status: 200})
+  @ApiResponse({
+    description: 'The instance was successfully created.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse({description: 'Bad request', status: 400})
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -84,7 +93,13 @@ export class InstanceController {
 
   @Delete(':instanceId')
   @ApiOperation({summary: 'Delete an instance.'})
-  @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
+  @ApiResponse({
+    description: 'The instance was successfully deleted.',
+    schema: {
+      example: {},
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -106,7 +121,18 @@ export class InstanceController {
 
   @Get(':instanceId')
   @ApiOperation({summary: 'Get information about an instance.'})
-  @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
+  @ApiResponse({
+    description: 'The instance was successfully deleted.',
+    schema: {
+      example: {
+        backend: 'string',
+        clientId: 'string',
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -134,7 +160,16 @@ export class InstanceController {
 
   @Post(':instanceId/archive')
   @ApiOperation({summary: 'Archive a conversation.'})
-  @ApiResponse({description: 'The conversation archived status has been updated.', status: 200})
+  @ApiResponse({
+    description: 'The conversation archived status has been updated.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -164,7 +199,16 @@ export class InstanceController {
 
   @Post(':instanceId/availability')
   @ApiOperation({summary: "Set a user's availability."})
-  @ApiResponse({description: "The user's availability has been updated.", status: 200})
+  @ApiResponse({
+    description: "The user's availability has been updated.",
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -194,7 +238,16 @@ export class InstanceController {
 
   @Post(':instanceId/clear')
   @ApiOperation({summary: 'Clear a conversation.'})
-  @ApiResponse({description: 'The conversation has been cleared.', status: 200})
+  @ApiResponse({
+    description: 'The conversation has been cleared.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -224,7 +277,26 @@ export class InstanceController {
 
   @Get(':instanceId/clients')
   @ApiOperation({summary: 'Get all clients of an instance.'})
-  @ApiResponse({description: 'The list of all clients.', status: 200})
+  @ApiResponse({
+    description: 'The list of all clients.',
+    schema: {
+      example: [
+        {
+          class: 'string',
+          cookie: 'string',
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          location: {
+            lat: 0,
+            lon: 0,
+          },
+          model: 'string',
+          time: '2020-04-29T11:29:02.445Z',
+          type: 'string',
+        },
+      ],
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -247,7 +319,16 @@ export class InstanceController {
 
   @Post(':instanceId/delete')
   @ApiOperation({summary: 'Delete a message locally.'})
-  @ApiResponse({description: 'The message was deleted locally.', status: 200})
+  @ApiResponse({
+    description: 'The message was deleted locally.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -277,7 +358,16 @@ export class InstanceController {
 
   @Post(':instanceId/deleteEverywhere')
   @ApiOperation({summary: 'Delete a message for everyone.'})
-  @ApiResponse({description: 'The message was deleted for everyone.', status: 200})
+  @ApiResponse({
+    description: 'The message was deleted for everyone.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -307,7 +397,16 @@ export class InstanceController {
 
   @Get(':instanceId/fingerprint')
   @ApiOperation({summary: "Get the fingerprint from the instance's client."})
-  @ApiResponse({description: 'The fingerprint of the client.', status: 200})
+  @ApiResponse({
+    description: 'The fingerprint of the client.',
+    schema: {
+      example: {
+        fingerprint: 'string',
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -333,7 +432,44 @@ export class InstanceController {
 
   @Post(':instanceId/getMessages')
   @ApiOperation({summary: 'Get all messages.'})
-  @ApiResponse({description: 'All messages.', status: 200})
+  @ApiResponse({
+    description: 'All messages.',
+    schema: {
+      example: [
+        {
+          confirmations: [
+            {
+              firstMessageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+              from: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+              moreMessageIds: ['3fa85f64-5717-4562-b3fc-2c963f66afa6'],
+              type: 0,
+            },
+          ],
+          content: {
+            expectsReadConfirmation: true,
+            legalHoldStatus: 0,
+            text: 'string',
+          },
+          conversation: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          from: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          messageTimer: 0,
+          reactions: [
+            {
+              from: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+              legalHoldStatus: 0,
+              originalMessageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+              type: '❤️',
+            },
+          ],
+          state: 'PayloadBundleState.INCOMING',
+          timestamp: 'string',
+          type: 'string',
+        },
+      ],
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -360,7 +496,16 @@ export class InstanceController {
 
   @Post(':instanceId/mute')
   @ApiOperation({summary: 'Mute a conversation.'})
-  @ApiResponse({description: 'The conversation muted status has been updated.', status: 200})
+  @ApiResponse({
+    description: 'The conversation muted status has been updated.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -390,7 +535,16 @@ export class InstanceController {
 
   @Post(':instanceId/sendConfirmationDelivered')
   @ApiOperation({summary: 'Send a delivery confirmation for a message.'})
-  @ApiResponse({description: 'The delivery confirmation has been sent.', status: 200})
+  @ApiResponse({
+    description: 'The delivery confirmation has been sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -420,7 +574,16 @@ export class InstanceController {
 
   @Post(':instanceId/sendConfirmationRead')
   @ApiOperation({summary: 'Send a read confirmation for a message.'})
-  @ApiResponse({description: 'The read confirmation has been sent.', status: 200})
+  @ApiResponse({
+    description: 'The read confirmation has been sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -450,7 +613,16 @@ export class InstanceController {
 
   @Post(':instanceId/sendEphemeralConfirmationDelivered')
   @ApiOperation({summary: 'Send a delivery confirmation for an ephemeral message.'})
-  @ApiResponse({description: 'The delivery confirmation for an ephemeral message has been sent.', status: 200})
+  @ApiResponse({
+    description: 'The delivery confirmation for an ephemeral message has been sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -480,7 +652,16 @@ export class InstanceController {
 
   @Post(':instanceId/sendEphemeralConfirmationRead')
   @ApiOperation({summary: 'Send a read confirmation for an ephemeral message.'})
-  @ApiResponse({description: 'The read confirmation for an ephemeral message has been sent.', status: 200})
+  @ApiResponse({
+    description: 'The read confirmation for an ephemeral message has been sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -510,7 +691,17 @@ export class InstanceController {
 
   @Post(':instanceId/sendFile')
   @ApiOperation({summary: 'Send a file to a conversation.'})
-  @ApiResponse({description: 'File sent.', status: 200})
+  @ApiResponse({
+    description: 'File sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -569,7 +760,17 @@ export class InstanceController {
 
   @Post(':instanceId/sendImage')
   @ApiOperation({summary: 'Send an image to a conversation.'})
-  @ApiResponse({description: 'Image sent.', status: 200})
+  @ApiResponse({
+    description: 'Image sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -610,7 +811,17 @@ export class InstanceController {
 
   @Post(':instanceId/sendLocation')
   @ApiOperation({summary: 'Send an location to a conversation.'})
-  @ApiResponse({description: 'Location sent.', status: 200})
+  @ApiResponse({
+    description: 'Location sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -656,7 +867,17 @@ export class InstanceController {
 
   @Post(':instanceId/sendPing')
   @ApiOperation({summary: 'Send an ping to a conversation.'})
-  @ApiResponse({description: 'Ping sent.', status: 200})
+  @ApiResponse({
+    description: 'Ping sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -695,7 +916,13 @@ export class InstanceController {
 
   @Post(':instanceId/sendButtonAction')
   @ApiOperation({summary: 'Send a button action to a poll.'})
-  @ApiResponse({description: 'Button action sent.', status: 200})
+  @ApiResponse({
+    description: 'Button action sent.',
+    schema: {
+      example: {},
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -722,7 +949,13 @@ export class InstanceController {
 
   @Post(':instanceId/sendButtonActionConfirmation')
   @ApiOperation({summary: 'Send a confirmation to a button action.'})
-  @ApiResponse({description: 'Confirmation sent.', status: 200})
+  @ApiResponse({
+    description: 'Confirmation sent.',
+    schema: {
+      example: {},
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -749,7 +982,17 @@ export class InstanceController {
 
   @Post(':instanceId/sendReaction')
   @ApiOperation({summary: 'Send a reaction to a message.'})
-  @ApiResponse({description: 'Reaction sent.', status: 200})
+  @ApiResponse({
+    description: 'Reaction sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -781,7 +1024,17 @@ export class InstanceController {
 
   @Post(':instanceId/sendSessionReset')
   @ApiOperation({summary: 'Clear a conversation.'})
-  @ApiResponse({description: 'The conversation has been cleared.', status: 200})
+  @ApiResponse({
+    description: 'The conversation has been cleared.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -809,39 +1062,19 @@ export class InstanceController {
     }
   }
 
-  @Post(':instanceId/sendTyping')
-  @ApiOperation({summary: 'Send a typing indicator to a conversation.'})
-  @ApiResponse({description: 'Typing indicator has been sent.', status: 200})
-  @ApiResponse(status404instance)
-  @ApiResponse(status422description)
-  @ApiResponse(status500description)
-  async sendTyping(
-    @Param('instanceId') instanceId: string,
-    @Body() body: InstanceTypingOptions,
-    @Res() res: Response,
-  ): Promise<void> {
-    if (!isUUID(instanceId, 4)) {
-      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
-    }
-
-    if (!this.instanceService.instanceExists(instanceId)) {
-      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
-    }
-
-    try {
-      const instanceName = await this.instanceService.sendTyping(instanceId, body);
-      res.status(HTTP_STATUS_CODE.OK).json({
-        instanceId,
-        name: instanceName,
-      });
-    } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
-    }
-  }
-
   @Post(':instanceId/sendText')
   @ApiOperation({summary: 'Send a text message to a conversation.'})
-  @ApiResponse({description: 'Text message has been sent.', status: 200})
+  @ApiResponse({
+    description: 'Text message has been sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -911,9 +1144,58 @@ export class InstanceController {
     }
   }
 
+  @Post(':instanceId/sendTyping')
+  @ApiOperation({summary: 'Send a typing indicator to a conversation.'})
+  @ApiResponse({
+    description: 'Typing indicator has been sent.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendTyping(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceTypingOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId, 4)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const instanceName = await this.instanceService.sendTyping(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
   @Post(':instanceId/updateText')
   @ApiOperation({summary: 'Update a text message in a conversation.'})
-  @ApiResponse({description: 'Text message has been updated.', status: 200})
+  @ApiResponse({
+    description: 'Text message has been updated.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
