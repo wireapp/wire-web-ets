@@ -232,7 +232,7 @@ export class InstanceService {
     try {
       await account.login(
         {
-          clientType: ClientType.TEMPORARY,
+          clientType: ClientType.PERMANENT,
           email: options.email,
           password: options.password,
         },
