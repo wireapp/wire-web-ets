@@ -1,5 +1,5 @@
 import {Body, Controller, Delete, Get, Param, Post, Put, Res} from '@nestjs/common';
-import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
+import {ApiOperation, ApiResponse, ApiTags, ApiBody} from '@nestjs/swagger';
 import {
   FileContent,
   FileMetaDataContent,
@@ -212,6 +212,7 @@ export class InstanceController {
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
+  @ApiBody({description: 'Type can be `0` (none), `1` (available), `2` (away), `3` (busy).'})
   async setAvailability(
     @Param('instanceId') instanceId: string,
     @Body() body: InstanceAvailabilityOptions,
