@@ -1,4 +1,4 @@
-import {ApiProperty} from '@nestjs/swagger';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content/';
 import {IsBoolean, IsEnum, IsOptional, IsUUID} from 'class-validator';
 
@@ -7,19 +7,19 @@ export class InstancePingOptions {
   @IsUUID(4)
   conversationId!: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
   })
   @IsOptional()
   @IsEnum(LegalHoldStatus)
   legalHoldStatus?: LegalHoldStatus;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
   expectsReadConfirmation?: boolean;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   messageTimer?: number;
 }
