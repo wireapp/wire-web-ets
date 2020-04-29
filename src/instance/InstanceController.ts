@@ -66,7 +66,16 @@ export class InstanceController {
 
   @Put()
   @ApiOperation({summary: 'Create a new instance.'})
-  @ApiResponse({description: 'The instance has successfully created.', status: 200})
+  @ApiResponse({
+    description: 'The instance has successfully created.',
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse({description: 'Bad request', status: 400})
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -84,7 +93,13 @@ export class InstanceController {
 
   @Delete(':instanceId')
   @ApiOperation({summary: 'Delete an instance.'})
-  @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
+  @ApiResponse({
+    description: 'The instance has successfully deleted.',
+    schema: {
+      example: {},
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -106,7 +121,18 @@ export class InstanceController {
 
   @Get(':instanceId')
   @ApiOperation({summary: 'Get information about an instance.'})
-  @ApiResponse({description: 'The instance has successfully deleted.', status: 200})
+  @ApiResponse({
+    description: 'The instance has successfully deleted.',
+    schema: {
+      example: {
+        backend: 'string',
+        clientId: 'string',
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -390,7 +416,10 @@ export class InstanceController {
 
   @Post(':instanceId/sendConfirmationDelivered')
   @ApiOperation({summary: 'Send a delivery confirmation for a message.'})
-  @ApiResponse({description: 'The delivery confirmation has been sent.', status: 200})
+  @ApiResponse({
+    description: 'The delivery confirmation has been sent.',
+    status: 200,
+  })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
