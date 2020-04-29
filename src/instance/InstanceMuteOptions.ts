@@ -4,7 +4,7 @@ import {IsUUID, IsBoolean} from 'class-validator';
 export class InstanceMuteOptions {
   @ApiProperty()
   @IsBoolean()
-  muted!: boolean;
+  mute!: boolean;
 
   @ApiProperty()
   @IsUUID(4)
