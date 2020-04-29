@@ -383,7 +383,7 @@ export class InstanceService {
     if (instance.account.service) {
       await instance.account.service.conversation.setConversationMutedStatus(
         options.conversationId,
-        options.muted ? 3 : 0,
+        options.mute ? 3 : 0,
         new Date(),
       );
       return instance.name;
