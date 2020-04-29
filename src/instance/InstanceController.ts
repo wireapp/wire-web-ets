@@ -212,7 +212,10 @@ export class InstanceController {
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
-  @ApiBody({description: 'Type can be `0` (none), `1` (available), `2` (away), `3` (busy).'})
+  @ApiBody({
+    description: 'Type can be `0` (none), `1` (available), `2` (away), `3` (busy).',
+    type: InstanceAvailabilityOptions,
+  })
   async setAvailability(
     @Param('instanceId') instanceId: string,
     @Body() body: InstanceAvailabilityOptions,
