@@ -1082,6 +1082,10 @@ export class InstanceController {
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
   @ApiResponse(status500description)
+  @ApiBody({
+    description: '`legalHoldStatus` type can be `0` (unknown), `1` (disabled) or `2` (enabled).',
+    type: InstanceTextOptions,
+  })
   async sendText(
     @Param('instanceId') instanceId: string,
     @Body() body: InstanceTextOptions,
