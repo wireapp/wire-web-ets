@@ -1434,7 +1434,7 @@ export class ServerController {
   }
 
   @Get('/commit')
-  @ApiOperation({summary: 'Get information about the server.'})
+  @ApiOperation({summary: 'Get the latest commit hash as plain text.'})
   @ApiResponse({
     schema: {
       example: 'string',
