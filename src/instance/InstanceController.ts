@@ -1454,7 +1454,7 @@ export class ServerController {
           logData.push(`Error: Could not find error log file "${errorLogFile}" or it is not readable.`);
         }
       } else {
-        logData.push(`Error: No error log file specified.`);
+        logData.push('Error: No error log file specified.');
       }
 
       if (outLogFile) {
@@ -1467,7 +1467,7 @@ export class ServerController {
           logData.push(`Error: Could not find output log file "${outLogFile}" or it is not readable.`);
         }
       } else {
-        logData.push(`Error: No output log file specified.`);
+        logData.push('Error: No output log file specified.');
       }
 
       res.contentType('text/plain; charset=UTF-8').send(logData.join('\n'));
