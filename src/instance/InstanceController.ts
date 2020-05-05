@@ -1442,37 +1442,35 @@ export class ServerController {
   @ApiResponse(status500description)
   async getLog(@Res() res: Response): Promise<void> {
     try {
-      let logData = '';
+      let logData: string[] = [];
 
       if (errorLogFile) {
-        logData += `=== ${errorLogFile} ===\n`;
+        logData.push(`=== ${errorLogFile} ===`);
         try {
           const errorLogData = await fs.readFile(errorLogFile, {encoding: 'utf8'});
-          logData += errorLogData;
+          logData = [errorLogData];
         } catch (error) {
           logger.error(error);
-          logData += `Error: Could not find error log file "${errorLogFile}" or it is not readable.`;
+          logData.push(`Error: Could not find error log file "${errorLogFile}" or it is not readable.`);
         }
       } else {
-        logData += `Error: No error log file specified.`;
+        logData.push(`Error: No error log file specified.`);
       }
-
-      logData += '\n';
 
       if (outLogFile) {
-        logData += `=== ${outLogFile} ===\n`;
+        logData.push(`=== ${outLogFile} ===`);
         try {
           const outLogData = await fs.readFile(outLogFile, {encoding: 'utf8'});
-          logData += outLogData;
+          logData.push(outLogData);
         } catch (error) {
           logger.error(error);
-          logData += `Error: Could not find output log file "${outLogFile}" or it is not readable.`;
+          logData.push(`Error: Could not find output log file "${outLogFile}" or it is not readable.`);
         }
       } else {
-        logData += `Error: No output log file specified.`;
+        logData.push(`Error: No output log file specified.`);
       }
 
-      res.contentType('text/plain; charset=UTF-8').send(logData);
+      res.contentType('text/plain; charset=UTF-8').send(logData.join('\n'));
     } catch (error) {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
