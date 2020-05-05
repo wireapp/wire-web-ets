@@ -1,6 +1,6 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {Type} from 'class-transformer';
-import {IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
+import {IsNotEmpty, IsOptional, IsString, ValidateNested, IsEmail} from 'class-validator';
 
 export class BackendMeta {
   @ApiProperty({example: 'my custom backend'})
@@ -28,7 +28,7 @@ export class ClientsOptions {
   customBackend?: BackendMeta;
 
   @ApiProperty({example: 'email@example.com'})
-  @IsNotEmpty()
+  @IsEmail()
   email!: string;
 
   @ApiProperty({example: ''})
