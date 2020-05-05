@@ -43,6 +43,8 @@ import {InstanceTypingOptions} from './InstanceTypingOptions';
 
 const {uptime: nodeUptime, version: nodeVersion} = process;
 const {LOG_ERROR, LOG_OUTPUT, NODE_DEBUG} = process.env;
+const outLogFile = process.env.LOG_OUTPUT;
+const errorLogFile = process.env.LOG_ERROR;
 const {version}: {version: string} = require('../../package.json');
 
 const logger = logdown('@wireapp/wire-web-ets/InstanceController', {
@@ -1447,6 +1449,53 @@ export class ServerController {
       const commitHashFile = path.join(config.DIST_DIR, 'commit');
       const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
       res.contentType('text/plain; charset=UTF-8').send(commitHash.trim());
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Get('/log')
+  @ApiOperation({summary: 'Get the complete log as plain text.'})
+  @ApiResponse({
+    schema: {
+      example: 'string',
+    },
+    status: 200,
+  })
+  @ApiResponse(status500description)
+  async getLog(@Res() res: Response): Promise<void> {
+    try {
+      let logData = '';
+
+      if (errorLogFile) {
+        logData += `=== ${errorLogFile} ===\n`;
+        try {
+          const errorLogData = await fs.readFile(errorLogFile, {encoding: 'utf8'});
+          logData += errorLogData;
+        } catch (error) {
+          logger.error(error);
+          logData += `Error: Could not find error log file "${errorLogFile}" or it is not readable.`;
+        }
+      } else {
+        logData += `Error: No error log file specified.`;
+      }
+
+      logData += '\n';
+
+      if (outLogFile) {
+        logData += `=== ${outLogFile} ===\n`;
+        try {
+          const outLogData = await fs.readFile(outLogFile, {encoding: 'utf8'});
+          logData += outLogData;
+        } catch (error) {
+          logger.error(error);
+          logData += `Error: Could not find output log file "${outLogFile}" or it is not readable.`;
+        }
+      } else {
+        logData += `Error: No output log file specified.`;
+      }
+
+      res.contentType('text/plain; charset=UTF-8').send(logData);
     } catch (error) {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
