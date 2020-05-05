@@ -30,6 +30,7 @@ import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
+import logdown from 'logdown';
 import UUID from 'pure-uuid';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
 import {ClientsOptions} from './ClientsOptions';
@@ -45,6 +46,11 @@ import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
 
 const {version}: {version: string} = require('../../package.json');
+
+const logger = logdown('@wireapp/wire-web-ets/InstanceService', {
+  logger: console,
+  markdown: false,
+});
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -89,7 +95,7 @@ export class InstanceService {
   }
 
   private attachListeners(account: Account, instance: Instance): void {
-    account.on(Account.TOPIC.ERROR, error => console.error(`[${formatDate()}]`, error));
+    account.on(Account.TOPIC.ERROR, error => logger.error(`[${formatDate()}]`, error));
 
     account.on(PayloadBundleType.TEXT, (payload: PayloadBundle) => {
       const linkPreviewContent = payload.content as TextContent;
@@ -215,11 +221,11 @@ export class InstanceService {
 
     const engine = new MemoryEngine();
 
-    console.info(`[${formatDate()}] Initializing MemoryEngine...`);
+    logger.info(`[${formatDate()}] Initializing MemoryEngine...`);
 
     await engine.init('wire-web-ets');
 
-    console.info(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
+    logger.info(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
 
     const client = new APIClient({urls: backendType});
     const account = new Account(client);
@@ -231,7 +237,7 @@ export class InstanceService {
       model: options.deviceName || 'E2E Test Server',
     };
 
-    console.info(`[${formatDate()}] Logging in ...`);
+    logger.info(`[${formatDate()}] Logging in ...`);
 
     try {
       await account.login(
@@ -249,7 +255,7 @@ export class InstanceService {
         throw new Error(`Backend error: ${error.response.data.message}`);
       }
 
-      console.error(`[${formatDate()}]`, error);
+      logger.error(`[${formatDate()}]`, error);
       throw error;
     }
 
@@ -267,7 +273,7 @@ export class InstanceService {
 
     this.attachListeners(account, instance);
 
-    console.info(`[${formatDate()}] Created instance with id "${instanceId}".`);
+    logger.info(`[${formatDate()}] Created instance with id "${instanceId}".`);
 
     return instanceId;
   }
@@ -292,7 +298,7 @@ export class InstanceService {
     await instance.account.logout();
 
     this.cachedInstances.delete(instanceId);
-    console.info(`[${formatDate()}] Deleted instance with id "${instanceId}".`);
+    logger.info(`[${formatDate()}] Deleted instance with id "${instanceId}".`);
   }
 
   async toggleArchiveConversation(instanceId: string, options: InstanceArchiveOptions): Promise<string> {
@@ -833,7 +839,7 @@ export class InstanceService {
     try {
       await account.login(loginData, true, ClientInfo);
     } catch (error) {
-      console.error(`[${formatDate()}]`, error);
+      logger.error(`[${formatDate()}]`, error);
 
       if (error.code !== StatusCode.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
         throw error;
@@ -850,7 +856,7 @@ export class InstanceService {
         }
       }
       if (client.class === ClientClassification.LEGAL_HOLD) {
-        console.info(`Can't delete client with ID "${client.id} since it's a Legal Hold client`);
+        logger.info(`Can't delete client with ID "${client.id} since it's a Legal Hold client`);
       } else {
         await apiClient.client.api.deleteClient(client.id, options.password);
       }

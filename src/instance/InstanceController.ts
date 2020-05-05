@@ -12,6 +12,7 @@ import {isUUID} from 'class-validator';
 import {Response} from 'express';
 import * as fs from 'fs-extra';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
+import logdown from 'logdown';
 import * as path from 'path';
 import {
   formatDate,
@@ -43,6 +44,11 @@ import {InstanceTypingOptions} from './InstanceTypingOptions';
 const {uptime: nodeUptime, version: nodeVersion} = process;
 const {LOG_ERROR, LOG_OUTPUT, NODE_DEBUG} = process.env;
 const {version}: {version: string} = require('../../package.json');
+
+const logger = logdown('@wireapp/wire-web-ets/InstanceController', {
+  logger: console,
+  markdown: false,
+});
 
 interface ErrorMessage {
   code: number;
@@ -1421,7 +1427,7 @@ export class ServerController {
       const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
       infoData.commit = commitHash.trim();
     } catch (error) {
-      console.error(`[${formatDate()}]`, error);
+      logger.error(`[${formatDate()}]`, error);
     }
 
     res.json(infoData);
