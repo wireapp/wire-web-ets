@@ -1,7 +1,7 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {ClientClassification} from '@wireapp/api-client/dist/client/';
 import {Type} from 'class-transformer';
-import {IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested, isEmail, IsEmail} from 'class-validator';
+import {IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
 
 export class BackendMeta {
   @ApiProperty({example: 'my custom backend'})
