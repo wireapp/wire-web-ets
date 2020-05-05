@@ -1306,6 +1306,7 @@ export class InstancesController {
 
     if (!Object.keys(instances).length) {
       res.json({});
+      return;
     }
 
     const reducedInstances: ReducedInstances = {};
