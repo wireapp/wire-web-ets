@@ -3,8 +3,8 @@ import {NestFactory} from '@nestjs/core';
 import {NestExpressApplication} from '@nestjs/platform-express';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import bodyParser from 'body-parser';
-import {RootModule} from './RootModule';
 import logdown from 'logdown';
+import {RootModule} from './RootModule';
 
 const logger = logdown('@wireapp/wire-web-ets/main', {
   logger: console,
