@@ -1,17 +1,18 @@
 import {Body, Controller, Delete, Get, Param, Post, Put, Res} from '@nestjs/common';
-import {ApiOperation, ApiResponse, ApiTags, ApiBody} from '@nestjs/swagger';
+import {ApiBody, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {
   FileContent,
   FileMetaDataContent,
   ImageContent,
+  LinkPreviewContent,
   LocationContent,
   QuoteContent,
-  LinkPreviewContent,
 } from '@wireapp/core/dist/conversation/content';
 import {isUUID} from 'class-validator';
 import {Response} from 'express';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
 import {hexToUint8Array, status404instance, status422description, status500description} from '../utils';
+import {ClientsOptions} from './ClientsOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
@@ -27,9 +28,8 @@ import {InstancePingOptions} from './InstancePingOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceService} from './InstanceService';
 import {InstanceTextOptions} from './InstanceTextOptions';
-import {InstanceTypingOptions} from './InstanceTypingOptions';
 import {InstanceTextUpdateOptions} from './InstanceTextUpdateOptions';
-import {ClientsOptions} from './ClientsOptions';
+import {InstanceTypingOptions} from './InstanceTypingOptions';
 
 interface ErrorMessage {
   code: number;
