@@ -1,9 +1,9 @@
 import {Module} from '@nestjs/common';
-import {InstanceController, InstancesController, ClientsController} from './InstanceController';
+import {InstanceController, InstancesController, ClientsController, ServerController} from './InstanceController';
 import {InstanceService} from './InstanceService';
 
 @Module({
-  controllers: [InstanceController, InstancesController, ClientsController],
+  controllers: [InstanceController, InstancesController, ClientsController, ServerController],
   exports: [InstanceService],
   providers: [InstanceService],
 })

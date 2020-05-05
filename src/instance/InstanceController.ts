@@ -1,17 +1,28 @@
 import {Body, Controller, Delete, Get, Param, Post, Put, Res} from '@nestjs/common';
-import {ApiOperation, ApiResponse, ApiTags, ApiBody} from '@nestjs/swagger';
+import {ApiBody, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {
   FileContent,
   FileMetaDataContent,
   ImageContent,
+  LinkPreviewContent,
   LocationContent,
   QuoteContent,
-  LinkPreviewContent,
 } from '@wireapp/core/dist/conversation/content';
 import {isUUID} from 'class-validator';
 import {Response} from 'express';
+import * as fs from 'fs-extra';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
-import {hexToUint8Array, status404instance, status422description, status500description} from '../utils';
+import * as path from 'path';
+import {config} from '../config';
+import {
+  formatDate,
+  formatUptime,
+  hexToUint8Array,
+  status404instance,
+  status422description,
+  status500description,
+} from '../utils';
+import {ClientsOptions} from './ClientsOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
@@ -27,9 +38,11 @@ import {InstancePingOptions} from './InstancePingOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceService} from './InstanceService';
 import {InstanceTextOptions} from './InstanceTextOptions';
-import {InstanceTypingOptions} from './InstanceTypingOptions';
 import {InstanceTextUpdateOptions} from './InstanceTextUpdateOptions';
-import {ClientsOptions} from './ClientsOptions';
+import {InstanceTypingOptions} from './InstanceTypingOptions';
+
+const {uptime: nodeUptime, version: nodeVersion} = process;
+const {LOG_ERROR, LOG_OUTPUT, NODE_DEBUG} = process.env;
 
 interface ErrorMessage {
   code: number;
@@ -52,6 +65,20 @@ interface ReducedInstances {
     instanceId: string;
     name: string;
   };
+}
+
+interface InfoData {
+  code: number;
+  commit?: string;
+  instance: {
+    env: {
+      LOG_ERROR?: string;
+      LOG_OUTPUT?: string;
+      NODE_DEBUG?: string;
+    };
+    uptime: string;
+  };
+  message: string;
 }
 
 const createInternalServerError = (error: Error): ServerErrorMessage => {
@@ -1325,5 +1352,55 @@ export class ClientsController {
     } catch (error) {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
+  }
+}
+
+@ApiTags('Server')
+@Controller()
+export class ServerController {
+  @Get()
+  @ApiOperation({summary: 'Get information about the server.'})
+  @ApiResponse({
+    schema: {
+      example: {
+        code: 0,
+        commit: 'string',
+        instance: {
+          env: {
+            LOG_ERROR: 'string',
+            LOG_OUTPUT: 'string',
+            NODE_DEBUG: 'string',
+          },
+          uptime: 'string',
+        },
+        message: 'string',
+      },
+    },
+    status: 200,
+  })
+  @ApiResponse(status500description)
+  async getInstances(@Res() res: Response): Promise<void> {
+    const commitHashFile = path.join(config.DIST_DIR, 'commit');
+    const infoData: InfoData = {
+      code: HTTP_STATUS_CODE.OK,
+      instance: {
+        env: {
+          LOG_ERROR,
+          LOG_OUTPUT,
+          NODE_DEBUG,
+        },
+        uptime: formatUptime(nodeUptime()),
+      },
+      message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`,
+    };
+
+    try {
+      const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
+      infoData.commit = commitHash.trim();
+    } catch (error) {
+      console.error(`[${formatDate()}]`, error);
+    }
+
+    res.json(infoData);
   }
 }
