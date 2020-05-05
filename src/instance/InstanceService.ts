@@ -30,7 +30,6 @@ import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
-import logdown from 'logdown';
 import UUID from 'pure-uuid';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
 import {ClientsOptions} from './ClientsOptions';
