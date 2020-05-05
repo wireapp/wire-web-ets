@@ -14,6 +14,7 @@ import * as fs from 'fs-extra';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
 import logdown from 'logdown';
 import * as path from 'path';
+import {config} from '../config';
 import {
   formatDate,
   formatUptime,
@@ -45,7 +46,6 @@ const {uptime: nodeUptime, version: nodeVersion} = process;
 const {LOG_ERROR, LOG_OUTPUT, NODE_DEBUG} = process.env;
 const outLogFile = process.env.LOG_OUTPUT;
 const errorLogFile = process.env.LOG_ERROR;
-const {version}: {version: string} = require('../../package.json');
 
 const logger = logdown('@wireapp/wire-web-ets/InstanceController', {
   logger: console,
@@ -88,29 +88,6 @@ interface InfoData {
   };
   message: string;
 }
-
-export interface ServerConfig {
-  CACHE_DURATION_SECONDS: number;
-  COMPRESS_LEVEL: number;
-  COMPRESS_MIN_SIZE: number;
-  DEVELOPMENT?: boolean;
-  DIST_DIR: string;
-  ENVIRONMENT: string;
-  PORT_HTTP: number;
-  VERSION: string;
-}
-
-const config: ServerConfig = {
-  CACHE_DURATION_SECONDS: 300, // 5 minutes
-  COMPRESS_LEVEL: 6,
-  COMPRESS_MIN_SIZE: 500,
-  DIST_DIR: path.resolve(__dirname),
-  ENVIRONMENT: process.env.ENVIRONMENT || 'prod',
-  PORT_HTTP: Number(process.env.PORT) || 21070,
-  VERSION: version,
-};
-
-config.DEVELOPMENT = config.ENVIRONMENT === 'dev';
 
 const createInternalServerError = (error: Error): ServerErrorMessage => {
   return {
