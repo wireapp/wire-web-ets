@@ -76,7 +76,6 @@ export class InstanceController {
   @Put()
   @ApiOperation({summary: 'Create a new instance.'})
   @ApiResponse({
-    description: 'The instance was successfully created.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -103,7 +102,6 @@ export class InstanceController {
   @Delete(':instanceId')
   @ApiOperation({summary: 'Delete an instance.'})
   @ApiResponse({
-    description: 'The instance was successfully deleted.',
     schema: {
       example: {},
     },
@@ -131,7 +129,6 @@ export class InstanceController {
   @Get(':instanceId')
   @ApiOperation({summary: 'Get information about an instance.'})
   @ApiResponse({
-    description: 'The instance was successfully deleted.',
     schema: {
       example: {
         backend: 'string',
@@ -170,7 +167,6 @@ export class InstanceController {
   @Post(':instanceId/archive')
   @ApiOperation({summary: 'Archive a conversation.'})
   @ApiResponse({
-    description: 'The conversation archived status has been updated.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -209,7 +205,6 @@ export class InstanceController {
   @Post(':instanceId/availability')
   @ApiOperation({summary: "Set a user's availability."})
   @ApiResponse({
-    description: "The user's availability has been updated.",
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -252,7 +247,6 @@ export class InstanceController {
   @Post(':instanceId/clear')
   @ApiOperation({summary: 'Clear a conversation.'})
   @ApiResponse({
-    description: 'The conversation has been cleared.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -291,7 +285,6 @@ export class InstanceController {
   @Get(':instanceId/clients')
   @ApiOperation({summary: 'Get all clients of an instance.'})
   @ApiResponse({
-    description: 'The list of all clients.',
     schema: {
       example: [
         {
@@ -333,7 +326,6 @@ export class InstanceController {
   @Post(':instanceId/delete')
   @ApiOperation({summary: 'Delete a message locally.'})
   @ApiResponse({
-    description: 'The message was deleted locally.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -372,7 +364,6 @@ export class InstanceController {
   @Post(':instanceId/deleteEverywhere')
   @ApiOperation({summary: 'Delete a message for everyone.'})
   @ApiResponse({
-    description: 'The message was deleted for everyone.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -411,7 +402,6 @@ export class InstanceController {
   @Get(':instanceId/fingerprint')
   @ApiOperation({summary: "Get the fingerprint from the instance's client."})
   @ApiResponse({
-    description: 'The fingerprint of the client.',
     schema: {
       example: {
         fingerprint: 'string',
@@ -446,7 +436,6 @@ export class InstanceController {
   @Post(':instanceId/getMessages')
   @ApiOperation({summary: 'Get all messages.'})
   @ApiResponse({
-    description: 'All messages.',
     schema: {
       example: [
         {
@@ -510,7 +499,6 @@ export class InstanceController {
   @Post(':instanceId/mute')
   @ApiOperation({summary: 'Mute a conversation.'})
   @ApiResponse({
-    description: 'The conversation muted status has been updated.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -549,7 +537,6 @@ export class InstanceController {
   @Post(':instanceId/sendConfirmationDelivered')
   @ApiOperation({summary: 'Send a delivery confirmation for a message.'})
   @ApiResponse({
-    description: 'The delivery confirmation has been sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -588,7 +575,6 @@ export class InstanceController {
   @Post(':instanceId/sendConfirmationRead')
   @ApiOperation({summary: 'Send a read confirmation for a message.'})
   @ApiResponse({
-    description: 'The read confirmation has been sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -627,7 +613,6 @@ export class InstanceController {
   @Post(':instanceId/sendEphemeralConfirmationDelivered')
   @ApiOperation({summary: 'Send a delivery confirmation for an ephemeral message.'})
   @ApiResponse({
-    description: 'The delivery confirmation for an ephemeral message has been sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -666,7 +651,6 @@ export class InstanceController {
   @Post(':instanceId/sendEphemeralConfirmationRead')
   @ApiOperation({summary: 'Send a read confirmation for an ephemeral message.'})
   @ApiResponse({
-    description: 'The read confirmation for an ephemeral message has been sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -705,7 +689,6 @@ export class InstanceController {
   @Post(':instanceId/sendFile')
   @ApiOperation({summary: 'Send a file to a conversation.'})
   @ApiResponse({
-    description: 'File sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -774,7 +757,6 @@ export class InstanceController {
   @Post(':instanceId/sendImage')
   @ApiOperation({summary: 'Send an image to a conversation.'})
   @ApiResponse({
-    description: 'Image sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -825,7 +807,6 @@ export class InstanceController {
   @Post(':instanceId/sendLocation')
   @ApiOperation({summary: 'Send an location to a conversation.'})
   @ApiResponse({
-    description: 'Location sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -881,7 +862,6 @@ export class InstanceController {
   @Post(':instanceId/sendPing')
   @ApiOperation({summary: 'Send an ping to a conversation.'})
   @ApiResponse({
-    description: 'Ping sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -930,7 +910,6 @@ export class InstanceController {
   @Post(':instanceId/sendButtonAction')
   @ApiOperation({summary: 'Send a button action to a poll.'})
   @ApiResponse({
-    description: 'Button action sent.',
     schema: {
       example: {},
     },
@@ -963,7 +942,6 @@ export class InstanceController {
   @Post(':instanceId/sendButtonActionConfirmation')
   @ApiOperation({summary: 'Send a confirmation to a button action.'})
   @ApiResponse({
-    description: 'Confirmation sent.',
     schema: {
       example: {},
     },
@@ -996,7 +974,6 @@ export class InstanceController {
   @Post(':instanceId/sendReaction')
   @ApiOperation({summary: 'Send a reaction to a message.'})
   @ApiResponse({
-    description: 'Reaction sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -1038,7 +1015,6 @@ export class InstanceController {
   @Post(':instanceId/sendSessionReset')
   @ApiOperation({summary: 'Clear a conversation.'})
   @ApiResponse({
-    description: 'The conversation has been cleared.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -1078,7 +1054,6 @@ export class InstanceController {
   @Post(':instanceId/sendText')
   @ApiOperation({summary: 'Send a text message to a conversation.'})
   @ApiResponse({
-    description: 'Text message has been sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -1092,7 +1067,6 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   @ApiBody({
-    description: '`legalHoldStatus` type can be `0` (unknown), `1` (disabled) or `2` (enabled).',
     type: InstanceTextOptions,
   })
   async sendText(
@@ -1164,7 +1138,6 @@ export class InstanceController {
   @Post(':instanceId/sendTyping')
   @ApiOperation({summary: 'Send a typing indicator to a conversation.'})
   @ApiResponse({
-    description: 'Typing indicator has been sent.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -1203,7 +1176,6 @@ export class InstanceController {
   @Post(':instanceId/updateText')
   @ApiOperation({summary: 'Update a text message in a conversation.'})
   @ApiResponse({
-    description: 'Text message has been updated.',
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
