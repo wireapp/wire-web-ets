@@ -47,11 +47,6 @@ import {InstanceTypingOptions} from './InstanceTypingOptions';
 
 const {version}: {version: string} = require('../../package.json');
 
-const logger = logdown('@wireapp/wire-web-ets/InstanceService', {
-  logger: console,
-  markdown: false,
-});
-
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
   from: string;
@@ -839,7 +834,7 @@ export class InstanceService {
     try {
       await account.login(loginData, true, ClientInfo);
     } catch (error) {
-      logger.error(`[${formatDate()}]`, error);
+      console.error(`[${formatDate()}]`, error);
 
       if (error.code !== StatusCode.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
         throw error;
@@ -856,7 +851,7 @@ export class InstanceService {
         }
       }
       if (client.class === ClientClassification.LEGAL_HOLD) {
-        logger.info(`Can't delete client with ID "${client.id} since it's a Legal Hold client`);
+        console.info(`Can't delete client with ID "${client.id} since it's a Legal Hold client`);
       } else {
         await apiClient.client.api.deleteClient(client.id, options.password);
       }
