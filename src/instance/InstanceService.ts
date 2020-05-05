@@ -25,7 +25,7 @@ import {
 } from '@wireapp/core/dist/conversation/content';
 import {MessageToProtoMapper} from '@wireapp/core/dist/conversation/message/MessageToProtoMapper';
 import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
-import {LRUCache} from '@wireapp/lru-cache';
+import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {MemoryEngine} from '@wireapp/store-engine';
 import UUID from 'pure-uuid';
@@ -803,5 +803,9 @@ export class InstanceService {
       return editedMessage.id;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  getInstances(): NodeMap<Instance> {
+    return this.cachedInstances.getAll();
   }
 }

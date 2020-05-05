@@ -44,6 +44,15 @@ const errorMessageInstanceUUID: ErrorMessage = {
   error: `Instance ID must me a UUID.`,
 };
 
+interface ReducedInstances {
+  [id: string]: {
+    backend: string;
+    clientId: string;
+    instanceId: string;
+    name: string;
+  };
+}
+
 const createInternalServerError = (error: Error): ServerErrorMessage => {
   return {
     code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -1267,6 +1276,53 @@ export class InstanceController {
         messageId,
         name: instanceName,
       });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+}
+
+@ApiTags('Instances')
+@Controller('instances')
+export class InstancesController {
+  constructor(private readonly instanceService: InstanceService) {}
+
+  @Get()
+  @ApiOperation({summary: 'Get all instances.'})
+  @ApiResponse({
+    schema: {
+      example: {
+        backend: 'string',
+        clientId: 'string',
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: 'string',
+      },
+    },
+    status: 200,
+  })
+  @ApiResponse(status500description)
+  async getInstances(@Res() res: Response): Promise<void> {
+    const instances = this.instanceService.getInstances();
+
+    if (!Object.keys(instances).length) {
+      res.json({});
+    }
+
+    const reducedInstances: ReducedInstances = {};
+
+    for (const instanceId in instances) {
+      const {backendType, client, name} = instances[instanceId];
+
+      reducedInstances[instanceId] = {
+        backend: backendType.name,
+        clientId: client.context!.clientId!,
+        instanceId,
+        name,
+      };
+    }
+
+    try {
+      res.json(reducedInstances);
     } catch (error) {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
