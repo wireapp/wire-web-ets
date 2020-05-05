@@ -1374,7 +1374,7 @@ export class ClientsController {
   })
   @ApiResponse(status422description)
   @ApiResponse(status500description)
-  async getInstances(@Body() body: ClientsOptions, @Res() res: Response): Promise<void> {
+  async getClients(@Body() body: ClientsOptions, @Res() res: Response): Promise<void> {
     try {
       await this.instanceService.removeAllClients(body);
       res.json({});
@@ -1408,7 +1408,7 @@ export class ServerController {
     status: 200,
   })
   @ApiResponse(status500description)
-  async getInstances(@Res() res: Response): Promise<void> {
+  async getServer(@Res() res: Response): Promise<void> {
     const commitHashFile = path.join(config.DIST_DIR, 'commit');
     const infoData: InfoData = {
       code: HTTP_STATUS_CODE.OK,
