@@ -95,7 +95,7 @@ export class InstanceService {
   }
 
   private attachListeners(account: Account, instance: Instance): void {
-    account.on(Account.TOPIC.ERROR, error => console.error(`[${formatDate()}]`, error));
+    account.on(Account.TOPIC.ERROR, error => logger.error(`[${formatDate()}]`, error));
 
     account.on(PayloadBundleType.TEXT, (payload: PayloadBundle) => {
       const linkPreviewContent = payload.content as TextContent;
@@ -221,11 +221,11 @@ export class InstanceService {
 
     const engine = new MemoryEngine();
 
-    console.info(`[${formatDate()}] Initializing MemoryEngine...`);
+    logger.info(`[${formatDate()}] Initializing MemoryEngine...`);
 
     await engine.init('wire-web-ets');
 
-    console.info(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
+    logger.info(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
 
     const client = new APIClient({urls: backendType});
     const account = new Account(client);
@@ -237,7 +237,7 @@ export class InstanceService {
       model: options.deviceName || 'E2E Test Server',
     };
 
-    console.info(`[${formatDate()}] Logging in ...`);
+    logger.info(`[${formatDate()}] Logging in ...`);
 
     try {
       await account.login(
@@ -255,7 +255,7 @@ export class InstanceService {
         throw new Error(`Backend error: ${error.response.data.message}`);
       }
 
-      console.error(`[${formatDate()}]`, error);
+      logger.error(`[${formatDate()}]`, error);
       throw error;
     }
 
@@ -273,7 +273,7 @@ export class InstanceService {
 
     this.attachListeners(account, instance);
 
-    console.info(`[${formatDate()}] Created instance with id "${instanceId}".`);
+    logger.info(`[${formatDate()}] Created instance with id "${instanceId}".`);
 
     return instanceId;
   }
@@ -298,7 +298,7 @@ export class InstanceService {
     await instance.account.logout();
 
     this.cachedInstances.delete(instanceId);
-    console.info(`[${formatDate()}] Deleted instance with id "${instanceId}".`);
+    logger.info(`[${formatDate()}] Deleted instance with id "${instanceId}".`);
   }
 
   async toggleArchiveConversation(instanceId: string, options: InstanceArchiveOptions): Promise<string> {

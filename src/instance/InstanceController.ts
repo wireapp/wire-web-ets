@@ -10,8 +10,18 @@ import {
 } from '@wireapp/core/dist/conversation/content';
 import {isUUID} from 'class-validator';
 import {Response} from 'express';
+import * as fs from 'fs-extra';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
-import {hexToUint8Array, status404instance, status422description, status500description} from '../utils';
+import logdown from 'logdown';
+import * as path from 'path';
+import {
+  formatDate,
+  formatUptime,
+  hexToUint8Array,
+  status404instance,
+  status422description,
+  status500description,
+} from '../utils';
 import {ClientsOptions} from './ClientsOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
@@ -30,6 +40,15 @@ import {InstanceService} from './InstanceService';
 import {InstanceTextOptions} from './InstanceTextOptions';
 import {InstanceTextUpdateOptions} from './InstanceTextUpdateOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
+
+const {uptime: nodeUptime, version: nodeVersion} = process;
+const {LOG_ERROR, LOG_OUTPUT, NODE_DEBUG} = process.env;
+const {version}: {version: string} = require('../../package.json');
+
+const logger = logdown('@wireapp/wire-web-ets/InstanceController', {
+  logger: console,
+  markdown: false,
+});
 
 interface ErrorMessage {
   code: number;
@@ -53,6 +72,43 @@ interface ReducedInstances {
     name: string;
   };
 }
+
+interface InfoData {
+  code: number;
+  commit?: string;
+  instance: {
+    env: {
+      LOG_ERROR?: string;
+      LOG_OUTPUT?: string;
+      NODE_DEBUG?: string;
+    };
+    uptime: string;
+  };
+  message: string;
+}
+
+export interface ServerConfig {
+  CACHE_DURATION_SECONDS: number;
+  COMPRESS_LEVEL: number;
+  COMPRESS_MIN_SIZE: number;
+  DEVELOPMENT?: boolean;
+  DIST_DIR: string;
+  ENVIRONMENT: string;
+  PORT_HTTP: number;
+  VERSION: string;
+}
+
+const config: ServerConfig = {
+  CACHE_DURATION_SECONDS: 300, // 5 minutes
+  COMPRESS_LEVEL: 6,
+  COMPRESS_MIN_SIZE: 500,
+  DIST_DIR: path.resolve(__dirname),
+  ENVIRONMENT: process.env.ENVIRONMENT || 'prod',
+  PORT_HTTP: Number(process.env.PORT) || 21070,
+  VERSION: version,
+};
+
+config.DEVELOPMENT = config.ENVIRONMENT === 'dev';
 
 const createInternalServerError = (error: Error): ServerErrorMessage => {
   return {
@@ -1325,5 +1381,55 @@ export class ClientsController {
     } catch (error) {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
+  }
+}
+
+@ApiTags('Server')
+@Controller()
+export class ServerController {
+  @Get()
+  @ApiOperation({summary: 'Get information about the server.'})
+  @ApiResponse({
+    schema: {
+      example: {
+        code: 0,
+        commit: 'string',
+        instance: {
+          env: {
+            LOG_ERROR: 'string',
+            LOG_OUTPUT: 'string',
+            NODE_DEBUG: 'string',
+          },
+          uptime: 'string',
+        },
+        message: 'string',
+      },
+    },
+    status: 200,
+  })
+  @ApiResponse(status500description)
+  async getInstances(@Res() res: Response): Promise<void> {
+    const commitHashFile = path.join(config.DIST_DIR, 'commit');
+    const infoData: InfoData = {
+      code: HTTP_STATUS_CODE.OK,
+      instance: {
+        env: {
+          LOG_ERROR,
+          LOG_OUTPUT,
+          NODE_DEBUG,
+        },
+        uptime: formatUptime(nodeUptime()),
+      },
+      message: `E2E Test Service v${config.VERSION} ready (Node.js ${nodeVersion})`,
+    };
+
+    try {
+      const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
+      infoData.commit = commitHash.trim();
+    } catch (error) {
+      logger.error(`[${formatDate()}]`, error);
+    }
+
+    res.json(infoData);
   }
 }

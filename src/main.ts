@@ -1,9 +1,15 @@
+import {ValidationPipe} from '@nestjs/common';
 import {NestFactory} from '@nestjs/core';
 import {NestExpressApplication} from '@nestjs/platform-express';
-import {ValidationPipe} from '@nestjs/common';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
-import {RootModule} from './RootModule';
 import bodyParser from 'body-parser';
+import logdown from 'logdown';
+import {RootModule} from './RootModule';
+
+const logger = logdown('@wireapp/wire-web-ets/main', {
+  logger: console,
+  markdown: false,
+});
 
 const port = process.env.PORT || 21080;
 const {name, version}: {name: string; version: string} = require('../package.json');
@@ -29,9 +35,9 @@ async function bootstrap(): Promise<void> {
   app.use(bodyParser.urlencoded({extended: true, limit: '101mb'}));
 
   await app.listen(port);
-  console.info(`Swagger UI running on "http://localhost:${port}/swagger-ui/"`);
+  logger.info(`Swagger UI running on "http://localhost:${port}/swagger-ui/"`);
 }
 
 bootstrap().catch(error => {
-  console.error(`Server crashed: ${error.message}`, error);
+  logger.error(`Server crashed: ${error.message}`, error);
 });
