@@ -1301,7 +1301,6 @@ export class InstancesController {
     status: 200,
   })
   @ApiResponse(status500description)
-
   async getInstances(@Res() res: Response): Promise<void> {
     const instances = this.instanceService.getInstances();
 
