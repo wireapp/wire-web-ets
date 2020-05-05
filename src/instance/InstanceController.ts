@@ -1,17 +1,18 @@
 import {Body, Controller, Delete, Get, Param, Post, Put, Res} from '@nestjs/common';
-import {ApiOperation, ApiResponse, ApiTags, ApiBody} from '@nestjs/swagger';
+import {ApiBody, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {
   FileContent,
   FileMetaDataContent,
   ImageContent,
+  LinkPreviewContent,
   LocationContent,
   QuoteContent,
-  LinkPreviewContent,
 } from '@wireapp/core/dist/conversation/content';
 import {isUUID} from 'class-validator';
 import {Response} from 'express';
 import * as HTTP_STATUS_CODE from 'http-status-codes';
 import {hexToUint8Array, status404instance, status422description, status500description} from '../utils';
+import {ClientsOptions} from './ClientsOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
@@ -27,8 +28,8 @@ import {InstancePingOptions} from './InstancePingOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceService} from './InstanceService';
 import {InstanceTextOptions} from './InstanceTextOptions';
-import {InstanceTypingOptions} from './InstanceTypingOptions';
 import {InstanceTextUpdateOptions} from './InstanceTextUpdateOptions';
+import {InstanceTypingOptions} from './InstanceTypingOptions';
 
 interface ErrorMessage {
   code: number;
@@ -1296,6 +1297,31 @@ export class InstancesController {
 
     try {
       res.json(reducedInstances);
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+}
+
+@ApiTags('Clients')
+@Controller('clients')
+export class ClientsController {
+  constructor(private readonly instanceService: InstanceService) {}
+
+  @Delete()
+  @ApiOperation({summary: 'Delete all clients.'})
+  @ApiResponse({
+    schema: {
+      example: {},
+    },
+    status: 200,
+  })
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async getInstances(@Body() body: ClientsOptions, @Res() res: Response): Promise<void> {
+    try {
+      await this.instanceService.removeAllClients(body);
+      res.json({});
     } catch (error) {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }

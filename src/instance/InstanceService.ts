@@ -3,6 +3,7 @@ import {APIClient} from '@wireapp/api-client';
 import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/client/';
 import {ClientType} from '@wireapp/api-client/dist/client/ClientType';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
+import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/http/';
 import {Account} from '@wireapp/core';
 import {ClientInfo} from '@wireapp/core/dist/client/';
 import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation';
@@ -28,19 +29,28 @@ import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {MemoryEngine} from '@wireapp/store-engine';
+import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
+import logdown from 'logdown';
 import UUID from 'pure-uuid';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
+import {ClientsOptions} from './ClientsOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
-import {InstanceCreationOptions, BackendMeta} from './InstanceCreationOptions';
+import {BackendMeta, InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
 import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
-import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
+
+const {version}: {version: string} = require('../../package.json');
+
+const logger = logdown('@wireapp/wire-web-ets/InstanceService', {
+  logger: console,
+  markdown: false,
+});
 
 type ConfirmationWithSender = ConfirmationContent & {from: string};
 type ReactionWithSender = ReactionContent & {
@@ -807,5 +817,51 @@ export class InstanceService {
 
   getInstances(): NodeMap<Instance> {
     return this.cachedInstances.getAll();
+  }
+
+  async removeAllClients(options: ClientsOptions): Promise<void> {
+    const backendType = this.parseBackend(options.backend);
+    const apiClient = new APIClient({urls: backendType});
+    const account = new Account(apiClient);
+
+    const ClientInfo: ClientInfo = {
+      classification: ClientClassification.DESKTOP,
+      cookieLabel: 'default',
+      model: `E2E Test Server v${version}`,
+    };
+
+    const loginData = {
+      clientType: ClientType.PERMANENT,
+      email: options.email,
+      password: options.password,
+    };
+
+    try {
+      await account.login(loginData, true, ClientInfo);
+    } catch (error) {
+      logger.error(`[${formatDate()}]`, error);
+
+      if (error.code !== StatusCode.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
+        throw error;
+      }
+    }
+
+    const clients = await apiClient.client.api.getClients();
+    const instances = this.cachedInstances.getAll();
+
+    for (const client of clients) {
+      for (const [instanceId, instance] of Object.entries(instances)) {
+        if (instance.client.context && instance.client.context.clientId === client.id) {
+          await this.deleteInstance(instanceId);
+        }
+      }
+      if (client.class === ClientClassification.LEGAL_HOLD) {
+        logger.info(`Can't delete client with ID "${client.id} since it's a Legal Hold client`);
+      } else {
+        await apiClient.client.api.deleteClient(client.id, options.password);
+      }
+    }
+
+    await account.logout();
   }
 }
