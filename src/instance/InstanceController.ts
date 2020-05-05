@@ -29,6 +29,7 @@ import {InstanceService} from './InstanceService';
 import {InstanceTextOptions} from './InstanceTextOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
 import {InstanceTextUpdateOptions} from './InstanceTextUpdateOptions';
+import {ClientsOptions} from './ClientsOptions';
 
 interface ErrorMessage {
   code: number;
@@ -1296,6 +1297,31 @@ export class InstancesController {
 
     try {
       res.json(reducedInstances);
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+}
+
+@ApiTags('Clients')
+@Controller('clients')
+export class ClientsController {
+  constructor(private readonly instanceService: InstanceService) {}
+
+  @Delete()
+  @ApiOperation({summary: 'Delete all clients.'})
+  @ApiResponse({
+    schema: {
+      example: {},
+    },
+    status: 200,
+  })
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async getInstances(@Body() body: ClientsOptions, @Res() res: Response): Promise<void> {
+    try {
+      await this.instanceService.removeAllClients(body);
+      res.json({});
     } catch (error) {
       res.status(createInternalServerError(error).code).json(createInternalServerError(error));
     }
