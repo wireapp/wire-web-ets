@@ -1432,4 +1432,23 @@ export class ServerController {
 
     res.json(infoData);
   }
+
+  @Get('/commit')
+  @ApiOperation({summary: 'Get information about the server.'})
+  @ApiResponse({
+    schema: {
+      example: 'string',
+    },
+    status: 200,
+  })
+  @ApiResponse(status500description)
+  async getCommit(@Res() res: Response): Promise<void> {
+    try {
+      const commitHashFile = path.join(config.DIST_DIR, 'commit');
+      const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
+      res.contentType('text/plain; charset=UTF-8').send(commitHash.trim());
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
 }
