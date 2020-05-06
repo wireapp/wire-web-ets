@@ -11,7 +11,7 @@
     "class-transformer": "0.2.3",
     "class-validator": "0.12.2",
     "http-status-codes": "1.4.0",
-    "moment": "2.25.1",
+    "moment": "2.25.3",
     "pm2": "4.4.0",
     "pm2-logrotate": "2.7.0",
     "pure-uuid": "1.6.0",
