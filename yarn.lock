@@ -617,10 +617,10 @@
     bazinga64 "5.7.0"
     logdown "3.3.1"
 
-"@wireapp/eslint-config@1.6.0":
-  version "1.6.0"
-  resolved "https://registry.npmjs.org/@wireapp/eslint-config/-/eslint-config-1.6.0.tgz#8d7a8e8526b9716ea86eddde745c1dc9d42fd8a3"
-  integrity sha512-29tJB7udn/LIlhze2Vwt8f/u+LmNz0xISsW9MncSvWKo7jOE9howpcXgJonIcgHp0mDed9501IEv3DEQ5DSCIg==
+"@wireapp/eslint-config@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.npmjs.org/@wireapp/eslint-config/-/eslint-config-1.7.0.tgz#e7aeb0587be84d619e124ab8b1487de1dee7057b"
+  integrity sha512-5QmZh7fi79N+mr4NP+rE+jAq6ThAm4tzjvhnxNj/Hn64AkI2vUtxp7sVkH4bD5mxvUxvJHmMDYHpd8kQvRbHHQ==
 
 "@wireapp/lru-cache@3.5.0":
   version "3.5.0"
