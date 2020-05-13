@@ -17,7 +17,7 @@
  *
  */
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 import {
   AssetContent,
@@ -83,4 +83,18 @@ function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
   }
 }
 
-export {formatDate, formatUptime, hexToUint8Array, isAssetContent, stripAsset, stripLinkPreview};
+const status404instance = {description: 'Instance not found', status: 404};
+const status422description = {description: 'Validation error', status: 422};
+const status500description = {description: 'Internal server error', status: 500};
+
+export {
+  formatDate,
+  formatUptime,
+  hexToUint8Array,
+  isAssetContent,
+  stripAsset,
+  stripLinkPreview,
+  status404instance,
+  status422description,
+  status500description,
+};

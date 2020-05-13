@@ -1,0 +1,21 @@
+{
+  "extends": "@wireapp/eslint-config",
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/typedef": "off",
+        "no-unused-vars": "off"
+      }
+    }
+  ],
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "rules": {
+    "import/no-default-export": "off",
+    "no-magic-numbers": "off",
+    "no-undef": "off"
+  }
+}

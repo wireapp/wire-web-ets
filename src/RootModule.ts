@@ -1,6 +1,6 @@
 /*
  * Wire
- * Copyright (C) 2018 Wire Swiss GmbH
+ * Copyright (C) 2020 Wire Swiss GmbH
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,10 @@
  *
  */
 
-import {Router} from 'express';
-import * as HTTP_STATUS_CODE from 'http-status-codes';
+import {Module} from '@nestjs/common';
+import {InstanceModule} from './instance/InstanceModule';
 
-export const healthCheckRoute = () => Router().get('/_health/?', (req, res) => res.sendStatus(HTTP_STATUS_CODE.OK));
+@Module({
+  imports: [InstanceModule],
+})
+export class RootModule {}
