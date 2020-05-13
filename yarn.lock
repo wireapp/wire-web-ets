@@ -138,16 +138,16 @@
   resolved "https://registry.npmjs.org/@nestjs/mapped-types/-/mapped-types-0.0.3.tgz#7b50206935452e74a270ed9a07ad05a6305b0b42"
   integrity sha512-PKxWOVaMyvj9/82afLpMZ/+Pb5JacCURRP/FY/tCDtsoS+MABeQGj2oqbtH4uQUiL4n+H0IigvQGHWQ1zPPknA==
 
-"@nestjs/platform-express@7.0.9":
-  version "7.0.9"
-  resolved "https://registry.npmjs.org/@nestjs/platform-express/-/platform-express-7.0.9.tgz#abfa9ae8855ddc889f644d4c4664682a4b11ff29"
-  integrity sha512-Ba6xuHOyc1iSZBGvNPfe66wetMadDO139xbIMkdnkHvTCxSxSLRPRwLUFQX4MFtGFQrllglrttqZjXXmZ8ZIZw==
+"@nestjs/platform-express@7.0.11":
+  version "7.0.11"
+  resolved "https://registry.npmjs.org/@nestjs/platform-express/-/platform-express-7.0.11.tgz#aa9a9c3f8938a6767cd6a875df7ef8f688c35637"
+  integrity sha512-QWddDTFzZIKgylcjYP60kRPb5upPvejomV0JaNS3CFiKyJSonFaq1iTWOe8owhrNb0i3QWADDN44ImSvLhVMPg==
   dependencies:
     body-parser "1.19.0"
     cors "2.8.5"
     express "4.17.1"
     multer "1.4.2"
-    tslib "1.11.1"
+    tslib "1.11.2"
 
 "@nestjs/swagger@4.5.5":
   version "4.5.5"
