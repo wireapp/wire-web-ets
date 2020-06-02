@@ -109,15 +109,15 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@nestjs/common@7.0.13":
-  version "7.0.13"
-  resolved "https://registry.npmjs.org/@nestjs/common/-/common-7.0.13.tgz#7effc4c0a00307121151547fe8f7e9ea10d0c256"
-  integrity sha512-jSEBnmeuxzorYzG+RAjcQxhs9Sga2/LYelt+ZOwWqxeRVxlB1d4bMWzhCDrVQ3uep9xJD67TbKztchkDBomokA==
+"@nestjs/common@7.1.2":
+  version "7.1.2"
+  resolved "https://registry.npmjs.org/@nestjs/common/-/common-7.1.2.tgz#81c77dcc5ccd7fac65f184ee9a157010296cc3a3"
+  integrity sha512-0av5fJCxqbcw7GESQ5tKwVxgBNS7mCn13JyK7jXhwbLAPb0iU1xdCdNv6NEdXy4+QD05UaCaIsTH4ohwHX3yqA==
   dependencies:
     axios "0.19.2"
     cli-color "2.0.0"
     iterare "1.2.0"
-    tslib "1.11.2"
+    tslib "2.0.0"
     uuid "8.0.0"
 
 "@nestjs/core@7.0.13":
@@ -5517,7 +5517,7 @@ ts-node@8.10.2:
     source-map-support "^0.5.17"
     yn "3.1.1"
 
-tslib@1.11.2, tslib@>=1.9.0, tslib@^1.8.1, tslib@^1.9.0:
+tslib@1.11.2, tslib@^1.8.1, tslib@^1.9.0:
   version "1.11.2"
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.11.2.tgz#9c79d83272c9a7aaf166f73915c9667ecdde3cc9"
   integrity sha512-tTSkux6IGPnUGUd1XAZHcpu85MOkIl5zX49pO+jfsie3eP0B6pyhOlLXm3cAC6T7s+euSDDUUV+Acop5WmtkVg==
@@ -5526,6 +5526,11 @@ tslib@1.9.3:
   version "1.9.3"
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
   integrity sha512-4krF8scpejhaOgqzBEcGM7yDIEfi0/8+8zDRZhNZZ2kjmHJ4hv3zCbQWxoJGz1iw5U0Jl0nma13xzHXcncMavQ==
+
+tslib@2.0.0, tslib@>=1.9.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.0.0.tgz#18d13fc2dce04051e20f074cc8387fd8089ce4f3"
+  integrity sha512-lTqkx847PI7xEDYJntxZH89L2/aXInsyF2luSafe/+0fHOMjlBNXdH6th7f70qxLDhul7KZK0zC8V5ZIyHl0/g==
 
 tsutils@^3.17.1:
   version "3.17.1"
