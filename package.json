@@ -18,7 +18,7 @@
     "reflect-metadata": "0.1.13",
     "rxjs": "6.5.5",
     "swagger-ui-express": "4.1.4",
-    "typescript": "3.8.3"
+    "typescript": "3.9.3"
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
