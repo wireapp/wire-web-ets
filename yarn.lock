@@ -1927,17 +1927,17 @@ eslint-plugin-import@2.20.2:
     read-pkg-up "^2.0.0"
     resolve "^1.12.0"
 
-eslint-plugin-jsdoc@27.0.7:
-  version "27.0.7"
-  resolved "https://registry.npmjs.org/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-27.0.7.tgz#de1211c0e5b915f9f2dc13bc58dc19acf5d05d1a"
-  integrity sha512-pJKQ8Nby/bQ4VjMtYF26cVU5/jckpHIN5VYij61Ie3ZQIURySh1ThOoZX7IVBYNakpRxsrCwbGmMelsxbjivVg==
+eslint-plugin-jsdoc@29.1.4:
+  version "29.1.4"
+  resolved "https://registry.npmjs.org/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-29.1.4.tgz#ca5b6e1952ecc1efb743c1ec572d3db15edc3859"
+  integrity sha512-pKpD8/R4FysNclNFUEVWRherkyZt9Rt6iwYPIQa1CeHzHQiLazqCvEYhQtohd5GSrhGWgigvtlCAeOcdgxNByw==
   dependencies:
     comment-parser "^0.7.5"
     debug "^4.1.1"
-    jsdoctypeparser "^6.1.0"
+    jsdoctypeparser "^8.0.0"
     lodash "^4.17.15"
     regextras "^0.7.1"
-    semver "^6.3.0"
+    semver "^7.3.2"
     spdx-expression-parse "^3.0.1"
 
 eslint-plugin-no-unsanitized@3.1.2:
@@ -3144,10 +3144,10 @@ js-yaml@3.13.1, js-yaml@^3.13.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-jsdoctypeparser@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.npmjs.org/jsdoctypeparser/-/jsdoctypeparser-6.1.0.tgz#acfb936c26300d98f1405cb03e20b06748e512a8"
-  integrity sha512-UCQBZ3xCUBv/PLfwKAJhp6jmGOSLFNKzrotXGNgbKhWvz27wPsCsVeP7gIcHPElQw2agBmynAitXqhxR58XAmA==
+jsdoctypeparser@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.npmjs.org/jsdoctypeparser/-/jsdoctypeparser-8.0.0.tgz#a04a944539d3f86e30040c1ece6f6730f865f81a"
+  integrity sha512-eLCs6s4JqN8TjFJfgdiLHRvogLhOAJz+5RIA2FtoMe6ZDyuvghvppnlIToqAEnVbxRqLMrfnNXpW8FpmR6IMBw==
 
 jsesc@^2.5.1:
   version "2.5.2"
