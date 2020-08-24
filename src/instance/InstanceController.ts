@@ -11,7 +11,7 @@ import {
 import {isUUID} from 'class-validator';
 import {Response} from 'express';
 import * as fs from 'fs-extra';
-import * as HTTP_STATUS_CODE from 'http-status-codes';
+import {StatusCodes as HTTP_STATUS_CODE} from 'http-status-codes';
 import logdown from 'logdown';
 import * as path from 'path';
 import {config} from '../config';
