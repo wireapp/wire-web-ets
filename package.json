@@ -87,7 +87,8 @@
     "preversion": "yarn && yarn test && yarn dist",
     "start": "pm2 start",
     "start:dev": "cross-env NODE_DEBUG=\"@wireapp/*\" ts-node src/main.ts",
-    "test": "yarn lint",
+    "test": "yarn lint && yarn test:types",
+    "test:types": "tsc --noEmit",
     "version": "yarn dist"
   },
   "version": "2.0.0"
