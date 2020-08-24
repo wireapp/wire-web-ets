@@ -11,7 +11,7 @@
     "class-transformer": "0.2.3",
     "class-validator": "0.12.2",
     "http-status-codes": "1.4.0",
-    "moment": "2.26.0",
+    "moment": "2.27.0",
     "pm2": "4.4.1",
     "pm2-logrotate": "2.7.0",
     "reflect-metadata": "0.1.13",
