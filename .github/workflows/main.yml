@@ -1,7 +1,6 @@
-name: Pull request
+name: Build and test
 
 on:
-  - pull_request
   - push
 
 jobs:
