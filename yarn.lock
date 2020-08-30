@@ -101,15 +101,15 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@nestjs/common@7.4.2":
-  version "7.4.2"
-  resolved "https://registry.npmjs.org/@nestjs/common/-/common-7.4.2.tgz#f1ceff01a7b2c77094726944f55d907a2196bfe1"
-  integrity sha512-gHfoUPPufBDLUdkBdhC60rgMwyiOKIFVmxCnFNHsMH1mrbt1DcXQD+5nefZm0XaLY20QeBoqZjJDc4KdvE444w==
+"@nestjs/common@7.4.3":
+  version "7.4.3"
+  resolved "https://registry.npmjs.org/@nestjs/common/-/common-7.4.3.tgz#cd202a5ff03cb4cf8c576f6cc0b17f57b9cedbd1"
+  integrity sha512-OeNnzPbUOk2dUuvf8/X0yBzDMhaR5IZP4Qzq8KpXVHk6xJewrscYlEpyMxymlSlnEYW3NWzj5woacvLbeps4Vg==
   dependencies:
-    axios "0.19.2"
+    axios "0.20.0"
     cli-color "2.0.0"
     iterare "1.2.1"
-    tslib "2.0.0"
+    tslib "2.0.1"
     uuid "8.3.0"
 
 "@nestjs/core@7.4.3":
