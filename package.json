@@ -22,7 +22,7 @@
   },
   "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
   "devDependencies": {
-    "@types/libsodium-wrappers-sumo": "0.7.3",
+    "@types/libsodium-wrappers-sumo": "0.7.4",
     "@types/swagger-ui-express": "4.1.2",
     "@typescript-eslint/eslint-plugin": "2.34.0",
     "@typescript-eslint/parser": "2.34.0",

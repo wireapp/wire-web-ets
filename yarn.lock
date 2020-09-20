@@ -410,6 +410,13 @@
   dependencies:
     "@types/libsodium-wrappers" "*"
 
+"@types/libsodium-wrappers-sumo@0.7.4":
+  version "0.7.4"
+  resolved "https://registry.npmjs.org/@types/libsodium-wrappers-sumo/-/libsodium-wrappers-sumo-0.7.4.tgz#4a0a05c867fc855726b4b01d740f271c1fa6d655"
+  integrity sha512-dkRYar5fZciknc3GzeflHDeUx3eKJmCIDxI30GiX75w0I3r/udqbVHb4/LZNBKsgjb9rodiULiv/YhtzpEA6WA==
+  dependencies:
+    "@types/libsodium-wrappers" "*"
+
 "@types/libsodium-wrappers@*":
   version "0.7.7"
   resolved "https://registry.npmjs.org/@types/libsodium-wrappers/-/libsodium-wrappers-0.7.7.tgz#cdb25e85458612ec80f0157c3815fac187d0b6d2"
