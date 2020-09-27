@@ -6,7 +6,7 @@
     "@nestjs/swagger": "4.6.1",
     "@types/hapi__joi": "17.1.6",
     "@types/node": "~14",
-    "@wireapp/core": "16.12.13",
+    "@wireapp/core": "16.12.16",
     "@wireapp/lru-cache": "3.7.2",
     "class-transformer": "0.3.1",
     "class-validator": "0.12.2",
