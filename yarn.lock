@@ -133,10 +133,10 @@
     multer "1.4.2"
     tslib "2.0.3"
 
-"@nestjs/swagger@4.7.0":
-  version "4.7.0"
-  resolved "https://registry.npmjs.org/@nestjs/swagger/-/swagger-4.7.0.tgz#7ac2a18af87b992232859a81f2c0ee4026f02517"
-  integrity sha512-R9OkUIc/2x/a3k5n/ASJkm9tP0VbGxPV/gMAAyqgeWAS2fu7fl7mGmm9wPGu0rN10jzQdi6LOhfcLKFdw+W/Zg==
+"@nestjs/swagger@4.7.3":
+  version "4.7.3"
+  resolved "https://registry.npmjs.org/@nestjs/swagger/-/swagger-4.7.3.tgz#b73b51214d6783d56238316259608029dc9e3756"
+  integrity sha512-rISljDHZEZLau8xRcL2ugNIrtVHzVojawScvYQUxSbV3col0fo1gs/SQBNU7qSbZPNqYGeocT0yXpu1gDs86BA==
   dependencies:
     "@nestjs/mapped-types" "0.1.1"
     lodash "4.17.20"
