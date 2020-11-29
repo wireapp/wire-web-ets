@@ -7,7 +7,7 @@
     "@types/hapi__joi": "17.1.6",
     "@types/node": "~14",
     "@wireapp/core": "16.12.27",
-    "@wireapp/lru-cache": "3.7.7",
+    "@wireapp/lru-cache": "3.7.9",
     "class-transformer": "0.3.1",
     "class-validator": "0.12.2",
     "http-status-codes": "2.1.4",
