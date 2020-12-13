@@ -2,7 +2,7 @@
   "dependencies": {
     "@nestjs/common": "7.6.1",
     "@nestjs/core": "7.6.1",
-    "@nestjs/platform-express": "7.5.5",
+    "@nestjs/platform-express": "7.6.1",
     "@nestjs/swagger": "4.7.5",
     "@types/hapi__joi": "17.1.6",
     "@types/node": "~14",
