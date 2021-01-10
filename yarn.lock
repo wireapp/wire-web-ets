@@ -5711,6 +5711,11 @@ uuidjs@4.2.6:
   resolved "https://registry.npmjs.org/uuidjs/-/uuidjs-4.2.6.tgz#6dccb3e45ccb351daf0be3f107c37911e369c810"
   integrity sha512-MN+qOwkX8k2V4p+qDDUzHc1gvBu1tCCB2p3cjOdMoeGfTUywATUBcQkqqaFR7Snd72FAY7HfBzkoAv7HxoCxuA==
 
+uuidjs@4.2.7:
+  version "4.2.7"
+  resolved "https://registry.npmjs.org/uuidjs/-/uuidjs-4.2.7.tgz#ff444ba9947293b1e80988a67c52c42c5f11e985"
+  integrity sha512-1+r9Di3v/E7hKCtizpzCVGth5XkPIoicjR3V/SUF/MV6cJwES7/YnypmwWYX9KyZy4GT2yKP7yhR2iLWURxhDw==
+
 v8-compile-cache@^2.0.0, v8-compile-cache@^2.0.3:
   version "2.1.0"
   resolved "https://registry.npmjs.org/v8-compile-cache/-/v8-compile-cache-2.1.0.tgz#e14de37b31a6d194f5690d67efc4e7f6fc6ab30e"
