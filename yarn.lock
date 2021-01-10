@@ -614,15 +614,15 @@
   resolved "https://registry.npmjs.org/@wireapp/eslint-config/-/eslint-config-1.7.0.tgz#e7aeb0587be84d619e124ab8b1487de1dee7057b"
   integrity sha512-5QmZh7fi79N+mr4NP+rE+jAq6ThAm4tzjvhnxNj/Hn64AkI2vUtxp7sVkH4bD5mxvUxvJHmMDYHpd8kQvRbHHQ==
 
+"@wireapp/lru-cache@3.7.10":
+  version "3.7.10"
+  resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.7.10.tgz#8e1ff905642bbee26c8cee756c6d7b3faddb6f02"
+  integrity sha512-HY6amtTStIGCRY0wtW//VmMKNARSVEUfPacrBPau98YR1JP/WKq0pSdfk6jJEaouT0YP42M8PoEKa4SruDZJlQ==
+
 "@wireapp/lru-cache@3.7.3":
   version "3.7.3"
   resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.7.3.tgz#213510ec70d05fd474dc06ba7a9aa3fa01ae2127"
   integrity sha512-eYrGRrjYsV51hbXBHtVc5ot6QgQrE1QNnT+yybfmVscyVjM0RtHJcTry3oeQIgv33d3RlDbsu5FlzfumBzaINg==
-
-"@wireapp/lru-cache@3.7.9":
-  version "3.7.9"
-  resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.7.9.tgz#d0199867573c436866b5b35c43bbcc08dcf73817"
-  integrity sha512-3Al7PoU9tko50D/FCGHI3yL7tEgIaXEkABQSF1uOkeqgaVQhIc50L+36fLhEoTn0iiBTMb2z/gznQ69UPfcKgg==
 
 "@wireapp/prettier-config@0.3.0":
   version "0.3.0"
