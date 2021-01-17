@@ -614,10 +614,10 @@
   resolved "https://registry.npmjs.org/@wireapp/eslint-config/-/eslint-config-1.7.0.tgz#e7aeb0587be84d619e124ab8b1487de1dee7057b"
   integrity sha512-5QmZh7fi79N+mr4NP+rE+jAq6ThAm4tzjvhnxNj/Hn64AkI2vUtxp7sVkH4bD5mxvUxvJHmMDYHpd8kQvRbHHQ==
 
-"@wireapp/lru-cache@3.7.10":
-  version "3.7.10"
-  resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.7.10.tgz#8e1ff905642bbee26c8cee756c6d7b3faddb6f02"
-  integrity sha512-HY6amtTStIGCRY0wtW//VmMKNARSVEUfPacrBPau98YR1JP/WKq0pSdfk6jJEaouT0YP42M8PoEKa4SruDZJlQ==
+"@wireapp/lru-cache@3.7.11":
+  version "3.7.11"
+  resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.7.11.tgz#001056f1264d9e81a136e5398ff78e8939300dcd"
+  integrity sha512-8TM0KhPnhwLh2k0//PClJw6+76o5rEHTZ5BukHZVJF5RgD88INQCjBv04YTbUoKGt3uOqSYmSoDschLYQ3xOxw==
 
 "@wireapp/lru-cache@3.7.3":
   version "3.7.3"
