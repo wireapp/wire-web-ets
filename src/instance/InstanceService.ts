@@ -1,7 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {APIClient} from '@wireapp/api-client';
-import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/client/';
-import {ClientType} from '@wireapp/api-client/dist/client/ClientType';
+import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/dist/client/';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
 import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/http/';
 import {Account} from '@wireapp/core';
@@ -233,8 +232,8 @@ export class InstanceService {
     const ClientInfo: ClientInfo = {
       classification: options.deviceClass || ClientClassification.DESKTOP,
       cookieLabel: 'default',
-      label: options.deviceLabel,
-      model: options.deviceName || 'E2E Test Server',
+      label: options.deviceLabel || 'ETS Device Label',
+      model: options.deviceName || 'ETS Device Model',
     };
 
     logger.info(`[${formatDate()}] Logging in ...`);
@@ -242,7 +241,7 @@ export class InstanceService {
     try {
       await account.login(
         {
-          clientType: ClientType.PERMANENT,
+          clientType: options.isTemporary === true ? ClientType.TEMPORARY : ClientType.PERMANENT,
           email: options.email,
           password: options.password,
         },
