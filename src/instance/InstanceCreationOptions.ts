@@ -33,19 +33,23 @@ export class InstanceCreationOptions {
   @IsOptional()
   deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
 
-  @ApiPropertyOptional({example: ''})
+  @ApiPropertyOptional({example: 'ETS Device Label'})
   @IsOptional()
   deviceLabel?: string;
 
-  @ApiProperty({example: ''})
-  @IsNotEmpty()
+  @ApiPropertyOptional({example: 'ETS Device Model'})
+  @IsOptional()
   deviceName!: string;
 
   @ApiProperty({example: 'email@example.com'})
   @IsEmail()
   email!: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: true})
+  @IsOptional()
+  isTemporary!: boolean;
+
+  @ApiPropertyOptional({example: 'My ETS Instance'})
   @IsOptional()
   name?: string;
 
