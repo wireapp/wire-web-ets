@@ -12,7 +12,7 @@
     "class-validator": "0.13.1",
     "http-status-codes": "2.1.4",
     "moment": "2.29.1",
-    "pm2": "4.5.2",
+    "pm2": "4.5.4",
     "pm2-logrotate": "2.7.0",
     "reflect-metadata": "0.1.13",
     "rxjs": "6.6.3",
