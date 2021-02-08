@@ -26,6 +26,7 @@ import {
 import {ClientsOptions} from './ClientsOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
+import {InstanceBreakSessionOptions} from './InstanceBreakSessionOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
@@ -1041,6 +1042,43 @@ export class InstanceController {
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
         messageId,
+        name: instanceName,
+      });
+    } catch (error) {
+      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+    }
+  }
+
+  @Post(':instanceId/breakSession')
+  @ApiOperation({summary: 'Break a session to a specific device of a remote user (on purpose).'})
+  @ApiResponse({
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      },
+    },
+    status: 200,
+  })
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async breakSession(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceBreakSessionOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId, 4)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+    }
+
+    try {
+      const instanceName = await this.instanceService.breakSession(instanceId, body);
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
         name: instanceName,
       });
     } catch (error) {

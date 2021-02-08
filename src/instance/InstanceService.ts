@@ -35,6 +35,7 @@ import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils
 import {ClientsOptions} from './ClientsOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
+import {InstanceBreakSessionOptions} from './InstanceBreakSessionOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {BackendMeta, InstanceCreationOptions} from './InstanceCreationOptions';
@@ -666,6 +667,32 @@ export class InstanceService {
       });
       const {id: messageId} = await service.conversation.send(payload);
       return messageId;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async breakSession(instanceId: string, options: InstanceBreakSessionOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+
+    if (instance.account.service) {
+      const sessionId = `${options.userId}@${options.clientId}`;
+      const cryptobox = instance.account.service.cryptography.cryptobox;
+      logger.info(`Corrupting Session with ID '${sessionId}'`);
+
+      const cryptoboxSession = await cryptobox.session_load(sessionId);
+      cryptoboxSession.session.session_states = {};
+
+      const record = {
+        created: Date.now(),
+        id: sessionId,
+        serialised: cryptoboxSession.session.serialise(),
+        version: 'broken_by_qa',
+      };
+      logger.info(record);
+
+      cryptobox['cachedSessions'].set(sessionId, cryptoboxSession);
+
+      return instance.id;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }

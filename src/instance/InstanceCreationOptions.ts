@@ -37,8 +37,8 @@ export class InstanceCreationOptions {
   @IsOptional()
   deviceLabel?: string;
 
-  @ApiPropertyOptional({example: 'ETS Device Model'})
-  @IsOptional()
+  @ApiProperty({example: 'ETS Device Model'})
+  @IsNotEmpty()
   deviceName!: string;
 
   @ApiProperty({example: 'email@example.com'})
