@@ -678,6 +678,8 @@ export class InstanceService {
     if (instance.account.service) {
       const sessionId = `${options.userId}@${options.clientId}`;
       const cryptobox = instance.account.service.cryptography.cryptobox;
+      logger.info(`Corrupting Session with ID '${sessionId}'`);
+
       const cryptoboxSession = await cryptobox.session_load(sessionId);
       cryptoboxSession.session.session_states = {};
 
@@ -687,18 +689,9 @@ export class InstanceService {
         serialised: cryptoboxSession.session.serialise(),
         version: 'broken_by_qa',
       };
-
-      cryptobox['cachedSessions'].set(sessionId, cryptoboxSession);
-
-      logger.info(`Corrupting Session with ID '${sessionId}'`);
-      // @wireapp/wire-web-ets/InstanceService Corrupting Session with ID '78beea7a-cbaa-411d-9aa6-9c3718e01e92@a75f58f1eda0ba5a'
-      logger.info(instance.engine.storeName);
-      // @wireapp/wire-web-ets/InstanceService wire-web-ets
       logger.info(record);
 
-      // in webapp:
-      //const sessionStoreName = StorageSchemata.OBJECT_STORE.SESSIONS;
-      //await this.storageRepository.storageService.update(sessionStoreName, sessionId, record);
+      cryptobox['cachedSessions'].set(sessionId, cryptoboxSession);
 
       return instance.id;
     }
