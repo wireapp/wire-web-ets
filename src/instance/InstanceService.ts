@@ -44,6 +44,7 @@ import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
+import {sendFile} from '../send/sendFile';
 
 const {version}: {version: string} = require('../../package.json');
 
@@ -521,25 +522,15 @@ export class InstanceService {
     const service = instance.account.service;
 
     if (service) {
-      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-
-      const metadataPayload = service.conversation.messageBuilder.createFileMetadata(
-        conversationId,
-        metadata,
-        undefined,
-        expectsReadConfirmation,
-        legalHoldStatus,
-      );
-      await service.conversation.send(metadataPayload);
-
-      const filePayload = await service.conversation.messageBuilder.createFileData(
+      const sentFile = await sendFile(
+        service.conversation,
         conversationId,
         file,
-        metadataPayload.id,
+        metadata,
         expectsReadConfirmation,
         legalHoldStatus,
+        expireAfterMillis,
       );
-      const sentFile = await service.conversation.send(filePayload);
 
       stripAsset(sentFile.content);
 

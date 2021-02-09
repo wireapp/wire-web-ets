@@ -31,6 +31,7 @@
     "axios": "0.21.1",
     "babel-eslint": "10.1.0",
     "cross-env": "7.0.3",
+    "dotenv-defaults": "2.0.1",
     "eslint": "7.19.0",
     "eslint-config-prettier": "7.2.0",
     "eslint-plugin-import": "2.22.1",
@@ -75,6 +76,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rimraf dist",
+    "demo:send-file": "ts-node ./src/demo/send-file.ts",
     "dist": "yarn clean && yarn build",
     "fix": "yarn fix:code && yarn fix:other",
     "fix:code": "yarn lint:code --fix",
