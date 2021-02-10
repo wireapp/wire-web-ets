@@ -26,8 +26,8 @@ import {
   ImageContent,
   LinkPreviewUploadedContent,
   RemoteData,
-} from '@wireapp/core/dist/conversation/content/';
-import {EncryptedAssetUploaded} from '@wireapp/core/dist/cryptography';
+} from '@wireapp/core/src/main/conversation/content/';
+import {EncryptedAssetUploaded} from '@wireapp/core/src/main/cryptography';
 
 function formatDate(): string {
   return moment().format('YYYY-MM-DD HH:mm:ss');

@@ -1,6 +1,6 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {IsUUID, IsBoolean, IsNumber, IsOptional, IsEnum, IsString} from 'class-validator';
-import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content/';
+import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content/';
 
 export class InstanceLocationOptions {
   @ApiProperty()

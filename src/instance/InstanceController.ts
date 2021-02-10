@@ -7,7 +7,7 @@ import {
   LinkPreviewContent,
   LocationContent,
   QuoteContent,
-} from '@wireapp/core/dist/conversation/content';
+} from '@wireapp/core/src/main/conversation/content';
 import {isUUID} from 'class-validator';
 import {Response} from 'express';
 import * as fs from 'fs-extra';

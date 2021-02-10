@@ -1,5 +1,5 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content/';
+import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content/';
 import {IsBoolean, IsEnum, IsOptional, IsUUID} from 'class-validator';
 
 export class InstancePingOptions {

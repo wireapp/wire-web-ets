@@ -1,6 +1,6 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {ReactionType} from '@wireapp/core/dist/conversation';
-import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content/';
+import {ReactionType} from '@wireapp/core/src/main/conversation';
+import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content/';
 import {IsEnum, IsOptional, IsUUID} from 'class-validator';
 
 export class InstanceReactionOptions {

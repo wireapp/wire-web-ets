@@ -1,11 +1,12 @@
 import {Injectable} from '@nestjs/common';
 import {APIClient} from '@wireapp/api-client';
-import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/dist/client/';
-import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
-import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/http/';
+import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/src/client/';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/src/conversation/data/';
+import {BackendErrorLabel} from '@wireapp/api-client/src/http/';
 import {Account} from '@wireapp/core';
-import {ClientInfo} from '@wireapp/core/dist/client/';
-import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation';
+import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
+import {ClientInfo} from '@wireapp/core/src/main/client/';
+import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/src/main/conversation';
 import {
   ClearedContent,
   ConfirmationContent,
@@ -22,13 +23,13 @@ import {
   QuoteContent,
   ReactionContent,
   TextContent,
-} from '@wireapp/core/dist/conversation/content';
-import {MessageToProtoMapper} from '@wireapp/core/dist/conversation/message/MessageToProtoMapper';
-import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
+} from '@wireapp/core/src/main/conversation/content';
+import {MessageToProtoMapper} from '@wireapp/core/src/main/conversation/message/MessageToProtoMapper';
+import {OtrMessage} from '@wireapp/core/src/main/conversation/message/OtrMessage';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {MemoryEngine} from '@wireapp/store-engine';
-import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
+import {CRUDEngine} from '@wireapp/store-engine/src/main/engine/';
 import logdown from 'logdown';
 import UUID from 'uuidjs';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
@@ -858,7 +859,7 @@ export class InstanceService {
     } catch (error) {
       logger.error(`[${formatDate()}]`, error);
 
-      if (error.code !== StatusCode.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
+      if (error.code !== HTTP_STATUS.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
         throw error;
       }
     }

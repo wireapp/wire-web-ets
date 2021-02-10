@@ -1,6 +1,6 @@
-import {FileContent, FileMetaDataContent} from '@wireapp/core/dist/conversation/content';
 import {LegalHoldStatus} from '@wireapp/protocol-messaging';
-import {ConversationService} from '@wireapp/core/dist/conversation';
+import {ConversationService} from '@wireapp/core/src/main/conversation';
+import {FileContent, FileMetaDataContent} from '@wireapp/core/src/main/conversation/content';
 
 export async function sendFile(
   conversationService: ConversationService,
