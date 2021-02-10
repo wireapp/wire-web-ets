@@ -1,7 +1,7 @@
+import 'dotenv-defaults/config';
+
 import {Account} from '@wireapp/core';
 import {ClientType} from '@wireapp/api-client/dist/client';
-
-import 'dotenv-defaults/config';
 import {APIClient} from '@wireapp/api-client';
 
 const {WIRE_EMAIL, WIRE_PASSWORD} = process.env;

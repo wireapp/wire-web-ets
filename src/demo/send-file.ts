@@ -1,13 +1,18 @@
 import {initTemporaryAccount} from './initTemporaryAccount';
 import {sendFile} from '../send/sendFile';
-import {createFilledBuffer} from '../util/createFilledBuffer';
+import {promisify} from 'util';
+import fs from 'fs';
+import path from 'path';
 
 async function main(): Promise<void> {
   const client = await initTemporaryAccount();
 
-  console.info(`Generating file (~1.5 MB)...`);
+  console.info(`Reading file (~15 MB)...`);
 
-  const dataBuffer = createFilledBuffer(1.5);
+  const readFileAsync = promisify(fs.readFile);
+  const dataBuffer = await readFileAsync(path.join(__dirname, '../fixtures/files/text/15mb.txt'));
+
+  console.info(`Read file.`);
 
   console.info(`Sending file...`);
 
@@ -23,6 +28,8 @@ async function main(): Promise<void> {
       type: 'plain/text',
     },
   );
+
+  console.info(`Sent file.`);
 }
 
 main().catch(console.error);
