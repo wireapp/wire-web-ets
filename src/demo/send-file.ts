@@ -1,17 +1,13 @@
 import {initTemporaryAccount} from './initTemporaryAccount';
 import {sendFile} from '../send/sendFile';
+import {createFilledBuffer} from '../util/createFilledBuffer';
 
 async function main(): Promise<void> {
   const client = await initTemporaryAccount();
 
-  const characterBuffer = new Buffer('A');
-  let dataBuffer = new Buffer('');
-
   console.info(`Generating file (~1.5 MB)...`);
 
-  for (let amount = 0; amount <= 1500000; amount++) {
-    dataBuffer = Buffer.concat([dataBuffer, characterBuffer]);
-  }
+  const dataBuffer = createFilledBuffer(1.5);
 
   console.info(`Sending file...`);
 
