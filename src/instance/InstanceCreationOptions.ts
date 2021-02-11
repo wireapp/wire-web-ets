@@ -1,5 +1,5 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {ClientClassification} from '@wireapp/api-client/dist/client/';
+import {ClientClassification} from '@wireapp/api-client/src/client/';
 import {Type} from 'class-transformer';
 import {IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
 
