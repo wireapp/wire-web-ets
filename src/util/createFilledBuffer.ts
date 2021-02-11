@@ -18,8 +18,8 @@
  */
 
 export function createFilledBuffer(sizeInMegaBytes: number): Buffer {
-  const characterBuffer = new Buffer('A');
-  let dataBuffer = new Buffer('');
+  const characterBuffer = Buffer.alloc(1, 'A');
+  let dataBuffer = Buffer.alloc(0);
 
   const characters = sizeInMegaBytes * 1000000;
 
