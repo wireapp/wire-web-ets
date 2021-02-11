@@ -23,10 +23,20 @@ import {Account} from '@wireapp/core';
 import {ClientType} from '@wireapp/api-client/src/client';
 import {APIClient} from '@wireapp/api-client';
 
-const {WIRE_EMAIL, WIRE_PASSWORD} = process.env;
+const {WIRE_BACKEND, WIRE_EMAIL, WIRE_PASSWORD} = process.env;
+
+if (!WIRE_EMAIL) {
+  throw new Error('Please set an email address for your Wire user account in your `.env` file to login.');
+}
+
+if (!WIRE_PASSWORD) {
+  throw new Error('Please set a password for your Wire user account in your `.env` file to login.');
+}
 
 export async function initTemporaryAccount(): Promise<Account> {
-  const apiClient = new APIClient();
+  const apiClient = new APIClient({
+    urls: WIRE_BACKEND === 'staging' ? APIClient.BACKEND.STAGING : APIClient.BACKEND.PRODUCTION,
+  });
 
   const account = new Account(apiClient);
 
