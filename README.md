@@ -55,7 +55,7 @@ yarn start
 The following ETS deployments are reachable via Wire's VPN:
 
 - [ETS "dev" branch](http://192.168.120.44:27080/swagger-ui/)
-- [ETS "master" branch](http://192.168.120.44:28080/swagger-ui/)
+- [ETS "main" branch](http://192.168.120.44:28080/swagger-ui/)
 
 ## How it works
 

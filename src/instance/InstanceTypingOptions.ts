@@ -1,5 +1,5 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/src/conversation/data/';
 import {IsEnum, IsUUID} from 'class-validator';
 
 export class InstanceTypingOptions {

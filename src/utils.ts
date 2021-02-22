@@ -18,15 +18,16 @@
  */
 
 import moment from 'moment';
-
 import {
   AssetContent,
   ConversationContent,
   FileAssetContent,
   ImageAssetContent,
+  ImageContent,
   LinkPreviewUploadedContent,
-} from '@wireapp/core/dist/conversation/content/';
-import {EncryptedAssetUploaded} from '@wireapp/core/dist/cryptography';
+  RemoteData,
+} from '@wireapp/core/src/main/conversation/content/';
+import {EncryptedAssetUploaded} from '@wireapp/core/src/main/cryptography';
 
 function formatDate(): string {
   return moment().format('YYYY-MM-DD HH:mm:ss');
@@ -54,7 +55,7 @@ function isImageAssetContent(content: any): content is ImageAssetContent {
   return !!(content as ImageAssetContent).image && !!(content as ImageAssetContent).asset;
 }
 
-function stripAssetData(asset: EncryptedAssetUploaded): void {
+function stripAssetData(asset: Partial<EncryptedAssetUploaded>): void {
   delete asset.cipherText;
   delete asset.keyBytes;
   delete asset.sha256;
@@ -63,23 +64,23 @@ function stripAssetData(asset: EncryptedAssetUploaded): void {
 function stripAsset(content?: ConversationContent): void {
   if (isFileAssetContent(content)) {
     stripAssetData(content.asset);
-    delete content.file;
+    delete (content as Partial<FileAssetContent>).file;
   } else if (isAssetContent(content) && content.uploaded) {
-    delete content.uploaded.sha256;
-    delete content.uploaded.otrKey;
+    delete (content.uploaded as Partial<RemoteData>).sha256;
+    delete (content.uploaded as Partial<RemoteData>).otrKey;
   } else if (isImageAssetContent(content)) {
-    delete content.image.data;
+    delete (content.image as Partial<ImageContent>).data;
   }
 }
 
 function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
   if (linkPreview.imageUploaded) {
     stripAssetData(linkPreview.imageUploaded.asset);
-    delete linkPreview.imageUploaded.image.data;
+    delete (linkPreview.imageUploaded.image as Partial<ImageContent>).data;
   }
 
   if (linkPreview.image) {
-    delete linkPreview.image.data;
+    delete (linkPreview.image as Partial<ImageContent>).data;
   }
 }
 

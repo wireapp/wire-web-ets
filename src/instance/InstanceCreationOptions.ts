@@ -1,5 +1,5 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {ClientClassification} from '@wireapp/api-client/dist/client/';
+import {ClientClassification} from '@wireapp/api-client/src/client/';
 import {Type} from 'class-transformer';
 import {IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
 
@@ -33,11 +33,11 @@ export class InstanceCreationOptions {
   @IsOptional()
   deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
 
-  @ApiPropertyOptional({example: ''})
+  @ApiPropertyOptional({example: 'ETS Device Label'})
   @IsOptional()
   deviceLabel?: string;
 
-  @ApiProperty({example: ''})
+  @ApiProperty({example: 'ETS Device Model'})
   @IsNotEmpty()
   deviceName!: string;
 
@@ -45,7 +45,11 @@ export class InstanceCreationOptions {
   @IsEmail()
   email!: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: true})
+  @IsOptional()
+  isTemporary!: boolean;
+
+  @ApiPropertyOptional({example: 'My ETS Instance'})
   @IsOptional()
   name?: string;
 

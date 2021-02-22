@@ -1,7 +1,7 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {IsOptional, IsString, IsUUID, ValidateNested, IsEnum, IsBoolean, IsNumber} from 'class-validator';
 import {Type} from 'class-transformer';
-import {LegalHoldStatus} from '@wireapp/core/dist/conversation/content';
+import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content';
 
 class QuoteMeta {
   @ApiProperty()

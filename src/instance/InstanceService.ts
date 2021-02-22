@@ -1,12 +1,12 @@
 import {Injectable} from '@nestjs/common';
 import {APIClient} from '@wireapp/api-client';
-import {ClientClassification, RegisteredClient} from '@wireapp/api-client/dist/client/';
-import {ClientType} from '@wireapp/api-client/dist/client/ClientType';
-import {CONVERSATION_TYPING} from '@wireapp/api-client/dist/conversation/data/';
-import {BackendErrorLabel, StatusCode} from '@wireapp/api-client/dist/http/';
+import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/src/client/';
+import {CONVERSATION_TYPING} from '@wireapp/api-client/src/conversation/data/';
+import {BackendErrorLabel} from '@wireapp/api-client/src/http/';
 import {Account} from '@wireapp/core';
-import {ClientInfo} from '@wireapp/core/dist/client/';
-import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/dist/conversation';
+import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
+import {ClientInfo} from '@wireapp/core/src/main/client/';
+import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/src/main/conversation';
 import {
   ClearedContent,
   ConfirmationContent,
@@ -23,15 +23,15 @@ import {
   QuoteContent,
   ReactionContent,
   TextContent,
-} from '@wireapp/core/dist/conversation/content';
-import {MessageToProtoMapper} from '@wireapp/core/dist/conversation/message/MessageToProtoMapper';
-import {OtrMessage} from '@wireapp/core/dist/conversation/message/OtrMessage';
+} from '@wireapp/core/src/main/conversation/content';
+import {MessageToProtoMapper} from '@wireapp/core/src/main/conversation/message/MessageToProtoMapper';
+import {OtrMessage} from '@wireapp/core/src/main/conversation/message/OtrMessage';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
 import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {MemoryEngine} from '@wireapp/store-engine';
-import {CRUDEngine} from '@wireapp/store-engine/dist/commonjs/engine/';
+import {CRUDEngine} from '@wireapp/store-engine/src/main/engine/';
 import logdown from 'logdown';
-import UUID from 'pure-uuid';
+import UUID from 'uuidjs';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
 import {ClientsOptions} from './ClientsOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
@@ -45,6 +45,7 @@ import {InstanceDeliveryOptions} from './InstanceDeliveryOptions';
 import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
+import {sendFile} from '../send/sendFile';
 
 const {version}: {version: string} = require('../../package.json');
 
@@ -217,7 +218,7 @@ export class InstanceService {
   }
 
   async createInstance(options: InstanceCreationOptions): Promise<string> {
-    const instanceId = new UUID(4).format();
+    const instanceId = UUID.genV4().toString();
     const backendType = this.parseBackend(options.backend || options.customBackend);
 
     const engine = new MemoryEngine();
@@ -234,8 +235,8 @@ export class InstanceService {
     const ClientInfo: ClientInfo = {
       classification: options.deviceClass || ClientClassification.DESKTOP,
       cookieLabel: 'default',
-      label: options.deviceLabel,
-      model: options.deviceName || 'E2E Test Server',
+      label: options.deviceLabel || 'ETS Device Label',
+      model: options.deviceName || 'ETS Device Model',
     };
 
     logger.info(`[${formatDate()}] Logging in ...`);
@@ -243,7 +244,7 @@ export class InstanceService {
     try {
       await account.login(
         {
-          clientType: ClientType.PERMANENT,
+          clientType: options.isTemporary === true ? ClientType.TEMPORARY : ClientType.PERMANENT,
           email: options.email,
           password: options.password,
         },
@@ -522,25 +523,15 @@ export class InstanceService {
     const service = instance.account.service;
 
     if (service) {
-      service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-
-      const metadataPayload = service.conversation.messageBuilder.createFileMetadata(
-        conversationId,
-        metadata,
-        undefined,
-        expectsReadConfirmation,
-        legalHoldStatus,
-      );
-      await service.conversation.send(metadataPayload);
-
-      const filePayload = await service.conversation.messageBuilder.createFileData(
+      const sentFile = await sendFile(
+        service.conversation,
         conversationId,
         file,
-        metadataPayload.id,
+        metadata,
         expectsReadConfirmation,
         legalHoldStatus,
+        expireAfterMillis,
       );
-      const sentFile = await service.conversation.send(filePayload);
 
       stripAsset(sentFile.content);
 
@@ -868,7 +859,7 @@ export class InstanceService {
     } catch (error) {
       logger.error(`[${formatDate()}]`, error);
 
-      if (error.code !== StatusCode.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
+      if (error.code !== HTTP_STATUS.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
         throw error;
       }
     }
