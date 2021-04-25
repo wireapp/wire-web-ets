@@ -5,7 +5,7 @@
     "@nestjs/platform-express": "7.6.15",
     "@nestjs/swagger": "4.7.16",
     "@wireapp/core": "17.1.11",
-    "@wireapp/lru-cache": "3.7.16",
+    "@wireapp/lru-cache": "3.7.17",
     "class-transformer": "0.4.0",
     "class-validator": "0.13.1",
     "http-status-codes": "2.1.4",
