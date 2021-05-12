@@ -762,10 +762,10 @@
   resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.7.12.tgz#1a26775230a2e163edd9cd3b34a341874bb7d817"
   integrity sha512-51kGOfLqWayTf+wlFXCkfOm/HnjZgrGNYzIDYCn0luHhgOWLxTSqr18J1t223phe4Z6h168wTNSzsUlQjEsZpw==
 
-"@wireapp/lru-cache@3.7.17":
-  version "3.7.17"
-  resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.7.17.tgz#e94d7d6c1d04ce07eb490bd17ce461d0e58a34a4"
-  integrity sha512-C6whm5ISgIFM75yrGX/7ek0GHbafS+/k/1OdHR+GidRrWQ1kOlyuhoyyjRcllYT8UIYek4y02eMz8KRhLk9ApQ==
+"@wireapp/lru-cache@3.8.0":
+  version "3.8.0"
+  resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.8.0.tgz#63e32a85abd4bd32a80a7c41615fc12c42cd2eec"
+  integrity sha512-XVcvbhIdgD8uNDW91Iueyd1dgsWh8alz1sU5MtID18r2d2nuM3BNryffAyONcmyjbTj7PqB04iLk+kHNQ5m4/Q==
 
 "@wireapp/prettier-config@0.3.0":
   version "0.3.0"
