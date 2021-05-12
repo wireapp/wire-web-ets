@@ -72,5 +72,5 @@ export class InstanceImageOptions {
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  otherCipher?: boolean;
+  otherAlgorithm?: boolean;
 }

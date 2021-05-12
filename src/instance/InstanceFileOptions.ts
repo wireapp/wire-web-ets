@@ -111,5 +111,5 @@ export class InstanceFileOptions {
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  otherCipher?: boolean;
+  otherAlgorithm?: boolean;
 }

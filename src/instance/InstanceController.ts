@@ -792,7 +792,7 @@ export class InstanceController {
         }
       }
 
-      const customCipher = body.otherCipher ? 'AES-128-CCM' : undefined;
+      const customAlgorithm = body.otherAlgorithm ? 'AES-128-CCM' : undefined;
       let customHash: Buffer | undefined;
 
       if (body.otherHash) {
@@ -812,7 +812,7 @@ export class InstanceController {
         body.legalHoldStatus,
         body.messageTimer,
         customHash,
-        customCipher,
+        customAlgorithm,
       );
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
@@ -853,7 +853,7 @@ export class InstanceController {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
     }
 
-    const customCipher = body.otherCipher ? 'AES-128-CCM' : undefined;
+    const customAlgorithm = body.otherAlgorithm ? 'AES-128-CCM' : undefined;
     let customHash: Buffer | undefined;
 
     if (body.otherHash) {
@@ -875,7 +875,7 @@ export class InstanceController {
         body.legalHoldStatus,
         body.messageTimer,
         customHash,
-        customCipher,
+        customAlgorithm,
       );
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({

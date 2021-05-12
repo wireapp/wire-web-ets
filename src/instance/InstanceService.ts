@@ -427,13 +427,12 @@ export class InstanceService {
     const service = instance.account.service;
 
     if (service) {
-      const payload = service.conversation.messageBuilder.createConfirmation(
-        options.conversationId,
-        options.firstMessageId,
-        Confirmation.Type.DELIVERED,
-        undefined,
-        options.moreMessageIds,
-      );
+      const payload = service.conversation.messageBuilder.createConfirmation({
+        conversationId: options.conversationId,
+        firstMessageId: options.firstMessageId,
+        moreMessageIds: options.moreMessageIds,
+        type: Confirmation.Type.DELIVERED,
+      });
       await service.conversation.send(payload);
       return instance.name;
     }
@@ -445,13 +444,12 @@ export class InstanceService {
     const service = instance.account.service;
 
     if (service) {
-      const payload = service.conversation.messageBuilder.createConfirmation(
-        options.conversationId,
-        options.firstMessageId,
-        Confirmation.Type.READ,
-        undefined,
-        options.moreMessageIds,
-      );
+      const payload = service.conversation.messageBuilder.createConfirmation({
+        conversationId: options.conversationId,
+        firstMessageId: options.firstMessageId,
+        moreMessageIds: options.moreMessageIds,
+        type: Confirmation.Type.READ,
+      });
       await service.conversation.send(payload);
       return instance.name;
     }
@@ -468,13 +466,12 @@ export class InstanceService {
     }
 
     if (service) {
-      const confirmationPayload = service.conversation.messageBuilder.createConfirmation(
-        options.conversationId,
-        options.firstMessageId,
-        Confirmation.Type.DELIVERED,
-        undefined,
-        options.moreMessageIds,
-      );
+      const confirmationPayload = service.conversation.messageBuilder.createConfirmation({
+        conversationId: options.conversationId,
+        firstMessageId: options.firstMessageId,
+        moreMessageIds: options.moreMessageIds,
+        type: Confirmation.Type.DELIVERED,
+      });
       await service.conversation.send(confirmationPayload);
       await service.conversation.deleteMessageEveryone(options.conversationId, options.firstMessageId, [message.from]);
 
@@ -504,13 +501,12 @@ export class InstanceService {
     }
 
     if (service) {
-      const confirmationPayload = service.conversation.messageBuilder.createConfirmation(
-        options.conversationId,
-        options.firstMessageId,
-        Confirmation.Type.READ,
-        undefined,
-        options.moreMessageIds,
-      );
+      const confirmationPayload = service.conversation.messageBuilder.createConfirmation({
+        conversationId: options.conversationId,
+        firstMessageId: options.firstMessageId,
+        moreMessageIds: options.moreMessageIds,
+        type: Confirmation.Type.READ,
+      });
       await service.conversation.send(confirmationPayload);
       await service.conversation.deleteMessageEveryone(options.conversationId, options.firstMessageId, [message.from]);
       if (options.moreMessageIds && options.moreMessageIds.length) {
@@ -537,8 +533,8 @@ export class InstanceService {
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
     expireAfterMillis = 0,
-    customHash?: Buffer,
-    customCipher?: string,
+    otherHash?: Buffer,
+    customAlgorithm?: string,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -552,8 +548,8 @@ export class InstanceService {
         expectsReadConfirmation,
         legalHoldStatus,
         expireAfterMillis,
-        customHash,
-        customCipher,
+        otherHash,
+        customAlgorithm,
       );
 
       stripAsset(sentFile.content);
@@ -571,22 +567,21 @@ export class InstanceService {
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
     expireAfterMillis = 0,
-    customHash?: Buffer,
-    customCipher?: string,
+    otherHash?: Buffer,
+    customAlgorithm?: string,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await service.conversation.messageBuilder.createImage(
+      const payload = await service.conversation.messageBuilder.createImage({
+        cipherOptions: {customAlgorithm, otherHash},
         conversationId,
-        image,
-        undefined,
         expectsReadConfirmation,
+        image,
         legalHoldStatus,
-        {customCipher, customHash},
-      );
+      });
       const sentImage = await service.conversation.send(payload);
 
       stripAsset(sentImage.content);
@@ -608,7 +603,7 @@ export class InstanceService {
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await service.conversation.messageBuilder.createLocation(conversationId, location);
+      const payload = await service.conversation.messageBuilder.createLocation({conversationId, location});
       const sentLocation = await service.conversation.send(payload);
 
       instance.messages.set(sentLocation.id, sentLocation);
@@ -629,10 +624,13 @@ export class InstanceService {
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = service.conversation.messageBuilder.createPing(conversationId, {
-        expectsReadConfirmation,
-        hotKnock: false,
-        legalHoldStatus,
+      const payload = service.conversation.messageBuilder.createPing({
+        conversationId,
+        ping: {
+          expectsReadConfirmation,
+          hotKnock: false,
+          legalHoldStatus,
+        },
       });
       const sentPing = await service.conversation.send(payload);
 
@@ -646,9 +644,12 @@ export class InstanceService {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
     if (service) {
-      const payload = service.conversation.messageBuilder.createButtonActionMessage(options.conversationId, {
-        buttonId: options.buttonId,
-        referenceMessageId: options.referenceMessageId,
+      const payload = service.conversation.messageBuilder.createButtonActionMessage({
+        content: {
+          buttonId: options.buttonId,
+          referenceMessageId: options.referenceMessageId,
+        },
+        conversationId: options.conversationId,
       });
       await service.conversation.send(payload, options.userIds);
     } else {
@@ -660,13 +661,13 @@ export class InstanceService {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
     if (service) {
-      const payload = service.conversation.messageBuilder.createButtonActionConfirmationMessage(
-        options.conversationId,
-        {
+      const payload = service.conversation.messageBuilder.createButtonActionConfirmationMessage({
+        content: {
           buttonId: options.buttonId,
           referenceMessageId: options.referenceMessageId,
         },
-      );
+        conversationId: options.conversationId,
+      });
       await service.conversation.send(payload, options.userIds);
     } else {
       throw new Error(`Account service for instance "${instanceId}" not set.`);
@@ -678,10 +679,13 @@ export class InstanceService {
     const service = instance.account.service;
 
     if (service) {
-      const payload = service.conversation.messageBuilder.createReaction(options.conversationId, {
-        legalHoldStatus: options.legalHoldStatus,
-        originalMessageId: options.originalMessageId,
-        type: options.type,
+      const payload = service.conversation.messageBuilder.createReaction({
+        conversationId: options.conversationId,
+        reaction: {
+          legalHoldStatus: options.legalHoldStatus,
+          originalMessageId: options.originalMessageId,
+          type: options.type,
+        },
       });
       const {id: messageId} = await service.conversation.send(payload);
       return messageId;
@@ -720,7 +724,9 @@ export class InstanceService {
     const service = instance.account.service;
 
     if (service) {
-      const sessionResetPayload = service.conversation.messageBuilder.createSessionReset(options.conversationId);
+      const sessionResetPayload = service.conversation.messageBuilder.createSessionReset({
+        conversationId: options.conversationId,
+      });
       const {id: messageId} = await service.conversation.send(sessionResetPayload);
       return messageId;
     }
@@ -761,7 +767,7 @@ export class InstanceService {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
       let payloadBundle: OtrMessage = service.conversation.messageBuilder
-        .createText(conversationId, message)
+        .createText({conversationId, text: message})
         .withMentions(mentions)
         .withQuote(quote)
         .withReadConfirmation(expectsReadConfirmation)
@@ -771,7 +777,7 @@ export class InstanceService {
       if (buttons.length > 0) {
         const textProto = MessageToProtoMapper.mapText(payloadBundle);
         const compositeBuilder = service.conversation.messageBuilder
-          .createComposite(conversationId)
+          .createComposite({conversationId})
           .withReadConfirmation(expectsReadConfirmation)
           .addText(textProto);
         buttons.forEach(button => compositeBuilder.addButton(button));
@@ -783,7 +789,7 @@ export class InstanceService {
       if (linkPreview) {
         const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(linkPreview);
         const editedWithPreviewPayload = service.conversation.messageBuilder
-          .createText(conversationId, message, sentMessage.id)
+          .createText({conversationId, messageId: sentMessage.id, text: message})
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(mentions)
           .withQuote(quote)
@@ -824,7 +830,7 @@ export class InstanceService {
 
     if (service) {
       const editedPayload = service.conversation.messageBuilder
-        .createEditedText(conversationId, newMessageText, originalMessageId)
+        .createEditedText({conversationId, newMessageText, originalMessageId})
         .withMentions(newMentions)
         .withQuote(newQuote)
         .withReadConfirmation(expectsReadConfirmation)
@@ -836,7 +842,7 @@ export class InstanceService {
       if (newLinkPreview) {
         const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(newLinkPreview);
         const editedWithPreviewPayload = service.conversation.messageBuilder
-          .createEditedText(conversationId, newMessageText, originalMessageId, editedMessage.id)
+          .createEditedText({conversationId, messageId: editedMessage.id, newMessageText, originalMessageId})
           .withLinkPreviews([linkPreviewPayload])
           .withMentions(newMentions)
           .withQuote(newQuote)
