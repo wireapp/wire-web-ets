@@ -18,12 +18,16 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ dev ]
   schedule:
-    - cron: '15 17 * * 2'
+    - cron: '27 0 * * 6'
 
 jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
 
     strategy:
       fail-fast: false
