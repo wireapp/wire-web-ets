@@ -75,21 +75,22 @@ class ImageMeta {
   @IsString()
   type!: string;
 
-  @ApiPropertyOptional({
-    enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
-  })
-  @IsOptional()
-  @IsEnum(LegalHoldStatus)
-  legalHoldStatus?: LegalHoldStatus;
-
   @ApiProperty()
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   expectsReadConfirmation?: boolean;
 
   @ApiProperty()
+  @IsNumber()
   @IsOptional()
   messageTimer?: number;
+
+  @ApiPropertyOptional({
+    enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
+  })
+  @IsEnum(LegalHoldStatus)
+  @IsOptional()
+  legalHoldStatus?: LegalHoldStatus;
 }
 
 class LinkPreviewMeta {
@@ -144,20 +145,20 @@ export class InstanceTextOptions {
 
   @ApiPropertyOptional()
   @ValidateNested()
-  @IsOptional()
   @Type(() => QuoteMeta)
+  @IsOptional()
   quote?: QuoteMeta;
 
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
   })
-  @IsOptional()
   @IsEnum(LegalHoldStatus)
+  @IsOptional()
   legalHoldStatus?: LegalHoldStatus;
 
   @ApiPropertyOptional()
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   expectsReadConfirmation?: boolean;
 
   @ApiPropertyOptional({isArray: true, type: String})
@@ -166,14 +167,14 @@ export class InstanceTextOptions {
   buttons?: string[];
 
   @ApiPropertyOptional({isArray: true, type: MentionsMeta})
-  @IsOptional()
   @ValidateNested({each: true})
   @Type(() => MentionsMeta)
+  @IsOptional()
   mentions?: MentionsMeta[];
 
   @ApiPropertyOptional()
-  @IsOptional()
   @ValidateNested()
   @Type(() => LinkPreviewMeta)
+  @IsOptional()
   linkPreview?: LinkPreviewMeta;
 }

@@ -40,7 +40,7 @@ export class InstanceReactionOptions {
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
   })
-  @IsOptional()
   @IsEnum(LegalHoldStatus)
+  @IsOptional()
   legalHoldStatus?: LegalHoldStatus;
 }

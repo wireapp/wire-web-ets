@@ -42,8 +42,8 @@ export class ClientsOptions {
 
   @ApiPropertyOptional()
   @ValidateNested()
-  @IsOptional()
   @Type(() => BackendMeta)
+  @IsOptional()
   customBackend?: BackendMeta;
 
   @ApiProperty({example: 'email@example.com'})
@@ -52,5 +52,6 @@ export class ClientsOptions {
 
   @ApiProperty({example: ''})
   @IsNotEmpty()
+  @IsString()
   password!: string;
 }

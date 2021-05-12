@@ -37,23 +37,23 @@ export class InstanceLocationOptions {
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
   })
-  @IsOptional()
   @IsEnum(LegalHoldStatus)
+  @IsOptional()
   legalHoldStatus?: LegalHoldStatus;
 
   @ApiPropertyOptional()
-  @IsOptional()
   @IsString()
+  @IsOptional()
   locationName?: string;
 
   @ApiPropertyOptional()
-  @IsOptional()
   @IsNumber()
+  @IsOptional()
   zoom?: number;
 
   @ApiPropertyOptional()
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   expectsReadConfirmation?: boolean;
 
   @ApiPropertyOptional()

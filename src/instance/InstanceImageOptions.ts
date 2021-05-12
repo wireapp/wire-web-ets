@@ -45,13 +45,13 @@ export class InstanceImageOptions {
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
   })
-  @IsOptional()
   @IsEnum(LegalHoldStatus)
+  @IsOptional()
   legalHoldStatus?: LegalHoldStatus;
 
   @ApiPropertyOptional()
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   expectsReadConfirmation?: boolean;
 
   @ApiPropertyOptional()

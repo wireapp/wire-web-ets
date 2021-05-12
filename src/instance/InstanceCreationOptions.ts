@@ -43,8 +43,8 @@ export class InstanceCreationOptions {
 
   @ApiPropertyOptional()
   @ValidateNested()
-  @IsOptional()
   @Type(() => BackendMeta)
+  @IsOptional()
   customBackend?: BackendMeta;
 
   @ApiPropertyOptional({enum: [ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET]})
@@ -72,7 +72,7 @@ export class InstanceCreationOptions {
   @IsOptional()
   name?: string;
 
-  @ApiProperty({example: ''})
+  @ApiProperty({example: 'my-secret'})
   @IsNotEmpty()
   password!: string;
 }

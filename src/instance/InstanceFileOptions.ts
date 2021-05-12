@@ -24,30 +24,30 @@ import {Type} from 'class-transformer';
 
 class AudioMeta {
   @ApiPropertyOptional()
-  @IsOptional()
   @IsNumber()
+  @IsOptional()
   durationInMillis?: number;
 
   @ApiPropertyOptional({isArray: true, type: Number})
-  @IsOptional()
   @IsNumber({}, {each: true})
+  @IsOptional()
   normalizedLoudness?: number[];
 }
 
 class VideoMeta {
   @ApiPropertyOptional()
-  @IsOptional()
   @IsNumber()
+  @IsOptional()
   durationInMillis?: number;
 
   @ApiPropertyOptional()
-  @IsOptional()
   @IsNumber()
+  @IsOptional()
   height?: number;
 
   @ApiPropertyOptional()
-  @IsOptional()
   @IsNumber()
+  @IsOptional()
   width?: number;
 }
 
@@ -70,29 +70,30 @@ export class InstanceFileOptions {
 
   @ApiPropertyOptional()
   @ValidateNested()
-  @IsOptional()
   @Type(() => AudioMeta)
+  @IsOptional()
   audio?: AudioMeta;
 
   @ApiPropertyOptional()
   @ValidateNested()
-  @IsOptional()
   @Type(() => VideoMeta)
+  @IsOptional()
   video?: VideoMeta;
 
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
   })
-  @IsOptional()
   @IsEnum(LegalHoldStatus)
+  @IsOptional()
   legalHoldStatus?: LegalHoldStatus;
 
   @ApiPropertyOptional()
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   expectsReadConfirmation?: boolean;
 
   @ApiPropertyOptional()
+  @IsNumber()
   @IsOptional()
   messageTimer?: number;
 }
