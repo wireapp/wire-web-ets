@@ -533,7 +533,7 @@ export class InstanceService {
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
     expireAfterMillis = 0,
-    otherHash?: Buffer,
+    customHash?: Buffer,
     customAlgorithm?: string,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
@@ -548,7 +548,7 @@ export class InstanceService {
         expectsReadConfirmation,
         legalHoldStatus,
         expireAfterMillis,
-        otherHash,
+        customHash,
         customAlgorithm,
       );
 
