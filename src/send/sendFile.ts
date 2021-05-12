@@ -29,6 +29,8 @@ export async function sendFile(
   expectsReadConfirmation?: boolean,
   legalHoldStatus?: LegalHoldStatus,
   expireAfterMillis = 0,
+  customHash?: Buffer,
+  customCipher?: string,
 ): Promise<ReturnType<ConversationService['send']>> {
   conversationService.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
@@ -47,6 +49,7 @@ export async function sendFile(
     metadataPayload.id,
     expectsReadConfirmation,
     legalHoldStatus,
+    {customCipher, customHash},
   );
   return conversationService.send(filePayload);
 }

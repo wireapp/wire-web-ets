@@ -8,11 +8,13 @@ import {
   LocationContent,
   QuoteContent,
 } from '@wireapp/core/src/main/conversation/content';
+import * as crypto from 'crypto';
 import {isUUID} from 'class-validator';
 import {Response} from 'express';
 import * as fs from 'fs-extra';
 import {StatusCodes as HTTP_STATUS_CODE} from 'http-status-codes';
 import logdown from 'logdown';
+import UUID from 'uuidjs';
 import * as path from 'path';
 import {config} from '../config';
 import {
@@ -771,6 +773,21 @@ export class InstanceController {
         }
       }
 
+      let customCipher: string | undefined;
+      let customHash: Buffer | undefined;
+
+      if (body.otherCipher) {
+        customCipher = 'AES-128-CCM';
+      }
+
+      if (body.otherHash) {
+        customHash = crypto.createHash('SHA256').update(Buffer.from(UUID.genV4().toString(), 'utf-8')).digest();
+      }
+
+      if (body.invalidHash) {
+        customHash = Buffer.from(UUID.genV4().toString(), 'utf-8');
+      }
+
       const messageId = await this.instanceService.sendFile(
         instanceId,
         body.conversationId,
@@ -779,6 +796,8 @@ export class InstanceController {
         body.expectsReadConfirmation,
         body.legalHoldStatus,
         body.messageTimer,
+        customHash,
+        customCipher,
       );
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
@@ -819,6 +838,21 @@ export class InstanceController {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
     }
 
+    let customCipher: string | undefined;
+    let customHash: Buffer | undefined;
+
+    if (body.otherCipher) {
+      customCipher = 'AES-128-CCM';
+    }
+
+    if (body.otherHash) {
+      customHash = crypto.createHash('SHA256').update(Buffer.from(UUID.genV4().toString(), 'utf-8')).digest();
+    }
+
+    if (body.invalidHash) {
+      customHash = Buffer.from(UUID.genV4().toString(), 'utf-8');
+    }
+
     try {
       const data = Buffer.from(body.data, 'base64');
       const image: ImageContent = {data, height: body.height, type: body.type, width: body.width};
@@ -829,6 +863,8 @@ export class InstanceController {
         body.expectsReadConfirmation,
         body.legalHoldStatus,
         body.messageTimer,
+        customHash,
+        customCipher,
       );
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({

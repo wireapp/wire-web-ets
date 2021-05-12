@@ -518,6 +518,8 @@ export class InstanceService {
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
     expireAfterMillis = 0,
+    customHash?: Buffer,
+    customCipher?: string,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -531,6 +533,8 @@ export class InstanceService {
         expectsReadConfirmation,
         legalHoldStatus,
         expireAfterMillis,
+        customHash,
+        customCipher,
       );
 
       stripAsset(sentFile.content);
@@ -548,6 +552,8 @@ export class InstanceService {
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
     expireAfterMillis = 0,
+    customHash?: Buffer,
+    customCipher?: string,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
@@ -560,6 +566,7 @@ export class InstanceService {
         undefined,
         expectsReadConfirmation,
         legalHoldStatus,
+        {customCipher, customHash},
       );
       const sentImage = await service.conversation.send(payload);
 
