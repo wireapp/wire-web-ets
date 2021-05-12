@@ -567,7 +567,7 @@ export class InstanceService {
     expectsReadConfirmation?: boolean,
     legalHoldStatus?: LegalHoldStatus,
     expireAfterMillis = 0,
-    otherHash?: Buffer,
+    customHash?: Buffer,
     customAlgorithm?: string,
   ): Promise<string> {
     const instance = this.getInstance(instanceId);
@@ -576,7 +576,7 @@ export class InstanceService {
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
       const payload = await service.conversation.messageBuilder.createImage({
-        cipherOptions: {customAlgorithm, otherHash},
+        cipherOptions: {algorithm: customAlgorithm, hash: customHash},
         conversationId,
         expectsReadConfirmation,
         image,

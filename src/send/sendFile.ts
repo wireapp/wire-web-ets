@@ -29,7 +29,7 @@ export async function sendFile(
   expectsReadConfirmation?: boolean,
   legalHoldStatus?: LegalHoldStatus,
   expireAfterMillis = 0,
-  otherHash?: Buffer,
+  customHash?: Buffer,
   customAlgorithm?: string,
 ): Promise<ReturnType<ConversationService['send']>> {
   conversationService.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
@@ -43,7 +43,7 @@ export async function sendFile(
   await conversationService.send(metadataPayload);
 
   const filePayload = await conversationService.messageBuilder.createFileData({
-    cipherOptions: {customAlgorithm, otherHash},
+    cipherOptions: {algorithm: customAlgorithm, hash: customHash},
     conversationId,
     expectsReadConfirmation,
     file,
