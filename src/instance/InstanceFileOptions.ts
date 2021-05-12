@@ -95,5 +95,21 @@ export class InstanceFileOptions {
   @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()
+  @IsNumber()
   messageTimer?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  otherHash?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  invalidHash?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  otherAlgorithm?: boolean;
 }
