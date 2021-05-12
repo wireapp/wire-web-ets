@@ -743,10 +743,10 @@
     "@wireapp/store-engine" "4.6.0"
     bazinga64 "5.7.33"
 
-"@wireapp/eslint-config@1.9.0":
-  version "1.9.0"
-  resolved "https://registry.npmjs.org/@wireapp/eslint-config/-/eslint-config-1.9.0.tgz#67f6f293a32dd3cb5f0228cae08c0ca4a8f5f125"
-  integrity sha512-xmV/Wyd9KKJVMXtG4MbJ1uz00lv2vikfADZHhpLQgn6fqS8mcQ5bpkssZxVp7LaaHVqxXJoxAvO5NSmoDa2rUg==
+"@wireapp/eslint-config@1.11.0":
+  version "1.11.0"
+  resolved "https://registry.npmjs.org/@wireapp/eslint-config/-/eslint-config-1.11.0.tgz#d7ce75fa83dcdd722d0b5865f8b1237ba215b593"
+  integrity sha512-TJyiXFHZv70y0La+ySu4tG25+njrYEJeePZYXuT+Km1wGAGD/yuAhEIfcQUfbc329sUXj6C8/DATVQAv3lzY/A==
 
 "@wireapp/lru-cache@3.8.0":
   version "3.8.0"
@@ -2064,6 +2064,11 @@ eslint-module-utils@^2.6.0:
     debug "^2.6.9"
     pkg-dir "^2.0.0"
 
+eslint-plugin-header@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.npmjs.org/eslint-plugin-header/-/eslint-plugin-header-3.1.1.tgz#6ce512432d57675265fac47292b50d1eff11acd6"
+  integrity sha512-9vlKxuJ4qf793CmeeSrZUvVClw6amtpghq3CuWcB5cUNnWHQhgcqy5eF8oVKFk1G3Y/CbchGfEaw3wiIJaNmVg==
+
 eslint-plugin-import@2.22.1:
   version "2.22.1"
   resolved "https://registry.npmjs.org/eslint-plugin-import/-/eslint-plugin-import-2.22.1.tgz#0896c7e6a0cf44109a2d97b95903c2bb689d7702"
@@ -2153,6 +2158,18 @@ eslint-plugin-typescript-sort-keys@1.6.0:
     "@typescript-eslint/experimental-utils" "^2.32.0"
     json-schema "^0.2.5"
     natural-compare-lite "^1.4.0"
+
+eslint-plugin-unused-imports@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/eslint-plugin-unused-imports/-/eslint-plugin-unused-imports-1.1.1.tgz#a5433f8b394461201129a246d8d92d9613e69597"
+  integrity sha512-EApvRx9Q3XQI96Tg7xPPqY6OuOy95wWMXAtc8RrwdIRk9bv8vkJKwOVoE4HeWJOQhHeHcI8lUbOqmup/PxjfOw==
+  dependencies:
+    eslint-rule-composer "^0.3.0"
+
+eslint-rule-composer@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/eslint-rule-composer/-/eslint-rule-composer-0.3.0.tgz#79320c927b0c5c0d3d3d2b76c8b4a488f25bbaf9"
+  integrity sha512-bt+Sh8CtDmn2OajxvNO+BX7Wn4CIWMpTRm3MaiKPCQcnnlm0CS2mhui6QaoeQugs+3Kj2ESKEEGJUdVafwhiCg==
 
 eslint-scope@^5.0.0, eslint-scope@^5.1.1:
   version "5.1.1"
@@ -4784,10 +4801,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@2.2.1:
-  version "2.2.1"
-  resolved "https://registry.npmjs.org/prettier/-/prettier-2.2.1.tgz#795a1a78dd52f073da0cd42b21f9c91381923ff5"
-  integrity sha512-PqyhM2yCjg/oKkFPtTGUojv7gnZAoG80ttl45O6x2Ug/rMJw4wcc9k6aaf2hibP7BGVCCM33gZoGjyvt9mm16Q==
+prettier@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/prettier/-/prettier-2.3.0.tgz#b6a5bf1284026ae640f17f7ff5658a7567fc0d18"
+  integrity sha512-kXtO4s0Lz/DW/IJ9QdWhAf7/NmPWQXkFr/r/WkR3vyI+0v8amTDxiaQSLzs8NBlytfLWX/7uQUMIW677yLKl4w==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
