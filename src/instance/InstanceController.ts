@@ -773,12 +773,8 @@ export class InstanceController {
         }
       }
 
-      let customCipher: string | undefined;
+      const customCipher = body.otherCipher ? 'AES-128-CCM' : undefined;
       let customHash: Buffer | undefined;
-
-      if (body.otherCipher) {
-        customCipher = 'AES-128-CCM';
-      }
 
       if (body.otherHash) {
         customHash = crypto.createHash('SHA256').update(Buffer.from(UUID.genV4().toString(), 'utf-8')).digest();
@@ -838,12 +834,8 @@ export class InstanceController {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
     }
 
-    let customCipher: string | undefined;
+    const customCipher = body.otherCipher ? 'AES-128-CCM' : undefined;
     let customHash: Buffer | undefined;
-
-    if (body.otherCipher) {
-      customCipher = 'AES-128-CCM';
-    }
 
     if (body.otherHash) {
       customHash = crypto.createHash('SHA256').update(Buffer.from(UUID.genV4().toString(), 'utf-8')).digest();
