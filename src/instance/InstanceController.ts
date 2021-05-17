@@ -808,7 +808,7 @@ export class InstanceController {
         }
       }
 
-      const customAlgorithm = body.otherAlgorithm ? 'AES-128-CCM' : undefined;
+      const customAlgorithm = body.otherAlgorithm ? 'AES-256-CFB' : undefined;
       let customHash: Buffer | undefined;
 
       if (body.otherHash) {
