@@ -98,17 +98,17 @@ export class InstanceFileOptions {
   @IsNumber()
   messageTimer?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: false})
   @IsOptional()
   @IsBoolean()
   otherHash?: boolean;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: false})
   @IsOptional()
   @IsBoolean()
   invalidHash?: boolean;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: false})
   @IsOptional()
   @IsBoolean()
   otherAlgorithm?: boolean;
