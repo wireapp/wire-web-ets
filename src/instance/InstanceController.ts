@@ -1,3 +1,22 @@
+/*
+ * Wire
+ * Copyright (C) 2021 Wire Swiss GmbH
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see http://www.gnu.org/licenses/.
+ *
+ */
+
 import {Body, Controller, Delete, Get, Param, Post, Put, Res} from '@nestjs/common';
 import {ApiBody, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {
@@ -8,11 +27,13 @@ import {
   LocationContent,
   QuoteContent,
 } from '@wireapp/core/src/main/conversation/content';
+import * as crypto from 'crypto';
 import {isUUID} from 'class-validator';
 import {Response} from 'express';
 import * as fs from 'fs-extra';
 import {StatusCodes as HTTP_STATUS_CODE} from 'http-status-codes';
 import logdown from 'logdown';
+import UUID from 'uuidjs';
 import * as path from 'path';
 import {config} from '../config';
 import {
@@ -44,9 +65,7 @@ import {InstanceTextUpdateOptions} from './InstanceTextUpdateOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
 
 const {uptime: nodeUptime, version: nodeVersion} = process;
-const {LOG_ERROR, LOG_OUTPUT, NODE_DEBUG} = process.env;
-const outLogFile = process.env.LOG_OUTPUT;
-const errorLogFile = process.env.LOG_ERROR;
+const {LOG_ERROR: errorLogFile, LOG_OUTPUT: outLogFile, NODE_DEBUG} = process.env;
 
 const logger = logdown('@wireapp/wire-web-ets/InstanceController', {
   logger: console,
@@ -119,7 +138,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse({description: 'Bad request', status: 400})
   @ApiResponse(status422description)
@@ -132,7 +151,8 @@ export class InstanceController {
         name: body.name || '',
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -142,7 +162,7 @@ export class InstanceController {
     schema: {
       example: {},
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -150,16 +170,20 @@ export class InstanceController {
   async deleteInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
       await this.instanceService.deleteInstance(instanceId);
+      res.status(HTTP_STATUS_CODE.OK).json({});
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -174,7 +198,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -182,10 +206,12 @@ export class InstanceController {
   async getInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -197,7 +223,8 @@ export class InstanceController {
         name: instance.name,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -210,7 +237,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -222,10 +249,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -235,7 +264,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -248,7 +278,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -264,10 +294,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -277,7 +309,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -290,7 +323,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -302,10 +335,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -315,7 +350,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -338,7 +374,7 @@ export class InstanceController {
         },
       ],
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -346,17 +382,20 @@ export class InstanceController {
   async getClients(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
       const clients = this.instanceService.getAllClients(instanceId);
       res.json(clients);
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -369,7 +408,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -381,10 +420,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -394,7 +435,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -407,7 +449,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -419,10 +461,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -432,7 +476,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -445,7 +490,7 @@ export class InstanceController {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -453,10 +498,12 @@ export class InstanceController {
   async getFingerprint(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -466,7 +513,8 @@ export class InstanceController {
         instanceId,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -507,7 +555,7 @@ export class InstanceController {
         },
       ],
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -519,17 +567,20 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
       const messages = this.instanceService.getMessages(instanceId, body);
       res.status(HTTP_STATUS_CODE.OK).json(messages || []);
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -542,7 +593,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -554,10 +605,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -567,7 +620,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -580,7 +634,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -592,10 +646,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -605,7 +661,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -618,7 +675,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -630,10 +687,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -643,7 +702,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -656,7 +716,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -668,10 +728,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -681,7 +743,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -694,7 +757,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -706,10 +769,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -719,7 +784,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -733,7 +799,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -745,10 +811,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -771,6 +839,17 @@ export class InstanceController {
         }
       }
 
+      const customAlgorithm = body.otherAlgorithm ? 'AES-256-CFB' : undefined;
+      let customHash: Buffer | undefined;
+
+      if (body.otherHash) {
+        customHash = crypto.createHash('SHA256').update(Buffer.from(UUID.genV4().toString(), 'utf-8')).digest();
+      }
+
+      if (body.invalidHash) {
+        customHash = Buffer.from(UUID.genV4().toString(), 'utf-8');
+      }
+
       const messageId = await this.instanceService.sendFile(
         instanceId,
         body.conversationId,
@@ -779,6 +858,8 @@ export class InstanceController {
         body.expectsReadConfirmation,
         body.legalHoldStatus,
         body.messageTimer,
+        customHash,
+        customAlgorithm,
       );
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
@@ -787,7 +868,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -801,7 +883,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -813,10 +895,23 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
+    }
+
+    const customAlgorithm = body.otherAlgorithm ? 'AES-256-CFB' : undefined;
+    let customHash: Buffer | undefined;
+
+    if (body.otherHash) {
+      customHash = crypto.createHash('SHA256').update(Buffer.from(UUID.genV4().toString(), 'utf-8')).digest();
+    }
+
+    if (body.invalidHash) {
+      customHash = Buffer.from(UUID.genV4().toString(), 'utf-8');
     }
 
     try {
@@ -829,6 +924,8 @@ export class InstanceController {
         body.expectsReadConfirmation,
         body.legalHoldStatus,
         body.messageTimer,
+        customHash,
+        customAlgorithm,
       );
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
@@ -837,7 +934,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -851,7 +949,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -863,10 +961,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -892,7 +992,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -906,7 +1007,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -918,10 +1019,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -940,7 +1043,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -950,7 +1054,7 @@ export class InstanceController {
     schema: {
       example: {},
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -962,17 +1066,20 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
       await this.instanceService.sendButtonAction(instanceId, body);
       res.status(HTTP_STATUS_CODE.OK).json({});
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -982,7 +1089,7 @@ export class InstanceController {
     schema: {
       example: {},
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -994,17 +1101,20 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
       await this.instanceService.sendButtonActionConfirmation(instanceId, body);
       res.status(HTTP_STATUS_CODE.OK).json({});
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -1018,7 +1128,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1030,10 +1140,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1045,7 +1157,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -1057,7 +1170,7 @@ export class InstanceController {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1069,10 +1182,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1082,7 +1197,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -1096,7 +1212,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1108,10 +1224,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1121,7 +1239,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -1135,7 +1254,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1150,10 +1269,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     let linkPreviewContent: LinkPreviewContent | undefined;
@@ -1205,7 +1326,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -1218,7 +1340,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1230,10 +1352,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1243,7 +1367,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -1257,7 +1382,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1269,10 +1394,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     let linkPreviewContent: LinkPreviewContent | undefined;
@@ -1323,7 +1450,8 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 }
@@ -1344,7 +1472,7 @@ export class InstancesController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status500description)
   async getInstances(@Res() res: Response): Promise<void> {
@@ -1371,7 +1499,8 @@ export class InstancesController {
     try {
       res.json(reducedInstances);
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 }
@@ -1387,7 +1516,7 @@ export class ClientsController {
     schema: {
       example: {},
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -1396,7 +1525,8 @@ export class ClientsController {
       await this.instanceService.removeAllClients(body);
       res.json({});
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 }
@@ -1422,7 +1552,7 @@ export class ServerController {
         message: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status500description)
   async getServer(@Res() res: Response): Promise<void> {
@@ -1431,8 +1561,8 @@ export class ServerController {
       code: HTTP_STATUS_CODE.OK,
       instance: {
         env: {
-          LOG_ERROR,
-          LOG_OUTPUT,
+          LOG_ERROR: errorLogFile,
+          LOG_OUTPUT: outLogFile,
           NODE_DEBUG,
         },
         uptime: formatUptime(nodeUptime()),
@@ -1456,7 +1586,7 @@ export class ServerController {
     schema: {
       example: 'string',
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status500description)
   async getCommit(@Res() res: Response): Promise<void> {
@@ -1465,7 +1595,8 @@ export class ServerController {
       const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
       res.contentType('text/plain; charset=UTF-8').send(commitHash.trim());
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 
@@ -1475,7 +1606,7 @@ export class ServerController {
     schema: {
       example: 'string',
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status500description)
   async getLog(@Res() res: Response): Promise<void> {
@@ -1510,7 +1641,8 @@ export class ServerController {
 
       res.contentType('text/plain; charset=UTF-8').send(logData.join('\n'));
     } catch (error) {
-      res.status(createInternalServerError(error).code).json(createInternalServerError(error));
+      const internalServerError = createInternalServerError(error);
+      res.status(internalServerError.code).json(internalServerError);
     }
   }
 }

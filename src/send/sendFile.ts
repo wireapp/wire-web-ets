@@ -29,24 +29,26 @@ export async function sendFile(
   expectsReadConfirmation?: boolean,
   legalHoldStatus?: LegalHoldStatus,
   expireAfterMillis = 0,
+  customHash?: Buffer,
+  customAlgorithm?: string,
 ): Promise<ReturnType<ConversationService['send']>> {
   conversationService.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
-  const metadataPayload = conversationService.messageBuilder.createFileMetadata(
+  const metadataPayload = conversationService.messageBuilder.createFileMetadata({
     conversationId,
-    metadata,
-    undefined,
     expectsReadConfirmation,
     legalHoldStatus,
-  );
+    metaData: metadata,
+  });
   await conversationService.send(metadataPayload);
 
-  const filePayload = await conversationService.messageBuilder.createFileData(
+  const filePayload = await conversationService.messageBuilder.createFileData({
+    cipherOptions: {algorithm: customAlgorithm, hash: customHash},
     conversationId,
-    file,
-    metadataPayload.id,
     expectsReadConfirmation,
+    file,
     legalHoldStatus,
-  );
+    originalMessageId: metadataPayload.id,
+  });
   return conversationService.send(filePayload);
 }

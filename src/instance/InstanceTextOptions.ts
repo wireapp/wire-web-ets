@@ -1,3 +1,22 @@
+/*
+ * Wire
+ * Copyright (C) 2021 Wire Swiss GmbH
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see http://www.gnu.org/licenses/.
+ *
+ */
+
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {IsOptional, IsString, IsUUID, ValidateNested, IsEnum, IsBoolean, IsNumber} from 'class-validator';
 import {Type} from 'class-transformer';
@@ -56,21 +75,22 @@ class ImageMeta {
   @IsString()
   type!: string;
 
-  @ApiPropertyOptional({
-    enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
-  })
-  @IsOptional()
-  @IsEnum(LegalHoldStatus)
-  legalHoldStatus?: LegalHoldStatus;
-
   @ApiProperty()
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   expectsReadConfirmation?: boolean;
 
   @ApiProperty()
+  @IsNumber()
   @IsOptional()
   messageTimer?: number;
+
+  @ApiPropertyOptional({
+    enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
+  })
+  @IsEnum(LegalHoldStatus)
+  @IsOptional()
+  legalHoldStatus?: LegalHoldStatus;
 }
 
 class LinkPreviewMeta {
@@ -125,20 +145,20 @@ export class InstanceTextOptions {
 
   @ApiPropertyOptional()
   @ValidateNested()
-  @IsOptional()
   @Type(() => QuoteMeta)
+  @IsOptional()
   quote?: QuoteMeta;
 
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
   })
-  @IsOptional()
   @IsEnum(LegalHoldStatus)
+  @IsOptional()
   legalHoldStatus?: LegalHoldStatus;
 
   @ApiPropertyOptional()
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   expectsReadConfirmation?: boolean;
 
   @ApiPropertyOptional({isArray: true, type: String})
@@ -147,14 +167,14 @@ export class InstanceTextOptions {
   buttons?: string[];
 
   @ApiPropertyOptional({isArray: true, type: MentionsMeta})
-  @IsOptional()
   @ValidateNested({each: true})
   @Type(() => MentionsMeta)
+  @IsOptional()
   mentions?: MentionsMeta[];
 
   @ApiPropertyOptional()
-  @IsOptional()
   @ValidateNested()
   @Type(() => LinkPreviewMeta)
+  @IsOptional()
   linkPreview?: LinkPreviewMeta;
 }

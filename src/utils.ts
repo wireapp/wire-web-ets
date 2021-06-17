@@ -28,6 +28,7 @@ import {
   RemoteData,
 } from '@wireapp/core/src/main/conversation/content/';
 import {EncryptedAssetUploaded} from '@wireapp/core/src/main/cryptography';
+import {StatusCodes as HTTP_STATUS_CODE} from 'http-status-codes';
 
 function formatDate(): string {
   return moment().format('YYYY-MM-DD HH:mm:ss');
@@ -84,9 +85,9 @@ function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
   }
 }
 
-const status404instance = {description: 'Instance not found', status: 404};
-const status422description = {description: 'Validation error', status: 422};
-const status500description = {description: 'Internal server error', status: 500};
+const status404instance = {description: 'Instance not found', status: HTTP_STATUS_CODE.NOT_FOUND};
+const status422description = {description: 'Validation error', status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY};
+const status500description = {description: 'Internal server error', status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR};
 
 export {
   formatDate,

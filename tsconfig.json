@@ -5,9 +5,9 @@
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "lib": ["dom", "es6"],
+    "lib": ["DOM", "ESNext"],
     "module": "CommonJS",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "noEmitOnError": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
@@ -17,6 +17,11 @@
     "sourceMap": true,
     "strict": true,
     "target": "ES6"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "rootDir": "."
+    }
   },
   "exclude": ["dist", "node_modules", "**/*.spec.ts"]
 }
