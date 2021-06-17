@@ -18,5 +18,10 @@
     "strict": true,
     "target": "ES6"
   },
+  "ts-node": {
+    "compilerOptions": {
+      "rootDir": "."
+    }
+  },
   "exclude": ["dist", "node_modules", "**/*.spec.ts"]
 }
