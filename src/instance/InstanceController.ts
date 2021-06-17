@@ -65,9 +65,7 @@ import {InstanceTextUpdateOptions} from './InstanceTextUpdateOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
 
 const {uptime: nodeUptime, version: nodeVersion} = process;
-const {LOG_ERROR, LOG_OUTPUT, NODE_DEBUG} = process.env;
-const outLogFile = process.env.LOG_OUTPUT;
-const errorLogFile = process.env.LOG_ERROR;
+const {LOG_ERROR: errorLogFile, LOG_OUTPUT: outLogFile, NODE_DEBUG} = process.env;
 
 const logger = logdown('@wireapp/wire-web-ets/InstanceController', {
   logger: console,
@@ -140,7 +138,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse({description: 'Bad request', status: 400})
   @ApiResponse(status422description)
@@ -164,7 +162,7 @@ export class InstanceController {
     schema: {
       example: {},
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -172,10 +170,12 @@ export class InstanceController {
   async deleteInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -197,7 +197,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -205,10 +205,12 @@ export class InstanceController {
   async getInstance(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -234,7 +236,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -246,10 +248,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -273,7 +277,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -289,10 +293,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -316,7 +322,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -328,10 +334,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -365,7 +373,7 @@ export class InstanceController {
         },
       ],
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -373,10 +381,12 @@ export class InstanceController {
   async getClients(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -397,7 +407,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -409,10 +419,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -436,7 +448,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -448,10 +460,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -475,7 +489,7 @@ export class InstanceController {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -483,10 +497,12 @@ export class InstanceController {
   async getFingerprint(@Param('instanceId') instanceId: string, @Res() res: Response): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -538,7 +554,7 @@ export class InstanceController {
         },
       ],
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -550,10 +566,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -574,7 +592,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -586,10 +604,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -613,7 +633,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -625,10 +645,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -652,7 +674,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -664,10 +686,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -691,7 +715,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -703,10 +727,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -730,7 +756,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -742,10 +768,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -770,7 +798,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -782,10 +810,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -852,7 +882,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -864,10 +894,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     const customAlgorithm = body.otherAlgorithm ? 'AES-256-CFB' : undefined;
@@ -916,7 +948,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -928,10 +960,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -972,7 +1006,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -984,10 +1018,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1017,7 +1053,7 @@ export class InstanceController {
     schema: {
       example: {},
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1029,10 +1065,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1050,7 +1088,7 @@ export class InstanceController {
     schema: {
       example: {},
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1062,10 +1100,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1087,7 +1127,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1099,10 +1139,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1127,7 +1169,7 @@ export class InstanceController {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1139,10 +1181,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1167,7 +1211,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1179,10 +1223,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1207,7 +1253,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1222,10 +1268,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     let linkPreviewContent: LinkPreviewContent | undefined;
@@ -1291,7 +1339,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1303,10 +1351,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     try {
@@ -1331,7 +1381,7 @@ export class InstanceController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status404instance)
   @ApiResponse(status422description)
@@ -1343,10 +1393,12 @@ export class InstanceController {
   ): Promise<void> {
     if (!isUUID(instanceId, 4)) {
       res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
     }
 
     if (!this.instanceService.instanceExists(instanceId)) {
       res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
     }
 
     let linkPreviewContent: LinkPreviewContent | undefined;
@@ -1419,7 +1471,7 @@ export class InstancesController {
         name: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status500description)
   async getInstances(@Res() res: Response): Promise<void> {
@@ -1463,7 +1515,7 @@ export class ClientsController {
     schema: {
       example: {},
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status422description)
   @ApiResponse(status500description)
@@ -1499,7 +1551,7 @@ export class ServerController {
         message: 'string',
       },
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status500description)
   async getServer(@Res() res: Response): Promise<void> {
@@ -1508,8 +1560,8 @@ export class ServerController {
       code: HTTP_STATUS_CODE.OK,
       instance: {
         env: {
-          LOG_ERROR,
-          LOG_OUTPUT,
+          LOG_ERROR: errorLogFile,
+          LOG_OUTPUT: outLogFile,
           NODE_DEBUG,
         },
         uptime: formatUptime(nodeUptime()),
@@ -1533,7 +1585,7 @@ export class ServerController {
     schema: {
       example: 'string',
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status500description)
   async getCommit(@Res() res: Response): Promise<void> {
@@ -1553,7 +1605,7 @@ export class ServerController {
     schema: {
       example: 'string',
     },
-    status: 200,
+    status: HTTP_STATUS_CODE.OK,
   })
   @ApiResponse(status500description)
   async getLog(@Res() res: Response): Promise<void> {
