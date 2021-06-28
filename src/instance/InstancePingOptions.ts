@@ -22,9 +22,14 @@ import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content/';
 import {IsBoolean, IsEnum, IsNumber, IsOptional, IsUUID} from 'class-validator';
 
 export class InstancePingOptions {
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
+
+  @ApiPropertyOptional({example: false})
+  @IsBoolean()
+  @IsOptional()
+  expectsReadConfirmation?: boolean;
 
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
@@ -33,12 +38,7 @@ export class InstancePingOptions {
   @IsOptional()
   legalHoldStatus?: LegalHoldStatus;
 
-  @ApiPropertyOptional()
-  @IsBoolean()
-  @IsOptional()
-  expectsReadConfirmation?: boolean;
-
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: 0})
   @IsNumber()
   @IsOptional()
   messageTimer?: number;

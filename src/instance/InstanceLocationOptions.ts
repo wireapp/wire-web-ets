@@ -22,17 +22,18 @@ import {IsUUID, IsBoolean, IsNumber, IsOptional, IsEnum, IsString} from 'class-v
 import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content/';
 
 export class InstanceLocationOptions {
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional({example: false})
+  @IsBoolean()
+  @IsOptional()
+  expectsReadConfirmation?: boolean;
+
+  @ApiProperty({example: 0})
   @IsNumber()
   latitude!: number;
-
-  @ApiProperty()
-  @IsNumber()
-  longitude!: number;
 
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
@@ -41,22 +42,21 @@ export class InstanceLocationOptions {
   @IsOptional()
   legalHoldStatus?: LegalHoldStatus;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: ''})
   @IsString()
   @IsOptional()
   locationName?: string;
 
-  @ApiPropertyOptional()
+  @ApiProperty({example: 0})
+  @IsNumber()
+  longitude!: number;
+
+  @ApiPropertyOptional({example: 0})
+  @IsOptional()
+  messageTimer?: number;
+
+  @ApiPropertyOptional({example: 0})
   @IsNumber()
   @IsOptional()
   zoom?: number;
-
-  @ApiPropertyOptional()
-  @IsBoolean()
-  @IsOptional()
-  expectsReadConfirmation?: boolean;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  messageTimer?: number;
 }

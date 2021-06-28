@@ -21,11 +21,11 @@ import {ApiProperty} from '@nestjs/swagger';
 import {IsUUID, IsBoolean} from 'class-validator';
 
 export class InstanceMuteOptions {
-  @ApiProperty()
-  @IsBoolean()
-  mute!: boolean;
-
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
+
+  @ApiProperty({example: false})
+  @IsBoolean()
+  mute!: boolean;
 }

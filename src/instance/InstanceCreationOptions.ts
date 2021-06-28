@@ -20,24 +20,28 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {ClientClassification} from '@wireapp/api-client/src/client/';
 import {Type} from 'class-transformer';
-import {IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
+import {IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
 
 export class BackendMeta {
   @ApiProperty({example: 'my custom backend'})
   @IsString()
+  @IsNotEmpty()
   name!: string;
 
   @ApiProperty({example: 'https://...'})
   @IsString()
+  @IsNotEmpty()
   rest!: string;
 
   @ApiProperty({example: 'wss://...'})
   @IsString()
+  @IsNotEmpty()
   ws!: string;
 }
 
 export class InstanceCreationOptions {
   @ApiPropertyOptional({example: 'staging'})
+  @IsString()
   @IsOptional()
   backend?: string;
 
@@ -53,26 +57,32 @@ export class InstanceCreationOptions {
   deviceClass?: ClientClassification.DESKTOP | ClientClassification.PHONE | ClientClassification.TABLET;
 
   @ApiPropertyOptional({example: 'ETS Device Label'})
+  @IsString()
   @IsOptional()
   deviceLabel?: string;
 
   @ApiProperty({example: 'ETS Device Model'})
+  @IsString()
   @IsNotEmpty()
   deviceName!: string;
 
   @ApiProperty({example: 'email@example.com'})
+  @IsString()
   @IsEmail()
   email!: string;
 
   @ApiPropertyOptional({example: true})
+  @IsBoolean()
   @IsOptional()
-  isTemporary!: boolean;
+  isTemporary?: boolean;
 
   @ApiPropertyOptional({example: 'My ETS Instance'})
+  @IsString()
   @IsOptional()
   name?: string;
 
-  @ApiProperty({example: 'my-secret'})
+  @ApiProperty({example: ''})
+  @IsString()
   @IsNotEmpty()
   password!: string;
 }

@@ -21,7 +21,7 @@ import {ApiProperty} from '@nestjs/swagger';
 import {IsUUID} from 'class-validator';
 
 export class InstanceConversationOptions {
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
 }

@@ -21,11 +21,11 @@ import {ApiProperty} from '@nestjs/swagger';
 import {IsUUID} from 'class-validator';
 
 export class InstanceDeleteOptions {
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
 
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   messageId!: string;
 }

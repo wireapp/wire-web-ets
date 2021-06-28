@@ -23,7 +23,7 @@ import {IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, ValidateNeste
 import {Type} from 'class-transformer';
 
 class AudioMeta {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: 0})
   @IsNumber()
   @IsOptional()
   durationInMillis?: number;
@@ -35,50 +35,50 @@ class AudioMeta {
 }
 
 class VideoMeta {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: 0})
   @IsNumber()
   @IsOptional()
   durationInMillis?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: 0})
   @IsNumber()
   @IsOptional()
   height?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: 0})
   @IsNumber()
   @IsOptional()
   width?: number;
 }
 
 export class InstanceFileOptions {
-  @ApiProperty()
-  @IsUUID(4)
-  conversationId!: string;
-
-  @ApiProperty()
-  @IsString()
-  data!: string;
-
-  @ApiProperty()
-  @IsString()
-  fileName!: string;
-
-  @ApiProperty()
-  @IsString()
-  type!: string;
-
   @ApiPropertyOptional()
   @ValidateNested()
   @Type(() => AudioMeta)
   @IsOptional()
   audio?: AudioMeta;
 
-  @ApiPropertyOptional()
-  @ValidateNested()
-  @Type(() => VideoMeta)
+  @ApiProperty({example: ''})
+  @IsUUID(4)
+  conversationId!: string;
+
+  @ApiProperty({example: ''})
+  @IsString()
+  data!: string;
+
+  @ApiProperty({example: ''})
+  @IsString()
+  fileName!: string;
+
+  @ApiPropertyOptional({example: false})
   @IsOptional()
-  video?: VideoMeta;
+  @IsBoolean()
+  expectsReadConfirmation?: boolean;
+
+  @ApiPropertyOptional({example: false})
+  @IsOptional()
+  @IsBoolean()
+  invalidHash?: boolean;
 
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
@@ -87,12 +87,7 @@ export class InstanceFileOptions {
   @IsOptional()
   legalHoldStatus?: LegalHoldStatus;
 
-  @ApiPropertyOptional()
-  @IsBoolean()
-  @IsOptional()
-  expectsReadConfirmation?: boolean;
-
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: 0})
   @IsNumber()
   @IsOptional()
   @IsNumber()
@@ -101,15 +96,20 @@ export class InstanceFileOptions {
   @ApiPropertyOptional({example: false})
   @IsOptional()
   @IsBoolean()
+  otherAlgorithm?: boolean;
+
+  @ApiPropertyOptional({example: false})
+  @IsOptional()
+  @IsBoolean()
   otherHash?: boolean;
 
-  @ApiPropertyOptional({example: false})
-  @IsOptional()
-  @IsBoolean()
-  invalidHash?: boolean;
+  @ApiProperty({example: ''})
+  @IsString()
+  type!: string;
 
-  @ApiPropertyOptional({example: false})
+  @ApiPropertyOptional()
+  @ValidateNested()
+  @Type(() => VideoMeta)
   @IsOptional()
-  @IsBoolean()
-  otherAlgorithm?: boolean;
+  video?: VideoMeta;
 }

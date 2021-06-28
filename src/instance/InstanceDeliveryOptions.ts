@@ -21,11 +21,11 @@ import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {IsUUID, IsOptional} from 'class-validator';
 
 export class InstanceDeliveryOptions {
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
 
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   firstMessageId!: string;
 

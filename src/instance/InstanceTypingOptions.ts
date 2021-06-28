@@ -22,7 +22,7 @@ import {CONVERSATION_TYPING} from '@wireapp/api-client/src/conversation/data/';
 import {IsEnum, IsUUID} from 'class-validator';
 
 export class InstanceTypingOptions {
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
 

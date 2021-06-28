@@ -23,11 +23,18 @@ import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content/';
 import {IsEnum, IsOptional, IsUUID} from 'class-validator';
 
 export class InstanceReactionOptions {
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional({
+    enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
+  })
+  @IsEnum(LegalHoldStatus)
+  @IsOptional()
+  legalHoldStatus?: LegalHoldStatus;
+
+  @ApiProperty({example: ''})
   @IsUUID(4)
   originalMessageId!: string;
 
@@ -36,11 +43,4 @@ export class InstanceReactionOptions {
   })
   @IsEnum(ReactionType)
   type!: ReactionType;
-
-  @ApiPropertyOptional({
-    enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
-  })
-  @IsEnum(LegalHoldStatus)
-  @IsOptional()
-  legalHoldStatus?: LegalHoldStatus;
 }

@@ -24,19 +24,23 @@ import {IsNotEmpty, IsOptional, IsString, ValidateNested, IsEmail} from 'class-v
 export class BackendMeta {
   @ApiProperty({example: 'my custom backend'})
   @IsString()
+  @IsNotEmpty()
   name!: string;
 
   @ApiProperty({example: 'https://...'})
   @IsString()
+  @IsNotEmpty()
   rest!: string;
 
   @ApiProperty({example: 'wss://...'})
   @IsString()
+  @IsNotEmpty()
   ws!: string;
 }
 
 export class ClientsOptions {
   @ApiPropertyOptional({example: 'staging'})
+  @IsString()
   @IsOptional()
   backend?: string;
 
@@ -47,6 +51,7 @@ export class ClientsOptions {
   customBackend?: BackendMeta;
 
   @ApiProperty({example: 'email@example.com'})
+  @IsNotEmpty()
   @IsEmail()
   email!: string;
 

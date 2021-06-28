@@ -135,7 +135,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -192,10 +192,10 @@ export class InstanceController {
   @ApiResponse({
     schema: {
       example: {
-        backend: 'string',
-        clientId: 'string',
+        backend: '',
+        clientId: '',
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -234,7 +234,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -275,7 +275,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -320,7 +320,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -361,16 +361,16 @@ export class InstanceController {
     schema: {
       example: [
         {
-          class: 'string',
-          cookie: 'string',
+          class: '',
+          cookie: '',
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           location: {
             lat: 0,
             lon: 0,
           },
-          model: 'string',
+          model: '',
           time: '2020-04-29T11:29:02.445Z',
-          type: 'string',
+          type: '',
         },
       ],
     },
@@ -405,7 +405,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -446,7 +446,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -486,7 +486,7 @@ export class InstanceController {
   @ApiResponse({
     schema: {
       example: {
-        fingerprint: 'string',
+        fingerprint: '',
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       },
     },
@@ -535,7 +535,7 @@ export class InstanceController {
           content: {
             expectsReadConfirmation: true,
             legalHoldStatus: 0,
-            text: 'string',
+            text: '',
           },
           conversation: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           from: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -550,8 +550,8 @@ export class InstanceController {
             },
           ],
           state: 'PayloadBundleState.INCOMING',
-          timestamp: 'string',
-          type: 'string',
+          timestamp: '',
+          type: '',
         },
       ],
     },
@@ -590,7 +590,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -631,7 +631,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -672,7 +672,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -713,7 +713,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -754,7 +754,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -796,7 +796,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -880,7 +880,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -946,7 +946,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1004,7 +1004,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1125,7 +1125,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1209,7 +1209,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1251,7 +1251,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1337,7 +1337,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1379,7 +1379,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1466,10 +1466,10 @@ export class InstancesController {
   @ApiResponse({
     schema: {
       example: {
-        backend: 'string',
-        clientId: 'string',
+        backend: '',
+        clientId: '',
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1540,16 +1540,16 @@ export class ServerController {
     schema: {
       example: {
         code: 0,
-        commit: 'string',
+        commit: '',
         instance: {
           env: {
-            LOG_ERROR: 'string',
-            LOG_OUTPUT: 'string',
-            NODE_DEBUG: 'string',
+            LOG_ERROR: '',
+            LOG_OUTPUT: '',
+            NODE_DEBUG: '',
           },
-          uptime: 'string',
+          uptime: '',
         },
-        message: 'string',
+        message: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1584,7 +1584,7 @@ export class ServerController {
   @ApiOperation({summary: 'Get the latest commit hash as plain text.'})
   @ApiResponse({
     schema: {
-      example: 'string',
+      example: '',
     },
     status: HTTP_STATUS_CODE.OK,
   })
@@ -1604,7 +1604,7 @@ export class ServerController {
   @ApiOperation({summary: 'Get the complete log as plain text.'})
   @ApiResponse({
     schema: {
-      example: 'string',
+      example: '',
     },
     status: HTTP_STATUS_CODE.OK,
   })

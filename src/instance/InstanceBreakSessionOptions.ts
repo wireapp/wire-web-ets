@@ -21,11 +21,11 @@ import {ApiProperty} from '@nestjs/swagger';
 import {IsUUID, IsString} from 'class-validator';
 
 export class InstanceBreakSessionOptions {
-  @ApiProperty()
-  @IsUUID(4)
-  userId!: string;
-
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsString()
   clientId!: string;
+
+  @ApiProperty({example: ''})
+  @IsUUID(4)
+  userId!: string;
 }
