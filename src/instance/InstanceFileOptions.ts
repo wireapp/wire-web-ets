@@ -58,6 +58,11 @@ export class InstanceFileOptions {
   @IsOptional()
   audio?: AudioMeta;
 
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsOptional()
+  @IsString()
+  conversationDomain?: string;
+
   @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;

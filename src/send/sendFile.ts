@@ -21,17 +21,29 @@ import {LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {ConversationService} from '@wireapp/core/src/main/conversation';
 import {FileContent, FileMetaDataContent} from '@wireapp/core/src/main/conversation/content';
 
-export async function sendFile(
-  conversationService: ConversationService,
-  conversationId: string,
-  file: FileContent,
-  metadata: FileMetaDataContent,
-  expectsReadConfirmation?: boolean,
-  legalHoldStatus?: LegalHoldStatus,
+export async function sendFile({
+  conversationId,
+  conversationService,
+  customAlgorithm,
+  customHash,
+  conversationDomain,
+  expectsReadConfirmation,
   expireAfterMillis = 0,
-  customHash?: Buffer,
-  customAlgorithm?: string,
-): Promise<ReturnType<ConversationService['send']>> {
+  file,
+  legalHoldStatus,
+  metadata,
+}: {
+  conversationDomain?: string;
+  conversationId: string;
+  conversationService: ConversationService;
+  customAlgorithm?: string;
+  customHash?: Buffer;
+  expectsReadConfirmation?: boolean;
+  expireAfterMillis?: number;
+  file: FileContent;
+  legalHoldStatus?: LegalHoldStatus;
+  metadata: FileMetaDataContent;
+}): Promise<ReturnType<ConversationService['send']>> {
   conversationService.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
   const metadataPayload = conversationService.messageBuilder.createFileMetadata({
@@ -40,7 +52,7 @@ export async function sendFile(
     legalHoldStatus,
     metaData: metadata,
   });
-  await conversationService.send(metadataPayload);
+  await conversationService.send({conversationDomain, payloadBundle: metadataPayload});
 
   const filePayload = await conversationService.messageBuilder.createFileData({
     cipherOptions: {algorithm: customAlgorithm, hash: customHash},
@@ -50,5 +62,5 @@ export async function sendFile(
     legalHoldStatus,
     originalMessageId: metadataPayload.id,
   });
-  return conversationService.send(filePayload);
+  return conversationService.send({payloadBundle: filePayload});
 }

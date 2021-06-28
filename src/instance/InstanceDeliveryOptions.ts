@@ -18,9 +18,14 @@
  */
 
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {IsUUID, IsOptional} from 'class-validator';
+import {IsUUID, IsOptional, IsString} from 'class-validator';
 
 export class InstanceDeliveryOptions {
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsString()
+  @IsOptional()
+  conversationDomain?: string;
+
   @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;

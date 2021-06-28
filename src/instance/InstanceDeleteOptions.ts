@@ -17,10 +17,15 @@
  *
  */
 
-import {ApiProperty} from '@nestjs/swagger';
-import {IsUUID} from 'class-validator';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
+import {IsOptional, IsString, IsUUID} from 'class-validator';
 
 export class InstanceDeleteOptions {
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsString()
+  @IsOptional()
+  conversationDomain?: string;
+
   @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;

@@ -22,6 +22,11 @@ import {IsUUID, IsBoolean, IsNumber, IsOptional, IsEnum, IsString} from 'class-v
 import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content/';
 
 export class InstanceLocationOptions {
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsOptional()
+  @IsString()
+  conversationDomain?: string;
+
   @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
