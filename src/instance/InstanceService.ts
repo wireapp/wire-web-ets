@@ -93,6 +93,53 @@ interface Instance {
   name: string;
 }
 
+interface BaseOptions {
+  conversationId: string;
+  expectsReadConfirmation?: boolean;
+  instanceId: string;
+  legalHoldStatus?: LegalHoldStatus;
+}
+
+interface SendOptions extends BaseOptions {
+  expireAfterMillis?: number;
+}
+
+interface SendFileOptions extends SendOptions {
+  customAlgorithm?: string;
+  customHash?: Buffer;
+  file: FileContent;
+  metadata: FileMetaDataContent;
+}
+
+interface SendImageOptions extends SendOptions {
+  customAlgorithm?: string;
+  customHash?: Buffer;
+  image: ImageContent;
+}
+
+interface SendLocationOptions extends BaseOptions {
+  expireAfterMillis?: number;
+  location: LocationContent;
+}
+
+type SendPingOptions = SendOptions;
+
+interface SendTextOptions extends SendOptions {
+  buttons?: string[];
+  linkPreview?: LinkPreviewContent;
+  mentions?: MentionContent[];
+  message: string;
+  quote?: QuoteContent;
+}
+
+interface UpdateTextOptions extends BaseOptions {
+  newLinkPreview?: LinkPreviewContent;
+  newMentions?: MentionContent[];
+  newMessageText: string;
+  newQuote?: QuoteContent;
+  originalMessageId: string;
+}
+
 @Injectable()
 export class InstanceService {
   private readonly cachedInstances: LRUCache<Instance> = new LRUCache(100);
@@ -525,17 +572,17 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendFile(
-    instanceId: string,
-    conversationId: string,
-    file: FileContent,
-    metadata: FileMetaDataContent,
-    expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus,
+  async sendFile({
+    conversationId,
+    customAlgorithm,
+    customHash,
+    expectsReadConfirmation,
     expireAfterMillis = 0,
-    customHash?: Buffer,
-    customAlgorithm?: string,
-  ): Promise<string> {
+    file,
+    instanceId,
+    legalHoldStatus,
+    metadata,
+  }: SendFileOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
@@ -560,16 +607,16 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendImage(
-    instanceId: string,
-    conversationId: string,
-    image: ImageContent,
-    expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus,
+  async sendImage({
+    conversationId,
+    customAlgorithm,
+    customHash,
+    expectsReadConfirmation,
     expireAfterMillis = 0,
-    customHash?: Buffer,
-    customAlgorithm?: string,
-  ): Promise<string> {
+    image,
+    instanceId,
+    legalHoldStatus,
+  }: SendImageOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
@@ -592,18 +639,18 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendLocation(
-    instanceId: string,
-    conversationId: string,
-    location: LocationContent,
+  async sendLocation({
+    conversationId,
     expireAfterMillis = 0,
-  ): Promise<string> {
+    instanceId,
+    location,
+  }: SendLocationOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await service.conversation.messageBuilder.createLocation({conversationId, location});
+      const payload = service.conversation.messageBuilder.createLocation({conversationId, location});
       const sentLocation = await service.conversation.send(payload);
 
       instance.messages.set(sentLocation.id, sentLocation);
@@ -612,13 +659,13 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendPing(
-    instanceId: string,
-    conversationId: string,
-    expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus,
+  async sendPing({
+    conversationId,
+    expectsReadConfirmation,
     expireAfterMillis = 0,
-  ): Promise<string> {
+    instanceId,
+    legalHoldStatus,
+  }: SendPingOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
@@ -748,18 +795,18 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendText(
-    instanceId: string,
-    conversationId: string,
-    message: string,
-    linkPreview?: LinkPreviewContent,
-    mentions?: MentionContent[],
-    quote?: QuoteContent,
-    expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus,
+  async sendText({
+    buttons = [],
+    conversationId,
+    expectsReadConfirmation,
     expireAfterMillis = 0,
-    buttons: string[] = [],
-  ): Promise<string> {
+    instanceId,
+    legalHoldStatus,
+    linkPreview,
+    mentions,
+    message,
+    quote,
+  }: SendTextOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
@@ -814,17 +861,17 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async updateText(
-    instanceId: string,
-    conversationId: string,
-    originalMessageId: string,
-    newMessageText: string,
-    newLinkPreview?: LinkPreviewContent,
-    newMentions?: MentionContent[],
-    newQuote?: QuoteContent,
-    expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus,
-  ): Promise<string> {
+  async updateText({
+    conversationId,
+    expectsReadConfirmation,
+    instanceId,
+    legalHoldStatus,
+    newLinkPreview,
+    newMentions,
+    newMessageText,
+    newQuote,
+    originalMessageId,
+  }: UpdateTextOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 

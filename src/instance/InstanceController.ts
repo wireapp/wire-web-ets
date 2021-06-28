@@ -850,17 +850,17 @@ export class InstanceController {
         customHash = Buffer.from(UUID.genV4().toString(), 'utf-8');
       }
 
-      const messageId = await this.instanceService.sendFile(
-        instanceId,
-        body.conversationId,
-        fileContent,
-        metadata,
-        body.expectsReadConfirmation,
-        body.legalHoldStatus,
-        body.messageTimer,
-        customHash,
+      const messageId = await this.instanceService.sendFile({
+        conversationId: body.conversationId,
         customAlgorithm,
-      );
+        customHash,
+        expectsReadConfirmation: body.expectsReadConfirmation,
+        expireAfterMillis: body.messageTimer,
+        file: fileContent,
+        instanceId,
+        legalHoldStatus: body.legalHoldStatus,
+        metadata,
+      });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
@@ -917,16 +917,16 @@ export class InstanceController {
     try {
       const data = Buffer.from(body.data, 'base64');
       const image: ImageContent = {data, height: body.height, type: body.type, width: body.width};
-      const messageId = await this.instanceService.sendImage(
-        instanceId,
-        body.conversationId,
-        image,
-        body.expectsReadConfirmation,
-        body.legalHoldStatus,
-        body.messageTimer,
-        customHash,
+      const messageId = await this.instanceService.sendImage({
+        conversationId: body.conversationId,
         customAlgorithm,
-      );
+        customHash,
+        expectsReadConfirmation: body.expectsReadConfirmation,
+        expireAfterMillis: body.messageTimer,
+        image,
+        instanceId,
+        legalHoldStatus: body.legalHoldStatus,
+      });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
@@ -979,12 +979,12 @@ export class InstanceController {
         zoom: body.zoom,
       };
 
-      const messageId = await this.instanceService.sendLocation(
+      const messageId = await this.instanceService.sendLocation({
+        conversationId: body.conversationId,
+        expireAfterMillis: body.messageTimer,
         instanceId,
-        body.conversationId,
         location,
-        body.messageTimer,
-      );
+      });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
@@ -1028,13 +1028,13 @@ export class InstanceController {
     }
 
     try {
-      const messageId = await this.instanceService.sendPing(
+      const messageId = await this.instanceService.sendPing({
+        conversationId: body.conversationId,
+        expectsReadConfirmation: body.expectsReadConfirmation,
+        expireAfterMillis: body.messageTimer,
         instanceId,
-        body.conversationId,
-        body.expectsReadConfirmation,
-        body.legalHoldStatus,
-        body.messageTimer,
-      );
+        legalHoldStatus: body.legalHoldStatus,
+      });
 
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
@@ -1307,18 +1307,18 @@ export class InstanceController {
     }
 
     try {
-      const messageId = await this.instanceService.sendText(
+      const messageId = await this.instanceService.sendText({
+        buttons: body.buttons,
+        conversationId: body.conversationId,
+        expectsReadConfirmation: body.expectsReadConfirmation,
+        expireAfterMillis: body.messageTimer,
         instanceId,
-        body.conversationId,
-        body.text,
-        linkPreviewContent,
-        body.mentions,
-        quoteContent,
-        body.expectsReadConfirmation,
-        body.legalHoldStatus,
-        body.messageTimer,
-        body.buttons,
-      );
+        legalHoldStatus: body.legalHoldStatus,
+        linkPreview: linkPreviewContent,
+        mentions: body.mentions,
+        message: body.text,
+        quote: quoteContent,
+      });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
@@ -1432,17 +1432,17 @@ export class InstanceController {
     }
 
     try {
-      const messageId = await this.instanceService.updateText(
+      const messageId = await this.instanceService.updateText({
+        conversationId: body.conversationId,
+        expectsReadConfirmation: body.expectsReadConfirmation,
         instanceId,
-        body.conversationId,
-        body.firstMessageId,
-        body.text,
-        linkPreviewContent,
-        body.mentions,
-        quoteContent,
-        body.expectsReadConfirmation,
-        body.legalHoldStatus,
-      );
+        legalHoldStatus: body.legalHoldStatus,
+        newLinkPreview: linkPreviewContent,
+        newMentions: body.mentions,
+        newMessageText: body.text,
+        newQuote: quoteContent,
+        originalMessageId: body.firstMessageId,
+      });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
