@@ -20,9 +20,14 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {ReactionType} from '@wireapp/core/src/main/conversation';
 import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content/';
-import {IsEnum, IsOptional, IsUUID} from 'class-validator';
+import {IsEnum, IsOptional, IsString, IsUUID} from 'class-validator';
 
 export class InstanceReactionOptions {
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsString()
+  @IsOptional()
+  conversationDomain?: string;
+
   @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;

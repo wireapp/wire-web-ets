@@ -19,9 +19,14 @@
 
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content/';
-import {IsBoolean, IsEnum, IsNumber, IsOptional, IsUUID} from 'class-validator';
+import {IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID} from 'class-validator';
 
 export class InstancePingOptions {
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsString()
+  @IsOptional()
+  conversationDomain?: string;
+
   @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;

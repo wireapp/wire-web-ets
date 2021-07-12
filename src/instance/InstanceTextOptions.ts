@@ -59,6 +59,11 @@ class TweetMeta {
 }
 
 class ImageMeta {
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsString()
+  @IsOptional()
+  conversationDomain?: string;
+
   @ApiProperty({example: ''})
   @IsString()
   data!: string;
@@ -135,6 +140,11 @@ export class InstanceTextOptions {
   @IsString({each: true})
   @IsOptional()
   buttons?: string[];
+
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsString()
+  @IsOptional()
+  conversationDomain?: string;
 
   @ApiProperty({example: ''})
   @IsUUID(4)
