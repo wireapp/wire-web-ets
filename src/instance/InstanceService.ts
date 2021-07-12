@@ -433,7 +433,7 @@ export class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const cryptoboxIdentity = instance.account.service.cryptography.cryptobox.identity;
+      const cryptoboxIdentity = instance.account.service.cryptography.cryptobox.getIdentity();
       if (cryptoboxIdentity) {
         return cryptoboxIdentity.public_key.fingerprint();
       }
