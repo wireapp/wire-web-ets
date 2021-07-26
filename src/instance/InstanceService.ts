@@ -93,6 +93,54 @@ interface Instance {
   name: string;
 }
 
+interface BaseOptions {
+  conversationDomain?: string;
+  conversationId: string;
+  expectsReadConfirmation?: boolean;
+  instanceId: string;
+  legalHoldStatus?: LegalHoldStatus;
+}
+
+interface SendOptions extends BaseOptions {
+  expireAfterMillis?: number;
+}
+
+interface SendFileOptions extends SendOptions {
+  customAlgorithm?: string;
+  customHash?: Buffer;
+  file: FileContent;
+  metadata: FileMetaDataContent;
+}
+
+interface SendImageOptions extends SendOptions {
+  customAlgorithm?: string;
+  customHash?: Buffer;
+  image: ImageContent;
+}
+
+interface SendLocationOptions extends BaseOptions {
+  expireAfterMillis?: number;
+  location: LocationContent;
+}
+
+type SendPingOptions = SendOptions;
+
+interface SendTextOptions extends SendOptions {
+  buttons?: string[];
+  linkPreview?: LinkPreviewContent;
+  mentions?: MentionContent[];
+  message: string;
+  quote?: QuoteContent;
+}
+
+interface UpdateTextOptions extends BaseOptions {
+  newLinkPreview?: LinkPreviewContent;
+  newMentions?: MentionContent[];
+  newMessageText: string;
+  newQuote?: QuoteContent;
+  originalMessageId: string;
+}
+
 @Injectable()
 export class InstanceService {
   private readonly cachedInstances: LRUCache<Instance> = new LRUCache(100);
@@ -385,7 +433,7 @@ export class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      const cryptoboxIdentity = instance.account.service.cryptography.cryptobox.identity;
+      const cryptoboxIdentity = instance.account.service.cryptography.cryptobox.getIdentity();
       if (cryptoboxIdentity) {
         return cryptoboxIdentity.public_key.fingerprint();
       }
@@ -433,7 +481,7 @@ export class InstanceService {
         moreMessageIds: options.moreMessageIds,
         type: Confirmation.Type.DELIVERED,
       });
-      await service.conversation.send(payload);
+      await service.conversation.send({conversationDomain: options.conversationDomain, payloadBundle: payload});
       return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -450,7 +498,7 @@ export class InstanceService {
         moreMessageIds: options.moreMessageIds,
         type: Confirmation.Type.READ,
       });
-      await service.conversation.send(payload);
+      await service.conversation.send({conversationDomain: options.conversationDomain, payloadBundle: payload});
       return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -472,7 +520,10 @@ export class InstanceService {
         moreMessageIds: options.moreMessageIds,
         type: Confirmation.Type.DELIVERED,
       });
-      await service.conversation.send(confirmationPayload);
+      await service.conversation.send({
+        conversationDomain: options.conversationDomain,
+        payloadBundle: confirmationPayload,
+      });
       await service.conversation.deleteMessageEveryone(options.conversationId, options.firstMessageId, [message.from]);
 
       if (options.moreMessageIds && options.moreMessageIds.length) {
@@ -507,7 +558,10 @@ export class InstanceService {
         moreMessageIds: options.moreMessageIds,
         type: Confirmation.Type.READ,
       });
-      await service.conversation.send(confirmationPayload);
+      await service.conversation.send({
+        conversationDomain: options.conversationDomain,
+        payloadBundle: confirmationPayload,
+      });
       await service.conversation.deleteMessageEveryone(options.conversationId, options.firstMessageId, [message.from]);
       if (options.moreMessageIds && options.moreMessageIds.length) {
         for (const messageId of options.moreMessageIds) {
@@ -525,32 +579,32 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendFile(
-    instanceId: string,
-    conversationId: string,
-    file: FileContent,
-    metadata: FileMetaDataContent,
-    expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus,
+  async sendFile({
+    conversationId,
+    customAlgorithm,
+    customHash,
+    expectsReadConfirmation,
     expireAfterMillis = 0,
-    customHash?: Buffer,
-    customAlgorithm?: string,
-  ): Promise<string> {
+    file,
+    instanceId,
+    legalHoldStatus,
+    metadata,
+  }: SendFileOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
     if (service) {
-      const sentFile = await sendFile(
-        service.conversation,
+      const sentFile = await sendFile({
         conversationId,
-        file,
-        metadata,
-        expectsReadConfirmation,
-        legalHoldStatus,
-        expireAfterMillis,
-        customHash,
+        conversationService: service.conversation,
         customAlgorithm,
-      );
+        customHash,
+        expectsReadConfirmation,
+        expireAfterMillis,
+        file,
+        legalHoldStatus,
+        metadata,
+      });
 
       stripAsset(sentFile.content);
 
@@ -560,16 +614,17 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendImage(
-    instanceId: string,
-    conversationId: string,
-    image: ImageContent,
-    expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus,
+  async sendImage({
+    conversationDomain,
+    conversationId,
+    customAlgorithm,
+    customHash,
+    expectsReadConfirmation,
     expireAfterMillis = 0,
-    customHash?: Buffer,
-    customAlgorithm?: string,
-  ): Promise<string> {
+    image,
+    instanceId,
+    legalHoldStatus,
+  }: SendImageOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
@@ -582,7 +637,7 @@ export class InstanceService {
         image,
         legalHoldStatus,
       });
-      const sentImage = await service.conversation.send(payload);
+      const sentImage = await service.conversation.send({conversationDomain, payloadBundle: payload});
 
       stripAsset(sentImage.content);
 
@@ -592,19 +647,20 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendLocation(
-    instanceId: string,
-    conversationId: string,
-    location: LocationContent,
+  async sendLocation({
+    conversationDomain,
+    conversationId,
     expireAfterMillis = 0,
-  ): Promise<string> {
+    instanceId,
+    location,
+  }: SendLocationOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await service.conversation.messageBuilder.createLocation({conversationId, location});
-      const sentLocation = await service.conversation.send(payload);
+      const payload = service.conversation.messageBuilder.createLocation({conversationId, location});
+      const sentLocation = await service.conversation.send({conversationDomain, payloadBundle: payload});
 
       instance.messages.set(sentLocation.id, sentLocation);
       return sentLocation.id;
@@ -612,13 +668,14 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendPing(
-    instanceId: string,
-    conversationId: string,
-    expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus,
+  async sendPing({
+    conversationDomain,
+    conversationId,
+    expectsReadConfirmation,
     expireAfterMillis = 0,
-  ): Promise<string> {
+    instanceId,
+    legalHoldStatus,
+  }: SendPingOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
@@ -632,7 +689,7 @@ export class InstanceService {
           legalHoldStatus,
         },
       });
-      const sentPing = await service.conversation.send(payload);
+      const sentPing = await service.conversation.send({conversationDomain, payloadBundle: payload});
 
       instance.messages.set(sentPing.id, sentPing);
       return sentPing.id;
@@ -651,7 +708,11 @@ export class InstanceService {
         },
         conversationId: options.conversationId,
       });
-      await service.conversation.send(payload, options.userIds);
+      await service.conversation.send({
+        conversationDomain: options.conversationDomain,
+        payloadBundle: payload,
+        userIds: options.userIds,
+      });
     } else {
       throw new Error(`Account service for instance ${instanceId} not set.`);
     }
@@ -668,7 +729,11 @@ export class InstanceService {
         },
         conversationId: options.conversationId,
       });
-      await service.conversation.send(payload, options.userIds);
+      await service.conversation.send({
+        conversationDomain: options.conversationDomain,
+        payloadBundle: payload,
+        userIds: options.userIds,
+      });
     } else {
       throw new Error(`Account service for instance "${instanceId}" not set.`);
     }
@@ -687,7 +752,10 @@ export class InstanceService {
           type: options.type,
         },
       });
-      const {id: messageId} = await service.conversation.send(payload);
+      const {id: messageId} = await service.conversation.send({
+        conversationDomain: options.conversationDomain,
+        payloadBundle: payload,
+      });
       return messageId;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -724,10 +792,13 @@ export class InstanceService {
     const service = instance.account.service;
 
     if (service) {
-      const sessionResetPayload = service.conversation.messageBuilder.createSessionReset({
+      const payload = service.conversation.messageBuilder.createSessionReset({
         conversationId: options.conversationId,
       });
-      const {id: messageId} = await service.conversation.send(sessionResetPayload);
+      const {id: messageId} = await service.conversation.send({
+        conversationDomain: options.conversationDomain,
+        payloadBundle: payload,
+      });
       return messageId;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -748,18 +819,19 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendText(
-    instanceId: string,
-    conversationId: string,
-    message: string,
-    linkPreview?: LinkPreviewContent,
-    mentions?: MentionContent[],
-    quote?: QuoteContent,
-    expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus,
+  async sendText({
+    buttons = [],
+    conversationDomain,
+    conversationId,
+    expectsReadConfirmation,
     expireAfterMillis = 0,
-    buttons: string[] = [],
-  ): Promise<string> {
+    instanceId,
+    legalHoldStatus,
+    linkPreview,
+    mentions,
+    message,
+    quote,
+  }: SendTextOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
@@ -784,7 +856,7 @@ export class InstanceService {
         payloadBundle = compositeBuilder.build();
       }
 
-      let sentMessage = await service.conversation.send(payloadBundle);
+      let sentMessage = await service.conversation.send({conversationDomain, payloadBundle});
 
       if (linkPreview) {
         const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(linkPreview);
@@ -797,7 +869,7 @@ export class InstanceService {
           .withLegalHoldStatus(legalHoldStatus)
           .build();
 
-        sentMessage = await service.conversation.send(editedWithPreviewPayload);
+        sentMessage = await service.conversation.send({conversationDomain, payloadBundle: editedWithPreviewPayload});
 
         const messageContent = sentMessage.content as TextContent;
 
@@ -814,17 +886,18 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async updateText(
-    instanceId: string,
-    conversationId: string,
-    originalMessageId: string,
-    newMessageText: string,
-    newLinkPreview?: LinkPreviewContent,
-    newMentions?: MentionContent[],
-    newQuote?: QuoteContent,
-    expectsReadConfirmation?: boolean,
-    legalHoldStatus?: LegalHoldStatus,
-  ): Promise<string> {
+  async updateText({
+    conversationId,
+    conversationDomain,
+    expectsReadConfirmation,
+    instanceId,
+    legalHoldStatus,
+    newLinkPreview,
+    newMentions,
+    newMessageText,
+    newQuote,
+    originalMessageId,
+  }: UpdateTextOptions): Promise<string> {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
 
@@ -837,7 +910,7 @@ export class InstanceService {
         .withLegalHoldStatus(legalHoldStatus)
         .build();
 
-      let editedMessage = await service.conversation.send(editedPayload);
+      let editedMessage = await service.conversation.send({conversationDomain, payloadBundle: editedPayload});
 
       if (newLinkPreview) {
         const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(newLinkPreview);
@@ -850,7 +923,7 @@ export class InstanceService {
           .withLegalHoldStatus(legalHoldStatus)
           .build();
 
-        editedMessage = await service.conversation.send(editedWithPreviewPayload);
+        editedMessage = await service.conversation.send({conversationDomain, payloadBundle: editedWithPreviewPayload});
 
         const editedMessageContent = editedMessage.content as EditedTextContent;
 

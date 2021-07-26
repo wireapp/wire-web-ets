@@ -17,21 +17,26 @@
  *
  */
 
-import {ApiProperty} from '@nestjs/swagger';
-import {IsUUID, IsString} from 'class-validator';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
+import {IsUUID, IsString, IsOptional} from 'class-validator';
 
 export class InstanceButtonOptions {
-  @ApiProperty()
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsString()
+  @IsOptional()
+  conversationDomain?: string;
+
+  @ApiProperty({example: ''})
+  @IsString()
+  buttonId!: string;
+
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
 
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   referenceMessageId!: string;
-
-  @ApiProperty()
-  @IsString()
-  buttonId!: string;
 
   @ApiProperty({isArray: true, type: String})
   @IsUUID(4, {each: true})

@@ -21,11 +21,11 @@ import {ApiProperty} from '@nestjs/swagger';
 import {IsBoolean, IsUUID} from 'class-validator';
 
 export class InstanceArchiveOptions {
-  @ApiProperty()
+  @ApiProperty({example: false})
   @IsBoolean()
   archived!: boolean;
 
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
 }

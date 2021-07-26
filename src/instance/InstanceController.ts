@@ -135,7 +135,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -192,10 +192,10 @@ export class InstanceController {
   @ApiResponse({
     schema: {
       example: {
-        backend: 'string',
-        clientId: 'string',
+        backend: '',
+        clientId: '',
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -234,7 +234,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -275,7 +275,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -320,7 +320,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -361,16 +361,16 @@ export class InstanceController {
     schema: {
       example: [
         {
-          class: 'string',
-          cookie: 'string',
+          class: '',
+          cookie: '',
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           location: {
             lat: 0,
             lon: 0,
           },
-          model: 'string',
+          model: '',
           time: '2020-04-29T11:29:02.445Z',
-          type: 'string',
+          type: '',
         },
       ],
     },
@@ -405,7 +405,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -446,7 +446,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -486,7 +486,7 @@ export class InstanceController {
   @ApiResponse({
     schema: {
       example: {
-        fingerprint: 'string',
+        fingerprint: '',
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       },
     },
@@ -535,7 +535,7 @@ export class InstanceController {
           content: {
             expectsReadConfirmation: true,
             legalHoldStatus: 0,
-            text: 'string',
+            text: '',
           },
           conversation: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           from: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -550,8 +550,8 @@ export class InstanceController {
             },
           ],
           state: 'PayloadBundleState.INCOMING',
-          timestamp: 'string',
-          type: 'string',
+          timestamp: '',
+          type: '',
         },
       ],
     },
@@ -590,7 +590,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -631,7 +631,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -672,7 +672,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -713,7 +713,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -754,7 +754,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -796,7 +796,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -850,17 +850,17 @@ export class InstanceController {
         customHash = Buffer.from(UUID.genV4().toString(), 'utf-8');
       }
 
-      const messageId = await this.instanceService.sendFile(
-        instanceId,
-        body.conversationId,
-        fileContent,
-        metadata,
-        body.expectsReadConfirmation,
-        body.legalHoldStatus,
-        body.messageTimer,
-        customHash,
+      const messageId = await this.instanceService.sendFile({
+        conversationId: body.conversationId,
         customAlgorithm,
-      );
+        customHash,
+        expectsReadConfirmation: body.expectsReadConfirmation,
+        expireAfterMillis: body.messageTimer,
+        file: fileContent,
+        instanceId,
+        legalHoldStatus: body.legalHoldStatus,
+        metadata,
+      });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
@@ -880,7 +880,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -917,16 +917,16 @@ export class InstanceController {
     try {
       const data = Buffer.from(body.data, 'base64');
       const image: ImageContent = {data, height: body.height, type: body.type, width: body.width};
-      const messageId = await this.instanceService.sendImage(
-        instanceId,
-        body.conversationId,
-        image,
-        body.expectsReadConfirmation,
-        body.legalHoldStatus,
-        body.messageTimer,
-        customHash,
+      const messageId = await this.instanceService.sendImage({
+        conversationId: body.conversationId,
         customAlgorithm,
-      );
+        customHash,
+        expectsReadConfirmation: body.expectsReadConfirmation,
+        expireAfterMillis: body.messageTimer,
+        image,
+        instanceId,
+        legalHoldStatus: body.legalHoldStatus,
+      });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
@@ -946,7 +946,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -979,12 +979,12 @@ export class InstanceController {
         zoom: body.zoom,
       };
 
-      const messageId = await this.instanceService.sendLocation(
+      const messageId = await this.instanceService.sendLocation({
+        conversationId: body.conversationId,
+        expireAfterMillis: body.messageTimer,
         instanceId,
-        body.conversationId,
         location,
-        body.messageTimer,
-      );
+      });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
@@ -1004,7 +1004,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1028,13 +1028,13 @@ export class InstanceController {
     }
 
     try {
-      const messageId = await this.instanceService.sendPing(
+      const messageId = await this.instanceService.sendPing({
+        conversationId: body.conversationId,
+        expectsReadConfirmation: body.expectsReadConfirmation,
+        expireAfterMillis: body.messageTimer,
         instanceId,
-        body.conversationId,
-        body.expectsReadConfirmation,
-        body.legalHoldStatus,
-        body.messageTimer,
-      );
+        legalHoldStatus: body.legalHoldStatus,
+      });
 
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
@@ -1125,7 +1125,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1209,7 +1209,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1251,7 +1251,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1307,18 +1307,18 @@ export class InstanceController {
     }
 
     try {
-      const messageId = await this.instanceService.sendText(
+      const messageId = await this.instanceService.sendText({
+        buttons: body.buttons,
+        conversationId: body.conversationId,
+        expectsReadConfirmation: body.expectsReadConfirmation,
+        expireAfterMillis: body.messageTimer,
         instanceId,
-        body.conversationId,
-        body.text,
-        linkPreviewContent,
-        body.mentions,
-        quoteContent,
-        body.expectsReadConfirmation,
-        body.legalHoldStatus,
-        body.messageTimer,
-        body.buttons,
-      );
+        legalHoldStatus: body.legalHoldStatus,
+        linkPreview: linkPreviewContent,
+        mentions: body.mentions,
+        message: body.text,
+        quote: quoteContent,
+      });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
@@ -1337,7 +1337,7 @@ export class InstanceController {
     schema: {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1379,7 +1379,7 @@ export class InstanceController {
       example: {
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1432,17 +1432,17 @@ export class InstanceController {
     }
 
     try {
-      const messageId = await this.instanceService.updateText(
+      const messageId = await this.instanceService.updateText({
+        conversationId: body.conversationId,
+        expectsReadConfirmation: body.expectsReadConfirmation,
         instanceId,
-        body.conversationId,
-        body.firstMessageId,
-        body.text,
-        linkPreviewContent,
-        body.mentions,
-        quoteContent,
-        body.expectsReadConfirmation,
-        body.legalHoldStatus,
-      );
+        legalHoldStatus: body.legalHoldStatus,
+        newLinkPreview: linkPreviewContent,
+        newMentions: body.mentions,
+        newMessageText: body.text,
+        newQuote: quoteContent,
+        originalMessageId: body.firstMessageId,
+      });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
@@ -1466,10 +1466,10 @@ export class InstancesController {
   @ApiResponse({
     schema: {
       example: {
-        backend: 'string',
-        clientId: 'string',
+        backend: '',
+        clientId: '',
         instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'string',
+        name: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1540,16 +1540,16 @@ export class ServerController {
     schema: {
       example: {
         code: 0,
-        commit: 'string',
+        commit: '',
         instance: {
           env: {
-            LOG_ERROR: 'string',
-            LOG_OUTPUT: 'string',
-            NODE_DEBUG: 'string',
+            LOG_ERROR: '',
+            LOG_OUTPUT: '',
+            NODE_DEBUG: '',
           },
-          uptime: 'string',
+          uptime: '',
         },
-        message: 'string',
+        message: '',
       },
     },
     status: HTTP_STATUS_CODE.OK,
@@ -1584,7 +1584,7 @@ export class ServerController {
   @ApiOperation({summary: 'Get the latest commit hash as plain text.'})
   @ApiResponse({
     schema: {
-      example: 'string',
+      example: '',
     },
     status: HTTP_STATUS_CODE.OK,
   })
@@ -1604,7 +1604,7 @@ export class ServerController {
   @ApiOperation({summary: 'Get the complete log as plain text.'})
   @ApiResponse({
     schema: {
-      example: 'string',
+      example: '',
     },
     status: HTTP_STATUS_CODE.OK,
   })

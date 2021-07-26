@@ -23,67 +23,59 @@ import {Type} from 'class-transformer';
 import {LegalHoldStatus} from '@wireapp/core/src/main/conversation/content';
 
 class QuoteMeta {
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsUUID(4)
   quotedMessageId!: string;
 
-  @ApiProperty()
+  @ApiProperty({example: ''})
   @IsString()
   quotedMessageSha256!: string;
 }
 
 class MentionsMeta {
-  @ApiProperty()
-  @IsUUID(4)
-  userId!: string;
-
-  @ApiProperty()
+  @ApiProperty({example: 0})
   @IsNumber()
   length!: number;
 
-  @ApiProperty()
+  @ApiProperty({example: 0})
   @IsNumber()
   start!: number;
+
+  @ApiProperty({example: ''})
+  @IsUUID(4)
+  userId!: string;
 }
 
 class TweetMeta {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: ''})
   @IsString()
   @IsOptional()
   author?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: ''})
   @IsString()
   @IsOptional()
   username?: string;
 }
 
 class ImageMeta {
-  @ApiProperty()
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsString()
+  @IsOptional()
+  conversationDomain?: string;
+
+  @ApiProperty({example: ''})
   @IsString()
   data!: string;
 
-  @ApiProperty()
-  @IsNumber()
-  height!: number;
-
-  @ApiProperty()
-  @IsNumber()
-  width!: number;
-
-  @ApiProperty()
-  @IsString()
-  type!: string;
-
-  @ApiProperty()
+  @ApiPropertyOptional({example: false})
   @IsBoolean()
   @IsOptional()
   expectsReadConfirmation?: boolean;
 
-  @ApiProperty()
+  @ApiProperty({example: 0})
   @IsNumber()
-  @IsOptional()
-  messageTimer?: number;
+  height!: number;
 
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
@@ -91,28 +83,39 @@ class ImageMeta {
   @IsEnum(LegalHoldStatus)
   @IsOptional()
   legalHoldStatus?: LegalHoldStatus;
+
+  @ApiPropertyOptional({example: 0})
+  @IsNumber()
+  @IsOptional()
+  messageTimer?: number;
+
+  @ApiProperty({example: ''})
+  @IsString()
+  type!: string;
+
+  @ApiProperty({example: 0})
+  @IsNumber()
+  width!: number;
 }
 
 class LinkPreviewMeta {
-  @ApiProperty()
-  @IsString()
-  url!: string;
-
-  @ApiProperty()
-  @IsNumber()
-  urlOffset!: number;
-
   @ApiPropertyOptional()
+  @ValidateNested()
+  @Type(() => ImageMeta)
+  @IsOptional()
+  image?: ImageMeta;
+
+  @ApiPropertyOptional({example: ''})
   @IsString()
   @IsOptional()
   permanentUrl?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: ''})
   @IsString()
   @IsOptional()
   summary?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: ''})
   @IsString()
   @IsOptional()
   title?: string;
@@ -123,31 +126,34 @@ class LinkPreviewMeta {
   @IsOptional()
   tweet?: TweetMeta;
 
-  @ApiPropertyOptional()
-  @ValidateNested()
-  @Type(() => ImageMeta)
-  @IsOptional()
-  image?: ImageMeta;
+  @ApiProperty({example: ''})
+  @IsString()
+  url!: string;
+
+  @ApiProperty({example: 0})
+  @IsNumber()
+  urlOffset!: number;
 }
 
 export class InstanceTextOptions {
-  @ApiProperty()
+  @ApiPropertyOptional({isArray: true, type: String})
+  @IsString({each: true})
+  @IsOptional()
+  buttons?: string[];
+
+  @ApiPropertyOptional({example: 'example.com'})
+  @IsString()
+  @IsOptional()
+  conversationDomain?: string;
+
+  @ApiProperty({example: ''})
   @IsUUID(4)
   conversationId!: string;
 
-  @ApiProperty()
-  @IsString()
-  text!: string;
-
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({example: false})
+  @IsBoolean()
   @IsOptional()
-  messageTimer?: number;
-
-  @ApiPropertyOptional()
-  @ValidateNested()
-  @Type(() => QuoteMeta)
-  @IsOptional()
-  quote?: QuoteMeta;
+  expectsReadConfirmation?: boolean;
 
   @ApiPropertyOptional({
     enum: [LegalHoldStatus.UNKNOWN, LegalHoldStatus.DISABLED, LegalHoldStatus.ENABLED],
@@ -157,14 +163,10 @@ export class InstanceTextOptions {
   legalHoldStatus?: LegalHoldStatus;
 
   @ApiPropertyOptional()
-  @IsBoolean()
+  @ValidateNested()
+  @Type(() => LinkPreviewMeta)
   @IsOptional()
-  expectsReadConfirmation?: boolean;
-
-  @ApiPropertyOptional({isArray: true, type: String})
-  @IsString({each: true})
-  @IsOptional()
-  buttons?: string[];
+  linkPreview?: LinkPreviewMeta;
 
   @ApiPropertyOptional({isArray: true, type: MentionsMeta})
   @ValidateNested({each: true})
@@ -172,9 +174,17 @@ export class InstanceTextOptions {
   @IsOptional()
   mentions?: MentionsMeta[];
 
+  @ApiPropertyOptional({example: 0})
+  @IsOptional()
+  messageTimer?: number;
+
   @ApiPropertyOptional()
   @ValidateNested()
-  @Type(() => LinkPreviewMeta)
+  @Type(() => QuoteMeta)
   @IsOptional()
-  linkPreview?: LinkPreviewMeta;
+  quote?: QuoteMeta;
+
+  @ApiProperty({example: ''})
+  @IsString()
+  text!: string;
 }
