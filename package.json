@@ -94,5 +94,5 @@
     "test:types": "tsc --noEmit",
     "version": "yarn dist"
   },
-  "version": "2.3.2"
+  "version": "2.3.3"
 }
