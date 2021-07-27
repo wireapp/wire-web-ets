@@ -42,7 +42,7 @@ yarn start
 
 ## Creating releases
 
-To create a release, checkout the "dev" branch and execute `yarn release:patch`, `yarn release:minor` or `yarn release:major`. Afterwards, create a PR against the "master" with the latest changes.
+To create a release, checkout the "dev" branch and execute `yarn release:patch`, `yarn release:minor` or `yarn release:major`. Afterwards, create a PR against the "main" branch with the latest changes.
 
 ## API documentation
 
