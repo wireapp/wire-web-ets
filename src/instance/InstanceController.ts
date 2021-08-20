@@ -130,7 +130,7 @@ export class InstanceController {
   constructor(private readonly instanceService: InstanceService) {}
 
   @Put()
-  @ApiOperation({summary: 'Create a new instance.'})
+  @ApiOperation({summary: 'Login with an existing user to create a new ETS instance / session.'})
   @ApiResponse({
     schema: {
       example: {

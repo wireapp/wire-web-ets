@@ -141,11 +141,13 @@ interface UpdateTextOptions extends BaseOptions {
   originalMessageId: string;
 }
 
+export type BackendIdentifier = 'prod' | 'production' | 'staging';
+
 @Injectable()
 export class InstanceService {
   private readonly cachedInstances: LRUCache<Instance> = new LRUCache(100);
 
-  private parseBackend(backend?: string | BackendMeta): BackendMeta {
+  private parseBackend(backend?: BackendIdentifier | BackendMeta): BackendMeta {
     if (typeof backend === 'string') {
       switch (backend) {
         case 'production':

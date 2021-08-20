@@ -20,6 +20,7 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {Type} from 'class-transformer';
 import {IsNotEmpty, IsOptional, IsString, ValidateNested, IsEmail} from 'class-validator';
+import {BackendIdentifier} from "./InstanceService";
 
 export class BackendMeta {
   @ApiProperty({example: 'my custom backend'})
@@ -42,7 +43,7 @@ export class ClientsOptions {
   @ApiPropertyOptional({example: 'staging'})
   @IsString()
   @IsOptional()
-  backend?: string;
+  backend?: BackendIdentifier;
 
   @ApiPropertyOptional()
   @ValidateNested()
