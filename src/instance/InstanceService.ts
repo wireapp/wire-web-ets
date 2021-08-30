@@ -287,7 +287,7 @@ export class InstanceService {
 
   async createInstance(options: InstanceCreationOptions): Promise<string> {
     const instanceId = UUID.genV4().toString();
-    const backendType = this.parseBackend(options.backend || options.customBackend);
+    const backendMeta = this.parseBackend(options.backend || options.customBackend);
 
     const engine = new MemoryEngine();
 
@@ -295,9 +295,9 @@ export class InstanceService {
 
     await engine.init('wire-web-ets');
 
-    logger.info(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
+    logger.info(`[${formatDate()}] Creating APIClient with "${backendMeta.name}" backend ...`);
 
-    const client = new APIClient({urls: backendType});
+    const client = new APIClient({urls: backendMeta});
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
@@ -331,7 +331,7 @@ export class InstanceService {
 
     const instance: Instance = {
       account,
-      backendType,
+      backendType: backendMeta,
       client,
       engine,
       id: instanceId,
@@ -527,7 +527,7 @@ export class InstanceService {
       });
       await service.conversation.deleteMessageEveryone(options.conversationId, options.firstMessageId, [message.from]);
 
-      if (options.moreMessageIds && options.moreMessageIds.length) {
+      if (options.moreMessageIds?.length) {
         for (const messageId of options.moreMessageIds) {
           const furtherMessage = instance.messages.get(messageId);
 
@@ -564,7 +564,7 @@ export class InstanceService {
         payloadBundle: confirmationPayload,
       });
       await service.conversation.deleteMessageEveryone(options.conversationId, options.firstMessageId, [message.from]);
-      if (options.moreMessageIds && options.moreMessageIds.length) {
+      if (options.moreMessageIds?.length) {
         for (const messageId of options.moreMessageIds) {
           const furtherMessage = instance.messages.get(messageId);
 
@@ -978,7 +978,7 @@ export class InstanceService {
 
     for (const client of clients) {
       for (const [instanceId, instance] of Object.entries(instances)) {
-        if (instance.client.context && instance.client.context.clientId === client.id) {
+        if (instance.client.context?.clientId === client.id) {
           await this.deleteInstance(instanceId);
         }
       }
