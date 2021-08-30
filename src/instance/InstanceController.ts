@@ -851,6 +851,7 @@ export class InstanceController {
       }
 
       const messageId = await this.instanceService.sendFile({
+        conversationDomain: body.conversationDomain,
         conversationId: body.conversationId,
         customAlgorithm,
         customHash,
@@ -918,6 +919,7 @@ export class InstanceController {
       const data = Buffer.from(body.data, 'base64');
       const image: ImageContent = {data, height: body.height, type: body.type, width: body.width};
       const messageId = await this.instanceService.sendImage({
+        conversationDomain: body.conversationDomain,
         conversationId: body.conversationId,
         customAlgorithm,
         customHash,
@@ -980,6 +982,7 @@ export class InstanceController {
       };
 
       const messageId = await this.instanceService.sendLocation({
+        conversationDomain: body.conversationDomain,
         conversationId: body.conversationId,
         expireAfterMillis: body.messageTimer,
         instanceId,
@@ -1029,6 +1032,7 @@ export class InstanceController {
 
     try {
       const messageId = await this.instanceService.sendPing({
+        conversationDomain: body.conversationDomain,
         conversationId: body.conversationId,
         expectsReadConfirmation: body.expectsReadConfirmation,
         expireAfterMillis: body.messageTimer,
@@ -1309,6 +1313,7 @@ export class InstanceController {
     try {
       const messageId = await this.instanceService.sendText({
         buttons: body.buttons,
+        conversationDomain: body.conversationDomain,
         conversationId: body.conversationId,
         expectsReadConfirmation: body.expectsReadConfirmation,
         expireAfterMillis: body.messageTimer,
