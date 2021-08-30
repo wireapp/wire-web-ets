@@ -21,7 +21,7 @@ import {Injectable} from '@nestjs/common';
 import {APIClient} from '@wireapp/api-client';
 import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/src/client/';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/src/conversation/data/';
-import {BackendErrorLabel} from '@wireapp/api-client/src/http/';
+import {BackendError, BackendErrorLabel} from '@wireapp/api-client/src/http/';
 import {Account} from '@wireapp/core';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 import {ClientInfo} from '@wireapp/core/src/main/client/';
@@ -65,6 +65,7 @@ import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
 import {sendFile} from '../send/sendFile';
+import {AxiosError} from 'axios';
 
 const {version}: {version: string} = require('../../package.json');
 
@@ -320,8 +321,8 @@ export class InstanceService {
       );
       await account.listen();
     } catch (error) {
-      if (error.response?.data?.message) {
-        throw new Error(`Backend error: ${error.response.data.message}`);
+      if ((error as AxiosError).response?.data?.message) {
+        throw new Error(`Backend error: ${(error as AxiosError).response!.data.message}`);
       }
 
       logger.error(`[${formatDate()}]`, error);
@@ -964,7 +965,10 @@ export class InstanceService {
     } catch (error) {
       logger.error(`[${formatDate()}]`, error);
 
-      if (error.code !== HTTP_STATUS.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
+      if (
+        (error as BackendError).code !== HTTP_STATUS.FORBIDDEN ||
+        (error as BackendError).label !== BackendErrorLabel.TOO_MANY_CLIENTS
+      ) {
         throw error;
       }
     }

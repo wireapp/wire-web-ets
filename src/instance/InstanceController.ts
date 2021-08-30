@@ -151,7 +151,7 @@ export class InstanceController {
         name: body.name || '',
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -182,7 +182,7 @@ export class InstanceController {
       await this.instanceService.deleteInstance(instanceId);
       res.status(HTTP_STATUS_CODE.OK).json({});
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -223,7 +223,7 @@ export class InstanceController {
         name: instance.name,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -264,7 +264,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -309,7 +309,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -350,7 +350,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -394,7 +394,7 @@ export class InstanceController {
       const clients = this.instanceService.getAllClients(instanceId);
       res.json(clients);
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -435,7 +435,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -476,7 +476,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -513,7 +513,7 @@ export class InstanceController {
         instanceId,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -579,7 +579,7 @@ export class InstanceController {
       const messages = this.instanceService.getMessages(instanceId, body);
       res.status(HTTP_STATUS_CODE.OK).json(messages || []);
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -620,7 +620,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -661,7 +661,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -702,7 +702,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -743,7 +743,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -784,7 +784,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -869,7 +869,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -936,7 +936,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -995,7 +995,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1047,7 +1047,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1082,7 +1082,7 @@ export class InstanceController {
       await this.instanceService.sendButtonAction(instanceId, body);
       res.status(HTTP_STATUS_CODE.OK).json({});
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1117,7 +1117,7 @@ export class InstanceController {
       await this.instanceService.sendButtonActionConfirmation(instanceId, body);
       res.status(HTTP_STATUS_CODE.OK).json({});
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1161,7 +1161,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1201,7 +1201,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1243,7 +1243,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1331,7 +1331,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1372,7 +1372,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1455,7 +1455,7 @@ export class InstanceController {
         name: instanceName,
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1504,7 +1504,7 @@ export class InstancesController {
     try {
       res.json(reducedInstances);
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1530,7 +1530,7 @@ export class ClientsController {
       await this.instanceService.removeAllClients(body);
       res.json({});
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1600,7 +1600,7 @@ export class ServerController {
       const commitHash = await fs.readFile(commitHashFile, {encoding: 'utf8'});
       res.contentType('text/plain; charset=UTF-8').send(commitHash.trim());
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
@@ -1646,7 +1646,7 @@ export class ServerController {
 
       res.contentType('text/plain; charset=UTF-8').send(logData.join('\n'));
     } catch (error) {
-      const internalServerError = createInternalServerError(error);
+      const internalServerError = createInternalServerError(error as Error);
       res.status(internalServerError.code).json(internalServerError);
     }
   }
