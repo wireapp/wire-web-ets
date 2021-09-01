@@ -21,6 +21,7 @@ import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {ClientClassification} from '@wireapp/api-client/src/client/';
 import {Type} from 'class-transformer';
 import {IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested} from 'class-validator';
+import {InvalidateIf} from '../util/validationUtil';
 
 export class BackendMeta {
   @ApiProperty({example: 'my custom backend'})
@@ -40,6 +41,9 @@ export class BackendMeta {
 }
 
 export class InstanceCreationOptions {
+  @InvalidateIf<InstanceCreationOptions>(options => !!options.customBackend, {
+    message: 'Only one of backend or customBackend supported.',
+  })
   @ApiPropertyOptional({example: 'staging'})
   @IsString()
   @IsOptional()

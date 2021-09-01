@@ -144,6 +144,9 @@ export class InstanceController {
   @ApiResponse(status422description)
   @ApiResponse(status500description)
   async putInstance(@Body() body: InstanceCreationOptions, @Res() res: Response): Promise<void> {
+    // if (body.backend && body.customBackend) {
+    //   throw new ValidationError('Cannot specify both backend and custom backend.');
+    // }
     try {
       const instanceId = await this.instanceService.createInstance(body);
       res.status(HTTP_STATUS_CODE.OK).json({
