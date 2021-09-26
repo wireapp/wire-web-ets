@@ -605,18 +605,18 @@
     "@typescript-eslint/types" "4.29.3"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@13.4.0":
-  version "13.4.0"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-13.4.0.tgz#e17568a568ee016d399e9e65038de213f7f14603"
-  integrity sha512-d3nkSlAtH2d6lZjrHl/idUCz6cZVZqlGjZtuKdwTHxvYE+Ho+oS2inBKZa+n0XX9KwOpkBRXHVri+7Zwk4XWwg==
+"@wireapp/api-client@13.8.1":
+  version "13.8.1"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-13.8.1.tgz#795d5b4615abdf36694b0190c3e01621fe868beb"
+  integrity sha512-ApfcK7xB4Vf0nJ51oZAH5wcqaok7WEYxEbTwhAw9LcPpQJUweo6GtS7lKHtaCdW7GYjQ1HrKEYNCqSBGo5YRBQ==
   dependencies:
     "@types/node" "~14"
     "@types/spark-md5" "3.0.2"
     "@types/tough-cookie" "4.0.1"
-    "@wireapp/commons" "4.2.11"
+    "@wireapp/commons" "4.2.12"
     "@wireapp/priority-queue" "1.6.37"
     "@wireapp/protocol-messaging" "1.35.0"
-    axios "0.21.1"
+    axios "0.21.4"
     axios-retry "3.1.9"
     http-status-codes "2.1.4"
     logdown "3.3.1"
@@ -630,10 +630,10 @@
   resolved "https://registry.npmjs.org/@wireapp/cbor/-/cbor-4.7.2.tgz#cf890cbd1af6f684fd06c704e96b3186bd0672f3"
   integrity sha512-SfWI1pfwPLpYDC2gkQIOtVFA51x1LFbWoZ5qPp9wit5l3x1CWIpmGK3g1F06XXJn/HeRHJawwp28pzzH58h2iQ==
 
-"@wireapp/commons@4.2.11":
-  version "4.2.11"
-  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-4.2.11.tgz#786605872daf4edb20a997136c2ea8b85411c60e"
-  integrity sha512-boo+x7pV7B3G6zHV5z9BoUhvQzUn/9C72/TehAdfkRhElTJQJ7IJsBC+gMzHavlhVSt+a/63YlvfgK84BTvUtw==
+"@wireapp/commons@4.2.12":
+  version "4.2.12"
+  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-4.2.12.tgz#2121cd9e40fa6252d18e18830f615d90e80e74c4"
+  integrity sha512-wbSpRUkdTgOs/F8tazPqo3iBjp/5xTA4VY44MOQW7c8hMZuVxJbENrJW6w8ZbipiaJO3jXsYS01cXF2TfIvLdA==
   dependencies:
     "@types/fs-extra" "9.0.12"
     "@types/node" "~14"
@@ -644,14 +644,14 @@
     platform "1.3.6"
     url-search-params-polyfill "8.1.1"
 
-"@wireapp/core@17.13.0":
-  version "17.13.0"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.13.0.tgz#a347f9bc026eebc16a053938e1c1db3c9e71a3cd"
-  integrity sha512-nBqqvpVoaOK0tOyavfYmNJ2EOBgqRWHGEavv8Mzxt4IWuVJovSqYXewbWO03rjv+/hUfzHKSRzhSrH9/JKBPDg==
+"@wireapp/core@17.16.3":
+  version "17.16.3"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.16.3.tgz#f07303a0e5501219b95847cd3bca672dd5b4ebe6"
+  integrity sha512-W1v/eqFKKM2ONZ7qZiFgeopCvMSH/fKO53Vn/6sxKk54H7ZnHzhkkfxOZaJ5sWLv3HL5nmAxSPELeKWBD+5E6Q==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~14"
-    "@wireapp/api-client" "13.4.0"
+    "@wireapp/api-client" "13.8.1"
     "@wireapp/cryptobox" "12.7.1"
     bazinga64 "5.9.7"
     hash.js "1.1.7"
@@ -971,6 +971,13 @@ axios@0.21.1, axios@^0.21.0:
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   dependencies:
     follow-redirects "^1.10.0"
+
+axios@0.21.4:
+  version "0.21.4"
+  resolved "https://registry.npmjs.org/axios/-/axios-0.21.4.tgz#c67b90dc0568e5c1cf2b0b858c43ba28e2eda575"
+  integrity sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==
+  dependencies:
+    follow-redirects "^1.14.0"
 
 babel-eslint@10.1.0:
   version "10.1.0"
@@ -2187,6 +2194,11 @@ follow-redirects@^1.10.0:
   version "1.13.0"
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
   integrity sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
+
+follow-redirects@^1.14.0:
+  version "1.14.4"
+  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.4.tgz#838fdf48a8bbdd79e52ee51fb1c94e3ed98b9379"
+  integrity sha512-zwGkiSXC1MUJG/qmeIFH2HBJx9u0V46QGUe3YR1fXG8bXQxq7fLj0RjLZQ5nubr9qNJUZrH+xUcwXEoXNpfS+g==
 
 forwarded@~0.1.2:
   version "0.1.2"
