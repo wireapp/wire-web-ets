@@ -21,7 +21,7 @@ import {Injectable} from '@nestjs/common';
 import {APIClient} from '@wireapp/api-client';
 import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/src/client/';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/src/conversation/data/';
-import {BackendErrorLabel} from '@wireapp/api-client/src/http/';
+import {BackendError, BackendErrorLabel} from '@wireapp/api-client/src/http/';
 import {Account} from '@wireapp/core';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 import {ClientInfo} from '@wireapp/core/src/main/client/';
@@ -65,6 +65,7 @@ import {InstanceMuteOptions} from './InstanceMuteOptions';
 import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
 import {sendFile} from '../send/sendFile';
+import {AxiosError} from 'axios';
 
 const {version}: {version: string} = require('../../package.json');
 
@@ -286,7 +287,7 @@ export class InstanceService {
 
   async createInstance(options: InstanceCreationOptions): Promise<string> {
     const instanceId = UUID.genV4().toString();
-    const backendType = this.parseBackend(options.backend || options.customBackend);
+    const backendMeta = this.parseBackend(options.backend || options.customBackend);
 
     const engine = new MemoryEngine();
 
@@ -294,9 +295,9 @@ export class InstanceService {
 
     await engine.init('wire-web-ets');
 
-    logger.info(`[${formatDate()}] Creating APIClient with "${backendType.name}" backend ...`);
+    logger.info(`[${formatDate()}] Creating APIClient with "${backendMeta.name}" backend ...`);
 
-    const client = new APIClient({urls: backendType});
+    const client = new APIClient({urls: backendMeta});
     const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
@@ -320,8 +321,8 @@ export class InstanceService {
       );
       await account.listen();
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.message) {
-        throw new Error(`Backend error: ${error.response.data.message}`);
+      if ((error as AxiosError).response?.data?.message) {
+        throw new Error(`Backend error: ${(error as AxiosError).response!.data.message}`);
       }
 
       logger.error(`[${formatDate()}]`, error);
@@ -330,7 +331,7 @@ export class InstanceService {
 
     const instance: Instance = {
       account,
-      backendType,
+      backendType: backendMeta,
       client,
       engine,
       id: instanceId,
@@ -526,7 +527,7 @@ export class InstanceService {
       });
       await service.conversation.deleteMessageEveryone(options.conversationId, options.firstMessageId, [message.from]);
 
-      if (options.moreMessageIds && options.moreMessageIds.length) {
+      if (options.moreMessageIds?.length) {
         for (const messageId of options.moreMessageIds) {
           const furtherMessage = instance.messages.get(messageId);
 
@@ -563,7 +564,7 @@ export class InstanceService {
         payloadBundle: confirmationPayload,
       });
       await service.conversation.deleteMessageEveryone(options.conversationId, options.firstMessageId, [message.from]);
-      if (options.moreMessageIds && options.moreMessageIds.length) {
+      if (options.moreMessageIds?.length) {
         for (const messageId of options.moreMessageIds) {
           const furtherMessage = instance.messages.get(messageId);
 
@@ -964,7 +965,10 @@ export class InstanceService {
     } catch (error) {
       logger.error(`[${formatDate()}]`, error);
 
-      if (error.code !== HTTP_STATUS.FORBIDDEN || error.label !== BackendErrorLabel.TOO_MANY_CLIENTS) {
+      if (
+        (error as BackendError).code !== HTTP_STATUS.FORBIDDEN ||
+        (error as BackendError).label !== BackendErrorLabel.TOO_MANY_CLIENTS
+      ) {
         throw error;
       }
     }
@@ -974,7 +978,7 @@ export class InstanceService {
 
     for (const client of clients) {
       for (const [instanceId, instance] of Object.entries(instances)) {
-        if (instance.client.context && instance.client.context.clientId === client.id) {
+        if (instance.client.context?.clientId === client.id) {
           await this.deleteInstance(instanceId);
         }
       }

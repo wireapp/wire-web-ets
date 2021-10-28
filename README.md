@@ -40,6 +40,10 @@ yarn dist
 yarn start
 ```
 
+## Creating releases
+
+To create a release, checkout the "dev" branch and execute `yarn release:patch`, `yarn release:minor` or `yarn release:major`. Afterwards, create a PR against the "main" branch with the latest changes.
+
 ## API documentation
 
 - Swagger UI is available at `/swagger-ui` when running the ETS, i.e. http://localhost:21080/swagger-ui/
