@@ -27,6 +27,6 @@ export class InstanceConversationOptions {
   conversationDomain?: string;
 
   @ApiProperty({example: ''})
-  @IsUUID(4)
+  @IsUUID()
   conversationId!: string;
 }
