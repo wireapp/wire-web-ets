@@ -31,5 +31,5 @@ export class InstanceBreakSessionOptions {
 
   @ApiProperty({example: 'example.com'})
   @IsString()
-  domain?: string;
+  userDomain?: string;
 }

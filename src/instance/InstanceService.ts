@@ -767,7 +767,7 @@ export class InstanceService {
 
     if (instance.account.service) {
       const baseSessionId = `${options.userId}@${options.clientId}`;
-      const sessionId = options.domain ? `${options.domain}@${baseSessionId}` : baseSessionId;
+      const sessionId = options.userDomain ? `${options.userDomain}@${baseSessionId}` : baseSessionId;
       const cryptobox = instance.account.service.cryptography.cryptobox;
       logger.info(`Corrupting Session with ID '${sessionId}'`);
 
