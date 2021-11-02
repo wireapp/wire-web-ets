@@ -31,7 +31,7 @@ export class InstanceButtonOptions {
   buttonId!: string;
 
   @ApiProperty({example: ''})
-  @IsUUID(4)
+  @IsUUID()
   conversationId!: string;
 
   @ApiProperty({example: ''})

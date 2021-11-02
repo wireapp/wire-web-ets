@@ -27,7 +27,7 @@ export class InstanceDeleteOptions {
   conversationDomain?: string;
 
   @ApiProperty({example: ''})
-  @IsUUID(4)
+  @IsUUID()
   conversationId!: string;
 
   @ApiProperty({example: ''})
