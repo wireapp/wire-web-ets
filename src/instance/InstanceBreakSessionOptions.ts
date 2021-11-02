@@ -28,4 +28,8 @@ export class InstanceBreakSessionOptions {
   @ApiProperty({example: ''})
   @IsUUID(4)
   userId!: string;
+
+  @ApiProperty({example: 'example.com'})
+  @IsString()
+  userDomain?: string;
 }
