@@ -26,6 +26,6 @@ export class InstanceArchiveOptions {
   archived!: boolean;
 
   @ApiProperty({example: ''})
-  @IsUUID(4)
+  @IsUUID()
   conversationId!: string;
 }
