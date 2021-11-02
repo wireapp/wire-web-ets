@@ -147,7 +147,7 @@ export class InstanceTextOptions {
   conversationDomain?: string;
 
   @ApiProperty({example: ''})
-  @IsUUID(4)
+  @IsUUID()
   conversationId!: string;
 
   @ApiPropertyOptional({example: false})

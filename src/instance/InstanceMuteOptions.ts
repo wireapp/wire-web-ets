@@ -22,7 +22,7 @@ import {IsUUID, IsBoolean} from 'class-validator';
 
 export class InstanceMuteOptions {
   @ApiProperty({example: ''})
-  @IsUUID(4)
+  @IsUUID()
   conversationId!: string;
 
   @ApiProperty({example: false})
