@@ -18,7 +18,7 @@
  */
 
 import {ApiProperty} from '@nestjs/swagger';
-import {IsUUID, IsString} from 'class-validator';
+import {IsUUID, IsString, IsOptional} from 'class-validator';
 
 export class InstanceBreakSessionOptions {
   @ApiProperty({example: ''})
@@ -30,6 +30,7 @@ export class InstanceBreakSessionOptions {
   userId!: string;
 
   @ApiProperty({example: 'example.com'})
+  @IsOptional()
   @IsString()
   userDomain?: string;
 }
