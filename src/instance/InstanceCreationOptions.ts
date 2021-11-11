@@ -55,6 +55,11 @@ export class InstanceCreationOptions {
   @IsOptional()
   customBackend?: BackendMeta;
 
+  @ApiPropertyOptional({example: 'anta.wire.link'})
+  @IsString()
+  @IsOptional()
+  federationDomain?: string;
+
   @ApiPropertyOptional({enum: [ClientClassification.DESKTOP, ClientClassification.PHONE, ClientClassification.TABLET]})
   @IsEnum(ClientClassification)
   @IsOptional()
