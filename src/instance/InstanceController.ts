@@ -1438,6 +1438,7 @@ export class InstanceController {
 
     try {
       const messageId = await this.instanceService.updateText({
+        conversationDomain: body.conversationDomain,
         conversationId: body.conversationId,
         expectsReadConfirmation: body.expectsReadConfirmation,
         instanceId,

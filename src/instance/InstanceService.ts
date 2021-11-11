@@ -298,7 +298,7 @@ export class InstanceService {
     logger.info(`[${formatDate()}] Creating APIClient with "${backendMeta.name}" backend ...`);
 
     const client = new APIClient({urls: backendMeta});
-    const account = new Account(client);
+    const account = new Account(client, undefined, {federationDomain: options.federationDomain});
 
     const ClientInfo: ClientInfo = {
       classification: options.deviceClass || ClientClassification.DESKTOP,
@@ -424,7 +424,13 @@ export class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.deleteMessageEveryone(options.conversationId, options.messageId);
+      await instance.account.service.conversation.deleteMessageEveryone(
+        options.conversationId,
+        options.messageId,
+        undefined,
+        false,
+        options.conversationDomain,
+      );
       return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
