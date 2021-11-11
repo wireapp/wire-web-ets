@@ -644,10 +644,10 @@
     platform "1.3.6"
     url-search-params-polyfill "8.1.1"
 
-"@wireapp/core@17.27.0":
-  version "17.27.0"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.27.0.tgz#9ad75799da52d3167af3bdafaff5989bbdc38d3e"
-  integrity sha512-ChXQc7Hjy4jtS/3hbf6mCGnxMhxXY7jT6Zi3bUbryO7UZrteeyWi4awdKZgW9NqulQHeHWLjZGp3qmvl3EUaQQ==
+"@wireapp/core@17.27.1":
+  version "17.27.1"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.27.1.tgz#074483665889c1a8f3622ee1ba0cf0fb22cb62c7"
+  integrity sha512-o6S+0tyKTE4BD7XnOzxA73O24Mi6a3K4kmPKJCHA1jcJKyRJKSNp8h9OtFBewgkujRGRNmBqwdaTTaO7Z28Wog==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~14"
