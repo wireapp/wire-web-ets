@@ -4,7 +4,7 @@
     "@nestjs/core": "7.6.17",
     "@nestjs/platform-express": "7.6.18",
     "@nestjs/swagger": "4.8.0",
-    "@wireapp/core": "17.24.0",
+    "@wireapp/core": "17.27.1",
     "@wireapp/lru-cache": "3.8.0",
     "class-transformer": "0.4.0",
     "class-validator": "0.13.1",
@@ -97,5 +97,5 @@
     "test": "yarn lint && yarn test:types",
     "test:types": "tsc --noEmit"
   },
-  "version": "3.0.0"
+  "version": "3.1.0"
 }
