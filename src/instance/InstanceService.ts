@@ -424,7 +424,13 @@ export class InstanceService {
     const instance = this.getInstance(instanceId);
 
     if (instance.account.service) {
-      await instance.account.service.conversation.deleteMessageEveryone(options.conversationId, options.messageId);
+      await instance.account.service.conversation.deleteMessageEveryone(
+        options.conversationId,
+        options.messageId,
+        undefined,
+        false,
+        options.conversationDomain,
+      );
       return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
