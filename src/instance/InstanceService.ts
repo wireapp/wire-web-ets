@@ -531,7 +531,13 @@ export class InstanceService {
         conversationDomain: options.conversationDomain,
         payloadBundle: confirmationPayload,
       });
-      await service.conversation.deleteMessageEveryone(options.conversationId, options.firstMessageId, [message.from]);
+      await service.conversation.deleteMessageEveryone(
+        options.conversationId,
+        options.firstMessageId,
+        [message.from],
+        false,
+        options.conversationDomain,
+      );
 
       if (options.moreMessageIds?.length) {
         for (const messageId of options.moreMessageIds) {
@@ -541,7 +547,13 @@ export class InstanceService {
             throw new Error(`Message with ID "${options.firstMessageId}" not found.`);
           }
 
-          await service.conversation.deleteMessageEveryone(options.conversationId, messageId, [furtherMessage.from]);
+          await service.conversation.deleteMessageEveryone(
+            options.conversationId,
+            messageId,
+            [furtherMessage.from],
+            false,
+            options.conversationDomain,
+          );
         }
       }
       return instance.name;
@@ -569,7 +581,13 @@ export class InstanceService {
         conversationDomain: options.conversationDomain,
         payloadBundle: confirmationPayload,
       });
-      await service.conversation.deleteMessageEveryone(options.conversationId, options.firstMessageId, [message.from]);
+      await service.conversation.deleteMessageEveryone(
+        options.conversationId,
+        options.firstMessageId,
+        [message.from],
+        false,
+        options.conversationDomain,
+      );
       if (options.moreMessageIds?.length) {
         for (const messageId of options.moreMessageIds) {
           const furtherMessage = instance.messages.get(messageId);
@@ -578,7 +596,13 @@ export class InstanceService {
             throw new Error(`Message with ID "${options.firstMessageId}" not found.`);
           }
 
-          await service.conversation.deleteMessageEveryone(options.conversationId, messageId, [furtherMessage.from]);
+          await service.conversation.deleteMessageEveryone(
+            options.conversationId,
+            messageId,
+            [furtherMessage.from],
+            false,
+            options.conversationDomain,
+          );
         }
       }
       return instance.name;
