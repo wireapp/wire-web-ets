@@ -477,137 +477,85 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
-  async sendConfirmationDelivered(instanceId: string, options: InstanceDeliveryOptions): Promise<string> {
+  private async sendConfirmation(instanceId: string, options: InstanceDeliveryOptions, type: Confirmation.Type) {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
+    const message = instance.messages.get(options.firstMessageId);
+
+    if (!message) {
+      throw new Error(`Message with ID "${options.firstMessageId}" not found.`);
+    }
 
     if (service) {
       const payload = service.conversation.messageBuilder.createConfirmation({
         conversationId: options.conversationId,
         firstMessageId: options.firstMessageId,
         moreMessageIds: options.moreMessageIds,
-        type: Confirmation.Type.DELIVERED,
+        type,
       });
       await service.conversation.send({conversationDomain: options.conversationDomain, payloadBundle: payload});
       return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async sendConfirmationDelivered(instanceId: string, options: InstanceDeliveryOptions): Promise<string> {
+    return this.sendConfirmation(instanceId, options, Confirmation.Type.DELIVERED);
   }
 
   async sendConfirmationRead(instanceId: string, options: InstanceDeliveryOptions): Promise<string> {
-    const instance = this.getInstance(instanceId);
-    const service = instance.account.service;
+    return this.sendConfirmation(instanceId, options, Confirmation.Type.READ);
+  }
 
-    if (service) {
-      const payload = service.conversation.messageBuilder.createConfirmation({
-        conversationId: options.conversationId,
-        firstMessageId: options.firstMessageId,
-        moreMessageIds: options.moreMessageIds,
-        type: Confirmation.Type.READ,
-      });
-      await service.conversation.send({conversationDomain: options.conversationDomain, payloadBundle: payload});
-      return instance.name;
+  private async sendEphemeralConfirmation(
+    instanceId: string,
+    options: InstanceDeliveryOptions,
+    type: Confirmation.Type,
+  ): Promise<string> {
+    await this.sendConfirmation(instanceId, options, type);
+
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service!;
+    const message = instance.messages.get(options.firstMessageId);
+
+    if (!message) {
+      throw new Error(`Message with ID "${options.firstMessageId}" not found.`);
     }
-    throw new Error(`Account service for instance ${instanceId} not set.`);
+
+    await service.conversation.deleteMessageEveryone(
+      options.conversationId,
+      options.firstMessageId,
+      options.conversationDomain && message.qualifiedFrom ? [message.qualifiedFrom] : [message.from],
+      false,
+      options.conversationDomain,
+    );
+
+    if (options.moreMessageIds?.length) {
+      for (const messageId of options.moreMessageIds) {
+        const furtherMessage = instance.messages.get(messageId);
+
+        if (!furtherMessage) {
+          throw new Error(`Message with ID "${messageId}" not found.`);
+        }
+
+        await service.conversation.deleteMessageEveryone(
+          options.conversationId,
+          messageId,
+          options.conversationDomain && message.qualifiedFrom ? [message.qualifiedFrom] : [message.from],
+          false,
+          options.conversationDomain,
+        );
+      }
+    }
+    return instance.name;
   }
 
   async sendEphemeralConfirmationDelivered(instanceId: string, options: InstanceDeliveryOptions): Promise<string> {
-    const instance = this.getInstance(instanceId);
-    const message = instance.messages.get(options.firstMessageId);
-    const service = instance.account.service;
-
-    if (!message) {
-      throw new Error(`Message with ID "${options.firstMessageId}" not found.`);
-    }
-
-    if (service) {
-      const confirmationPayload = service.conversation.messageBuilder.createConfirmation({
-        conversationId: options.conversationId,
-        firstMessageId: options.firstMessageId,
-        moreMessageIds: options.moreMessageIds,
-        type: Confirmation.Type.DELIVERED,
-      });
-      await service.conversation.send({
-        conversationDomain: options.conversationDomain,
-        payloadBundle: confirmationPayload,
-      });
-      await service.conversation.deleteMessageEveryone(
-        options.conversationId,
-        options.firstMessageId,
-        [message.from],
-        false,
-        options.conversationDomain,
-      );
-
-      if (options.moreMessageIds?.length) {
-        for (const messageId of options.moreMessageIds) {
-          const furtherMessage = instance.messages.get(messageId);
-
-          if (!furtherMessage) {
-            throw new Error(`Message with ID "${options.firstMessageId}" not found.`);
-          }
-
-          await service.conversation.deleteMessageEveryone(
-            options.conversationId,
-            messageId,
-            [furtherMessage.from],
-            false,
-            options.conversationDomain,
-          );
-        }
-      }
-      return instance.name;
-    }
-    throw new Error(`Account service for instance ${instanceId} not set.`);
+    return this.sendEphemeralConfirmation(instanceId, options, Confirmation.Type.DELIVERED);
   }
 
   async sendEphemeralConfirmationRead(instanceId: string, options: InstanceDeliveryOptions): Promise<string> {
-    const instance = this.getInstance(instanceId);
-    const message = instance.messages.get(options.firstMessageId);
-    const service = instance.account.service;
-
-    if (!message) {
-      throw new Error(`Message with ID "${options.firstMessageId}" not found.`);
-    }
-
-    if (service) {
-      const confirmationPayload = service.conversation.messageBuilder.createConfirmation({
-        conversationId: options.conversationId,
-        firstMessageId: options.firstMessageId,
-        moreMessageIds: options.moreMessageIds,
-        type: Confirmation.Type.READ,
-      });
-      await service.conversation.send({
-        conversationDomain: options.conversationDomain,
-        payloadBundle: confirmationPayload,
-      });
-      await service.conversation.deleteMessageEveryone(
-        options.conversationId,
-        options.firstMessageId,
-        [message.from],
-        false,
-        options.conversationDomain,
-      );
-      if (options.moreMessageIds?.length) {
-        for (const messageId of options.moreMessageIds) {
-          const furtherMessage = instance.messages.get(messageId);
-
-          if (!furtherMessage) {
-            throw new Error(`Message with ID "${options.firstMessageId}" not found.`);
-          }
-
-          await service.conversation.deleteMessageEveryone(
-            options.conversationId,
-            messageId,
-            [furtherMessage.from],
-            false,
-            options.conversationDomain,
-          );
-        }
-      }
-      return instance.name;
-    }
-    throw new Error(`Account service for instance ${instanceId} not set.`);
+    return this.sendEphemeralConfirmation(instanceId, options, Confirmation.Type.READ);
   }
 
   async sendFile({
