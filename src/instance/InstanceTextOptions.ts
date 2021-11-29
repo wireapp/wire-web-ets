@@ -44,6 +44,11 @@ class MentionsMeta {
   @ApiProperty({example: ''})
   @IsUUID(4)
   userId!: string;
+
+  @ApiProperty({example: ''})
+  @IsString()
+  @IsOptional()
+  userDomain?: string;
 }
 
 class TweetMeta {

@@ -25,6 +25,7 @@ import {
   ImageContent,
   LinkPreviewContent,
   LocationContent,
+  MentionContent,
   QuoteContent,
 } from '@wireapp/core/src/main/conversation/content';
 import * as crypto from 'crypto';
@@ -1320,7 +1321,12 @@ export class InstanceController {
         instanceId,
         legalHoldStatus: body.legalHoldStatus,
         linkPreview: linkPreviewContent,
-        mentions: body.mentions,
+        mentions: body.mentions?.map(
+          (mention): MentionContent => ({
+            ...mention,
+            qualifiedUserId: {domain: mention.userDomain || '', id: mention.userId},
+          }),
+        ),
         message: body.text,
         quote: quoteContent,
       });
