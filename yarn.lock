@@ -605,17 +605,17 @@
     "@typescript-eslint/types" "4.29.3"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@15.6.0":
-  version "15.6.0"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-15.6.0.tgz#5d6bad06ae10f05dfc03931752a5d7fa3ae21687"
-  integrity sha512-ekgo/vjJ25Qq5VT0CKTqYh32giYfqBEJfz8yooLA+NjIwWFKwfYxMYXfdg273xWGtWEwop/6LQrdP4eNhdMMDA==
+"@wireapp/api-client@16.3.0":
+  version "16.3.0"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-16.3.0.tgz#164567d3511c1739dda9f6940f873997098a96b1"
+  integrity sha512-eAui9K1LdJO8gbaxdUwQi0cgGlV8umx4wG44nbtwWYwak5nqBClQ8Dh+WXNKAG80+DFS4XI5oO86hB4o2iX98Q==
   dependencies:
     "@types/node" "~14"
     "@types/spark-md5" "3.0.2"
     "@types/tough-cookie" "4.0.1"
     "@wireapp/commons" "4.2.13"
     "@wireapp/priority-queue" "1.6.37"
-    "@wireapp/protocol-messaging" "1.35.0"
+    "@wireapp/protocol-messaging" "1.36.0"
     axios "0.21.4"
     axios-retry "3.1.9"
     http-status-codes "2.1.4"
@@ -644,16 +644,16 @@
     platform "1.3.6"
     url-search-params-polyfill "8.1.1"
 
-"@wireapp/core@17.31.0":
-  version "17.31.0"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.31.0.tgz#545994932f8308a628a413bfa6040ff3ffed9e1b"
-  integrity sha512-rBjNnV72D21P4jW03qe0YLYqHjfdzMTXRDznDOTE9e7XeR4T9orvPpPomNZBdn5eQfRK6LNphI5JHBv7mXHbgg==
+"@wireapp/core@20.4.1":
+  version "20.4.1"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-20.4.1.tgz#3af90894f6940da31775717f48c99f0e0cac97b7"
+  integrity sha512-+KV3zyLp4tc6ABplEbFpwJ5THaSZiDVvwDSLwvDvqXt4NJO8EYw7DSQFuAGBkj5z9S6sLaEBaFJSbwPnh40agQ==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~14"
-    "@wireapp/api-client" "15.6.0"
+    "@wireapp/api-client" "16.3.0"
     "@wireapp/cryptobox" "12.7.1"
-    bazinga64 "5.9.7"
+    bazinga64 "5.10.0"
     hash.js "1.1.7"
     http-status-codes "2.1.4"
     logdown "3.3.1"
@@ -712,10 +712,10 @@
     "@wireapp/cbor" "4.7.2"
     libsodium-wrappers-sumo "0.7.9"
 
-"@wireapp/protocol-messaging@1.35.0":
-  version "1.35.0"
-  resolved "https://registry.npmjs.org/@wireapp/protocol-messaging/-/protocol-messaging-1.35.0.tgz#2d45f67bdd00f31383f93b23dcf636b4278ca673"
-  integrity sha512-RsgREb74npIOMKac2Q5oUgLT6noqKY7Tze+TdWJ3dX/gxp5Oid4mOcaCm5jKJb94K7MxhBo/E+jE6FzZiWWYQg==
+"@wireapp/protocol-messaging@1.36.0":
+  version "1.36.0"
+  resolved "https://registry.npmjs.org/@wireapp/protocol-messaging/-/protocol-messaging-1.36.0.tgz#3d4bd0bca3df9d4193ac9851d02129a274408dfb"
+  integrity sha512-g/znuDIHWerJh9vS86bkWmBRDgMqLfKq3nPGgvpDm+0tRMyhRKW4y6wB5j4DLlEY2nLyl6WsH+uP/BLV55vObQ==
   dependencies:
     protobufjs "6.10.2"
 
@@ -1006,15 +1006,15 @@ base64-js@^1.3.1:
   resolved "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
 
+bazinga64@5.10.0:
+  version "5.10.0"
+  resolved "https://registry.npmjs.org/bazinga64/-/bazinga64-5.10.0.tgz#ceba5dd21bf8723e23916e39daa0721a711766af"
+  integrity sha512-ymVNSWxRmZJ05PAy5+PBA2VcTPVMwoBFjyWkxjZ+rK4ZlV+ziPeF+NR08dDXj0C8XI2tMBG1Dnd5BlU4g8tFGQ==
+
 bazinga64@5.9.2:
   version "5.9.2"
   resolved "https://registry.npmjs.org/bazinga64/-/bazinga64-5.9.2.tgz#536d260f4d5e2298141350c4f3dfc28a263d18bd"
   integrity sha512-cWGu1Giklh8+ewb1CaTHGFErtSWX4X5vJleYiYmInfKmbyP4Oz0P/IMK3X86LJRMFiNZsK4kJN5m55oCa/U8GQ==
-
-bazinga64@5.9.7:
-  version "5.9.7"
-  resolved "https://registry.npmjs.org/bazinga64/-/bazinga64-5.9.7.tgz#2a8fcf68fa7cf8df446df85ed9fd2b54afeeedb0"
-  integrity sha512-OzBRvkvDrDxH+wbQmYfw7QgDQXdxF6H2zJYrpaVs228KGjaLU8frRPi6ucDlMS+8CQwzf7aRcgPeSqgAa4vyjQ==
 
 binary-extensions@^2.0.0:
   version "2.0.0"
