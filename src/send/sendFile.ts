@@ -62,5 +62,5 @@ export async function sendFile({
     legalHoldStatus,
     originalMessageId: metadataPayload.id,
   });
-  return conversationService.send({payloadBundle: filePayload});
+  return conversationService.send({conversationDomain, payloadBundle: filePayload});
 }
