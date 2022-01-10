@@ -560,6 +560,7 @@ export class InstanceService {
 
   async sendFile({
     conversationId,
+    conversationDomain,
     customAlgorithm,
     customHash,
     expectsReadConfirmation,
@@ -574,6 +575,7 @@ export class InstanceService {
 
     if (service) {
       const sentFile = await sendFile({
+        conversationDomain,
         conversationId,
         conversationService: service.conversation,
         customAlgorithm,
