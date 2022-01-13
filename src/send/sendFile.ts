@@ -18,12 +18,14 @@
  */
 
 import {LegalHoldStatus} from '@wireapp/protocol-messaging';
-import {ConversationService} from '@wireapp/core/src/main/conversation';
+import {AssetService, ConversationService} from '@wireapp/core/src/main/conversation';
 import {FileContent, FileMetaDataContent} from '@wireapp/core/src/main/conversation/content';
+import {MessageBuilder} from '@wireapp/core/src/main/conversation/message/MessageBuilder';
 
 export async function sendFile({
   conversationId,
   conversationService,
+  assetService,
   customAlgorithm,
   customHash,
   conversationDomain,
@@ -32,7 +34,9 @@ export async function sendFile({
   file,
   legalHoldStatus,
   metadata,
+  from,
 }: {
+  assetService: AssetService;
   conversationDomain?: string;
   conversationId: string;
   conversationService: ConversationService;
@@ -41,24 +45,28 @@ export async function sendFile({
   expectsReadConfirmation?: boolean;
   expireAfterMillis?: number;
   file: FileContent;
+  from: string;
   legalHoldStatus?: LegalHoldStatus;
   metadata: FileMetaDataContent;
 }): Promise<ReturnType<ConversationService['send']>> {
   conversationService.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
-  const metadataPayload = conversationService.messageBuilder.createFileMetadata({
+  const metadataPayload = MessageBuilder.createFileMetadata({
     conversationId,
     expectsReadConfirmation,
+    from,
     legalHoldStatus,
     metaData: metadata,
   });
   await conversationService.send({conversationDomain, payloadBundle: metadataPayload});
 
-  const filePayload = await conversationService.messageBuilder.createFileData({
-    cipherOptions: {algorithm: customAlgorithm, hash: customHash},
+  const asset = await assetService.uploadAsset(file.data);
+  const filePayload = MessageBuilder.createFileData({
+    asset: await asset.response,
     conversationId,
     expectsReadConfirmation,
     file,
+    from,
     legalHoldStatus,
     originalMessageId: metadataPayload.id,
   });

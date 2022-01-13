@@ -79,10 +79,6 @@ function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
     stripAssetData(linkPreview.imageUploaded.asset);
     delete (linkPreview.imageUploaded.image as Partial<ImageContent>).data;
   }
-
-  if (linkPreview.image) {
-    delete (linkPreview.image as Partial<ImageContent>).data;
-  }
 }
 
 const status404instance = {description: 'Instance not found', status: HTTP_STATUS_CODE.NOT_FOUND};

@@ -25,6 +25,7 @@ import {BackendError, BackendErrorLabel} from '@wireapp/api-client/src/http/';
 import {Account} from '@wireapp/core';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 import {ClientInfo} from '@wireapp/core/src/main/client/';
+import {MessageBuilder} from '@wireapp/core/src/main/conversation/message/MessageBuilder';
 import {PayloadBundle, PayloadBundleType, ReactionType} from '@wireapp/core/src/main/conversation';
 import {
   ClearedContent,
@@ -487,9 +488,10 @@ export class InstanceService {
     }
 
     if (service) {
-      const payload = service.conversation.messageBuilder.createConfirmation({
+      const payload = MessageBuilder.createConfirmation({
         conversationId: options.conversationId,
         firstMessageId: options.firstMessageId,
+        from: instance.client.userId as string,
         moreMessageIds: options.moreMessageIds,
         type,
       });
@@ -575,6 +577,7 @@ export class InstanceService {
 
     if (service) {
       const sentFile = await sendFile({
+        assetService: service.asset,
         conversationDomain,
         conversationId,
         conversationService: service.conversation,
@@ -583,6 +586,7 @@ export class InstanceService {
         expectsReadConfirmation,
         expireAfterMillis,
         file,
+        from: instance.client.userId as string,
         legalHoldStatus,
         metadata,
       });
@@ -611,10 +615,12 @@ export class InstanceService {
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = await service.conversation.messageBuilder.createImage({
-        cipherOptions: {algorithm: customAlgorithm, hash: customHash},
+      const asset = await service.asset.uploadAsset(image.data);
+      const payload = MessageBuilder.createImage({
+        asset: await asset.response,
         conversationId,
         expectsReadConfirmation,
+        from: instance.client.userId as string,
         image,
         legalHoldStatus,
       });
@@ -640,7 +646,11 @@ export class InstanceService {
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = service.conversation.messageBuilder.createLocation({conversationId, location});
+      const payload = MessageBuilder.createLocation({
+        conversationId,
+        from: instance.client.userId as string,
+        location,
+      });
       const sentLocation = await service.conversation.send({conversationDomain, payloadBundle: payload});
 
       instance.messages.set(sentLocation.id, sentLocation);
@@ -662,8 +672,9 @@ export class InstanceService {
 
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
-      const payload = service.conversation.messageBuilder.createPing({
+      const payload = MessageBuilder.createPing({
         conversationId,
+        from: instance.client.userId as string,
         ping: {
           expectsReadConfirmation,
           hotKnock: false,
@@ -682,12 +693,13 @@ export class InstanceService {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
     if (service) {
-      const payload = service.conversation.messageBuilder.createButtonActionMessage({
+      const payload = MessageBuilder.createButtonActionMessage({
         content: {
           buttonId: options.buttonId,
           referenceMessageId: options.referenceMessageId,
         },
         conversationId: options.conversationId,
+        from: instance.client.userId as string,
       });
       await service.conversation.send({
         conversationDomain: options.conversationDomain,
@@ -703,12 +715,13 @@ export class InstanceService {
     const instance = this.getInstance(instanceId);
     const service = instance.account.service;
     if (service) {
-      const payload = service.conversation.messageBuilder.createButtonActionConfirmationMessage({
+      const payload = MessageBuilder.createButtonActionConfirmationMessage({
         content: {
           buttonId: options.buttonId,
           referenceMessageId: options.referenceMessageId,
         },
         conversationId: options.conversationId,
+        from: instance.client.userId as string,
       });
       await service.conversation.send({
         conversationDomain: options.conversationDomain,
@@ -725,8 +738,9 @@ export class InstanceService {
     const service = instance.account.service;
 
     if (service) {
-      const payload = service.conversation.messageBuilder.createReaction({
+      const payload = MessageBuilder.createReaction({
         conversationId: options.conversationId,
+        from: instance.client.userId as string,
         reaction: {
           legalHoldStatus: options.legalHoldStatus,
           originalMessageId: options.originalMessageId,
@@ -774,8 +788,9 @@ export class InstanceService {
     const service = instance.account.service;
 
     if (service) {
-      const payload = service.conversation.messageBuilder.createSessionReset({
+      const payload = MessageBuilder.createSessionReset({
         conversationId: options.conversationId,
+        from: instance.client.userId as string,
       });
       const {id: messageId} = await service.conversation.send({
         conversationDomain: options.conversationDomain,
@@ -820,8 +835,11 @@ export class InstanceService {
     if (service) {
       service.conversation.messageTimer.setMessageLevelTimer(conversationId, expireAfterMillis);
 
-      let payloadBundle: OtrMessage = service.conversation.messageBuilder
-        .createText({conversationId, text: message})
+      let payloadBundle: OtrMessage = MessageBuilder.createText({
+        conversationId,
+        from: instance.client.userId as string,
+        text: message,
+      })
         .withMentions(mentions)
         .withQuote(quote)
         .withReadConfirmation(expectsReadConfirmation)
@@ -830,8 +848,10 @@ export class InstanceService {
 
       if (buttons.length > 0) {
         const textProto = MessageToProtoMapper.mapText(payloadBundle);
-        const compositeBuilder = service.conversation.messageBuilder
-          .createComposite({conversationId})
+        const compositeBuilder = MessageBuilder.createComposite({
+          conversationId,
+          from: instance.client.userId as string,
+        })
           .withReadConfirmation(expectsReadConfirmation)
           .addText(textProto);
         buttons.forEach(button => compositeBuilder.addButton(button));
@@ -841,10 +861,13 @@ export class InstanceService {
       let sentMessage = await service.conversation.send({conversationDomain, payloadBundle});
 
       if (linkPreview) {
-        const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(linkPreview);
-        const editedWithPreviewPayload = service.conversation.messageBuilder
-          .createText({conversationId, messageId: sentMessage.id, text: message})
-          .withLinkPreviews([linkPreviewPayload])
+        const editedWithPreviewPayload = MessageBuilder.createText({
+          conversationId,
+          from: instance.client.userId as string,
+          messageId: sentMessage.id,
+          text: message,
+        })
+          .withLinkPreviews([await service.linkPreview.uploadLinkPreviewImage(linkPreview)])
           .withMentions(mentions)
           .withQuote(quote)
           .withReadConfirmation(expectsReadConfirmation)
@@ -884,8 +907,12 @@ export class InstanceService {
     const service = instance.account.service;
 
     if (service) {
-      const editedPayload = service.conversation.messageBuilder
-        .createEditedText({conversationId, newMessageText, originalMessageId})
+      const editedPayload = MessageBuilder.createEditedText({
+        conversationId,
+        from: instance.client.userId as string,
+        newMessageText,
+        originalMessageId,
+      })
         .withMentions(newMentions)
         .withQuote(newQuote)
         .withReadConfirmation(expectsReadConfirmation)
@@ -895,10 +922,14 @@ export class InstanceService {
       let editedMessage = await service.conversation.send({conversationDomain, payloadBundle: editedPayload});
 
       if (newLinkPreview) {
-        const linkPreviewPayload = await service.conversation.messageBuilder.createLinkPreview(newLinkPreview);
-        const editedWithPreviewPayload = service.conversation.messageBuilder
-          .createEditedText({conversationId, messageId: editedMessage.id, newMessageText, originalMessageId})
-          .withLinkPreviews([linkPreviewPayload])
+        const editedWithPreviewPayload = MessageBuilder.createEditedText({
+          conversationId,
+          from: instance.client.userId as string,
+          messageId: editedMessage.id,
+          newMessageText,
+          originalMessageId,
+        })
+          .withLinkPreviews([await service.linkPreview.uploadLinkPreviewImage(newLinkPreview)])
           .withMentions(newMentions)
           .withQuote(newQuote)
           .withReadConfirmation(expectsReadConfirmation)
