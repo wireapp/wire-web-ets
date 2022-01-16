@@ -36,11 +36,13 @@ async function main(): Promise<void> {
   console.info(`Sending file...`);
 
   await sendFile({
+    assetService: client.service!.asset!,
     conversationId: process.env.WIRE_CONVERSATION_ID!,
     conversationService: client.service!.conversation!,
     file: {
       data: dataBuffer,
     },
+    from: client.userId,
     metadata: {
       length: dataBuffer.length,
       name: 'some-file.txt',

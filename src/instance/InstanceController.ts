@@ -1288,7 +1288,7 @@ export class InstanceController {
     if (body.linkPreview) {
       linkPreviewContent = {
         ...body.linkPreview,
-        image: undefined,
+        image: undefined as any,
       };
 
       if (body.linkPreview.image) {
@@ -1419,7 +1419,7 @@ export class InstanceController {
     if (body.linkPreview) {
       linkPreviewContent = {
         ...body.linkPreview,
-        image: undefined,
+        image: undefined as any,
       };
 
       if (body.linkPreview.image) {
