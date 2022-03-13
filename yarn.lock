@@ -605,16 +605,16 @@
     "@typescript-eslint/types" "4.29.3"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@16.6.0":
-  version "16.6.0"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-16.6.0.tgz#6b2a398b4e91a9b4d63e4c8e47bd637b0eceda70"
-  integrity sha512-qO3qNqebCNi0sRVsAP4zdwelBOWUkC24ifk3WOHfR/5rlz2023ZCddjLDaZA4N/YrsYU7yHPfDVpIMzHxxwGtQ==
+"@wireapp/api-client@18.3.2":
+  version "18.3.2"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-18.3.2.tgz#081ea33844c7db675e2cfbc59e4d2b30c0865faa"
+  integrity sha512-3JJmogzgZIVwVXV56p9tF64Xthkz/UQVK+2XnyXGqN6bTR1xofrPQfV+ICRd0VA0CSd6O55qs6TZKGm5wFokPg==
   dependencies:
     "@types/node" "~14"
     "@types/spark-md5" "3.0.2"
     "@types/tough-cookie" "4.0.1"
     "@wireapp/commons" "4.2.13"
-    "@wireapp/priority-queue" "1.6.37"
+    "@wireapp/priority-queue" "1.6.39"
     "@wireapp/protocol-messaging" "1.37.0"
     axios "0.21.4"
     axios-retry "3.1.9"
@@ -644,14 +644,14 @@
     platform "1.3.6"
     url-search-params-polyfill "8.1.1"
 
-"@wireapp/core@21.0.1":
-  version "21.0.1"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-21.0.1.tgz#2945254bc9f57144847a15d00b68b78b23d094b8"
-  integrity sha512-g/SGEIDRPXWqLSOHMuRjxRwJvfhE4XpkI4PgjF6sZWVaE2SnRDMQF8mzm/V78E9cosm7rGwrtxpSpoAl1a+2vg==
+"@wireapp/core@24.2.2":
+  version "24.2.2"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-24.2.2.tgz#27b7c81698ea262727cd1b39897cc0c8b043ddc9"
+  integrity sha512-UMk4qsrRz1Prips7Ci5TIsF6kgM8WwxEbp1byds+G6MX2I0dCWyaRgfg6nEm4OWTlQ9DD0IZ7DIs2d9AqhASkw==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~14"
-    "@wireapp/api-client" "16.6.0"
+    "@wireapp/api-client" "18.3.2"
     "@wireapp/cryptobox" "12.7.1"
     bazinga64 "5.10.0"
     hash.js "1.1.7"
@@ -695,10 +695,10 @@
   dependencies:
     "@types/node" "~14"
 
-"@wireapp/priority-queue@1.6.37":
-  version "1.6.37"
-  resolved "https://registry.npmjs.org/@wireapp/priority-queue/-/priority-queue-1.6.37.tgz#d5414c3040dfe3763baa5439f299a1299be6ab22"
-  integrity sha512-ASbGZITGY5FgNsjILd5wPpf9aKuPUVdVCYqAABKSAjuK++BxZm5nHjZAqiu/ncqeJ3r4WXNa/2WQME46L62OPg==
+"@wireapp/priority-queue@1.6.39":
+  version "1.6.39"
+  resolved "https://registry.npmjs.org/@wireapp/priority-queue/-/priority-queue-1.6.39.tgz#ebf887bc74ae1331bc9ad3612fcc7dcaf7e47e0c"
+  integrity sha512-Rsv0DixzhEwETALKEk0BRlQ4w0W2/oNtYpcTxpcCGOLZee9aqag3ETFo2LLnvGjCv14Q95FkGrzpvRT8yo2SVQ==
   dependencies:
     "@types/node" "~14"
 
