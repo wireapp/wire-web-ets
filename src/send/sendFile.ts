@@ -60,9 +60,18 @@ export async function sendFile({
   });
   await conversationService.send({conversationDomain, payloadBundle: metadataPayload});
 
-  const asset = await assetService.uploadAsset(file.data);
+  const uploadResult = await assetService.uploadAsset(file.data, {
+    algorithm: customAlgorithm,
+  });
+
+  const asset = await uploadResult.response;
+
+  if (customHash) {
+    asset.sha256 = customHash;
+  }
+
   const filePayload = MessageBuilder.createFileData({
-    asset: await asset.response,
+    asset: asset,
     conversationId,
     expectsReadConfirmation,
     file,
