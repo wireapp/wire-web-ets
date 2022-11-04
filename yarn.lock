@@ -683,10 +683,10 @@
   resolved "https://registry.npmjs.org/@wireapp/lru-cache/-/lru-cache-3.8.0.tgz#63e32a85abd4bd32a80a7c41615fc12c42cd2eec"
   integrity sha512-XVcvbhIdgD8uNDW91Iueyd1dgsWh8alz1sU5MtID18r2d2nuM3BNryffAyONcmyjbTj7PqB04iLk+kHNQ5m4/Q==
 
-"@wireapp/prettier-config@0.3.2":
-  version "0.3.2"
-  resolved "https://registry.npmjs.org/@wireapp/prettier-config/-/prettier-config-0.3.2.tgz#831bf7e66c52e627c0fb8e6692d25f49962c00fa"
-  integrity sha512-BYCsyqXe3oy/19R03hwD91Kd1AtNm8p2xQf8qyVVv9rxU3F3z83CwAKSGQfq05AFEUVp1K1SHhKeHVZ+rQrTPQ==
+"@wireapp/prettier-config@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.npmjs.org/@wireapp/prettier-config/-/prettier-config-0.5.0.tgz#1416d2bdc96d9c00a8390a13ad2fa18f3337d901"
+  integrity sha512-gmx/dTdxZKP/vBbOimb8cVNy7nhzn2MSu+qY7jTQajuLWghJYQg3YJue3e31wN0IZaiwnIgne5WSAP9DSM7PHQ==
 
 "@wireapp/priority-queue@1.6.34":
   version "1.6.34"
@@ -3360,16 +3360,21 @@ module-details-from-path@^1.0.3:
   integrity sha1-EUyUlnPiqKNenTV4hSeqN7Z52is=
 
 moment-timezone@^0.5.11, moment-timezone@^0.5.25, moment-timezone@^0.5.x:
-  version "0.5.26"
-  resolved "https://registry.npmjs.org/moment-timezone/-/moment-timezone-0.5.26.tgz#c0267ca09ae84631aa3dc33f65bedbe6e8e0d772"
-  integrity sha512-sFP4cgEKTCymBBKgoxZjYzlSovC20Y6J7y3nanDc5RoBIXKlZhoYwBoZGe3flwU6A372AcRwScH8KiwV6zjy1g==
+  version "0.5.38"
+  resolved "https://registry.npmjs.org/moment-timezone/-/moment-timezone-0.5.38.tgz#9674a5397b8be7c13de820fd387d8afa0f725aad"
+  integrity sha512-nMIrzGah4+oYZPflDvLZUgoVUO4fvAqHstvG3xAUnMolWncuAiLDWNnJZj6EwJGMGfb1ZcuTFE6GI3hNOVWI/Q==
   dependencies:
     moment ">= 2.9.0"
 
-moment@2.29.1, "moment@>= 2.9.0":
+moment@2.29.1:
   version "2.29.1"
   resolved "https://registry.npmjs.org/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
+"moment@>= 2.9.0":
+  version "2.29.4"
+  resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 ms@2.0.0:
   version "2.0.0"
