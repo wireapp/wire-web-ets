@@ -50,6 +50,7 @@ import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
 import {InstanceBreakSessionOptions} from './InstanceBreakSessionOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
+import {InstanceCallOptions} from './InstanceCallOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
@@ -989,6 +990,55 @@ export class InstanceController {
         instanceId,
         location,
       });
+      const instanceName = this.instanceService.getInstance(instanceId).name;
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        messageId,
+        name: instanceName,
+      });
+    } catch (error) {
+      const internalServerError = createInternalServerError(error as Error);
+      res.status(internalServerError.code).json(internalServerError);
+    }
+  }
+
+  @Post(':instanceId/sendCall')
+  @ApiOperation({summary: 'Send a call to a conversation.'})
+  @ApiResponse({
+    schema: {
+      example: {
+        content: '',
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      },
+    },
+    status: HTTP_STATUS_CODE.OK,
+  })
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendCall(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceCallOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId, 4)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
+    }
+
+    try {
+      const messageId = await this.instanceService.sendCall({
+        content: body.content,
+        conversationDomain: body.conversationDomain,
+        conversationId: body.conversationId,
+        instanceId,
+      });
+
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,
