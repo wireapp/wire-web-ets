@@ -825,6 +825,7 @@ export class InstanceController {
       const data = Buffer.from(body.data, 'base64');
       const fileContent: FileContent = {data};
       const metadata: FileMetaDataContent = {
+        image: body.image,
         length: data.length,
         name: body.fileName,
         type: body.type,
