@@ -21,6 +21,7 @@ import {LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {AssetService, ConversationService} from '@wireapp/core/src/main/conversation';
 import {FileContent, FileMetaDataContent} from '@wireapp/core/src/main/conversation/content';
 import {MessageBuilder} from '@wireapp/core/src/main/conversation/message/MessageBuilder';
+import {ConversationProtocol} from '@wireapp/api-client/src/conversation/NewConversation';
 
 export async function sendFile({
   conversationId,
@@ -58,7 +59,11 @@ export async function sendFile({
     legalHoldStatus,
     metaData: metadata,
   });
-  await conversationService.send({conversationDomain, payloadBundle: metadataPayload});
+  await conversationService.send({
+    conversationDomain,
+    payload: metadataPayload,
+    protocol: ConversationProtocol.PROTEUS,
+  });
 
   const uploadResult = await assetService.uploadAsset(file.data, {
     algorithm: customAlgorithm,
@@ -79,5 +84,5 @@ export async function sendFile({
     legalHoldStatus,
     originalMessageId: metadataPayload.id,
   });
-  return conversationService.send({conversationDomain, payloadBundle: filePayload});
+  return conversationService.send({conversationDomain, payload: filePayload, protocol: ConversationProtocol.PROTEUS});
 }

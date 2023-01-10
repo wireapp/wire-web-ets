@@ -67,6 +67,7 @@ import {InstanceReactionOptions} from './InstanceReactionOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
 import {sendFile} from '../send/sendFile';
 import {AxiosError} from 'axios';
+import {ConversationProtocol} from '@wireapp/api-client/src/conversation/NewConversation';
 
 const {version}: {version: string} = require('../../package.json');
 
@@ -499,7 +500,11 @@ export class InstanceService {
         moreMessageIds: options.moreMessageIds,
         type,
       });
-      await service.conversation.send({conversationDomain: options.conversationDomain, payloadBundle: payload});
+      await service.conversation.send({
+        conversationDomain: options.conversationDomain,
+        payload: payload,
+        protocol: ConversationProtocol.PROTEUS,
+      });
       return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
@@ -628,7 +633,11 @@ export class InstanceService {
         image,
         legalHoldStatus,
       });
-      const sentImage = await service.conversation.send({conversationDomain, payloadBundle: payload});
+      const sentImage = await service.conversation.send({
+        conversationDomain,
+        payload: payload,
+        protocol: ConversationProtocol.PROTEUS,
+      });
 
       stripAsset(sentImage.content);
 
@@ -655,7 +664,11 @@ export class InstanceService {
         from: instance.client.userId as string,
         location,
       });
-      const sentLocation = await service.conversation.send({conversationDomain, payloadBundle: payload});
+      const sentLocation = await service.conversation.send({
+        conversationDomain,
+        payload: payload,
+        protocol: ConversationProtocol.PROTEUS,
+      });
 
       instance.messages.set(sentLocation.id, sentLocation);
       return sentLocation.id;
@@ -673,7 +686,11 @@ export class InstanceService {
         conversationId,
         from: instance.client.userId as string,
       });
-      const sentCall = await service.conversation.send({conversationDomain, payloadBundle: payload});
+      const sentCall = await service.conversation.send({
+        conversationDomain,
+        payload: payload,
+        protocol: ConversationProtocol.PROTEUS,
+      });
 
       instance.messages.set(sentCall.id, sentCall);
       return sentCall.id;
@@ -703,7 +720,11 @@ export class InstanceService {
           legalHoldStatus,
         },
       });
-      const sentPing = await service.conversation.send({conversationDomain, payloadBundle: payload});
+      const sentPing = await service.conversation.send({
+        conversationDomain,
+        payload: payload,
+        protocol: ConversationProtocol.PROTEUS,
+      });
 
       instance.messages.set(sentPing.id, sentPing);
       return sentPing.id;
@@ -725,7 +746,8 @@ export class InstanceService {
       });
       await service.conversation.send({
         conversationDomain: options.conversationDomain,
-        payloadBundle: payload,
+        payload: payload,
+        protocol: ConversationProtocol.PROTEUS,
         userIds: options.userIds,
       });
     } else {
@@ -747,7 +769,8 @@ export class InstanceService {
       });
       await service.conversation.send({
         conversationDomain: options.conversationDomain,
-        payloadBundle: payload,
+        payload: payload,
+        protocol: ConversationProtocol.PROTEUS,
         userIds: options.userIds,
       });
     } else {
@@ -771,7 +794,8 @@ export class InstanceService {
       });
       const {id: messageId} = await service.conversation.send({
         conversationDomain: options.conversationDomain,
-        payloadBundle: payload,
+        payload: payload,
+        protocol: ConversationProtocol.PROTEUS,
       });
       return messageId;
     }
@@ -816,7 +840,8 @@ export class InstanceService {
       });
       const {id: messageId} = await service.conversation.send({
         conversationDomain: options.conversationDomain,
-        payloadBundle: payload,
+        payload: payload,
+        protocol: ConversationProtocol.PROTEUS,
       });
       return messageId;
     }
@@ -880,7 +905,11 @@ export class InstanceService {
         payloadBundle = compositeBuilder.build();
       }
 
-      let sentMessage = await service.conversation.send({conversationDomain, payloadBundle});
+      let sentMessage = await service.conversation.send({
+        conversationDomain,
+        payload: payloadBundle,
+        protocol: ConversationProtocol.PROTEUS,
+      });
 
       if (linkPreview) {
         const editedWithPreviewPayload = MessageBuilder.createText({
@@ -896,7 +925,11 @@ export class InstanceService {
           .withLegalHoldStatus(legalHoldStatus)
           .build();
 
-        sentMessage = await service.conversation.send({conversationDomain, payloadBundle: editedWithPreviewPayload});
+        sentMessage = await service.conversation.send({
+          conversationDomain,
+          payload: editedWithPreviewPayload,
+          protocol: ConversationProtocol.PROTEUS,
+        });
 
         const messageContent = sentMessage.content as TextContent;
 
@@ -941,7 +974,11 @@ export class InstanceService {
         .withLegalHoldStatus(legalHoldStatus)
         .build();
 
-      let editedMessage = await service.conversation.send({conversationDomain, payloadBundle: editedPayload});
+      let editedMessage = await service.conversation.send({
+        conversationDomain,
+        payload: editedPayload,
+        protocol: ConversationProtocol.PROTEUS,
+      });
 
       if (newLinkPreview) {
         const editedWithPreviewPayload = MessageBuilder.createEditedText({
@@ -958,7 +995,11 @@ export class InstanceService {
           .withLegalHoldStatus(legalHoldStatus)
           .build();
 
-        editedMessage = await service.conversation.send({conversationDomain, payloadBundle: editedWithPreviewPayload});
+        editedMessage = await service.conversation.send({
+          conversationDomain,
+          payload: editedWithPreviewPayload,
+          protocol: ConversationProtocol.PROTEUS,
+        });
 
         const editedMessageContent = editedMessage.content as EditedTextContent;
 
