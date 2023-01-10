@@ -275,10 +275,10 @@
     "@opencensus/core" "^0.0.8"
     uuid "^3.2.1"
 
-"@otak/core-crypto@0.3.0-beta-2":
-  version "0.3.0-beta-2"
-  resolved "https://registry.npmjs.org/@otak/core-crypto/-/core-crypto-0.3.0-beta-2.tgz#095bc80678ef1f2cc6c6245a9a233307cb2aa9f5"
-  integrity sha512-P0D4ru5a+EhsdpxERwAsJt+dUGXpUak2oKCNRUqNifCkrFFS08I5x+U22oh6lKLXF0iGHbfLJq67Q93KExRUCw==
+"@otak/core-crypto@0.3.0-es2017":
+  version "0.3.0-es2017"
+  resolved "https://registry.npmjs.org/@otak/core-crypto/-/core-crypto-0.3.0-es2017.tgz#a221ab983cde8903af191844be94a98cdec152b1"
+  integrity sha512-tz4HNaghngCR1aBY+pFOxsmMP3ZLiWZLV3UIreuBRGUKV7JX4w9AcCUkMxmbTEitHuWstSnZCboJ67lNgkREFQ==
 
 "@pm2/agent@~2.0.0":
   version "2.0.0"
@@ -654,10 +654,10 @@
     "@typescript-eslint/types" "5.48.2"
     eslint-visitor-keys "^3.3.0"
 
-"@wireapp/api-client@19.17.0":
-  version "19.17.0"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-19.17.0.tgz#f5b047d0a45599ed90d5b5bb50f169ce6a8bb09e"
-  integrity sha512-pEcuIkT9Z+kUbDqgcXMnyzncexAQQmXD7QJ8R3IGD4kB+YpBshT5dkpGQsQTxoxkQQRKtlWBaOMDIsjGv9FxVA==
+"@wireapp/api-client@19.21.6":
+  version "19.21.6"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-19.21.6.tgz#abae62172301e53d155415ce7adb757703688459"
+  integrity sha512-AY+uUiSgnXTJhpDWMz8yGrlLSLotKPUYwd1dnD8QxGux7aU86Y0oE6Zw7O2EskTaabj1XWSIS/6Z2dzOxh6grw==
   dependencies:
     "@types/node" "~14"
     "@types/spark-md5" "3.0.2"
@@ -693,16 +693,16 @@
     platform "1.3.6"
     url-search-params-polyfill "8.1.1"
 
-"@wireapp/core@28.7.1":
-  version "28.7.1"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-28.7.1.tgz#b70850ce0ff211e44a60229d5fda19d0e105df22"
-  integrity sha512-m0reL6Nbv+6+W0zDDjg43d6aeI4ly4dfOdLpF0QPBBVDMEL/trfUWyAr2xBc3xdrR6l9DLVEiIZ49FtsZIp2wg==
+"@wireapp/core@29.3.0":
+  version "29.3.0"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-29.3.0.tgz#d7284d3d59005632930df886ea9e4e9da391af13"
+  integrity sha512-7G1hLZA8QT4szS6xcNCCBIwqyYCuxt15GM/iPTOAgELVsdHuQ/73V0nTqvuZ2s1hPVfbtBWcFSeATlKYgugMiA==
   dependencies:
     "@open-wc/webpack-import-meta-loader" "0.4.7"
-    "@otak/core-crypto" "0.3.0-beta-2"
+    "@otak/core-crypto" "0.3.0-es2017"
     "@types/long" "4.0.1"
     "@types/node" "~14"
-    "@wireapp/api-client" "19.17.0"
+    "@wireapp/api-client" "19.21.6"
     "@wireapp/commons" "4.3.0"
     "@wireapp/cryptobox" "12.8.0"
     "@wireapp/store-engine-dexie" "1.6.10"
