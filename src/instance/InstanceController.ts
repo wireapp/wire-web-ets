@@ -65,6 +65,7 @@ import {InstanceService} from './InstanceService';
 import {InstanceTextOptions} from './InstanceTextOptions';
 import {InstanceTextUpdateOptions} from './InstanceTextUpdateOptions';
 import {InstanceTypingOptions} from './InstanceTypingOptions';
+import {InstanceGenericOptions} from './InstanceGenericOptions';
 
 const {uptime: nodeUptime, version: nodeVersion} = process;
 const {LOG_ERROR: errorLogFile, LOG_OUTPUT: outLogFile, NODE_DEBUG} = process.env;
@@ -1380,6 +1381,58 @@ export class InstanceController {
         ),
         message: body.text,
         quote: quoteContent,
+      });
+      const instanceName = this.instanceService.getInstance(instanceId).name;
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        messageId,
+        name: instanceName,
+      });
+    } catch (error) {
+      const internalServerError = createInternalServerError(error as Error);
+      res.status(internalServerError.code).json(internalServerError);
+    }
+  }
+
+  @Post(':instanceId/sendGeneric')
+  @ApiOperation({summary: 'Send a generic message object to a conversation.'})
+  @ApiResponse({
+    schema: {
+      example: {
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: '',
+      },
+    },
+    status: HTTP_STATUS_CODE.OK,
+  })
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  @ApiBody({
+    type: InstanceGenericOptions,
+  })
+  async sendGeneric(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceGenericOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId, 4)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
+    }
+
+    try {
+      const messageId = await this.instanceService.sendGeneric({
+        conversationDomain: body.conversationDomain,
+        conversationId: body.conversationId,
+        generic: body.generic,
+        instanceId: instanceId,
       });
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
