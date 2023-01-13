@@ -30,7 +30,7 @@ export class InstanceGenericOptions {
   @IsUUID()
   conversationId!: string;
 
-  @ApiProperty({example: ''})
+  @ApiProperty({example: {messageID: 'uuid', text: {content: ''}}})
   @IsNotEmpty()
   generic!: {[k: string]: any};
 }
