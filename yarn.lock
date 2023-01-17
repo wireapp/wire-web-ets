@@ -446,10 +446,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/hapi__joi@17.1.7":
-  version "17.1.7"
-  resolved "https://registry.npmjs.org/@types/hapi__joi/-/hapi__joi-17.1.7.tgz#a479bc593823fb7bd5600fea37917c8e5c71629c"
-  integrity sha512-byC9slpuqyDeEKegl/ViT8PCQRSp0CYkhLzz0cPxqxV6QC53Ht1cr2jG5iwOvtt/RxylUbTpXNqpgbf9Qu8QFw==
+"@types/hapi__joi@17.1.9":
+  version "17.1.9"
+  resolved "https://registry.npmjs.org/@types/hapi__joi/-/hapi__joi-17.1.9.tgz#fb4001df38aba1cd2406ce4b17d4e6fc3b0bd036"
+  integrity sha512-oOMFT8vmCTFncsF1engrs04jatz8/Anwx3De9uxnOK4chgSEgWBvFtpSoJo8u3784JNO+ql5tzRR6phHoRnscQ==
 
 "@types/json-schema@^7.0.7":
   version "7.0.7"
