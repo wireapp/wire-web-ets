@@ -326,8 +326,8 @@ export class InstanceService {
       );
       await account.listen();
     } catch (error) {
-      if ((error as AxiosError).response?.data?.message) {
-        throw new Error(`Backend error: ${(error as AxiosError).response!.data.message}`);
+      if ((error as AxiosError<any>).response?.data?.message) {
+        throw new Error(`Backend error: ${(error as AxiosError<any>).response!.data.message}`);
       }
 
       logger.error(`[${formatDate()}]`, error);
