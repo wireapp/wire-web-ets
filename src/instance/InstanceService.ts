@@ -47,7 +47,7 @@ import {
 import {MessageToProtoMapper} from '@wireapp/core/src/main/conversation/message/MessageToProtoMapper';
 import {OtrMessage} from '@wireapp/core/src/main/conversation/message/OtrMessage';
 import {LRUCache, NodeMap} from '@wireapp/lru-cache';
-import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
+import {Confirmation, LegalHoldStatus, GenericMessage} from '@wireapp/protocol-messaging';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/src/main/engine/';
 import logdown from 'logdown';
@@ -137,6 +137,10 @@ interface SendTextOptions extends SendOptions {
   mentions?: MentionContent[];
   message: string;
   quote?: QuoteContent;
+}
+
+interface SendGenericOptions extends BaseOptions {
+  generic: {[k: string]: any};
 }
 
 interface UpdateTextOptions extends BaseOptions {
@@ -836,6 +840,21 @@ export class InstanceService {
       return instance.name;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async sendGeneric({conversationDomain, conversationId, generic, instanceId}: SendGenericOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (!service) {
+      throw new Error(`Account service for instance ${instanceId} not set.`);
+    }
+    const msg: GenericMessage = GenericMessage.fromObject(generic);
+    // sendGenericMessage is private
+    await (service.conversation as any).sendGenericMessage(instance.client.validatedClientId, conversationId, msg, {
+      conversationDomain,
+    });
+    return msg.messageId;
   }
 
   async sendText({
