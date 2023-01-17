@@ -22,7 +22,7 @@ node("$NODE") {
   stage('Build') {
     commit_msg = sh returnStdout: true, script: 'git log -n 1 --pretty=format:"%ar - %an: %s"'
     try {
-      def NODE = tool name: 'node-v12.13.0', type: 'nodejs'
+      def NODE = tool name: 'node-v18', type: 'nodejs'
       withEnv(["PATH+NODE=${NODE}/bin"]) {
         sh 'npm install -g yarn pm2'
         sh 'yarn install --no-progress'
