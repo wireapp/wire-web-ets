@@ -14,7 +14,7 @@
     "pm2-logrotate": "2.7.0",
     "reflect-metadata": "0.1.13",
     "rxjs": "6.6.7",
-    "swagger-ui-express": "4.6.0",
+    "swagger-ui-express": "4.6.1",
     "typescript": "4.9.4",
     "uuidjs": "4.2.13"
   },
