@@ -44,6 +44,7 @@ import {
   status403description,
   status404instance,
   status422description,
+  status429description,
   status500description,
 } from '../utils';
 import {ClientsOptions} from './ClientsOptions';
@@ -111,9 +112,9 @@ interface InfoData {
   message: string;
 }
 
-const createInternalServerError = (error: Error): ServerErrorMessage => {
+const createInternalServerError = (error: Error | any): ServerErrorMessage => {
   return {
-    code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+    code: error.code ?? HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
     error: error.message,
     stack: error.stack,
   };
@@ -153,6 +154,7 @@ export class InstanceController {
   @ApiResponse({description: 'Bad request', status: 400})
   @ApiResponse(status422description)
   @ApiResponse(status403description)
+  @ApiResponse(status429description)
   @ApiResponse(status500description)
   async putInstance(@Body() body: InstanceCreationOptions, @Res() res: Response): Promise<void> {
     try {

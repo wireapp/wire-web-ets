@@ -317,6 +317,7 @@ export class InstanceService {
           clientType: options.isTemporary === true ? ClientType.TEMPORARY : ClientType.PERMANENT,
           email: options.email,
           password: options.password,
+          verificationCode: options.verificationCode,
         },
         true,
         ClientInfo,

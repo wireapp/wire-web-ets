@@ -98,5 +98,5 @@ export class InstanceCreationOptions {
   @ApiProperty({example: '000000'})
   @IsString()
   @IsOptional()
-  verification_code?: string;
+  verificationCode?: string;
 }
