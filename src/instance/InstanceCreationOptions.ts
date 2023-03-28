@@ -94,4 +94,9 @@ export class InstanceCreationOptions {
   @IsString()
   @IsNotEmpty()
   password!: string;
+
+  @ApiProperty({example: '000000'})
+  @IsString()
+  @IsOptional()
+  verification_code?: string;
 }

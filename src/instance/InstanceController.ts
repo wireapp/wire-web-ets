@@ -41,6 +41,7 @@ import {
   formatDate,
   formatUptime,
   hexToUint8Array,
+  status403description,
   status404instance,
   status422description,
   status500description,
@@ -118,6 +119,14 @@ const createInternalServerError = (error: Error): ServerErrorMessage => {
   };
 };
 
+const create2FACodeError = (error: Error): ServerErrorMessage => {
+  return {
+    code: HTTP_STATUS_CODE.FORBIDDEN,
+    error: 'Verification Code sent to email!',
+    stack: error.stack,
+  };
+};
+
 const createInstanceNotFoundError = (instanceId: string): ErrorMessage => {
   return {
     code: HTTP_STATUS_CODE.NOT_FOUND,
@@ -143,6 +152,7 @@ export class InstanceController {
   })
   @ApiResponse({description: 'Bad request', status: 400})
   @ApiResponse(status422description)
+  @ApiResponse(status403description)
   @ApiResponse(status500description)
   async putInstance(@Body() body: InstanceCreationOptions, @Res() res: Response): Promise<void> {
     try {
@@ -152,8 +162,13 @@ export class InstanceController {
         name: body.name || '',
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error as Error);
-      res.status(internalServerError.code).json(internalServerError);
+      if ((error as any).code === 403) {
+        const secondFactorError = create2FACodeError(error as Error);
+        res.status(secondFactorError.code).json(secondFactorError);
+      } else {
+        const internalServerError = createInternalServerError(error as Error);
+        res.status(internalServerError.code).json(internalServerError);
+      }
     }
   }
 

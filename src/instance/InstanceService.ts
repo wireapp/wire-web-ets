@@ -20,6 +20,7 @@
 import {Injectable} from '@nestjs/common';
 import {APIClient} from '@wireapp/api-client';
 import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/src/client/';
+import {VerificationActionType} from '@wireapp/api-client/src/auth/VerificationActionType';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/src/conversation/data/';
 import {BackendError, BackendErrorLabel} from '@wireapp/api-client/src/http/';
 import {Account} from '@wireapp/core';
@@ -299,7 +300,7 @@ export class InstanceService {
     logger.info(`[${formatDate()}] Creating APIClient with "${backendMeta.name}" backend ...`);
 
     const client = new APIClient({urls: backendMeta});
-    const account = new Account(client, undefined, {federationDomain: options.federationDomain});
+    const account = new Account(client, undefined, {useQualifiedIds: !!options.federationDomain});
 
     const ClientInfo: ClientInfo = {
       classification: options.deviceClass || ClientClassification.DESKTOP,
@@ -322,6 +323,9 @@ export class InstanceService {
       );
       await account.listen();
     } catch (error) {
+      if ((error as any).code === 403) {
+        await client.user.api.postVerificationCode(options.email, VerificationActionType.LOGIN);
+      }
       if ((error as AxiosError).response?.data?.message) {
         throw new Error(`Backend error: ${(error as AxiosError).response!.data.message}`);
       }

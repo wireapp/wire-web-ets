@@ -84,6 +84,7 @@ function stripLinkPreview(linkPreview: LinkPreviewUploadedContent): void {
 const status404instance = {description: 'Instance not found', status: HTTP_STATUS_CODE.NOT_FOUND};
 const status422description = {description: 'Validation error', status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY};
 const status500description = {description: 'Internal server error', status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR};
+const status403description = {description: 'Code Authentication failed', status: HTTP_STATUS_CODE.FORBIDDEN};
 
 export {
   formatDate,
@@ -94,5 +95,6 @@ export {
   stripLinkPreview,
   status404instance,
   status422description,
+  status403description,
   status500description,
 };
