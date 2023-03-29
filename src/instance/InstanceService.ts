@@ -300,7 +300,7 @@ export class InstanceService {
     logger.info(`[${formatDate()}] Creating APIClient with "${backendMeta.name}" backend ...`);
 
     const client = new APIClient({urls: backendMeta});
-    const account = new Account(client, undefined, {useQualifiedIds: !!options.federationDomain});
+    const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
       classification: options.deviceClass || ClientClassification.DESKTOP,
@@ -324,8 +324,8 @@ export class InstanceService {
       );
       await account.listen();
     } catch (error) {
-      if ((error as any).code === 403) {
-        await client.user.api.postVerificationCode(options.email, VerificationActionType.LOGIN);
+      if ((error as any).label.includes('code-authentication')) {
+        await client.api.user.postVerificationCode(options.email, VerificationActionType.LOGIN);
       }
       if ((error as AxiosError).response?.data?.message) {
         throw new Error(`Backend error: ${(error as AxiosError).response!.data.message}`);
@@ -990,7 +990,7 @@ export class InstanceService {
       }
     }
 
-    const clients = await apiClient.client.api.getClients();
+    const clients = await apiClient.api.client.getClients();
     const instances = this.cachedInstances.getAll();
 
     for (const client of clients) {
@@ -1002,7 +1002,7 @@ export class InstanceService {
       if (client.class === ClientClassification.LEGAL_HOLD) {
         logger.info(`Can't delete client with ID "${client.id} since it's a Legal Hold client`);
       } else {
-        await apiClient.client.api.deleteClient(client.id, options.password);
+        await apiClient.api.client.deleteClient(client.id, options.password);
       }
     }
 

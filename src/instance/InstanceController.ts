@@ -123,7 +123,7 @@ const createInternalServerError = (error: Error | any): ServerErrorMessage => {
 const create2FACodeError = (error: Error): ServerErrorMessage => {
   return {
     code: HTTP_STATUS_CODE.FORBIDDEN,
-    error: 'Verification Code sent to email!',
+    error: error.message,
     stack: error.stack,
   };
 };
