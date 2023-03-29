@@ -128,6 +128,10 @@ interface SendLocationOptions extends BaseOptions {
 
 type SendPingOptions = SendOptions;
 
+interface SendCallOptions extends BaseOptions {
+  content: string;
+}
+
 interface SendTextOptions extends SendOptions {
   buttons?: string[];
   linkPreview?: LinkPreviewContent;
@@ -660,6 +664,24 @@ export class InstanceService {
 
       instance.messages.set(sentLocation.id, sentLocation);
       return sentLocation.id;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
+  async sendCall({content, conversationDomain, conversationId, instanceId}: SendCallOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      const payload = MessageBuilder.createCall({
+        content: content,
+        conversationId,
+        from: instance.client.userId as string,
+      });
+      const sentCall = await service.conversation.send({conversationDomain, payloadBundle: payload});
+
+      instance.messages.set(sentCall.id, sentCall);
+      return sentCall.id;
     }
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
