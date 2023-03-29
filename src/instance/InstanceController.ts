@@ -124,7 +124,7 @@ const createInternalServerError = (error: Error | any): ServerErrorMessage => {
 const create2FACodeError = (error: Error): ServerErrorMessage => {
   return {
     code: HTTP_STATUS_CODE.FORBIDDEN,
-    error: error.message,
+    error: 'Code authentication failed. Please check your email for a 2fa code.',
     stack: error.stack,
   };
 };
@@ -165,7 +165,7 @@ export class InstanceController {
         name: body.name || '',
       });
     } catch (error) {
-      if ((error as any).code === 403) {
+      if ((error as any).label.includes('code-authentication')) {
         const secondFactorError = create2FACodeError(error as Error);
         res.status(secondFactorError.code).json(secondFactorError);
       } else {
