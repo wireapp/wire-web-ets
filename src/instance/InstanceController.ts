@@ -41,8 +41,10 @@ import {
   formatDate,
   formatUptime,
   hexToUint8Array,
+  status403description,
   status404instance,
   status422description,
+  status429description,
   status500description,
 } from '../utils';
 import {ClientsOptions} from './ClientsOptions';
@@ -111,10 +113,18 @@ interface InfoData {
   message: string;
 }
 
-const createInternalServerError = (error: Error): ServerErrorMessage => {
+const createInternalServerError = (error: Error | any): ServerErrorMessage => {
   return {
-    code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+    code: error.code ?? HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
     error: error.message,
+    stack: error.stack,
+  };
+};
+
+const create2FACodeError = (error: Error): ServerErrorMessage => {
+  return {
+    code: HTTP_STATUS_CODE.FORBIDDEN,
+    error: 'Code authentication failed. Please check your email for a 2fa code.',
     stack: error.stack,
   };
 };
@@ -144,6 +154,8 @@ export class InstanceController {
   })
   @ApiResponse({description: 'Bad request', status: 400})
   @ApiResponse(status422description)
+  @ApiResponse(status403description)
+  @ApiResponse(status429description)
   @ApiResponse(status500description)
   async putInstance(@Body() body: InstanceCreationOptions, @Res() res: Response): Promise<void> {
     try {
@@ -153,8 +165,13 @@ export class InstanceController {
         name: body.name || '',
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error as Error);
-      res.status(internalServerError.code).json(internalServerError);
+      if ((error as any).label.includes('code-authentication')) {
+        const secondFactorError = create2FACodeError(error as Error);
+        res.status(secondFactorError.code).json(secondFactorError);
+      } else {
+        const internalServerError = createInternalServerError(error as Error);
+        res.status(internalServerError.code).json(internalServerError);
+      }
     }
   }
 
