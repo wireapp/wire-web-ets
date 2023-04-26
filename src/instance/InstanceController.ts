@@ -41,8 +41,10 @@ import {
   formatDate,
   formatUptime,
   hexToUint8Array,
+  status403description,
   status404instance,
   status422description,
+  status429description,
   status500description,
 } from '../utils';
 import {ClientsOptions} from './ClientsOptions';
@@ -50,6 +52,7 @@ import {InstanceArchiveOptions} from './InstanceArchiveOptions';
 import {InstanceAvailabilityOptions} from './InstanceAvailabilityOptions';
 import {InstanceBreakSessionOptions} from './InstanceBreakSessionOptions';
 import {InstanceButtonOptions} from './InstanceButtonOptions';
+import {InstanceCallOptions} from './InstanceCallOptions';
 import {InstanceConversationOptions} from './InstanceConversationOptions';
 import {InstanceCreationOptions} from './InstanceCreationOptions';
 import {InstanceDeleteOptions} from './InstanceDeleteOptions';
@@ -110,10 +113,18 @@ interface InfoData {
   message: string;
 }
 
-const createInternalServerError = (error: Error): ServerErrorMessage => {
+const createInternalServerError = (error: Error | any): ServerErrorMessage => {
   return {
-    code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+    code: error.code ?? HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
     error: error.message,
+    stack: error.stack,
+  };
+};
+
+const create2FACodeError = (error: Error): ServerErrorMessage => {
+  return {
+    code: HTTP_STATUS_CODE.FORBIDDEN,
+    error: 'Code authentication failed. Please check your email for a 2fa code.',
     stack: error.stack,
   };
 };
@@ -143,6 +154,8 @@ export class InstanceController {
   })
   @ApiResponse({description: 'Bad request', status: 400})
   @ApiResponse(status422description)
+  @ApiResponse(status403description)
+  @ApiResponse(status429description)
   @ApiResponse(status500description)
   async putInstance(@Body() body: InstanceCreationOptions, @Res() res: Response): Promise<void> {
     try {
@@ -152,8 +165,13 @@ export class InstanceController {
         name: body.name || '',
       });
     } catch (error) {
-      const internalServerError = createInternalServerError(error as Error);
-      res.status(internalServerError.code).json(internalServerError);
+      if ((error as any).label.includes('code-authentication')) {
+        const secondFactorError = create2FACodeError(error as Error);
+        res.status(secondFactorError.code).json(secondFactorError);
+      } else {
+        const internalServerError = createInternalServerError(error as Error);
+        res.status(internalServerError.code).json(internalServerError);
+      }
     }
   }
 
@@ -824,6 +842,7 @@ export class InstanceController {
       const data = Buffer.from(body.data, 'base64');
       const fileContent: FileContent = {data};
       const metadata: FileMetaDataContent = {
+        image: body.image,
         length: data.length,
         name: body.fileName,
         type: body.type,
@@ -989,6 +1008,55 @@ export class InstanceController {
         instanceId,
         location,
       });
+      const instanceName = this.instanceService.getInstance(instanceId).name;
+      res.status(HTTP_STATUS_CODE.OK).json({
+        instanceId,
+        messageId,
+        name: instanceName,
+      });
+    } catch (error) {
+      const internalServerError = createInternalServerError(error as Error);
+      res.status(internalServerError.code).json(internalServerError);
+    }
+  }
+
+  @Post(':instanceId/sendCall')
+  @ApiOperation({summary: 'Send a call to a conversation.'})
+  @ApiResponse({
+    schema: {
+      example: {
+        content: '',
+        instanceId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      },
+    },
+    status: HTTP_STATUS_CODE.OK,
+  })
+  @ApiResponse(status404instance)
+  @ApiResponse(status422description)
+  @ApiResponse(status500description)
+  async sendCall(
+    @Param('instanceId') instanceId: string,
+    @Body() body: InstanceCallOptions,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!isUUID(instanceId, 4)) {
+      res.status(errorMessageInstanceUUID.code).json(errorMessageInstanceUUID);
+      return;
+    }
+
+    if (!this.instanceService.instanceExists(instanceId)) {
+      res.status(createInstanceNotFoundError(instanceId).code).json(createInstanceNotFoundError(instanceId));
+      return;
+    }
+
+    try {
+      const messageId = await this.instanceService.sendCall({
+        content: body.content,
+        conversationDomain: body.conversationDomain,
+        conversationId: body.conversationId,
+        instanceId,
+      });
+
       const instanceName = this.instanceService.getInstance(instanceId).name;
       res.status(HTTP_STATUS_CODE.OK).json({
         instanceId,

@@ -51,6 +51,16 @@ class VideoMeta {
   width?: number;
 }
 
+class ImageMeta {
+  @ApiPropertyOptional({example: 0})
+  @IsNumber()
+  height!: number;
+
+  @ApiPropertyOptional({example: 0})
+  @IsNumber()
+  width!: number;
+}
+
 export class InstanceFileOptions {
   @ApiPropertyOptional()
   @ValidateNested()
@@ -117,4 +127,10 @@ export class InstanceFileOptions {
   @Type(() => VideoMeta)
   @IsOptional()
   video?: VideoMeta;
+
+  @ApiPropertyOptional()
+  @ValidateNested()
+  @Type(() => ImageMeta)
+  @IsOptional()
+  image?: ImageMeta;
 }

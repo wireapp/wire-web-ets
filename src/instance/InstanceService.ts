@@ -20,6 +20,7 @@
 import {Injectable} from '@nestjs/common';
 import {APIClient} from '@wireapp/api-client';
 import {ClientClassification, ClientType, RegisteredClient} from '@wireapp/api-client/src/client/';
+import {VerificationActionType} from '@wireapp/api-client/src/auth/VerificationActionType';
 import {CONVERSATION_TYPING} from '@wireapp/api-client/src/conversation/data/';
 import {BackendError, BackendErrorLabel} from '@wireapp/api-client/src/http/';
 import {Account} from '@wireapp/core';
@@ -126,6 +127,10 @@ interface SendLocationOptions extends BaseOptions {
 }
 
 type SendPingOptions = SendOptions;
+
+interface SendCallOptions extends BaseOptions {
+  content: string;
+}
 
 interface SendTextOptions extends SendOptions {
   buttons?: string[];
@@ -299,7 +304,7 @@ export class InstanceService {
     logger.info(`[${formatDate()}] Creating APIClient with "${backendMeta.name}" backend ...`);
 
     const client = new APIClient({urls: backendMeta});
-    const account = new Account(client, undefined, {federationDomain: options.federationDomain});
+    const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
       classification: options.deviceClass || ClientClassification.DESKTOP,
@@ -316,12 +321,16 @@ export class InstanceService {
           clientType: options.isTemporary === true ? ClientType.TEMPORARY : ClientType.PERMANENT,
           email: options.email,
           password: options.password,
+          verificationCode: options.verificationCode,
         },
         true,
         ClientInfo,
       );
       await account.listen();
     } catch (error) {
+      if ((error as any).label.includes('code-authentication')) {
+        await client.api.user.postVerificationCode(options.email, VerificationActionType.LOGIN);
+      }
       if ((error as AxiosError).response?.data?.message) {
         throw new Error(`Backend error: ${(error as AxiosError).response!.data.message}`);
       }
@@ -659,6 +668,24 @@ export class InstanceService {
     throw new Error(`Account service for instance ${instanceId} not set.`);
   }
 
+  async sendCall({content, conversationDomain, conversationId, instanceId}: SendCallOptions): Promise<string> {
+    const instance = this.getInstance(instanceId);
+    const service = instance.account.service;
+
+    if (service) {
+      const payload = MessageBuilder.createCall({
+        content: content,
+        conversationId,
+        from: instance.client.userId as string,
+      });
+      const sentCall = await service.conversation.send({conversationDomain, payloadBundle: payload});
+
+      instance.messages.set(sentCall.id, sentCall);
+      return sentCall.id;
+    }
+    throw new Error(`Account service for instance ${instanceId} not set.`);
+  }
+
   async sendPing({
     conversationDomain,
     conversationId,
@@ -985,7 +1012,7 @@ export class InstanceService {
       }
     }
 
-    const clients = await apiClient.client.api.getClients();
+    const clients = await apiClient.api.client.getClients();
     const instances = this.cachedInstances.getAll();
 
     for (const client of clients) {
@@ -997,7 +1024,7 @@ export class InstanceService {
       if (client.class === ClientClassification.LEGAL_HOLD) {
         logger.info(`Can't delete client with ID "${client.id} since it's a Legal Hold client`);
       } else {
-        await apiClient.client.api.deleteClient(client.id, options.password);
+        await apiClient.api.client.deleteClient(client.id, options.password);
       }
     }
 
