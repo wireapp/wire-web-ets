@@ -304,7 +304,8 @@ export class InstanceService {
     logger.info(`[${formatDate()}] Creating APIClient with "${backendMeta.name}" backend ...`);
 
     const client = new APIClient({urls: backendMeta});
-    const account = new Account(client, undefined, {useQualifiedIds: !!options.federationDomain});
+    await client.useVersion([1, 2]);
+    const account = new Account(client);
 
     const ClientInfo: ClientInfo = {
       classification: options.deviceClass || ClientClassification.DESKTOP,
