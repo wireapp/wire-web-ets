@@ -305,7 +305,7 @@ export class InstanceService {
 
     const client = new APIClient({urls: backendMeta});
     if (options.federationDomain) {
-      await client.useVersion([1, 2]);
+      await client.useVersion([1]);
     }
     const account = new Account(client);
 
