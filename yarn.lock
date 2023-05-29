@@ -5125,15 +5125,15 @@ uuid@^3.0.1, uuid@^3.2.1:
   resolved "https://registry.npmjs.org/uuid/-/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha512-pW0No1RGHgzlpHJO1nsVrHKpOEIxkGg1xB+v0ZmdNH5OAeAwzAVrCnI2/6Mtx+Uys6iaylxa+D3g4j63IKKjSQ==
 
-uuidjs@4.2.13:
-  version "4.2.13"
-  resolved "https://registry.npmjs.org/uuidjs/-/uuidjs-4.2.13.tgz#84a71b93cd5a713bb9a33c498d6a2ba1ee6ddc66"
-  integrity sha512-at5lwiJ7pvO+mBy/qZU1IUKzZzVoN2hRHu0FGrmasLG/vQQIcaqbvP+JJshHeEi0mqmfz68Ugqlgvz7QkLdsqg==
-
 uuidjs@4.2.8:
   version "4.2.8"
   resolved "https://registry.npmjs.org/uuidjs/-/uuidjs-4.2.8.tgz#cd42ba57b13c3369f3c3800b4786635da8916e0b"
   integrity sha512-ric9GPq5dSYq50Cu9PemXiKlRztZLzsdB0NrGTbE8cLSM9PxzObmM/Fghq7g/sfuz3dVF1cwQ1AMt6FeXMaGJw==
+
+uuidjs@5.0.1:
+  version "5.0.1"
+  resolved "https://registry.npmjs.org/uuidjs/-/uuidjs-5.0.1.tgz#c41362de8b3146e8c0ef4b150f257078a592610f"
+  integrity sha512-W9ea6Rj0L4P7YyLpUYqDoqoBEH7AP1NshTYqXeAs9GoK3ynWco9VkWGzV7aqWjCyFEBbPgCCIBKiTJXOmlTTag==
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"
