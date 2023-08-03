@@ -1568,6 +1568,9 @@ export class InstancesController {
     for (const instanceId in instances) {
       const {backendType, client, name} = instances[instanceId];
 
+      if (client.context == undefined) {
+        continue;
+      }
       reducedInstances[instanceId] = {
         backend: backendType.name,
         clientId: client.context!.clientId!,
