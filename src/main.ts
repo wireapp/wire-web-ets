@@ -31,6 +31,7 @@ const logger = logdown('@wireapp/wire-web-ets/main', {
 });
 
 const port = process.env.PORT || 21080;
+const host = process.env.HOST || '127.0.0.1';
 const {name, version}: {name: string; version: string} = require('../package.json');
 
 async function bootstrap(): Promise<void> {
@@ -53,7 +54,7 @@ async function bootstrap(): Promise<void> {
   app.use(bodyParser.json({limit: '101mb'}));
   app.use(bodyParser.urlencoded({extended: true, limit: '101mb'}));
 
-  await app.listen(port);
+  await app.listen(port, host);
   logger.info(`Swagger UI running on "http://localhost:${port}/swagger-ui/"`);
 }
 
