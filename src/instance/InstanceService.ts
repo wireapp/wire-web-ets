@@ -52,7 +52,7 @@ import {Confirmation, LegalHoldStatus} from '@wireapp/protocol-messaging';
 import {MemoryEngine} from '@wireapp/store-engine';
 import {CRUDEngine} from '@wireapp/store-engine/src/main/engine/';
 import logdown from 'logdown';
-import UUID from 'uuidjs';
+import {v4 as uuidv4} from 'uuid';
 import {formatDate, isAssetContent, stripAsset, stripLinkPreview} from '../utils';
 import {ClientsOptions} from './ClientsOptions';
 import {InstanceArchiveOptions} from './InstanceArchiveOptions';
@@ -292,7 +292,7 @@ export class InstanceService {
   }
 
   async createInstance(options: InstanceCreationOptions): Promise<string> {
-    const instanceId = UUID.genV4().toString();
+    const instanceId = uuidv4();
     const backendMeta = this.parseBackend(options.backend || options.customBackend);
 
     const engine = new MemoryEngine();

@@ -34,7 +34,7 @@ import {Response} from 'express';
 import * as fs from 'fs-extra';
 import {StatusCodes as HTTP_STATUS_CODE} from 'http-status-codes';
 import logdown from 'logdown';
-import UUID from 'uuidjs';
+import {v4 as uuidv4} from 'uuid';
 import * as path from 'path';
 import {config} from '../config';
 import {
@@ -863,11 +863,11 @@ export class InstanceController {
       let customHash: Buffer | undefined;
 
       if (body.otherHash) {
-        customHash = crypto.createHash('SHA256').update(Buffer.from(UUID.genV4().toString(), 'utf-8')).digest();
+        customHash = crypto.createHash('SHA256').update(Buffer.from(uuidv4(), 'utf-8')).digest();
       }
 
       if (body.invalidHash) {
-        customHash = Buffer.from(UUID.genV4().toString(), 'utf-8');
+        customHash = Buffer.from(uuidv4(), 'utf-8');
       }
 
       const messageId = await this.instanceService.sendFile({
@@ -928,11 +928,11 @@ export class InstanceController {
     let customHash: Buffer | undefined;
 
     if (body.otherHash) {
-      customHash = crypto.createHash('SHA256').update(Buffer.from(UUID.genV4().toString(), 'utf-8')).digest();
+      customHash = crypto.createHash('SHA256').update(Buffer.from(uuidv4(), 'utf-8')).digest();
     }
 
     if (body.invalidHash) {
-      customHash = Buffer.from(UUID.genV4().toString(), 'utf-8');
+      customHash = Buffer.from(uuidv4(), 'utf-8');
     }
 
     try {
